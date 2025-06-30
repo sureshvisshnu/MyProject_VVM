@@ -358,18 +358,18 @@
             LoginMenu.Image = (Image)resources.GetObject("LoginMenu.Image");
             LoginMenu.ImageTransparentColor = SystemColors.ActiveBorder;
             LoginMenu.Name = "LoginMenu";
-            LoginMenu.Size = new Size(34, 24);
+            LoginMenu.Size = new Size(32, 24);
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
-            toolStripSeparator5.Size = new Size(221, 6);
+            toolStripSeparator5.Size = new Size(109, 6);
             // 
             // loginMenuItem
             // 
             loginMenuItem.Image = (Image)resources.GetObject("loginMenuItem.Image");
             loginMenuItem.Name = "loginMenuItem";
-            loginMenuItem.Size = new Size(224, 26);
+            loginMenuItem.Size = new Size(112, 22);
             loginMenuItem.Text = "Login";
             loginMenuItem.Click += loginToolStripMenuItem_Click;
             // 
@@ -377,7 +377,7 @@
             // 
             logoutMenuItem.Image = (Image)resources.GetObject("logoutMenuItem.Image");
             logoutMenuItem.Name = "logoutMenuItem";
-            logoutMenuItem.Size = new Size(224, 26);
+            logoutMenuItem.Size = new Size(112, 22);
             logoutMenuItem.Text = "Logout";
             logoutMenuItem.Visible = false;
             logoutMenuItem.Click += LogoutToolStripMenuItem_Click;
@@ -386,7 +386,7 @@
             // 
             exitMenuItem.Image = (Image)resources.GetObject("exitMenuItem.Image");
             exitMenuItem.Name = "exitMenuItem";
-            exitMenuItem.Size = new Size(224, 26);
+            exitMenuItem.Size = new Size(112, 22);
             exitMenuItem.Text = "E&xit";
             exitMenuItem.Click += ExitToolsStripMenuItem_Click;
             // 
@@ -394,7 +394,7 @@
             // 
             salesMenuItem.DropDownItems.AddRange(new ToolStripItem[] { invoiceToolStripMenuItem, quoteToolStripMenuItem, returnToolStripMenuItem, saleReportToolStripMenuItem, receivePaymentToolStripMenuItem, deliveryToolStripMenuItem });
             salesMenuItem.Name = "salesMenuItem";
-            salesMenuItem.Size = new Size(52, 24);
+            salesMenuItem.Size = new Size(44, 24);
             salesMenuItem.Text = "&Sales";
             salesMenuItem.Visible = false;
             // 
@@ -403,7 +403,7 @@
             invoiceToolStripMenuItem.Image = (Image)resources.GetObject("invoiceToolStripMenuItem.Image");
             invoiceToolStripMenuItem.Name = "invoiceToolStripMenuItem";
             invoiceToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-            invoiceToolStripMenuItem.Size = new Size(274, 26);
+            invoiceToolStripMenuItem.Size = new Size(225, 26);
             invoiceToolStripMenuItem.Text = "Sale";
             invoiceToolStripMenuItem.Click += invoiceToolStripMenuItem_Click;
             // 
@@ -412,7 +412,7 @@
             quoteToolStripMenuItem.Image = (Image)resources.GetObject("quoteToolStripMenuItem.Image");
             quoteToolStripMenuItem.Name = "quoteToolStripMenuItem";
             quoteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Q;
-            quoteToolStripMenuItem.Size = new Size(274, 26);
+            quoteToolStripMenuItem.Size = new Size(225, 26);
             quoteToolStripMenuItem.Text = "Quote";
             quoteToolStripMenuItem.Click += quoteToolStripMenuItem_Click;
             // 
@@ -421,7 +421,7 @@
             returnToolStripMenuItem.Image = (Image)resources.GetObject("returnToolStripMenuItem.Image");
             returnToolStripMenuItem.Name = "returnToolStripMenuItem";
             returnToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.Shift | Keys.R;
-            returnToolStripMenuItem.Size = new Size(274, 26);
+            returnToolStripMenuItem.Size = new Size(225, 26);
             returnToolStripMenuItem.Text = "Return";
             returnToolStripMenuItem.Click += returnToolStripMenuItem2_Click;
             // 
@@ -430,14 +430,14 @@
             saleReportToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saleReportToolStripMenuItem1, quoteReportToolStripMenuItem, saleReturnReportToolStripMenuItem, gstReportToolStripMenuItem, deliveryReportToolStripMenuItem });
             saleReportToolStripMenuItem.Image = (Image)resources.GetObject("saleReportToolStripMenuItem.Image");
             saleReportToolStripMenuItem.Name = "saleReportToolStripMenuItem";
-            saleReportToolStripMenuItem.Size = new Size(274, 26);
+            saleReportToolStripMenuItem.Size = new Size(225, 26);
             saleReportToolStripMenuItem.Text = "Reports";
             // 
             // saleReportToolStripMenuItem1
             // 
             saleReportToolStripMenuItem1.Image = (Image)resources.GetObject("saleReportToolStripMenuItem1.Image");
             saleReportToolStripMenuItem1.Name = "saleReportToolStripMenuItem1";
-            saleReportToolStripMenuItem1.Size = new Size(206, 26);
+            saleReportToolStripMenuItem1.Size = new Size(170, 26);
             saleReportToolStripMenuItem1.Text = "Sale Report";
             saleReportToolStripMenuItem1.Click += saleReportToolStripMenuItem1_Click;
             // 
@@ -445,7 +445,7 @@
             // 
             quoteReportToolStripMenuItem.Image = (Image)resources.GetObject("quoteReportToolStripMenuItem.Image");
             quoteReportToolStripMenuItem.Name = "quoteReportToolStripMenuItem";
-            quoteReportToolStripMenuItem.Size = new Size(206, 26);
+            quoteReportToolStripMenuItem.Size = new Size(170, 26);
             quoteReportToolStripMenuItem.Text = "Quote Report";
             quoteReportToolStripMenuItem.Click += quoteReportToolStripMenuItem_Click;
             // 
@@ -453,7 +453,7 @@
             // 
             saleReturnReportToolStripMenuItem.Image = (Image)resources.GetObject("saleReturnReportToolStripMenuItem.Image");
             saleReturnReportToolStripMenuItem.Name = "saleReturnReportToolStripMenuItem";
-            saleReturnReportToolStripMenuItem.Size = new Size(206, 26);
+            saleReturnReportToolStripMenuItem.Size = new Size(170, 26);
             saleReturnReportToolStripMenuItem.Text = "Sale Return Report";
             saleReturnReportToolStripMenuItem.Click += saleReturnReportToolStripMenuItem_Click;
             // 
@@ -461,7 +461,7 @@
             // 
             gstReportToolStripMenuItem.Image = (Image)resources.GetObject("gstReportToolStripMenuItem.Image");
             gstReportToolStripMenuItem.Name = "gstReportToolStripMenuItem";
-            gstReportToolStripMenuItem.Size = new Size(206, 26);
+            gstReportToolStripMenuItem.Size = new Size(170, 26);
             gstReportToolStripMenuItem.Text = "GSTR Report";
             gstReportToolStripMenuItem.Click += gstReportToolStripMenuItem_Click;
             // 
@@ -469,7 +469,7 @@
             // 
             deliveryReportToolStripMenuItem.Image = (Image)resources.GetObject("deliveryReportToolStripMenuItem.Image");
             deliveryReportToolStripMenuItem.Name = "deliveryReportToolStripMenuItem";
-            deliveryReportToolStripMenuItem.Size = new Size(206, 26);
+            deliveryReportToolStripMenuItem.Size = new Size(170, 26);
             deliveryReportToolStripMenuItem.Text = "Delivery Report";
             deliveryReportToolStripMenuItem.Click += deliveryReportToolStripMenuItem_Click;
             // 
@@ -478,7 +478,7 @@
             receivePaymentToolStripMenuItem.Image = (Image)resources.GetObject("receivePaymentToolStripMenuItem.Image");
             receivePaymentToolStripMenuItem.Name = "receivePaymentToolStripMenuItem";
             receivePaymentToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.Shift | Keys.P;
-            receivePaymentToolStripMenuItem.Size = new Size(274, 26);
+            receivePaymentToolStripMenuItem.Size = new Size(225, 26);
             receivePaymentToolStripMenuItem.Text = "Receive Payment";
             receivePaymentToolStripMenuItem.Click += receivePaymentToolStripMenuItem_Click;
             // 
@@ -487,7 +487,7 @@
             deliveryToolStripMenuItem.Image = (Image)resources.GetObject("deliveryToolStripMenuItem.Image");
             deliveryToolStripMenuItem.Name = "deliveryToolStripMenuItem";
             deliveryToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.Shift | Keys.D;
-            deliveryToolStripMenuItem.Size = new Size(274, 26);
+            deliveryToolStripMenuItem.Size = new Size(225, 26);
             deliveryToolStripMenuItem.Text = "Delivery";
             deliveryToolStripMenuItem.Click += DeliveryToolStripMenuItem_Click;
             // 
@@ -495,7 +495,7 @@
             // 
             purchaseMenuItem.DropDownItems.AddRange(new ToolStripItem[] { purchaseEntryToolStripMenuItem, purchaseReturnToolStripMenuItem, purchaseOrderToolStripMenuItem, purchaseReportsToolStripMenuItem });
             purchaseMenuItem.Name = "purchaseMenuItem";
-            purchaseMenuItem.Size = new Size(78, 24);
+            purchaseMenuItem.Size = new Size(63, 24);
             purchaseMenuItem.Text = "&Purchase";
             purchaseMenuItem.Visible = false;
             // 
@@ -504,7 +504,7 @@
             purchaseEntryToolStripMenuItem.Image = (Image)resources.GetObject("purchaseEntryToolStripMenuItem.Image");
             purchaseEntryToolStripMenuItem.Name = "purchaseEntryToolStripMenuItem";
             purchaseEntryToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
-            purchaseEntryToolStripMenuItem.Size = new Size(277, 26);
+            purchaseEntryToolStripMenuItem.Size = new Size(227, 26);
             purchaseEntryToolStripMenuItem.Text = "Purchase Entry";
             purchaseEntryToolStripMenuItem.Click += purchaseEntryToolStripMenuItem_Click;
             // 
@@ -513,7 +513,7 @@
             purchaseReturnToolStripMenuItem.Image = (Image)resources.GetObject("purchaseReturnToolStripMenuItem.Image");
             purchaseReturnToolStripMenuItem.Name = "purchaseReturnToolStripMenuItem";
             purchaseReturnToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.R;
-            purchaseReturnToolStripMenuItem.Size = new Size(277, 26);
+            purchaseReturnToolStripMenuItem.Size = new Size(227, 26);
             purchaseReturnToolStripMenuItem.Text = "Purchase Return";
             purchaseReturnToolStripMenuItem.Click += PurchaseReturnToolStripMenuItem_Click;
             // 
@@ -522,7 +522,7 @@
             purchaseOrderToolStripMenuItem.Image = (Image)resources.GetObject("purchaseOrderToolStripMenuItem.Image");
             purchaseOrderToolStripMenuItem.Name = "purchaseOrderToolStripMenuItem";
             purchaseOrderToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-            purchaseOrderToolStripMenuItem.Size = new Size(277, 26);
+            purchaseOrderToolStripMenuItem.Size = new Size(227, 26);
             purchaseOrderToolStripMenuItem.Text = "Purchase Order";
             purchaseOrderToolStripMenuItem.Click += purchaseOrderToolStripMenuItem_Click;
             // 
@@ -531,14 +531,14 @@
             purchaseReportsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { purchaseReportToolStripMenuItem, purchaseReturnReportToolStripMenuItem, purchaseOrderReportToolStripMenuItem, gstrReportToolStripMenuItem });
             purchaseReportsToolStripMenuItem.Image = (Image)resources.GetObject("purchaseReportsToolStripMenuItem.Image");
             purchaseReportsToolStripMenuItem.Name = "purchaseReportsToolStripMenuItem";
-            purchaseReportsToolStripMenuItem.Size = new Size(277, 26);
+            purchaseReportsToolStripMenuItem.Size = new Size(227, 26);
             purchaseReportsToolStripMenuItem.Text = "Reports";
             // 
             // purchaseReportToolStripMenuItem
             // 
             purchaseReportToolStripMenuItem.Image = (Image)resources.GetObject("purchaseReportToolStripMenuItem.Image");
             purchaseReportToolStripMenuItem.Name = "purchaseReportToolStripMenuItem";
-            purchaseReportToolStripMenuItem.Size = new Size(238, 26);
+            purchaseReportToolStripMenuItem.Size = new Size(194, 26);
             purchaseReportToolStripMenuItem.Text = "Purchase Report";
             purchaseReportToolStripMenuItem.Click += purchaseReportToolStripMenuItem_Click;
             // 
@@ -546,7 +546,7 @@
             // 
             purchaseReturnReportToolStripMenuItem.Image = (Image)resources.GetObject("purchaseReturnReportToolStripMenuItem.Image");
             purchaseReturnReportToolStripMenuItem.Name = "purchaseReturnReportToolStripMenuItem";
-            purchaseReturnReportToolStripMenuItem.Size = new Size(238, 26);
+            purchaseReturnReportToolStripMenuItem.Size = new Size(194, 26);
             purchaseReturnReportToolStripMenuItem.Text = "Purchase Return Report";
             purchaseReturnReportToolStripMenuItem.Click += PurchaseReturnReportToolStripMenuItem_Click;
             // 
@@ -554,7 +554,7 @@
             // 
             purchaseOrderReportToolStripMenuItem.Image = (Image)resources.GetObject("purchaseOrderReportToolStripMenuItem.Image");
             purchaseOrderReportToolStripMenuItem.Name = "purchaseOrderReportToolStripMenuItem";
-            purchaseOrderReportToolStripMenuItem.Size = new Size(238, 26);
+            purchaseOrderReportToolStripMenuItem.Size = new Size(194, 26);
             purchaseOrderReportToolStripMenuItem.Text = "Purchase Order Report";
             purchaseOrderReportToolStripMenuItem.Click += purchaseOrderReportToolStripMenuItem_Click;
             // 
@@ -562,7 +562,7 @@
             // 
             gstrReportToolStripMenuItem.Image = (Image)resources.GetObject("gstrReportToolStripMenuItem.Image");
             gstrReportToolStripMenuItem.Name = "gstrReportToolStripMenuItem";
-            gstrReportToolStripMenuItem.Size = new Size(238, 26);
+            gstrReportToolStripMenuItem.Size = new Size(194, 26);
             gstrReportToolStripMenuItem.Text = "GSTR Report";
             gstrReportToolStripMenuItem.Click += GstrReportToolStripMenuItem_Click;
             // 
@@ -570,7 +570,7 @@
             // 
             pOSToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { moveStockToolStripMenuItem, createInvoiceMenuItem, damageEntryToolStripMenuItem, inventoryUploadToolStripMenuItem, inventoryLocationToolStripMenuItem1, reportToolStripMenuItem1 });
             pOSToolStripMenuItem.Name = "pOSToolStripMenuItem";
-            pOSToolStripMenuItem.Size = new Size(83, 24);
+            pOSToolStripMenuItem.Size = new Size(67, 24);
             pOSToolStripMenuItem.Text = "&Inventory";
             pOSToolStripMenuItem.Visible = false;
             // 
@@ -579,7 +579,7 @@
             moveStockToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { intraStockMovementToolStripMenuItem, intraStockReceiveToolStripMenuItem, intraStockRequestToolStripMenuItem });
             moveStockToolStripMenuItem.Image = (Image)resources.GetObject("moveStockToolStripMenuItem.Image");
             moveStockToolStripMenuItem.Name = "moveStockToolStripMenuItem";
-            moveStockToolStripMenuItem.Size = new Size(282, 26);
+            moveStockToolStripMenuItem.Size = new Size(231, 26);
             moveStockToolStripMenuItem.Text = "Move Stock";
             // 
             // intraStockMovementToolStripMenuItem
@@ -587,7 +587,7 @@
             intraStockMovementToolStripMenuItem.Image = (Image)resources.GetObject("intraStockMovementToolStripMenuItem.Image");
             intraStockMovementToolStripMenuItem.Name = "intraStockMovementToolStripMenuItem";
             intraStockMovementToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.M;
-            intraStockMovementToolStripMenuItem.Size = new Size(301, 26);
+            intraStockMovementToolStripMenuItem.Size = new Size(245, 26);
             intraStockMovementToolStripMenuItem.Text = "Intra Stock Movement";
             intraStockMovementToolStripMenuItem.Click += intraStockMovementToolStripMenuItem_Click;
             // 
@@ -596,7 +596,7 @@
             intraStockReceiveToolStripMenuItem.Image = (Image)resources.GetObject("intraStockReceiveToolStripMenuItem.Image");
             intraStockReceiveToolStripMenuItem.Name = "intraStockReceiveToolStripMenuItem";
             intraStockReceiveToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.S;
-            intraStockReceiveToolStripMenuItem.Size = new Size(301, 26);
+            intraStockReceiveToolStripMenuItem.Size = new Size(245, 26);
             intraStockReceiveToolStripMenuItem.Text = "Intra Stock Receive";
             intraStockReceiveToolStripMenuItem.Click += intraStockReceiveToolStripMenuItem_Click;
             // 
@@ -605,7 +605,7 @@
             intraStockRequestToolStripMenuItem.Image = (Image)resources.GetObject("intraStockRequestToolStripMenuItem.Image");
             intraStockRequestToolStripMenuItem.Name = "intraStockRequestToolStripMenuItem";
             intraStockRequestToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.R;
-            intraStockRequestToolStripMenuItem.Size = new Size(301, 26);
+            intraStockRequestToolStripMenuItem.Size = new Size(245, 26);
             intraStockRequestToolStripMenuItem.Text = "Intra Stock Request";
             intraStockRequestToolStripMenuItem.Click += intraStockRequestToolStripMenuItem_Click;
             // 
@@ -614,7 +614,7 @@
             createInvoiceMenuItem.Image = (Image)resources.GetObject("createInvoiceMenuItem.Image");
             createInvoiceMenuItem.Name = "createInvoiceMenuItem";
             createInvoiceMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.I;
-            createInvoiceMenuItem.Size = new Size(282, 26);
+            createInvoiceMenuItem.Size = new Size(231, 26);
             createInvoiceMenuItem.Text = "Adjustment Entry";
             createInvoiceMenuItem.Click += createInvoiceMenuItem_Click;
             // 
@@ -623,7 +623,7 @@
             damageEntryToolStripMenuItem.Image = (Image)resources.GetObject("damageEntryToolStripMenuItem.Image");
             damageEntryToolStripMenuItem.Name = "damageEntryToolStripMenuItem";
             damageEntryToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.D;
-            damageEntryToolStripMenuItem.Size = new Size(282, 26);
+            damageEntryToolStripMenuItem.Size = new Size(231, 26);
             damageEntryToolStripMenuItem.Text = "Damage Entry";
             damageEntryToolStripMenuItem.Click += damageEntryToolStripMenuItem_Click;
             // 
@@ -632,7 +632,7 @@
             inventoryUploadToolStripMenuItem.Image = (Image)resources.GetObject("inventoryUploadToolStripMenuItem.Image");
             inventoryUploadToolStripMenuItem.Name = "inventoryUploadToolStripMenuItem";
             inventoryUploadToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.U;
-            inventoryUploadToolStripMenuItem.Size = new Size(282, 26);
+            inventoryUploadToolStripMenuItem.Size = new Size(231, 26);
             inventoryUploadToolStripMenuItem.Text = "Inventory Upload";
             inventoryUploadToolStripMenuItem.Click += inventoryUploadToolStripMenuItem_Click;
             // 
@@ -641,7 +641,7 @@
             inventoryLocationToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { inventoryLocationToolStripMenuItem2 });
             inventoryLocationToolStripMenuItem1.Image = (Image)resources.GetObject("inventoryLocationToolStripMenuItem1.Image");
             inventoryLocationToolStripMenuItem1.Name = "inventoryLocationToolStripMenuItem1";
-            inventoryLocationToolStripMenuItem1.Size = new Size(282, 26);
+            inventoryLocationToolStripMenuItem1.Size = new Size(231, 26);
             inventoryLocationToolStripMenuItem1.Text = "Master";
             // 
             // inventoryLocationToolStripMenuItem2
@@ -649,7 +649,7 @@
             inventoryLocationToolStripMenuItem2.Image = (Image)resources.GetObject("inventoryLocationToolStripMenuItem2.Image");
             inventoryLocationToolStripMenuItem2.Name = "inventoryLocationToolStripMenuItem2";
             inventoryLocationToolStripMenuItem2.ShortcutKeys = Keys.Control | Keys.Shift | Keys.L;
-            inventoryLocationToolStripMenuItem2.Size = new Size(290, 26);
+            inventoryLocationToolStripMenuItem2.Size = new Size(236, 26);
             inventoryLocationToolStripMenuItem2.Text = "Inventory Location";
             inventoryLocationToolStripMenuItem2.Click += InventoryLocationToolStripMenuItem2_Click;
             // 
@@ -658,14 +658,14 @@
             reportToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { inventoryReportToolStripMenuItem, currentStockToolStripMenuItem, priceListToolStripMenuItem, stockRequestsToolStripMenuItem, expeToolStripMenuItem, damageEntryReportToolStrip, stockReciveToolStripMenuItem, stockMovementReportToolStripMenuItem, adjustmentEntryReportToolStripMenuItem });
             reportToolStripMenuItem1.Image = (Image)resources.GetObject("reportToolStripMenuItem1.Image");
             reportToolStripMenuItem1.Name = "reportToolStripMenuItem1";
-            reportToolStripMenuItem1.Size = new Size(282, 26);
+            reportToolStripMenuItem1.Size = new Size(231, 26);
             reportToolStripMenuItem1.Text = "Report";
             // 
             // inventoryReportToolStripMenuItem
             // 
             inventoryReportToolStripMenuItem.Image = (Image)resources.GetObject("inventoryReportToolStripMenuItem.Image");
             inventoryReportToolStripMenuItem.Name = "inventoryReportToolStripMenuItem";
-            inventoryReportToolStripMenuItem.Size = new Size(245, 26);
+            inventoryReportToolStripMenuItem.Size = new Size(198, 26);
             inventoryReportToolStripMenuItem.Text = "Stock Report (Detail)";
             inventoryReportToolStripMenuItem.Click += InventoryReportToolStripMenuItem_Click;
             // 
@@ -673,7 +673,7 @@
             // 
             currentStockToolStripMenuItem.Image = (Image)resources.GetObject("currentStockToolStripMenuItem.Image");
             currentStockToolStripMenuItem.Name = "currentStockToolStripMenuItem";
-            currentStockToolStripMenuItem.Size = new Size(245, 26);
+            currentStockToolStripMenuItem.Size = new Size(198, 26);
             currentStockToolStripMenuItem.Text = "Item Ledger Report";
             currentStockToolStripMenuItem.Click += CurrentStockToolStripMenuItem_Click;
             // 
@@ -681,7 +681,7 @@
             // 
             priceListToolStripMenuItem.Image = (Image)resources.GetObject("priceListToolStripMenuItem.Image");
             priceListToolStripMenuItem.Name = "priceListToolStripMenuItem";
-            priceListToolStripMenuItem.Size = new Size(245, 26);
+            priceListToolStripMenuItem.Size = new Size(198, 26);
             priceListToolStripMenuItem.Text = "Price List Report";
             priceListToolStripMenuItem.Click += priceListToolStripMenuItem_Click;
             // 
@@ -689,7 +689,7 @@
             // 
             stockRequestsToolStripMenuItem.Image = (Image)resources.GetObject("stockRequestsToolStripMenuItem.Image");
             stockRequestsToolStripMenuItem.Name = "stockRequestsToolStripMenuItem";
-            stockRequestsToolStripMenuItem.Size = new Size(245, 26);
+            stockRequestsToolStripMenuItem.Size = new Size(198, 26);
             stockRequestsToolStripMenuItem.Text = "Stock Requests Report";
             stockRequestsToolStripMenuItem.Click += stockRequestsToolStripMenuItem_Click;
             // 
@@ -697,7 +697,7 @@
             // 
             expeToolStripMenuItem.Image = (Image)resources.GetObject("expeToolStripMenuItem.Image");
             expeToolStripMenuItem.Name = "expeToolStripMenuItem";
-            expeToolStripMenuItem.Size = new Size(245, 26);
+            expeToolStripMenuItem.Size = new Size(198, 26);
             expeToolStripMenuItem.Text = "Expiry Report";
             expeToolStripMenuItem.Click += expeToolStripMenuItem_Click;
             // 
@@ -705,7 +705,7 @@
             // 
             damageEntryReportToolStrip.Image = (Image)resources.GetObject("damageEntryReportToolStrip.Image");
             damageEntryReportToolStrip.Name = "damageEntryReportToolStrip";
-            damageEntryReportToolStrip.Size = new Size(245, 26);
+            damageEntryReportToolStrip.Size = new Size(198, 26);
             damageEntryReportToolStrip.Text = "Damage Entry Report";
             damageEntryReportToolStrip.Click += damageEntryReportToolStrip_Click;
             // 
@@ -713,7 +713,7 @@
             // 
             stockReciveToolStripMenuItem.Image = (Image)resources.GetObject("stockReciveToolStripMenuItem.Image");
             stockReciveToolStripMenuItem.Name = "stockReciveToolStripMenuItem";
-            stockReciveToolStripMenuItem.Size = new Size(245, 26);
+            stockReciveToolStripMenuItem.Size = new Size(198, 26);
             stockReciveToolStripMenuItem.Text = "Stock Receive Report";
             stockReciveToolStripMenuItem.Click += stockReciveToolStripMenuItem_Click;
             // 
@@ -721,7 +721,7 @@
             // 
             stockMovementReportToolStripMenuItem.Image = (Image)resources.GetObject("stockMovementReportToolStripMenuItem.Image");
             stockMovementReportToolStripMenuItem.Name = "stockMovementReportToolStripMenuItem";
-            stockMovementReportToolStripMenuItem.Size = new Size(245, 26);
+            stockMovementReportToolStripMenuItem.Size = new Size(198, 26);
             stockMovementReportToolStripMenuItem.Text = "Stock Movement Report";
             stockMovementReportToolStripMenuItem.Click += stockMovementReportToolStripMenuItem_Click;
             // 
@@ -729,7 +729,7 @@
             // 
             adjustmentEntryReportToolStripMenuItem.Image = (Image)resources.GetObject("adjustmentEntryReportToolStripMenuItem.Image");
             adjustmentEntryReportToolStripMenuItem.Name = "adjustmentEntryReportToolStripMenuItem";
-            adjustmentEntryReportToolStripMenuItem.Size = new Size(245, 26);
+            adjustmentEntryReportToolStripMenuItem.Size = new Size(198, 26);
             adjustmentEntryReportToolStripMenuItem.Text = "Adjustment Entry Report";
             adjustmentEntryReportToolStripMenuItem.Click += adjustmentEntryReportToolStripMenuItem_Click;
             // 
@@ -737,7 +737,7 @@
             // 
             hospitalToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { wardToolStripMenuItem1, bedTypeToolStripMenuItem, symptomToolStripMenuItem1, medicalTestToolStripMenuItem1, medicalProceduresToolStripMenuItem, consultationToolStripMenuItem, patientUploadToolStripMenuItem, settingsToolStripMenuItem, reportToolStripMenuItem });
             hospitalToolStripMenuItem.Name = "hospitalToolStripMenuItem";
-            hospitalToolStripMenuItem.Size = new Size(69, 24);
+            hospitalToolStripMenuItem.Size = new Size(57, 24);
             hospitalToolStripMenuItem.Text = "&Hospital";
             hospitalToolStripMenuItem.Visible = false;
             // 
@@ -746,7 +746,7 @@
             wardToolStripMenuItem1.Image = (Image)resources.GetObject("wardToolStripMenuItem1.Image");
             wardToolStripMenuItem1.Name = "wardToolStripMenuItem1";
             wardToolStripMenuItem1.ShortcutKeys = Keys.Alt | Keys.W;
-            wardToolStripMenuItem1.Size = new Size(287, 26);
+            wardToolStripMenuItem1.Size = new Size(238, 26);
             wardToolStripMenuItem1.Text = "Ward";
             wardToolStripMenuItem1.Click += wardToolStripMenuItem_Click;
             // 
@@ -755,7 +755,7 @@
             bedTypeToolStripMenuItem.Image = (Image)resources.GetObject("bedTypeToolStripMenuItem.Image");
             bedTypeToolStripMenuItem.Name = "bedTypeToolStripMenuItem";
             bedTypeToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.B;
-            bedTypeToolStripMenuItem.Size = new Size(287, 26);
+            bedTypeToolStripMenuItem.Size = new Size(238, 26);
             bedTypeToolStripMenuItem.Text = "Bed Type";
             bedTypeToolStripMenuItem.Click += bedToolStripMenuItem_Click;
             // 
@@ -764,7 +764,7 @@
             symptomToolStripMenuItem1.Image = (Image)resources.GetObject("symptomToolStripMenuItem1.Image");
             symptomToolStripMenuItem1.Name = "symptomToolStripMenuItem1";
             symptomToolStripMenuItem1.ShortcutKeys = Keys.Alt | Keys.D;
-            symptomToolStripMenuItem1.Size = new Size(287, 26);
+            symptomToolStripMenuItem1.Size = new Size(238, 26);
             symptomToolStripMenuItem1.Text = "Diagnosis";
             symptomToolStripMenuItem1.Click += symptomsToolStripMenuItem_Click;
             // 
@@ -773,7 +773,7 @@
             medicalTestToolStripMenuItem1.Image = (Image)resources.GetObject("medicalTestToolStripMenuItem1.Image");
             medicalTestToolStripMenuItem1.Name = "medicalTestToolStripMenuItem1";
             medicalTestToolStripMenuItem1.ShortcutKeys = Keys.Alt | Keys.T;
-            medicalTestToolStripMenuItem1.Size = new Size(287, 26);
+            medicalTestToolStripMenuItem1.Size = new Size(238, 26);
             medicalTestToolStripMenuItem1.Text = "Medical Test";
             medicalTestToolStripMenuItem1.Click += medicalTestsToolStripMenuItem_Click;
             // 
@@ -782,7 +782,7 @@
             medicalProceduresToolStripMenuItem.Image = (Image)resources.GetObject("medicalProceduresToolStripMenuItem.Image");
             medicalProceduresToolStripMenuItem.Name = "medicalProceduresToolStripMenuItem";
             medicalProceduresToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.M;
-            medicalProceduresToolStripMenuItem.Size = new Size(287, 26);
+            medicalProceduresToolStripMenuItem.Size = new Size(238, 26);
             medicalProceduresToolStripMenuItem.Text = "Medical Procedures";
             medicalProceduresToolStripMenuItem.Click += medicalProceduresToolStripMenuItem_Click;
             // 
@@ -791,7 +791,7 @@
             consultationToolStripMenuItem.Image = (Image)resources.GetObject("consultationToolStripMenuItem.Image");
             consultationToolStripMenuItem.Name = "consultationToolStripMenuItem";
             consultationToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.F;
-            consultationToolStripMenuItem.Size = new Size(287, 26);
+            consultationToolStripMenuItem.Size = new Size(238, 26);
             consultationToolStripMenuItem.Text = "Consultation Detials && Fee";
             consultationToolStripMenuItem.Click += ConsultationsToolStripMenuItem_Click;
             // 
@@ -800,7 +800,7 @@
             patientUploadToolStripMenuItem.Image = (Image)resources.GetObject("patientUploadToolStripMenuItem.Image");
             patientUploadToolStripMenuItem.Name = "patientUploadToolStripMenuItem";
             patientUploadToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.Shift | Keys.U;
-            patientUploadToolStripMenuItem.Size = new Size(287, 26);
+            patientUploadToolStripMenuItem.Size = new Size(238, 26);
             patientUploadToolStripMenuItem.Text = "Patient Upload";
             patientUploadToolStripMenuItem.Click += patientUploadToolStripMenuItem_Click;
             // 
@@ -809,7 +809,7 @@
             settingsToolStripMenuItem.Image = (Image)resources.GetObject("settingsToolStripMenuItem.Image");
             settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
             settingsToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.S;
-            settingsToolStripMenuItem.Size = new Size(287, 26);
+            settingsToolStripMenuItem.Size = new Size(238, 26);
             settingsToolStripMenuItem.Text = "Settings";
             settingsToolStripMenuItem.Click += SettingsToolStripMenuItem_Click;
             // 
@@ -818,14 +818,14 @@
             reportToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { careTakerAssignReportToolStripMenuItem, careTakerUnAssignReportToolStripMenuItem, opReportToolStripMenuItem, iPReportToolStripMenuItem, patientLedgerToolStripMenuItem, patientDueListToolStripMenuItem, wardAndBedReportToolStripMenuItem, paymentReceiveReportToolStripMenuItem, patientTransferReportToolStripMenuItem, patientProcedureReportToolStripMenuItem, labTestReportToolStripMenuItem, dischargeReportToolStripMenuItem, patientVisitCountingReportToolStripMenuItem, feeCollectionReportToolStripMenuItem, patientDetailsReportToolStripMenuItem });
             reportToolStripMenuItem.Image = (Image)resources.GetObject("reportToolStripMenuItem.Image");
             reportToolStripMenuItem.Name = "reportToolStripMenuItem";
-            reportToolStripMenuItem.Size = new Size(287, 26);
+            reportToolStripMenuItem.Size = new Size(238, 26);
             reportToolStripMenuItem.Text = "Report";
             // 
             // careTakerAssignReportToolStripMenuItem
             // 
             careTakerAssignReportToolStripMenuItem.Image = (Image)resources.GetObject("careTakerAssignReportToolStripMenuItem.Image");
             careTakerAssignReportToolStripMenuItem.Name = "careTakerAssignReportToolStripMenuItem";
-            careTakerAssignReportToolStripMenuItem.Size = new Size(265, 26);
+            careTakerAssignReportToolStripMenuItem.Size = new Size(216, 26);
             careTakerAssignReportToolStripMenuItem.Text = "Care Taker Assign Report";
             careTakerAssignReportToolStripMenuItem.Click += careTakerAssignReportToolStripMenuItem_Click;
             // 
@@ -833,7 +833,7 @@
             // 
             careTakerUnAssignReportToolStripMenuItem.Image = (Image)resources.GetObject("careTakerUnAssignReportToolStripMenuItem.Image");
             careTakerUnAssignReportToolStripMenuItem.Name = "careTakerUnAssignReportToolStripMenuItem";
-            careTakerUnAssignReportToolStripMenuItem.Size = new Size(265, 26);
+            careTakerUnAssignReportToolStripMenuItem.Size = new Size(216, 26);
             careTakerUnAssignReportToolStripMenuItem.Text = "Care Taker UnAssign Report";
             careTakerUnAssignReportToolStripMenuItem.Click += careTakerUnAssignReportToolStripMenuItem_Click;
             // 
@@ -841,7 +841,7 @@
             // 
             opReportToolStripMenuItem.Image = (Image)resources.GetObject("opReportToolStripMenuItem.Image");
             opReportToolStripMenuItem.Name = "opReportToolStripMenuItem";
-            opReportToolStripMenuItem.Size = new Size(265, 26);
+            opReportToolStripMenuItem.Size = new Size(216, 26);
             opReportToolStripMenuItem.Text = "Op Report";
             opReportToolStripMenuItem.Click += OpReportToolStripMenuItem_Click;
             // 
@@ -849,7 +849,7 @@
             // 
             iPReportToolStripMenuItem.Image = (Image)resources.GetObject("iPReportToolStripMenuItem.Image");
             iPReportToolStripMenuItem.Name = "iPReportToolStripMenuItem";
-            iPReportToolStripMenuItem.Size = new Size(265, 26);
+            iPReportToolStripMenuItem.Size = new Size(216, 26);
             iPReportToolStripMenuItem.Text = "IP Report";
             iPReportToolStripMenuItem.Click += IPReportToolStripMenuItem_Click;
             // 
@@ -857,7 +857,7 @@
             // 
             patientLedgerToolStripMenuItem.Image = (Image)resources.GetObject("patientLedgerToolStripMenuItem.Image");
             patientLedgerToolStripMenuItem.Name = "patientLedgerToolStripMenuItem";
-            patientLedgerToolStripMenuItem.Size = new Size(265, 26);
+            patientLedgerToolStripMenuItem.Size = new Size(216, 26);
             patientLedgerToolStripMenuItem.Text = "Patient Ledger";
             patientLedgerToolStripMenuItem.Click += PatientLedgerToolStripMenuItem_Click;
             // 
@@ -865,7 +865,7 @@
             // 
             patientDueListToolStripMenuItem.Image = (Image)resources.GetObject("patientDueListToolStripMenuItem.Image");
             patientDueListToolStripMenuItem.Name = "patientDueListToolStripMenuItem";
-            patientDueListToolStripMenuItem.Size = new Size(265, 26);
+            patientDueListToolStripMenuItem.Size = new Size(216, 26);
             patientDueListToolStripMenuItem.Text = "Patient Due List";
             patientDueListToolStripMenuItem.Click += patientDueListToolStripMenuItem_Click;
             // 
@@ -873,7 +873,7 @@
             // 
             wardAndBedReportToolStripMenuItem.Image = (Image)resources.GetObject("wardAndBedReportToolStripMenuItem.Image");
             wardAndBedReportToolStripMenuItem.Name = "wardAndBedReportToolStripMenuItem";
-            wardAndBedReportToolStripMenuItem.Size = new Size(265, 26);
+            wardAndBedReportToolStripMenuItem.Size = new Size(216, 26);
             wardAndBedReportToolStripMenuItem.Text = "Ward and Bed Report";
             wardAndBedReportToolStripMenuItem.Click += wardAndBedReportToolStripMenuItem_Click;
             // 
@@ -881,7 +881,7 @@
             // 
             paymentReceiveReportToolStripMenuItem.Image = (Image)resources.GetObject("paymentReceiveReportToolStripMenuItem.Image");
             paymentReceiveReportToolStripMenuItem.Name = "paymentReceiveReportToolStripMenuItem";
-            paymentReceiveReportToolStripMenuItem.Size = new Size(265, 26);
+            paymentReceiveReportToolStripMenuItem.Size = new Size(216, 26);
             paymentReceiveReportToolStripMenuItem.Text = "Payment Receive Report";
             paymentReceiveReportToolStripMenuItem.Click += paymentReceiveReportToolStripMenuItem_Click;
             // 
@@ -889,7 +889,7 @@
             // 
             patientTransferReportToolStripMenuItem.Image = (Image)resources.GetObject("patientTransferReportToolStripMenuItem.Image");
             patientTransferReportToolStripMenuItem.Name = "patientTransferReportToolStripMenuItem";
-            patientTransferReportToolStripMenuItem.Size = new Size(265, 26);
+            patientTransferReportToolStripMenuItem.Size = new Size(216, 26);
             patientTransferReportToolStripMenuItem.Text = "Patient Transfer Report";
             patientTransferReportToolStripMenuItem.Click += patientTransferReportToolStripMenuItem_Click;
             // 
@@ -897,7 +897,7 @@
             // 
             patientProcedureReportToolStripMenuItem.Image = (Image)resources.GetObject("patientProcedureReportToolStripMenuItem.Image");
             patientProcedureReportToolStripMenuItem.Name = "patientProcedureReportToolStripMenuItem";
-            patientProcedureReportToolStripMenuItem.Size = new Size(265, 26);
+            patientProcedureReportToolStripMenuItem.Size = new Size(216, 26);
             patientProcedureReportToolStripMenuItem.Text = "Patient Procedure Report";
             patientProcedureReportToolStripMenuItem.Click += patientProcedureReportToolStripMenuItem_Click;
             // 
@@ -905,7 +905,7 @@
             // 
             labTestReportToolStripMenuItem.Image = (Image)resources.GetObject("labTestReportToolStripMenuItem.Image");
             labTestReportToolStripMenuItem.Name = "labTestReportToolStripMenuItem";
-            labTestReportToolStripMenuItem.Size = new Size(265, 26);
+            labTestReportToolStripMenuItem.Size = new Size(216, 26);
             labTestReportToolStripMenuItem.Text = "LabTest Report";
             labTestReportToolStripMenuItem.Click += labTestReportToolStripMenuItem_Click;
             // 
@@ -913,7 +913,7 @@
             // 
             dischargeReportToolStripMenuItem.Image = (Image)resources.GetObject("dischargeReportToolStripMenuItem.Image");
             dischargeReportToolStripMenuItem.Name = "dischargeReportToolStripMenuItem";
-            dischargeReportToolStripMenuItem.Size = new Size(265, 26);
+            dischargeReportToolStripMenuItem.Size = new Size(216, 26);
             dischargeReportToolStripMenuItem.Text = "Discharge Report";
             dischargeReportToolStripMenuItem.Click += patientDischargeReportToolStripMenuItem_Click;
             // 
@@ -921,7 +921,7 @@
             // 
             patientVisitCountingReportToolStripMenuItem.Image = (Image)resources.GetObject("patientVisitCountingReportToolStripMenuItem.Image");
             patientVisitCountingReportToolStripMenuItem.Name = "patientVisitCountingReportToolStripMenuItem";
-            patientVisitCountingReportToolStripMenuItem.Size = new Size(265, 26);
+            patientVisitCountingReportToolStripMenuItem.Size = new Size(216, 26);
             patientVisitCountingReportToolStripMenuItem.Text = "Patient Visit Counting Report";
             patientVisitCountingReportToolStripMenuItem.Click += patientVisitCountingReportToolStripMenuItem_Click;
             // 
@@ -929,7 +929,7 @@
             // 
             feeCollectionReportToolStripMenuItem.Image = (Image)resources.GetObject("feeCollectionReportToolStripMenuItem.Image");
             feeCollectionReportToolStripMenuItem.Name = "feeCollectionReportToolStripMenuItem";
-            feeCollectionReportToolStripMenuItem.Size = new Size(265, 26);
+            feeCollectionReportToolStripMenuItem.Size = new Size(216, 26);
             feeCollectionReportToolStripMenuItem.Text = "Fee Charge Report";
             feeCollectionReportToolStripMenuItem.Click += feeCollectionReportToolStripMenuItem_Click;
             // 
@@ -937,7 +937,7 @@
             // 
             patientDetailsReportToolStripMenuItem.Image = (Image)resources.GetObject("patientDetailsReportToolStripMenuItem.Image");
             patientDetailsReportToolStripMenuItem.Name = "patientDetailsReportToolStripMenuItem";
-            patientDetailsReportToolStripMenuItem.Size = new Size(265, 26);
+            patientDetailsReportToolStripMenuItem.Size = new Size(216, 26);
             patientDetailsReportToolStripMenuItem.Text = "Patient Details Report";
             patientDetailsReportToolStripMenuItem.Click += patientDetailsReportToolStripMenuItem_Click;
             // 
@@ -945,7 +945,7 @@
             // 
             OutPatientCareToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { registrationToolStripMenuItem, patientToolStripMenuItem, receiveFeeToolStripMenuItem });
             OutPatientCareToolStripMenuItem.Name = "OutPatientCareToolStripMenuItem";
-            OutPatientCareToolStripMenuItem.Size = new Size(174, 24);
+            OutPatientCareToolStripMenuItem.Size = new Size(139, 24);
             OutPatientCareToolStripMenuItem.Text = "&Out Patient Management";
             OutPatientCareToolStripMenuItem.Visible = false;
             // 
@@ -954,7 +954,7 @@
             registrationToolStripMenuItem.Image = (Image)resources.GetObject("registrationToolStripMenuItem.Image");
             registrationToolStripMenuItem.Name = "registrationToolStripMenuItem";
             registrationToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.R;
-            registrationToolStripMenuItem.Size = new Size(237, 26);
+            registrationToolStripMenuItem.Size = new Size(196, 26);
             registrationToolStripMenuItem.Text = "Register";
             registrationToolStripMenuItem.Click += registrationToolStripMenuItem_Click;
             // 
@@ -963,7 +963,7 @@
             patientToolStripMenuItem.Image = (Image)resources.GetObject("patientToolStripMenuItem.Image");
             patientToolStripMenuItem.Name = "patientToolStripMenuItem";
             patientToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.I;
-            patientToolStripMenuItem.Size = new Size(237, 26);
+            patientToolStripMenuItem.Size = new Size(196, 26);
             patientToolStripMenuItem.Text = "Patient";
             patientToolStripMenuItem.Click += patientToolStripMenuItem2_Click;
             // 
@@ -972,7 +972,7 @@
             receiveFeeToolStripMenuItem.Image = (Image)resources.GetObject("receiveFeeToolStripMenuItem.Image");
             receiveFeeToolStripMenuItem.Name = "receiveFeeToolStripMenuItem";
             receiveFeeToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.A;
-            receiveFeeToolStripMenuItem.Size = new Size(237, 26);
+            receiveFeeToolStripMenuItem.Size = new Size(196, 26);
             receiveFeeToolStripMenuItem.Text = "Receive Payment";
             receiveFeeToolStripMenuItem.Click += ReceiveFeeToolStripMenuItem_Click;
             // 
@@ -980,7 +980,7 @@
             // 
             inPatientCareToolStripMenuItem1.DropDownItems.AddRange(new ToolStripItem[] { transferPatientToolStripMenuItem1, reAssignCareTakerToolStripMenuItem1, dischargePatientToolStripMenuItem });
             inPatientCareToolStripMenuItem1.Name = "inPatientCareToolStripMenuItem1";
-            inPatientCareToolStripMenuItem1.Size = new Size(163, 24);
+            inPatientCareToolStripMenuItem1.Size = new Size(131, 24);
             inPatientCareToolStripMenuItem1.Text = "&In Patient Management";
             inPatientCareToolStripMenuItem1.Visible = false;
             // 
@@ -989,7 +989,7 @@
             transferPatientToolStripMenuItem1.Image = (Image)resources.GetObject("transferPatientToolStripMenuItem1.Image");
             transferPatientToolStripMenuItem1.Name = "transferPatientToolStripMenuItem1";
             transferPatientToolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.T;
-            transferPatientToolStripMenuItem1.Size = new Size(270, 26);
+            transferPatientToolStripMenuItem1.Size = new Size(222, 26);
             transferPatientToolStripMenuItem1.Text = "Transfer Patient";
             transferPatientToolStripMenuItem1.Click += transferPatientToolStripMenuItem1_Click;
             // 
@@ -998,7 +998,7 @@
             reAssignCareTakerToolStripMenuItem1.Image = (Image)resources.GetObject("reAssignCareTakerToolStripMenuItem1.Image");
             reAssignCareTakerToolStripMenuItem1.Name = "reAssignCareTakerToolStripMenuItem1";
             reAssignCareTakerToolStripMenuItem1.ShortcutKeys = Keys.Control | Keys.A;
-            reAssignCareTakerToolStripMenuItem1.Size = new Size(270, 26);
+            reAssignCareTakerToolStripMenuItem1.Size = new Size(222, 26);
             reAssignCareTakerToolStripMenuItem1.Text = "Re-assign Care Taker";
             reAssignCareTakerToolStripMenuItem1.Click += reAssignCareTakerToolStripMenuItem1_Click;
             // 
@@ -1007,7 +1007,7 @@
             dischargePatientToolStripMenuItem.Image = (Image)resources.GetObject("dischargePatientToolStripMenuItem.Image");
             dischargePatientToolStripMenuItem.Name = "dischargePatientToolStripMenuItem";
             dischargePatientToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.D;
-            dischargePatientToolStripMenuItem.Size = new Size(270, 26);
+            dischargePatientToolStripMenuItem.Size = new Size(222, 26);
             dischargePatientToolStripMenuItem.Text = "Discharge Patient";
             dischargePatientToolStripMenuItem.Click += dischargePatientToolStripMenuItem_Click;
             // 
@@ -1015,7 +1015,7 @@
             // 
             nursesTechToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { nursestechOPQueueToolStripMenuItem, inPatientToolStripMenuItem, performProceduresToolStripMenuItem });
             nursesTechToolStripMenuItem.Name = "nursesTechToolStripMenuItem";
-            nursesTechToolStripMenuItem.Size = new Size(98, 24);
+            nursesTechToolStripMenuItem.Size = new Size(79, 24);
             nursesTechToolStripMenuItem.Text = "&Nurses/Tech";
             nursesTechToolStripMenuItem.Visible = false;
             // 
@@ -1024,7 +1024,7 @@
             nursestechOPQueueToolStripMenuItem.Image = (Image)resources.GetObject("nursestechOPQueueToolStripMenuItem.Image");
             nursestechOPQueueToolStripMenuItem.Name = "nursestechOPQueueToolStripMenuItem";
             nursestechOPQueueToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.O;
-            nursestechOPQueueToolStripMenuItem.Size = new Size(253, 26);
+            nursestechOPQueueToolStripMenuItem.Size = new Size(207, 26);
             nursestechOPQueueToolStripMenuItem.Text = "Out Patient Care";
             nursestechOPQueueToolStripMenuItem.Click += NursestechOPQueueToolStripMenuItem_Click;
             // 
@@ -1033,7 +1033,7 @@
             inPatientToolStripMenuItem.Image = (Image)resources.GetObject("inPatientToolStripMenuItem.Image");
             inPatientToolStripMenuItem.Name = "inPatientToolStripMenuItem";
             inPatientToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.I;
-            inPatientToolStripMenuItem.Size = new Size(253, 26);
+            inPatientToolStripMenuItem.Size = new Size(207, 26);
             inPatientToolStripMenuItem.Text = "In Patient Care";
             inPatientToolStripMenuItem.Click += InPatientToolStripMenuItem_Click;
             // 
@@ -1042,7 +1042,7 @@
             performProceduresToolStripMenuItem.Image = (Image)resources.GetObject("performProceduresToolStripMenuItem.Image");
             performProceduresToolStripMenuItem.Name = "performProceduresToolStripMenuItem";
             performProceduresToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.P;
-            performProceduresToolStripMenuItem.Size = new Size(253, 26);
+            performProceduresToolStripMenuItem.Size = new Size(207, 26);
             performProceduresToolStripMenuItem.Text = "Perform Procedures";
             performProceduresToolStripMenuItem.Click += performProceduresToolStripMenuItem_Click;
             // 
@@ -1050,7 +1050,7 @@
             // 
             doctorToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { doctorOPQueueToolStripMenuItem, iPQueueToolStripMenuItem, consultingToolStripMenuItem });
             doctorToolStripMenuItem.Name = "doctorToolStripMenuItem";
-            doctorToolStripMenuItem.Size = new Size(65, 24);
+            doctorToolStripMenuItem.Size = new Size(51, 24);
             doctorToolStripMenuItem.Text = "&Doctor";
             doctorToolStripMenuItem.Visible = false;
             // 
@@ -1059,7 +1059,7 @@
             doctorOPQueueToolStripMenuItem.Image = (Image)resources.GetObject("doctorOPQueueToolStripMenuItem.Image");
             doctorOPQueueToolStripMenuItem.Name = "doctorOPQueueToolStripMenuItem";
             doctorOPQueueToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.Shift | Keys.O;
-            doctorOPQueueToolStripMenuItem.Size = new Size(236, 26);
+            doctorOPQueueToolStripMenuItem.Size = new Size(198, 26);
             doctorOPQueueToolStripMenuItem.Text = "O.P.Queue";
             doctorOPQueueToolStripMenuItem.Click += oPQueueToolStripMenuItem1_Click;
             // 
@@ -1068,7 +1068,7 @@
             iPQueueToolStripMenuItem.Image = (Image)resources.GetObject("iPQueueToolStripMenuItem.Image");
             iPQueueToolStripMenuItem.Name = "iPQueueToolStripMenuItem";
             iPQueueToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.Shift | Keys.I;
-            iPQueueToolStripMenuItem.Size = new Size(236, 26);
+            iPQueueToolStripMenuItem.Size = new Size(198, 26);
             iPQueueToolStripMenuItem.Text = "I.P.Queue";
             iPQueueToolStripMenuItem.Click += IPQueueToolStripMenuItem_Click;
             // 
@@ -1077,7 +1077,7 @@
             consultingToolStripMenuItem.Image = (Image)resources.GetObject("consultingToolStripMenuItem.Image");
             consultingToolStripMenuItem.Name = "consultingToolStripMenuItem";
             consultingToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.Shift | Keys.C;
-            consultingToolStripMenuItem.Size = new Size(236, 26);
+            consultingToolStripMenuItem.Size = new Size(198, 26);
             consultingToolStripMenuItem.Text = "Consulting";
             consultingToolStripMenuItem.Click += ConsultingToolStripMenuItem_Click;
             // 
@@ -1085,7 +1085,7 @@
             // 
             transactionToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { InvoiceMenuItem, receiptsMenuItem, BillMenuItem, paymentsMenuItem, expenseToolStripMenuItem, journalsMenuItem, accountingReportsMenuItem, creditNoteToolStripMenuItem, debitNoteToolStripMenuItem });
             transactionToolStripMenuItem.Name = "transactionToolStripMenuItem";
-            transactionToolStripMenuItem.Size = new Size(79, 24);
+            transactionToolStripMenuItem.Size = new Size(63, 24);
             transactionToolStripMenuItem.Text = "&Accounts";
             transactionToolStripMenuItem.Visible = false;
             // 
@@ -1094,7 +1094,7 @@
             InvoiceMenuItem.Image = (Image)resources.GetObject("InvoiceMenuItem.Image");
             InvoiceMenuItem.Name = "InvoiceMenuItem";
             InvoiceMenuItem.ShortcutKeys = Keys.Control | Keys.I;
-            InvoiceMenuItem.Size = new Size(235, 26);
+            InvoiceMenuItem.Size = new Size(193, 26);
             InvoiceMenuItem.Text = "Invoice";
             InvoiceMenuItem.Click += InvoiceMenuItem_Click;
             // 
@@ -1103,7 +1103,7 @@
             receiptsMenuItem.Image = (Image)resources.GetObject("receiptsMenuItem.Image");
             receiptsMenuItem.Name = "receiptsMenuItem";
             receiptsMenuItem.ShortcutKeys = Keys.Control | Keys.R;
-            receiptsMenuItem.Size = new Size(235, 26);
+            receiptsMenuItem.Size = new Size(193, 26);
             receiptsMenuItem.Text = "Receipt";
             receiptsMenuItem.Click += receiptsMenuItem_Click;
             // 
@@ -1112,7 +1112,7 @@
             BillMenuItem.Image = (Image)resources.GetObject("BillMenuItem.Image");
             BillMenuItem.Name = "BillMenuItem";
             BillMenuItem.ShortcutKeys = Keys.Control | Keys.B;
-            BillMenuItem.Size = new Size(235, 26);
+            BillMenuItem.Size = new Size(193, 26);
             BillMenuItem.Text = "Bill";
             BillMenuItem.Click += BillMenuItem_Click;
             // 
@@ -1121,7 +1121,7 @@
             paymentsMenuItem.Image = (Image)resources.GetObject("paymentsMenuItem.Image");
             paymentsMenuItem.Name = "paymentsMenuItem";
             paymentsMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.P;
-            paymentsMenuItem.Size = new Size(235, 26);
+            paymentsMenuItem.Size = new Size(193, 26);
             paymentsMenuItem.Text = "Payments";
             paymentsMenuItem.Click += paymentsMenuItem_Click;
             // 
@@ -1130,7 +1130,7 @@
             expenseToolStripMenuItem.Image = (Image)resources.GetObject("expenseToolStripMenuItem.Image");
             expenseToolStripMenuItem.Name = "expenseToolStripMenuItem";
             expenseToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.E;
-            expenseToolStripMenuItem.Size = new Size(235, 26);
+            expenseToolStripMenuItem.Size = new Size(193, 26);
             expenseToolStripMenuItem.Text = "Expense";
             expenseToolStripMenuItem.Click += expenseToolStripMenuItem_Click;
             // 
@@ -1139,7 +1139,7 @@
             journalsMenuItem.Image = (Image)resources.GetObject("journalsMenuItem.Image");
             journalsMenuItem.Name = "journalsMenuItem";
             journalsMenuItem.ShortcutKeys = Keys.Control | Keys.J;
-            journalsMenuItem.Size = new Size(235, 26);
+            journalsMenuItem.Size = new Size(193, 26);
             journalsMenuItem.Text = "Journal";
             journalsMenuItem.Click += journalsMenuItem_Click;
             // 
@@ -1148,14 +1148,14 @@
             accountingReportsMenuItem.DropDownItems.AddRange(new ToolStripItem[] { daybookMenuItem, ledgerMenuItem, trialBalanceMenuItem, profitLossMenuItem, balanceSheetMenuItem, agingReportMenuItem, transactionReportToolStripMenuItem });
             accountingReportsMenuItem.Image = (Image)resources.GetObject("accountingReportsMenuItem.Image");
             accountingReportsMenuItem.Name = "accountingReportsMenuItem";
-            accountingReportsMenuItem.Size = new Size(235, 26);
+            accountingReportsMenuItem.Size = new Size(193, 26);
             accountingReportsMenuItem.Text = "Reports";
             // 
             // daybookMenuItem
             // 
             daybookMenuItem.Image = (Image)resources.GetObject("daybookMenuItem.Image");
             daybookMenuItem.Name = "daybookMenuItem";
-            daybookMenuItem.Size = new Size(213, 26);
+            daybookMenuItem.Size = new Size(175, 26);
             daybookMenuItem.Text = "Daybook";
             daybookMenuItem.Click += daybookMenuItem_Click;
             // 
@@ -1163,7 +1163,7 @@
             // 
             ledgerMenuItem.Image = (Image)resources.GetObject("ledgerMenuItem.Image");
             ledgerMenuItem.Name = "ledgerMenuItem";
-            ledgerMenuItem.Size = new Size(213, 26);
+            ledgerMenuItem.Size = new Size(175, 26);
             ledgerMenuItem.Text = "Ledger";
             ledgerMenuItem.Click += ledgerMenuItem_Click;
             // 
@@ -1171,7 +1171,7 @@
             // 
             trialBalanceMenuItem.Image = (Image)resources.GetObject("trialBalanceMenuItem.Image");
             trialBalanceMenuItem.Name = "trialBalanceMenuItem";
-            trialBalanceMenuItem.Size = new Size(213, 26);
+            trialBalanceMenuItem.Size = new Size(175, 26);
             trialBalanceMenuItem.Text = "Trial Balance";
             trialBalanceMenuItem.Click += trialBalanceMenuItem_Click;
             // 
@@ -1179,7 +1179,7 @@
             // 
             profitLossMenuItem.Image = (Image)resources.GetObject("profitLossMenuItem.Image");
             profitLossMenuItem.Name = "profitLossMenuItem";
-            profitLossMenuItem.Size = new Size(213, 26);
+            profitLossMenuItem.Size = new Size(175, 26);
             profitLossMenuItem.Text = "Profit / Loss";
             profitLossMenuItem.Click += ProfitLossToolStripMenuItem_Click;
             // 
@@ -1188,21 +1188,21 @@
             balanceSheetMenuItem.Image = (Image)resources.GetObject("balanceSheetMenuItem.Image");
             balanceSheetMenuItem.ImageAlign = ContentAlignment.BottomCenter;
             balanceSheetMenuItem.Name = "balanceSheetMenuItem";
-            balanceSheetMenuItem.Size = new Size(213, 26);
+            balanceSheetMenuItem.Size = new Size(175, 26);
             balanceSheetMenuItem.Text = "Balance Sheet";
             // 
             // agingReportMenuItem
             // 
             agingReportMenuItem.Image = (Image)resources.GetObject("agingReportMenuItem.Image");
             agingReportMenuItem.Name = "agingReportMenuItem";
-            agingReportMenuItem.Size = new Size(213, 26);
+            agingReportMenuItem.Size = new Size(175, 26);
             agingReportMenuItem.Text = "Aging Report";
             // 
             // transactionReportToolStripMenuItem
             // 
             transactionReportToolStripMenuItem.Image = (Image)resources.GetObject("transactionReportToolStripMenuItem.Image");
             transactionReportToolStripMenuItem.Name = "transactionReportToolStripMenuItem";
-            transactionReportToolStripMenuItem.Size = new Size(213, 26);
+            transactionReportToolStripMenuItem.Size = new Size(175, 26);
             transactionReportToolStripMenuItem.Text = "Transactions Report";
             transactionReportToolStripMenuItem.Click += TransactionReportToolStripMenuItem_Click;
             // 
@@ -1211,7 +1211,7 @@
             creditNoteToolStripMenuItem.Image = (Image)resources.GetObject("creditNoteToolStripMenuItem.Image");
             creditNoteToolStripMenuItem.Name = "creditNoteToolStripMenuItem";
             creditNoteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
-            creditNoteToolStripMenuItem.Size = new Size(235, 26);
+            creditNoteToolStripMenuItem.Size = new Size(193, 26);
             creditNoteToolStripMenuItem.Text = "CreditNote";
             creditNoteToolStripMenuItem.Click += creditNoteToolStripMenuItem_Click;
             // 
@@ -1220,7 +1220,7 @@
             debitNoteToolStripMenuItem.Image = (Image)resources.GetObject("debitNoteToolStripMenuItem.Image");
             debitNoteToolStripMenuItem.Name = "debitNoteToolStripMenuItem";
             debitNoteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.D;
-            debitNoteToolStripMenuItem.Size = new Size(235, 26);
+            debitNoteToolStripMenuItem.Size = new Size(193, 26);
             debitNoteToolStripMenuItem.Text = "DebitNote";
             debitNoteToolStripMenuItem.Click += debitNoteToolStripMenuItem_Click;
             // 
@@ -1228,7 +1228,7 @@
             // 
             toolsMenu.DropDownItems.AddRange(new ToolStripItem[] { usersMenuItem, changePasswordMenuItem, toolStripSeparator1, companyMenuItem, costCenterMenuItem, toolStripSeparator2, accountsMenuItem, suppliersMenuItem, customersMenuItem, masterReportToolStripMenuItem, toolStripSeparator3, catalogToolStripMenuItem, toolStripSeparator7, employeeToolStripMenuItem, toolStripSeparator6, miseleneousToolStripMenuItem });
             toolsMenu.Name = "toolsMenu";
-            toolsMenu.Size = new Size(62, 24);
+            toolsMenu.Size = new Size(52, 24);
             toolsMenu.Text = "&Master";
             toolsMenu.Visible = false;
             // 
@@ -1237,7 +1237,7 @@
             usersMenuItem.Image = (Image)resources.GetObject("usersMenuItem.Image");
             usersMenuItem.Name = "usersMenuItem";
             usersMenuItem.ShortcutKeys = Keys.Alt | Keys.U;
-            usersMenuItem.Size = new Size(271, 26);
+            usersMenuItem.Size = new Size(223, 26);
             usersMenuItem.Text = "Users";
             usersMenuItem.Click += usersToolStripMenuItem_Click;
             // 
@@ -1246,21 +1246,21 @@
             changePasswordMenuItem.Image = (Image)resources.GetObject("changePasswordMenuItem.Image");
             changePasswordMenuItem.Name = "changePasswordMenuItem";
             changePasswordMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.P;
-            changePasswordMenuItem.Size = new Size(271, 26);
+            changePasswordMenuItem.Size = new Size(223, 26);
             changePasswordMenuItem.Text = "Change Password";
             changePasswordMenuItem.Click += ChangePasswordToolStripMenuItem_Click;
             // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(268, 6);
+            toolStripSeparator1.Size = new Size(220, 6);
             // 
             // companyMenuItem
             // 
             companyMenuItem.Image = (Image)resources.GetObject("companyMenuItem.Image");
             companyMenuItem.Name = "companyMenuItem";
             companyMenuItem.ShortcutKeys = Keys.Alt | Keys.C;
-            companyMenuItem.Size = new Size(271, 26);
+            companyMenuItem.Size = new Size(223, 26);
             companyMenuItem.Text = "Company";
             companyMenuItem.Click += CompanyToolStripMenuItem_Click;
             // 
@@ -1269,21 +1269,21 @@
             costCenterMenuItem.Image = (Image)resources.GetObject("costCenterMenuItem.Image");
             costCenterMenuItem.Name = "costCenterMenuItem";
             costCenterMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.C;
-            costCenterMenuItem.Size = new Size(271, 26);
+            costCenterMenuItem.Size = new Size(223, 26);
             costCenterMenuItem.Text = "Cost Center";
             costCenterMenuItem.Click += costCenterToolStripMenuItem_Click;
             // 
             // toolStripSeparator2
             // 
             toolStripSeparator2.Name = "toolStripSeparator2";
-            toolStripSeparator2.Size = new Size(268, 6);
+            toolStripSeparator2.Size = new Size(220, 6);
             // 
             // accountsMenuItem
             // 
             accountsMenuItem.Image = (Image)resources.GetObject("accountsMenuItem.Image");
             accountsMenuItem.Name = "accountsMenuItem";
             accountsMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.A;
-            accountsMenuItem.Size = new Size(271, 26);
+            accountsMenuItem.Size = new Size(223, 26);
             accountsMenuItem.Text = "Accounts";
             accountsMenuItem.Click += AccountsToolStripMenuItem1_Click;
             // 
@@ -1293,7 +1293,7 @@
             suppliersMenuItem.ImageAlign = ContentAlignment.BottomLeft;
             suppliersMenuItem.Name = "suppliersMenuItem";
             suppliersMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.S;
-            suppliersMenuItem.Size = new Size(271, 26);
+            suppliersMenuItem.Size = new Size(223, 26);
             suppliersMenuItem.Text = "Suppliers";
             suppliersMenuItem.Click += SuppliersToolStripMenuItem1_Click;
             // 
@@ -1302,7 +1302,7 @@
             customersMenuItem.Image = (Image)resources.GetObject("customersMenuItem.Image");
             customersMenuItem.Name = "customersMenuItem";
             customersMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.C;
-            customersMenuItem.Size = new Size(271, 26);
+            customersMenuItem.Size = new Size(223, 26);
             customersMenuItem.Text = "Customers";
             customersMenuItem.Click += customersToolStripMenuItem1_Click;
             // 
@@ -1311,28 +1311,28 @@
             masterReportToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { chartOfAccountsToolStripMenuItem });
             masterReportToolStripMenuItem.Image = (Image)resources.GetObject("masterReportToolStripMenuItem.Image");
             masterReportToolStripMenuItem.Name = "masterReportToolStripMenuItem";
-            masterReportToolStripMenuItem.Size = new Size(271, 26);
+            masterReportToolStripMenuItem.Size = new Size(223, 26);
             masterReportToolStripMenuItem.Text = "Report";
             // 
             // chartOfAccountsToolStripMenuItem
             // 
             chartOfAccountsToolStripMenuItem.Image = (Image)resources.GetObject("chartOfAccountsToolStripMenuItem.Image");
             chartOfAccountsToolStripMenuItem.Name = "chartOfAccountsToolStripMenuItem";
-            chartOfAccountsToolStripMenuItem.Size = new Size(201, 26);
+            chartOfAccountsToolStripMenuItem.Size = new Size(165, 26);
             chartOfAccountsToolStripMenuItem.Text = "Chart of Accounts";
             chartOfAccountsToolStripMenuItem.Click += chartOfAccountsToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
-            toolStripSeparator3.Size = new Size(268, 6);
+            toolStripSeparator3.Size = new Size(220, 6);
             // 
             // catalogToolStripMenuItem
             // 
             catalogToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manageCatalogToolStripMenuItem, catalogReportToolStripMenuItem, importDataToolStripMenuItem, manageItemTaxToolStripMenuItem });
             catalogToolStripMenuItem.Image = (Image)resources.GetObject("catalogToolStripMenuItem.Image");
             catalogToolStripMenuItem.Name = "catalogToolStripMenuItem";
-            catalogToolStripMenuItem.Size = new Size(271, 26);
+            catalogToolStripMenuItem.Size = new Size(223, 26);
             catalogToolStripMenuItem.Text = "Catalog";
             // 
             // manageCatalogToolStripMenuItem
@@ -1340,7 +1340,7 @@
             manageCatalogToolStripMenuItem.Image = (Image)resources.GetObject("manageCatalogToolStripMenuItem.Image");
             manageCatalogToolStripMenuItem.Name = "manageCatalogToolStripMenuItem";
             manageCatalogToolStripMenuItem.ShortcutKeys = Keys.Alt | Keys.Shift | Keys.T;
-            manageCatalogToolStripMenuItem.Size = new Size(268, 26);
+            manageCatalogToolStripMenuItem.Size = new Size(221, 26);
             manageCatalogToolStripMenuItem.Text = "Manage Catalog";
             manageCatalogToolStripMenuItem.Click += manageCatalogToolStripMenuItem_Click;
             // 
@@ -1348,7 +1348,7 @@
             // 
             catalogReportToolStripMenuItem.Image = (Image)resources.GetObject("catalogReportToolStripMenuItem.Image");
             catalogReportToolStripMenuItem.Name = "catalogReportToolStripMenuItem";
-            catalogReportToolStripMenuItem.Size = new Size(268, 26);
+            catalogReportToolStripMenuItem.Size = new Size(221, 26);
             catalogReportToolStripMenuItem.Text = "Item Report";
             catalogReportToolStripMenuItem.Click += reportToolStripMenuItem1_Click;
             // 
@@ -1357,7 +1357,7 @@
             importDataToolStripMenuItem.Image = (Image)resources.GetObject("importDataToolStripMenuItem.Image");
             importDataToolStripMenuItem.Name = "importDataToolStripMenuItem";
             importDataToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.I;
-            importDataToolStripMenuItem.Size = new Size(268, 26);
+            importDataToolStripMenuItem.Size = new Size(221, 26);
             importDataToolStripMenuItem.Text = "Import Data";
             importDataToolStripMenuItem.Click += importDataToolStripMenuItem_Click;
             // 
@@ -1366,35 +1366,35 @@
             manageItemTaxToolStripMenuItem.Image = (Image)resources.GetObject("manageItemTaxToolStripMenuItem.Image");
             manageItemTaxToolStripMenuItem.Name = "manageItemTaxToolStripMenuItem";
             manageItemTaxToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.T;
-            manageItemTaxToolStripMenuItem.Size = new Size(268, 26);
+            manageItemTaxToolStripMenuItem.Size = new Size(221, 26);
             manageItemTaxToolStripMenuItem.Text = "Manage TaxCode";
             manageItemTaxToolStripMenuItem.Click += manageItemTaxToolStripMenuItem_Click;
             // 
             // toolStripSeparator7
             // 
             toolStripSeparator7.Name = "toolStripSeparator7";
-            toolStripSeparator7.Size = new Size(268, 6);
+            toolStripSeparator7.Size = new Size(220, 6);
             // 
             // employeeToolStripMenuItem
             // 
             employeeToolStripMenuItem.Image = (Image)resources.GetObject("employeeToolStripMenuItem.Image");
             employeeToolStripMenuItem.Name = "employeeToolStripMenuItem";
             employeeToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Shift | Keys.E;
-            employeeToolStripMenuItem.Size = new Size(271, 26);
+            employeeToolStripMenuItem.Size = new Size(223, 26);
             employeeToolStripMenuItem.Text = "Employee";
             employeeToolStripMenuItem.Click += employeeToolStripMenuItem_Click;
             // 
             // toolStripSeparator6
             // 
             toolStripSeparator6.Name = "toolStripSeparator6";
-            toolStripSeparator6.Size = new Size(268, 6);
+            toolStripSeparator6.Size = new Size(220, 6);
             // 
             // miseleneousToolStripMenuItem
             // 
             miseleneousToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { paymentTermsToolStripMenuItem, paymentMethodToolStripMenuItem });
             miseleneousToolStripMenuItem.Image = (Image)resources.GetObject("miseleneousToolStripMenuItem.Image");
             miseleneousToolStripMenuItem.Name = "miseleneousToolStripMenuItem";
-            miseleneousToolStripMenuItem.Size = new Size(271, 26);
+            miseleneousToolStripMenuItem.Size = new Size(223, 26);
             miseleneousToolStripMenuItem.Text = "Miscellaneous Config";
             // 
             // paymentTermsToolStripMenuItem
@@ -1402,7 +1402,7 @@
             paymentTermsToolStripMenuItem.Image = (Image)resources.GetObject("paymentTermsToolStripMenuItem.Image");
             paymentTermsToolStripMenuItem.Name = "paymentTermsToolStripMenuItem";
             paymentTermsToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.T;
-            paymentTermsToolStripMenuItem.Size = new Size(312, 26);
+            paymentTermsToolStripMenuItem.Size = new Size(255, 26);
             paymentTermsToolStripMenuItem.Text = "Payment Terms";
             paymentTermsToolStripMenuItem.Click += paymentTermsToolStripMenuItem_Click;
             // 
@@ -1411,7 +1411,7 @@
             paymentMethodToolStripMenuItem.Image = (Image)resources.GetObject("paymentMethodToolStripMenuItem.Image");
             paymentMethodToolStripMenuItem.Name = "paymentMethodToolStripMenuItem";
             paymentMethodToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Alt | Keys.Shift | Keys.M;
-            paymentMethodToolStripMenuItem.Size = new Size(312, 26);
+            paymentMethodToolStripMenuItem.Size = new Size(255, 26);
             paymentMethodToolStripMenuItem.Text = "Payment Methods";
             paymentMethodToolStripMenuItem.Click += paymentMethodToolStripMenuItem_Click;
             // 
@@ -1419,7 +1419,7 @@
             // 
             SettingsMenu.DropDownItems.AddRange(new ToolStripItem[] { workStationsetupStripMenuItem });
             SettingsMenu.Name = "SettingsMenu";
-            SettingsMenu.Size = new Size(71, 24);
+            SettingsMenu.Size = new Size(58, 24);
             SettingsMenu.Text = "&Settings";
             SettingsMenu.Visible = false;
             // 
@@ -1428,7 +1428,7 @@
             workStationsetupStripMenuItem.Image = (Image)resources.GetObject("workStationsetupStripMenuItem.Image");
             workStationsetupStripMenuItem.Name = "workStationsetupStripMenuItem";
             workStationsetupStripMenuItem.ShortcutKeys = Keys.Control | Keys.W;
-            workStationsetupStripMenuItem.Size = new Size(264, 26);
+            workStationsetupStripMenuItem.Size = new Size(213, 26);
             workStationsetupStripMenuItem.Text = "Work Station Setup";
             workStationsetupStripMenuItem.Click += workStationsetupStripMenuItem_Click;
             // 
@@ -1436,27 +1436,27 @@
             // 
             helpMenu.DropDownItems.AddRange(new ToolStripItem[] { toolStripSeparator8, aboutToolStripMenuItem });
             helpMenu.Name = "helpMenu";
-            helpMenu.Size = new Size(59, 24);
+            helpMenu.Size = new Size(48, 24);
             helpMenu.Text = "&About";
             // 
             // toolStripSeparator8
             // 
             toolStripSeparator8.Name = "toolStripSeparator8";
-            toolStripSeparator8.Size = new Size(173, 6);
+            toolStripSeparator8.Size = new Size(145, 6);
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Image = (Image)resources.GetObject("aboutToolStripMenuItem.Image");
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.ShortcutKeys = Keys.F10;
-            aboutToolStripMenuItem.Size = new Size(176, 26);
+            aboutToolStripMenuItem.Size = new Size(148, 26);
             aboutToolStripMenuItem.Text = "MediCare";
             aboutToolStripMenuItem.Click += AboutToolStripMenuItem_Click;
             // 
             // toolStripLabel1
             // 
             toolStripLabel1.Name = "toolStripLabel1";
-            toolStripLabel1.Size = new Size(81, 24);
+            toolStripLabel1.Size = new Size(62, 24);
             toolStripLabel1.Text = "Company : ";
             // 
             // toolStripTextBoxCompany
@@ -1475,7 +1475,7 @@
             // toolStripCostCenterLabel
             // 
             toolStripCostCenterLabel.Name = "toolStripCostCenterLabel";
-            toolStripCostCenterLabel.Size = new Size(90, 24);
+            toolStripCostCenterLabel.Size = new Size(72, 24);
             toolStripCostCenterLabel.Text = "Cost Center :";
             // 
             // toolStripTextBoxCostCenter
@@ -1494,7 +1494,7 @@
             // toolStripLabel2
             // 
             toolStripLabel2.Name = "toolStripLabel2";
-            toolStripLabel2.Size = new Size(125, 24);
+            toolStripLabel2.Size = new Size(99, 24);
             toolStripLabel2.Text = "Transaction Date : ";
             // 
             // toolStripTextBoxTransactionDate
@@ -1525,7 +1525,7 @@
             toolStripChangeCompanyButton.Image = (Image)resources.GetObject("toolStripChangeCompanyButton.Image");
             toolStripChangeCompanyButton.ImageTransparentColor = Color.Magenta;
             toolStripChangeCompanyButton.Name = "toolStripChangeCompanyButton";
-            toolStripChangeCompanyButton.Size = new Size(29, 24);
+            toolStripChangeCompanyButton.Size = new Size(24, 24);
             toolStripChangeCompanyButton.Text = "Change";
             toolStripChangeCompanyButton.ToolTipText = "Change Company";
             toolStripChangeCompanyButton.Click += toolStripButton1_Click;
@@ -1536,7 +1536,7 @@
             toolStripCostCenterButton.Image = (Image)resources.GetObject("toolStripCostCenterButton.Image");
             toolStripCostCenterButton.ImageTransparentColor = Color.Magenta;
             toolStripCostCenterButton.Name = "toolStripCostCenterButton";
-            toolStripCostCenterButton.Size = new Size(29, 24);
+            toolStripCostCenterButton.Size = new Size(24, 24);
             toolStripCostCenterButton.Text = "Change Cost Center";
             toolStripCostCenterButton.Click += toolStripCostCenterButton_Click;
             // 
@@ -1547,7 +1547,7 @@
             toolStripChangeDateButton.Image = (Image)resources.GetObject("toolStripChangeDateButton.Image");
             toolStripChangeDateButton.ImageTransparentColor = Color.Magenta;
             toolStripChangeDateButton.Name = "toolStripChangeDateButton";
-            toolStripChangeDateButton.Size = new Size(29, 24);
+            toolStripChangeDateButton.Size = new Size(24, 24);
             toolStripChangeDateButton.Text = "toolStripCalendarButton";
             toolStripChangeDateButton.ToolTipText = "Change Transacetion Date";
             toolStripChangeDateButton.Click += toolStripChangeDateButton_Click;
@@ -1624,14 +1624,14 @@
             // pictureBox1
             // 
             pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
-            pictureBox1.BackgroundImageLayout = ImageLayout.None;
+            pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
             pictureBox1.Dock = DockStyle.Left;
             pictureBox1.InitialImage = null;
             pictureBox1.Location = new Point(9, 10);
             pictureBox1.Margin = new Padding(9, 10, 9, 10);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Padding = new Padding(9, 10, 9, 10);
-            pictureBox1.Size = new Size(337, 88);
+            pictureBox1.Size = new Size(92, 88);
             pictureBox1.TabIndex = 4;
             pictureBox1.TabStop = false;
             // 
@@ -2975,7 +2975,7 @@
             // 
             // Container
             // 
-            AutoScaleDimensions = new SizeF(8F, 17F);
+            AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.ControlDark;
             ClientSize = new Size(1364, 749);
