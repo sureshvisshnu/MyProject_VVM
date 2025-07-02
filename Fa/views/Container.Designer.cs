@@ -2993,6 +2993,7 @@
             MinimumSize = new Size(1027, 595);
             Name = "Container";
             StartPosition = FormStartPosition.CenterScreen;
+            TransparencyKey = Color.White;
             WindowState = FormWindowState.Maximized;
             FormClosing += Container_FormClosing;
             Load += Container_Load;

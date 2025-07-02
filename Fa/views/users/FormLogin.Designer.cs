@@ -48,7 +48,7 @@
             label1.ForeColor = Color.Indigo;
             label1.Location = new Point(95, 17);
             label1.Name = "label1";
-            label1.Size = new Size(46, 17);
+            label1.Size = new Size(37, 13);
             label1.TabIndex = 0;
             label1.Text = "Login";
             // 
@@ -59,7 +59,7 @@
             label2.ForeColor = Color.Indigo;
             label2.Location = new Point(95, 58);
             label2.Name = "label2";
-            label2.Size = new Size(75, 17);
+            label2.Size = new Size(61, 13);
             label2.TabIndex = 1;
             label2.Text = "Password";
             // 
@@ -69,7 +69,7 @@
             TextBoxLoginLogin.Location = new Point(98, 33);
             TextBoxLoginLogin.MaxLength = 60;
             TextBoxLoginLogin.Name = "TextBoxLoginLogin";
-            TextBoxLoginLogin.Size = new Size(260, 24);
+            TextBoxLoginLogin.Size = new Size(260, 21);
             TextBoxLoginLogin.TabIndex = 2;
             TextBoxLoginLogin.TextChanged += TextBoxLoginLogin_TextChanged;
             TextBoxLoginLogin.KeyDown += TextBoxLoginLogin_KeyDown;
@@ -83,7 +83,7 @@
             TextBoxLoginPassword.MaxLength = 60;
             TextBoxLoginPassword.Name = "TextBoxLoginPassword";
             TextBoxLoginPassword.PasswordChar = '*';
-            TextBoxLoginPassword.Size = new Size(260, 24);
+            TextBoxLoginPassword.Size = new Size(260, 21);
             TextBoxLoginPassword.TabIndex = 3;
             TextBoxLoginPassword.TextChanged += TextBoxLoginPassword_TextChanged;
             TextBoxLoginPassword.KeyDown += TextBoxLoginPassword_KeyDown;
@@ -135,9 +135,9 @@
             // FormLogin
             // 
             AcceptButton = BtnLoginLogin;
-            AutoScaleDimensions = new SizeF(8F, 17F);
+            AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.LightSteelBlue;
+            BackColor = SystemColors.ControlLightLight;
             CancelButton = BtnLoginCancel;
             ClientSize = new Size(370, 147);
             Controls.Add(pictureBox2);

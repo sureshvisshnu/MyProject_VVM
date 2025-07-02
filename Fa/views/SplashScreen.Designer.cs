@@ -35,9 +35,11 @@
             timer1 = new System.Windows.Forms.Timer(components);
             pictureBox1 = new PictureBox();
             groupBox1 = new GroupBox();
+            pictureBox3 = new PictureBox();
             pictureBox2 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
             // 
@@ -71,6 +73,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(pictureBox3);
             groupBox1.Controls.Add(pictureBox2);
             groupBox1.Location = new Point(2, -4);
             groupBox1.Name = "groupBox1";
@@ -78,19 +81,30 @@
             groupBox1.TabIndex = 4;
             groupBox1.TabStop = false;
             // 
+            // pictureBox3
+            // 
+            pictureBox3.BackgroundImage = (Image)resources.GetObject("pictureBox3.BackgroundImage");
+            pictureBox3.BackgroundImageLayout = ImageLayout.Stretch;
+            pictureBox3.InitialImage = (Image)resources.GetObject("pictureBox3.InitialImage");
+            pictureBox3.Location = new Point(10, 15);
+            pictureBox3.Name = "pictureBox3";
+            pictureBox3.Size = new Size(85, 118);
+            pictureBox3.TabIndex = 1;
+            pictureBox3.TabStop = false;
+            // 
             // pictureBox2
             // 
             pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
             pictureBox2.BackgroundImageLayout = ImageLayout.Stretch;
-            pictureBox2.Location = new Point(12, 12);
+            pictureBox2.Location = new Point(95, 14);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(437, 118);
+            pictureBox2.Size = new Size(352, 119);
             pictureBox2.TabIndex = 0;
             pictureBox2.TabStop = false;
             // 
             // SplashScreen
             // 
-            AutoScaleDimensions = new SizeF(8F, 17F);
+            AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(461, 186);
             ControlBox = false;
@@ -107,6 +121,7 @@
             Load += SplashScreen_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
         }
@@ -118,5 +133,6 @@
         private PictureBox pictureBox1;
         private GroupBox groupBox1;
         private PictureBox pictureBox2;
+        private PictureBox pictureBox3;
     }
 }

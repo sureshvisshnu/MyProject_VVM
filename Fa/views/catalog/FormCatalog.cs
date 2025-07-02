@@ -1791,7 +1791,7 @@ namespace fa.views.catalog
             ComboBoxProductManufacturer.SelectedIndex = -1;
             ComboBoxProductSupplier.ResetText();
             TextBoxProductSupplier.ResetText();
-            ComboBoxProductSupplier.SelectedIndex = -1;       
+            ComboBoxProductSupplier.SelectedIndex = -1;
             GridViewProductTaxDetails.Rows.Clear();
 
         }
@@ -2787,9 +2787,9 @@ namespace fa.views.catalog
 
             }
         }
-        private void button1_Click(object sender, EventArgs e)
+        private void BtnPriceCalculator_Click(object sender, EventArgs e)
         {
-            FormItemPriceCalculator PriceCalculator = new FormItemPriceCalculator(this);
+            FormItemSpecialPriceCalculator PriceCalculator = new FormItemSpecialPriceCalculator(this);
             PriceCalculator.ShowDialog(this);
         }
         private void CheckBoxProductFamilyMaintainInventory_CheckedChanged(object sender, EventArgs e)
@@ -3120,5 +3120,7 @@ namespace fa.views.catalog
                 }
             }
         }
+
+        
     }
 }
