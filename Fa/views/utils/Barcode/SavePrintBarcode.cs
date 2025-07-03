@@ -396,7 +396,7 @@ namespace fa.views.utils
             {
                 if ((bool)Row.Cells[(int)BarcodePrintGridColumn.SELECT_ITEM].Value)
                 {
-                    int Quantity = int.Parse(Row.Cells[(int)BarcodePrintGridColumn.QTY].Value.ToString());
+                    int Quantity = int.Parse(Row.Cells[(int)BarcodePrintGridColumn.QTY].Value.ToString()!);
                     TotalQty = TotalQty + Quantity;
                     Rows += ((Quantity / 3) + ((Quantity % 3) != 0 ? 1 : 0)) + (UnCompletedRowCell != 0 ? 1 : 0);
                     if (AddColumn != 0)
@@ -1241,6 +1241,209 @@ namespace fa.views.utils
                 default:
                     throw new ArgumentException("Invalid label column value. Use 1, 2, or 3.");
             }
+        }
+        // ======= SIMILAR DESIGN ======
+        private void PrintThreeColumnLabels35x25mm(string printerName, Product product,
+                                        string productName, string companyName,
+                                        PriceInformation priceInfo, long quantity)
+        {
+            var rows = quantity / 3;
+            var remaining = quantity % 3;
+
+            // Print full rows (3 labels each)
+            for (long i = 0; i < rows; i++)
+            {
+                var commands = CreateThreeLabelCommandSet35x25mm(product, productName, companyName, priceInfo);
+                PrintLabel(printerName, commands, i.ToString());
+            }
+
+            // Print remaining labels (1 or 2)
+            if (remaining > 0)
+            {
+                var commands = remaining == 1
+                    ? CreateSingleLabelCommandSet35x25mm(product, productName, companyName, priceInfo)
+                    : CreateDoubleLabelCommandSet35x25mm(product, productName, companyName, priceInfo);
+
+                PrintLabel(printerName, commands, "");
+            }
+        }
+
+        private string[] CreateThreeLabelCommandSet35x25mm(Product product, string productName,
+                                                         string companyName, PriceInformation priceInfo)
+        {
+            return CombineCommands(
+                GetPrinterSetupCommands35x25mm(),
+                GetLabelCommand35x25mm(785, companyName, productName, product, priceInfo, 2, 1),
+                GetLabelCommand35x25mm(506, companyName, productName, product, priceInfo, 2, 1),
+                GetLabelCommand35x25mm(228, companyName, productName, product, priceInfo, 2, 1),
+                "P1"
+            );
+        }
+
+        private string[] CreateDoubleLabelCommandSet35x25mm(Product product, string productName,
+                                                          string companyName, PriceInformation priceInfo)
+        {
+            return CombineCommands(
+                GetPrinterSetupCommands35x25mm(),
+                GetLabelCommand35x25mm(785, companyName, productName, product, priceInfo, 2, 1),
+                GetLabelCommand35x25mm(506, companyName, productName, product, priceInfo, 2, 1),
+                "P1"
+            );
+        }
+
+        private string[] CreateSingleLabelCommandSet35x25mm(Product product, string productName,
+                                                          string companyName, PriceInformation priceInfo)
+        {
+            return CombineCommands(
+                GetPrinterSetupCommands35x25mm(),
+                GetLabelCommand35x25mm(785, companyName, productName, product, priceInfo, 2, 1),
+                "P1"
+            );
+        }
+
+        private string[] GetPrinterSetupCommands35x25mm()
+        {
+            return new string[]
+            {
+        "I8,A",    // 203 DPI, font A
+        "q295",    // Label height = 295 dots (~35mm)
+        "O",       // Reverse printing (optional)
+        "JF",      // Field justification
+        "ZT",      // Thermal transfer mode
+        "Q200,25", // Label width = 200 dots (~25mm)
+        "N"        // Normal printing mode
+            };
+        }
+
+        private string[] GetLabelCommand35x25mm(int xOffset, string companyName, string productName,
+                                              Product product, PriceInformation priceInfo,
+                                              int largeFontSize, int smallFontSize)
+        {
+            var quote = '"';
+            return new string[]
+            {
+        // Adjusted coordinates for 35x25mm labels
+        $"A{xOffset},100,2,{largeFontSize},1,1,N,{quote}{companyName}{quote}",
+        $"A{xOffset},80,2,{smallFontSize},1,1,N,{quote}{productName}{quote}",
+        $"B{xOffset-11},60,2,1,1,3,30,N,{quote}{product.MaterialId}{quote}",  // Smaller barcode
+        $"A{xOffset-11},30,2,{smallFontSize},1,1,N,{quote}{product.MaterialId}{quote}",
+        $"A{xOffset+5},20,2,{largeFontSize},1,1,N,{quote}{priceInfo.MrpText}{quote}",
+        $"A{xOffset-30},15,2,{largeFontSize},1,1,N,{quote}{priceInfo.FormattedMrp}{quote}"
+            };
+        }
+        // ===== SPECIAL DESIGN ---
+        public void GenerateCompactBarcodeLabel(long productId, long quantity, string printerName)
+        {
+            Product product = CatalogProductManager.Instance.GetProductInfoById(productId);
+
+            // Format text fields with appropriate lengths
+            string companyName = TruncateWithEllipsis(Global.Company.Name, 20);
+            string productName = TruncateWithEllipsis(product.Name, 20);
+            string productCode = product.MaterialId;
+
+            // Prepare pricing information
+            string mrp = product.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
+            string rate = (Global.Company.BusinessType == BuisnessType.Wholesale
+                          ? product.WholdSalePrice
+                          : product.RetailPrice)
+                         .ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
+
+            // Generate labels
+            PrintCompactLabels(printerName, companyName, productName, productCode, mrp, rate, quantity);
+        }
+
+        private void PrintCompactLabels(string printerName, string companyName, string productName,
+                                      string productCode, string mrp, string rate, long quantity)
+        {
+            var rows = quantity / 3;
+            var remaining = quantity % 3;
+
+            // Print full rows (3 labels each)
+            for (long i = 0; i < rows; i++)
+            {
+                var commands = CreateCompactLabelCommandSet(companyName, productName, productCode, mrp, rate);
+                PrintLabel(printerName, commands, i.ToString());
+            }
+
+            // Print remaining labels (1 or 2)
+            if (remaining > 0)
+            {
+                var commands = remaining == 1
+                    ? CreateSingleCompactLabelCommandSet(companyName, productName, productCode, mrp, rate)
+                    : CreateDoubleCompactLabelCommandSet(companyName, productName, productCode, mrp, rate);
+
+                PrintLabel(printerName, commands, "");
+            }
+        }
+
+        private string[] CreateCompactLabelCommandSet(string companyName, string productName,
+                                                    string productCode, string mrp, string rate)
+        {
+            return CombineCommands(
+                GetCompactPrinterSetupCommands(),
+                GetCompactLabelCommand(785, companyName, productName, productCode, mrp, rate),
+                GetCompactLabelCommand(506, companyName, productName, productCode, mrp, rate),
+                GetCompactLabelCommand(228, companyName, productName, productCode, mrp, rate),
+                "P1"
+            );
+        }
+
+        private string[] CreateDoubleCompactLabelCommandSet(string companyName, string productName,
+                                                          string productCode, string mrp, string rate)
+        {
+            return CombineCommands(
+                GetCompactPrinterSetupCommands(),
+                GetCompactLabelCommand(785, companyName, productName, productCode, mrp, rate),
+                GetCompactLabelCommand(506, companyName, productName, productCode, mrp, rate),
+                "P1"
+            );
+        }
+
+        private string[] CreateSingleCompactLabelCommandSet(string companyName, string productName,
+                                                          string productCode, string mrp, string rate)
+        {
+            return CombineCommands(
+                GetCompactPrinterSetupCommands(),
+                GetCompactLabelCommand(785, companyName, productName, productCode, mrp, rate),
+                "P1"
+            );
+        }
+
+        private string[] GetCompactPrinterSetupCommands()
+        {
+            return new string[]
+            {
+        "I8,A",    // 203 DPI, font A
+        "q295",    // Label height = 295 dots (~35mm)
+        "O",       // Reverse printing (optional)
+        "JF",      // Field justification
+        "ZT",      // Thermal transfer mode
+        "Q200,25", // Label width = 200 dots (~25mm)
+        "N"        // Normal printing mode
+            };
+        }
+
+        private string[] GetCompactLabelCommand(int xOffset, string companyName, string productName,
+                                              string productCode, string mrp, string rate)
+        {
+            var quote = '"';
+            return new string[]
+            {
+        // Company Name (top line)
+        $"A{xOffset},100,2,2,1,1,N,{quote}{companyName}{quote}",
+        
+        // Product Name (middle line)
+        $"A{xOffset},70,2,1,1,1,N,{quote}{productName}{quote}",
+        
+        // Barcode (centered)
+        $"B{xOffset-30},50,2,1,1,2,30,N,{quote}{productCode}{quote}",
+        
+        // Product Code (below barcode)
+        $"A{xOffset-30},30,2,1,1,1,N,{quote}{productCode}{quote}",
+        
+        // MRP and Rate (bottom line)
+        $"A{xOffset},15,2,1,1,1,N,{quote}MRP:{mrp} RATE:{rate}{quote}"
+            };
         }
     }
 }
