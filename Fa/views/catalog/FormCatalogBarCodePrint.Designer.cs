@@ -38,13 +38,13 @@
             BtnPrint = new Button();
             Print = new StatusStrip();
             PrintErrorMsg = new ToolStripStatusLabel();
-            TextBoxStartLocation = new controls.text.UserControlPoint();
+            TextBoxStartLocation = new fa.views.controls.text.UserControlPoint();
             groupBox2 = new GroupBox();
-            ComboBoxDefaultPrinter = new controls.ComboBoxSwapTextBox();
+            ComboBoxDefaultPrinter = new fa.views.controls.ComboBoxSwapTextBox();
             label3 = new Label();
             ComboBoxLabelSize = new ComboBox();
             LabelLabelSize = new Label();
-            YesNoRadioPaperSize = new controls.YesNoRadio();
+            YesNoRadioPaperSize = new fa.views.controls.YesNoRadio();
             Print.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -59,6 +59,7 @@
             // 
             // AccountIdTransport
             // 
+            AccountIdTransport.Location = new Point(0, 186);
             AccountIdTransport.Size = new Size(116, 21);
             // 
             // checkBoxIsPatient

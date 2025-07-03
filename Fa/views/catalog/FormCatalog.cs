@@ -2599,15 +2599,26 @@ namespace fa.views.catalog
         private void BtnPrintBarCode_Click(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
-            if (string.IsNullOrEmpty(TextBoxCatalogId.Text) || CatalogProductManager.GetProductInfoById(long.Parse(TextBoxCatalogId.Text)) == null)
+            this.Enabled = false; // Disable parent form
+            try
             {
-                DisplaySystemError("Somthing went wrong, the selected product is not valid.");
-                return;
+                if (string.IsNullOrEmpty(TextBoxCatalogId.Text) || CatalogProductManager.GetProductInfoById(long.Parse(TextBoxCatalogId.Text)) == null)
+                {
+                    DisplaySystemError("Somthing went wrong, the selected product is not valid.");
+                    return;
+                }
+
+                using (FormCatalogBarCodePrint printForm = new FormCatalogBarCodePrint(this))
+                {
+                    printForm.ProductId = long.Parse(TextBoxCatalogId.Text);
+                    printForm.ShowDialog();
+                }
             }
-            FormCatalogBarCodePrint printForm = new FormCatalogBarCodePrint(this);
-            printForm.ProductId = long.Parse(TextBoxCatalogId.Text);
-            printForm.Show();
-            Cursor.Current = Cursors.Default;
+            finally
+            {
+                this.Enabled = true; // Re-enable parent form
+                Cursor.Current = Cursors.Default;
+            }
         }
         private void BtnPrintTocken_Click(object sender, EventArgs e)
         {

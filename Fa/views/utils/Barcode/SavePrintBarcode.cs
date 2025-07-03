@@ -33,13 +33,13 @@ namespace fa.views.utils
 
     public enum LabelSize
     {
-        THREE,TWO,ONE
+        THREE, TWO, ONE
     }
     public class SavePrintBarcode
     {
         public string PrinterName;
         //a4 sheet barcode by item
-        public void GenerateBarcodeA4(long ProductId, string fileName, string fileExtension, bool isPrint, string Location,int Qty, string PrinterName)
+        public void GenerateBarcodeA4(long ProductId, string fileName, string fileExtension, bool isPrint, string Location, int Qty, string PrinterName)
         {
             using (MemoryStream myMemoryStream = new MemoryStream())
             {
@@ -55,7 +55,7 @@ namespace fa.views.utils
             }
         }
 
-        private PdfPTable MainTable(long ProductId, string Location,int Qty)
+        private PdfPTable MainTable(long ProductId, string Location, int Qty)
         {
             string[] StartCell = Location.Split(',');
             int PrintStartCellCount = (((int.Parse(StartCell[0]) - 1) * 3) + int.Parse(StartCell[1]));
@@ -67,7 +67,7 @@ namespace fa.views.utils
 
             float[] widths = null;
 
-            widths = new float[] { 280f, 270f, 260f};
+            widths = new float[] { 280f, 270f, 260f };
             ReportMainTable.SetWidths(widths);
 
             int Rows = 0;
@@ -85,106 +85,106 @@ namespace fa.views.utils
 
             Product ProductFromDB = CatalogProductManager.Instance.GetProductInfoById(ProductId);
 
-                    int Quantity = Qty;
-                    TotalQty = TotalQty + Quantity;
-                    Rows += ((Quantity / 3) + ((Quantity % 3) != 0 ? 1 : 0)) + (UnCompletedRowCell != 0 ? 1 : 0);
-                    if (AddColumn != 0)
+            int Quantity = Qty;
+            TotalQty = TotalQty + Quantity;
+            Rows += ((Quantity / 3) + ((Quantity % 3) != 0 ? 1 : 0)) + (UnCompletedRowCell != 0 ? 1 : 0);
+            if (AddColumn != 0)
+            {
+                jCell = AddColumn;
+                i = i - 1;
+            }
+            AddColumn = (Quantity % 3);
+
+            if (UnCompletedRowCell != 0)
+            {
+                jCell = UnCompletedRowCell;
+                if (AddColumn != 0 && ((3 - jCell) - AddColumn) > -1)
+                {
+                    Rows -= 1;
+                }
+            }
+            if (jCell != 0)
+            {
+                int TempAddColumn = (3 - jCell);
+                if (TempAddColumn <= AddColumn)
+                {
+                    if (TempAddColumn == AddColumn && UnCompletedRowCell == 0)
                     {
-                        jCell = AddColumn;
-                        i = i - 1;
+                        Rows -= 1;
                     }
-                    AddColumn = (Quantity % 3);
-
-                    if (UnCompletedRowCell != 0)
+                    AddColumn -= TempAddColumn;
+                }
+                else
+                {
+                    if (AddColumn != 0 && UnCompletedRowCell == 0)
                     {
-                        jCell = UnCompletedRowCell;
-                        if (AddColumn != 0 && ((3 - jCell) - AddColumn) > -1)
-                        {
-                            Rows -= 1;
-                        }
+                        Rows -= 1;
                     }
-                    if (jCell != 0)
+                    AddColumn = (3 - (TempAddColumn - AddColumn));
+                }
+            }
+            UnCompletedRowCell = 0;
+            MemoryStream Barcode = new MemoryStream();
+            var Image = BarCode.GenerateImageBarcode1(ProductFromDB.MaterialId);
+            Image.Save(Barcode, System.Drawing.Imaging.ImageFormat.Png);
+            iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(Barcode.ToArray());
+            image.ScaleAbsoluteHeight(15);
+            image.ScaleAbsoluteWidth(130);
+            var Temp = image;
+            int alength = Global.Company.Name.Length;
+            int plength = ProductFromDB.Name.Length;
+
+            var AboveBarcodeName = " " + Global.Company.Name.Substring(0, (alength <= 25) ? alength : 25) + ((alength > 25) ? ".." : "") + "\n" + " " + ProductFromDB.Name.Substring(0, (plength <= 25) ? plength : 25) + ((plength > 25) ? ".." : "");
+            var BelowBarcodeName = " " + ProductFromDB.MaterialId;
+            var price = "MRP: ₹" + ProductFromDB.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat) +
+               "     Rate: ₹" + (Global.Company.BusinessType == BuisnessType.Wholesale ? ProductFromDB.WholdSalePrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat)
+               : ProductFromDB.RetailPrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat));
+            var Description = string.Empty;
+
+            string Space = "";
+            int blength = 12 + (13 - BelowBarcodeName.Length);
+            for (int s = 0; s < blength; s++)
+            {
+                Space = Space + " ";
+            }
+            BelowBarcodeName = Space + BelowBarcodeName;
+
+            for (i = i; i < Rows; i++)
+            {
+                PdfPCell RowCell = new PdfPCell();
+
+                for (int j = jCell; j < Cols; j++)
+                {
+                    if (AddColumn != 0 && AddColumn <= j && i == (Rows - 1))
                     {
-                        int TempAddColumn = (3 - jCell);
-                        if (TempAddColumn <= AddColumn)
-                        {
-                            if (TempAddColumn == AddColumn && UnCompletedRowCell == 0)
-                            {
-                                Rows -= 1;
-                            }
-                            AddColumn -= TempAddColumn;
-                        }
-                        else
-                        {
-                            if (AddColumn != 0 && UnCompletedRowCell == 0)
-                            {
-                                Rows -= 1;
-                            }
-                            AddColumn = (3 - (TempAddColumn - AddColumn));
-                        }
+                        continue;
                     }
-                    UnCompletedRowCell = 0;
-                    MemoryStream Barcode = new MemoryStream();
-                    var Image = BarCode.GenerateImageBarcode1(ProductFromDB.MaterialId);
-                    Image.Save(Barcode, System.Drawing.Imaging.ImageFormat.Png);
-                    iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(Barcode.ToArray());
-                    image.ScaleAbsoluteHeight(15);
-                    image.ScaleAbsoluteWidth(130);
-                    var Temp = image;
-                    int alength = Global.Company.Name.Length;
-                    int plength = ProductFromDB.Name.Length;
+                    RowCell = new PdfPCell(new Phrase(AboveBarcodeName, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
+                    RowCell.MinimumHeight = 90;
+                    RowCell.PaddingTop = -3;
+                    RowCell.UseVariableBorders = true;
+                    RowCell.BorderColor = BaseColor.WHITE;
+                    RowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    RowCell.AddElement(new Phrase(AboveBarcodeName, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
 
-                    var AboveBarcodeName = " " + Global.Company.Name.Substring(0, (alength <= 25) ? alength : 25) + ((alength > 25) ? ".." : "") + "\n" + " " + ProductFromDB.Name.Substring(0, (plength <= 25) ? plength : 25) + ((plength > 25) ? ".." : "") ;
-                    var BelowBarcodeName = " " + ProductFromDB.MaterialId;
-                    var price = "MRP: ₹" + ProductFromDB.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat) +
-                       "     Rate: ₹" +(Global.Company.BusinessType == BuisnessType.Wholesale ? ProductFromDB.WholdSalePrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat) 
-                       : ProductFromDB.RetailPrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat));
-                    var Description = string.Empty;
-                    
-                    string Space = "";
-                    int blength = 12 + (13 - BelowBarcodeName.Length);
-                    for (int s = 0; s < blength; s++)
-                    {
-                        Space = Space + " ";
-                    }
-                    BelowBarcodeName = Space + BelowBarcodeName;
+                    RowCell.PaddingTop = -3;
+                    RowCell.UseVariableBorders = true;
+                    RowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    RowCell.AddElement(Temp);
 
-                    for (i = i; i < Rows; i++)
-                    {
-                        PdfPCell RowCell = new PdfPCell();
+                    RowCell.PaddingTop = -4;
+                    RowCell.UseVariableBorders = true;
+                    RowCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    RowCell.VerticalAlignment = Element.ALIGN_TOP;
+                    RowCell.AddElement(new Phrase(BelowBarcodeName, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
 
-                        for (int j = jCell; j < Cols; j++)
-                        {
-                            if (AddColumn != 0 && AddColumn <= j && i == (Rows - 1))
-                            {
-                                continue;
-                            }
-                            RowCell = new PdfPCell(new Phrase(AboveBarcodeName, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
-                            RowCell.MinimumHeight = 90;
-                            RowCell.PaddingTop = -3;
-                            RowCell.UseVariableBorders = true;
-                            RowCell.BorderColor = BaseColor.WHITE;
-                            RowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                            RowCell.AddElement(new Phrase(AboveBarcodeName, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
-
-                            RowCell.PaddingTop = -3;
-                            RowCell.UseVariableBorders = true;
-                            RowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                            RowCell.AddElement(Temp);
-
-                            RowCell.PaddingTop = -4;
-                            RowCell.UseVariableBorders = true;
-                            RowCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                            RowCell.VerticalAlignment = Element.ALIGN_TOP;
-                            RowCell.AddElement(new Phrase(BelowBarcodeName, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
-
-                            RowCell.PaddingTop = -3;
-                            RowCell.UseVariableBorders = true;
-                            RowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                            RowCell.AddElement(new Phrase(price, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
-                            ReportMainTable.AddCell(RowCell);
-                        }
-                        jCell = 0;
+                    RowCell.PaddingTop = -3;
+                    RowCell.UseVariableBorders = true;
+                    RowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                    RowCell.AddElement(new Phrase(price, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
+                    ReportMainTable.AddCell(RowCell);
+                }
+                jCell = 0;
 
                 if (i != (Rows - 1))
                 {
@@ -293,13 +293,13 @@ namespace fa.views.utils
             image.ScaleAbsoluteHeight(15);
             image.ScaleAbsoluteWidth(130);
             var Temp = image;
-            int alength = PatientFromDB.Address!=null?PatientFromDB.Address.FullAddressInSingleLine.Length: 0;
+            int alength = PatientFromDB.Address != null ? PatientFromDB.Address.FullAddressInSingleLine.Length : 0;
             int plength = PatientFromDB.Name.Length;
             var AboveBarcodeName = "Name :" + PatientFromDB.Name.Substring(0, (plength <= 25) ? plength : 25) + ((plength > 25) ? ".." : "") + "\n"
-                +"PNO  :"+ PatientFromDB.PatientNumber +"    Sex  :"+ PatientFromDB .Gender.ToString()+ "\n"
+                + "PNO  :" + PatientFromDB.PatientNumber + "    Sex  :" + PatientFromDB.Gender.ToString() + "\n"
                 + "DOB  :" + PatientFromDB.DateOfBirth.ToString(Global.Company.DateFormat) + "    Date :" + Global.getTransactionDate().ToString(Global.Company.DateFormat) + "\n"
-                + (PatientFromDB.Address != null ?( "Address:" + PatientFromDB.Address.FullAddressInSingleLine.Substring(0, (alength <= 70) ? alength : 70) + ((alength > 70) ? ".." : "")):"");
-           
+                + (PatientFromDB.Address != null ? ("Address:" + PatientFromDB.Address.FullAddressInSingleLine.Substring(0, (alength <= 70) ? alength : 70) + ((alength > 70) ? ".." : "")) : "");
+
             for (i = i; i < Rows; i++)
             {
                 PdfPCell RowCell = new PdfPCell();
@@ -351,7 +351,7 @@ namespace fa.views.utils
         }
 
         //a4 sheet barcode from grid
-        public void GenerateBarcodeA4(DataGridView DataGridView,string fileName, string fileExtension, bool isPrint,string Location, string PrinterName,LabelType LabelType)
+        public void GenerateBarcodeA4(DataGridView DataGridView, string fileName, string fileExtension, bool isPrint, string Location, string PrinterName, LabelType LabelType)
         {
             using (MemoryStream myMemoryStream = new MemoryStream())
             {
@@ -361,23 +361,23 @@ namespace fa.views.utils
                 PdfPTable ReportMainTable = MainTable(DataGridView, Location);
                 pdfDoc.Add(ReportMainTable);
                 pdfDoc.Close();
-                PdfGeneration.SaveMemoryStreamBarcode(PrinterName, myMemoryStream, fileName, fileExtension, isPrint,PaperTypes.A4_PORTRAIT);
+                PdfGeneration.SaveMemoryStreamBarcode(PrinterName, myMemoryStream, fileName, fileExtension, isPrint, PaperTypes.A4_PORTRAIT);
             }
         }
-        
-        private PdfPTable MainTable(DataGridView DataGridView,string Location)
+
+        private PdfPTable MainTable(DataGridView DataGridView, string Location)
         {
             string[] StartCell = Location.Split(',');
-            int PrintStartCellCount = (((int.Parse(StartCell[0])-1)*3) + int.Parse(StartCell[1]));
-            int PrintStartCell =(PrintStartCellCount==0)?0:(PrintStartCellCount - 1);
-            int UnCompletedRowCell= (PrintStartCell % 3);
+            int PrintStartCellCount = (((int.Parse(StartCell[0]) - 1) * 3) + int.Parse(StartCell[1]));
+            int PrintStartCell = (PrintStartCellCount == 0) ? 0 : (PrintStartCellCount - 1);
+            int UnCompletedRowCell = (PrintStartCell % 3);
             int Cols = 3;
-            
+
             PdfPTable ReportMainTable = new PdfPTable(Cols);
 
             float[] widths = null;
 
-            widths = new float[] { 280f,270f,260f };
+            widths = new float[] { 280f, 270f, 260f };
             ReportMainTable.SetWidths(widths);
 
             int Rows = 0;
@@ -398,10 +398,10 @@ namespace fa.views.utils
                 {
                     int Quantity = int.Parse(Row.Cells[(int)BarcodePrintGridColumn.QTY].Value.ToString());
                     TotalQty = TotalQty + Quantity;
-                    Rows +=((Quantity / 3) + ((Quantity % 3) != 0 ? 1 : 0)) + (UnCompletedRowCell!=0?1:0);
-                    if(AddColumn!=0)
+                    Rows += ((Quantity / 3) + ((Quantity % 3) != 0 ? 1 : 0)) + (UnCompletedRowCell != 0 ? 1 : 0);
+                    if (AddColumn != 0)
                     {
-                        jCell = AddColumn;                        
+                        jCell = AddColumn;
                         i = i - 1;
                     }
                     AddColumn = (Quantity % 3);
@@ -409,14 +409,14 @@ namespace fa.views.utils
                     if (UnCompletedRowCell != 0)
                     {
                         jCell = UnCompletedRowCell;
-                        if (AddColumn !=0 && ((3-jCell)-AddColumn) > -1)
+                        if (AddColumn != 0 && ((3 - jCell) - AddColumn) > -1)
                         {
                             Rows -= 1;
-                        }                        
+                        }
                     }
-                    if (jCell!=0)
+                    if (jCell != 0)
                     {
-                        int TempAddColumn= (3- jCell);
+                        int TempAddColumn = (3 - jCell);
                         if (TempAddColumn <= AddColumn)
                         {
                             if (TempAddColumn == AddColumn && UnCompletedRowCell == 0)
@@ -431,7 +431,7 @@ namespace fa.views.utils
                             {
                                 Rows -= 1;
                             }
-                            AddColumn =(3 -(TempAddColumn - AddColumn));                          
+                            AddColumn = (3 - (TempAddColumn - AddColumn));
                         }
                     }
                     UnCompletedRowCell = 0;
@@ -450,15 +450,15 @@ namespace fa.views.utils
                     var price = "MRP: ₹" + (float.Parse(Row.Cells[(int)BarcodePrintGridColumn.MRP].Value.ToString())).ToString(Global.Company.PrimaryCurrency.CurrencyFormat) +
                        "     Rate: ₹" + (float.Parse(Row.Cells[(int)BarcodePrintGridColumn.RATE].Value.ToString())).ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
                     var Description = string.Empty;
-                   
-                    string Space="";
-                    int blength =12+(13- BelowBarcodeName.Length);
-                    for(int s=0;s< blength;s++)
+
+                    string Space = "";
+                    int blength = 12 + (13 - BelowBarcodeName.Length);
+                    for (int s = 0; s < blength; s++)
                     {
                         Space = Space + " ";
                     }
                     BelowBarcodeName = Space + BelowBarcodeName;
-                    
+
                     for (i = i; i < Rows; i++)
                     {
                         PdfPCell RowCell = new PdfPCell();
@@ -467,7 +467,7 @@ namespace fa.views.utils
                         {
                             if (AddColumn != 0 && AddColumn <= j && i == (Rows - 1))
                             {
-                                continue; 
+                                continue;
                             }
                             RowCell = new PdfPCell(new Phrase(AboveBarcodeName, PdfDataAlignment.GetFont("Font_Normal_Italic_10_Black")));
                             RowCell.MinimumHeight = 90;
@@ -510,20 +510,171 @@ namespace fa.views.utils
                 }
             }
             AddColumn = TotalQty % 3;
-            if(AddColumn>0)
+            if (AddColumn > 0)
             {
-                for(i=0;i< (3-AddColumn); i++)
+                for (i = 0; i < (3 - AddColumn); i++)
                 {
                     PdfPCell RowCell = new PdfPCell();
                     RowCell.BorderColor = BaseColor.WHITE;
                     ReportMainTable.AddCell(RowCell);
                 }
             }
-                return ReportMainTable;
+            return ReportMainTable;
         }
 
         //generate barcode label for single product
-        public void GenerateBarcodeLabel(long ProductId, LabelSize Size,long Qty, string PrinterName/*, LabelType Label*/)
+        public void GenerateBarcodeLabel(long productId, LabelSize size, long quantity, string printerName)
+        {
+            // Fetch product data
+            var product = CatalogProductManager.Instance.GetProductInfoById(productId);
+
+            // Format text fields with ellipsis if too long
+            var productName = TruncateWithEllipsis(product.Name, 17);
+            var companyName = TruncateWithEllipsis(Global.Company.Name, 17);
+
+            // Prepare pricing information
+            var priceInfo = PreparePriceInformation(product);
+
+            // Generate labels based on size
+            if (size == LabelSize.THREE)
+            {
+                PrintThreeColumnLabels(printerName, product, productName, companyName, priceInfo, quantity);
+            }
+        }
+
+        // Helper method to truncate text with ellipsis
+        private string TruncateWithEllipsis(string text, int maxLength)
+        {
+            if (text.Length <= maxLength) return text;
+            return text.Substring(0, maxLength) + "..";
+        }
+
+        // Helper method to prepare price information
+        private PriceInformation PreparePriceInformation(Product product)
+        {
+            var currencyFormat = Global.Company.PrimaryCurrency.CurrencyFormat;
+            var isWholesale = Global.Company.BusinessType == BuisnessType.Wholesale;
+
+            return new PriceInformation
+            {
+                MrpText = "sms:",
+                RateText = "Rs:",
+                FormattedMrp = product.RetailPrice.ToString(currencyFormat).Replace(",", ""),
+                FormattedRate = (isWholesale ? product.WholdSalePrice : product.RetailPrice)
+                                .ToString(currencyFormat)
+                                .Replace(",", "")
+            };
+        }
+
+        // Helper method to print 3-column labels
+        private void PrintThreeColumnLabels(string printerName, Product product,
+                                           string productName, string companyName,
+                                           PriceInformation priceInfo, long quantity)
+        {
+            var rows = quantity / 3;
+            var remaining = quantity % 3;
+
+            // Print full rows (3 labels each)
+            for (long i = 0; i < rows; i++)
+            {
+                var commands = CreateThreeLabelCommandSet(product, productName, companyName, priceInfo);
+                PrintLabel(printerName, commands, i.ToString());
+            }
+
+            // Print remaining labels (1 or 2)
+            if (remaining > 0)
+            {
+                var commands = remaining == 1
+                    ? CreateSingleLabelCommandSet(product, productName, companyName, priceInfo)
+                    : CreateDoubleLabelCommandSet(product, productName, companyName, priceInfo);
+
+                PrintLabel(printerName, commands, "");
+            }
+        }
+
+        // Command set builders
+        private string[] CreateThreeLabelCommandSet(Product product, string productName,
+                                                  string companyName, PriceInformation priceInfo)
+        {
+            return CombineCommands(
+                GetPrinterSetupCommands(),
+                GetLabelCommand(785, companyName, productName, product, priceInfo, 2, 1),
+                GetLabelCommand(506, companyName, productName, product, priceInfo, 2, 1),
+                GetLabelCommand(228, companyName, productName, product, priceInfo, 2, 1),
+                "P1"
+            );
+        }
+
+        private string[] CreateDoubleLabelCommandSet(Product product, string productName,
+                                                   string companyName, PriceInformation priceInfo)
+        {
+            return CombineCommands(
+                GetPrinterSetupCommands(),
+                GetLabelCommand(785, companyName, productName, product, priceInfo, 2, 1),
+                GetLabelCommand(506, companyName, productName, product, priceInfo, 2, 1),
+                "P1"
+            );
+        }
+
+        private string[] CreateSingleLabelCommandSet(Product product, string productName,
+                                                   string companyName, PriceInformation priceInfo)
+        {
+            return CombineCommands(
+                GetPrinterSetupCommands(),
+                GetLabelCommand(785, companyName, productName, product, priceInfo, 2, 1),
+                "P1"
+            );
+        }
+
+        // Helper method to create printer setup commands
+        private string[] GetPrinterSetupCommands()
+        {
+            return new string[]
+            {
+                "I8,A",    // 203 DPI, font A
+                "q812",    // Label height = 812 dots (~4 inches)
+                "O",       // Reverse printing (optional)
+                "JF",      // Field justification
+                "ZT",      // Thermal transfer mode
+                "Q200,25", // Label width = 200 dots, gap sensitivity
+                "N"        // Normal printing mode
+            };
+        }
+
+        // Helper method to create label commands
+        private string[] GetLabelCommand(int xOffset, string companyName, string productName,
+                                        Product product, PriceInformation priceInfo,
+                                        int largeFontSize, int smallFontSize)
+        {
+            var quote = '"';
+            return new string[]
+            {
+                $"A{xOffset},180,2,{largeFontSize},1,1,N,{quote}{companyName}{quote}",
+                $"A{xOffset},150,2,{smallFontSize},1,1,N,{quote}{productName}{quote}",
+                $"B{xOffset-11},126,2,1,1,4,41,N,{quote}{product.MaterialId}{quote}",
+                $"A{xOffset-11},69,2,{smallFontSize},1,1,N,{quote}{product.MaterialId}{quote}",
+                $"A{xOffset+5},30,2,{largeFontSize},1,1,N,{quote}{priceInfo.MrpText}{quote}",
+                $"A{xOffset-50},27,2,{largeFontSize},1,1,N,{quote}{priceInfo.FormattedMrp}{quote}"
+            };
+        }
+
+        // Helper method to combine command arrays
+        private string[] CombineCommands(params object[] commandSets)
+        {
+            return commandSets.SelectMany(c =>
+                c is string[] array ? array : new[] { c.ToString()! }
+            ).ToArray();
+        }
+
+        // Supporting class for price information
+        private class PriceInformation
+        {
+            public string? MrpText { get; set; }
+            public string? RateText { get; set; }
+            public string? FormattedMrp { get; set; }
+            public string? FormattedRate { get; set; }
+        }
+        public void GenerateBarcodeLabelxxx(long ProductId, LabelSize Size, long Qty, string PrinterName/*, LabelType Label*/)
         {
             Product ProductFromDB = CatalogProductManager.Instance.GetProductInfoById(ProductId);
             var length = ProductFromDB.Name.Length;
@@ -589,36 +740,36 @@ namespace fa.views.utils
                     "A380,180,2,4,1,1,N,"+quote+CompanyName+quote+"","A380,147,2,3,1,1,N,"+quote+Product+quote+"","B354,115,2,1C,4,8,39,N,"+quote+ProductFromDB.MaterialId+quote+"",
                     "A252,69,2,3,1,1,N,"+quote+ProductFromDB.MaterialId+quote+"","A380,41,2,3,1,1,N,"+ quote + Mrp + quote +"","A324,38,2,2,1,1,N,"+ quote + PMrp + quote +"","A132,41,2,3,1,1,N,"+ quote + Rate + quote +"",
                     "A62,38,2,2,1,1,N,"+ quote + PRate + quote +"","P1"};
-                    PrintLabel(PrinterName, Print,i.ToString());
+                    PrintLabel(PrinterName, Print, i.ToString());
                 }
                 if (Cols != 0)
                 {
-                   Print =new string[] {"I8,A","q812","O","JF","ZT","Q200,25","N","A796,180,2,4,1,1,N,"+quote+CompanyName+quote+"",
+                    Print = new string[] {"I8,A","q812","O","JF","ZT","Q200,25","N","A796,180,2,4,1,1,N,"+quote+CompanyName+quote+"",
                     "A796,147,2,3,1,1,N,"+quote+Product+quote+"","B770,115,2,1C,4,8,39,N,"+quote+ProductFromDB.MaterialId+quote+"","A668,69,2,3,1,1,N,"+quote+ProductFromDB.MaterialId+quote+"",
                     "A796,41,2,3,1,1,N,"+quote+Mrp+quote+"","A740,38,2,2,1,1,N," + quote + PMrp + quote + "","A548,41,2,3,1,1,N,"+ quote + Rate + quote +"","A478,38,2,2,1,1,N," + quote + PRate + quote + "",
                 "P1"};
-                    PrintLabel(PrinterName, Print,"");
-                }         
+                    PrintLabel(PrinterName, Print, "");
+                }
             }
             else if (Size == LabelSize.ONE)
-            {         
+            {
                 string[] Print = {"I8,A","q779","O","JF","ZT","Q184,25","N","A748,170,2,4,1,1,N,"+quote+CompanyName+quote+"",
                     "A748,137,2,3,1,1,N,"+quote+Product+quote+"","B722,105,2,1C,5,10,39,N,"+quote+ProductFromDB.MaterialId+quote+"","A580,60,2,3,1,1,N,"+quote+ProductFromDB.MaterialId+quote+"",
                     "A748,32,2,3,1,1,N,"+quote+Mrp+quote+"","A692,29,2,2,1,1,N,"+ quote + PMrp + quote +"","A420,32,2,3,1,1,N,"+ quote + Rate + quote +"","A350,29,2,2,1,1,N,"+ quote + PRate + quote +"",
                 "P1"};
-                PrintLabel(PrinterName, Print,"");
+                PrintLabel(PrinterName, Print, "");
             }
-                
+
         }
 
         //generate barcode label for multiple product
-        public void GenerateBarcodeLabel(DataGridView DataGridView, LabelSize Size,string PrinterName, LabelType LabelType)
+        public void GenerateBarcodeLabel(DataGridView DataGridView, LabelSize Size, string PrinterName, LabelType LabelType)
         {
             int TotalCount = 0;
             int CurrentCount = 0;
             int BufferCount = 0;
             bool IsBufferString = false;
-            string[] BufferPrint=new string[] { };
+            string[] BufferPrint = new string[] { };
 
             foreach (DataGridViewRow Row in DataGridView.Rows)
             {
@@ -634,75 +785,75 @@ namespace fa.views.utils
                     CurrentCount++;
                     bool IsBatch = (bool)Row.Cells[(int)BarcodePrintGridColumn.ISBATCH].Value;
                     string BatchNo = string.Empty;
-                    string MeterialId = Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString();
+                    string MeterialId = Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()!;
                     if (IsBatch)
                     {
-                        BatchNo = Row.Cells[(int)BarcodePrintGridColumn.BATCH_NO].Value.ToString();                           
+                        BatchNo = Row.Cells[(int)BarcodePrintGridColumn.BATCH_NO].Value.ToString()!;
                     }
-                    var length =Row.Cells[(int)BarcodePrintGridColumn.ITEM_NAME].Value.ToString().Length;
-                    var Product = Row.Cells[(int)BarcodePrintGridColumn.ITEM_NAME].Value.ToString().Substring(0, (length <= 15) ? length : 15) + ((length > 15) ? ".." : "");
+                    var length = Row.Cells[(int)BarcodePrintGridColumn.ITEM_NAME].Value.ToString()!.Length;
+                    var Product = Row.Cells[(int)BarcodePrintGridColumn.ITEM_NAME].Value.ToString()!.Substring(0, (length <= 15) ? length : 15) + ((length > 15) ? ".." : "");
                     length = Global.Company.Name.Length;
                     var CompanyName = Global.Company.Name.Substring(0, (length <= 15) ? length : 15) + ((length > 15) ? ".." : "");
 
                     char quote = '"';
                     string Mrp = "Mrp:";
                     string Rate = "Rs:";
-                    string PMrp = double.Parse(Row.Cells[(int)BarcodePrintGridColumn.MRP].Value.ToString()).ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
-                    string PRate = double.Parse(Row.Cells[(int)BarcodePrintGridColumn.RATE].Value.ToString()).ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
-                    string MatId =IsBatch? quote + MeterialId + "#" + BatchNo + "#" + quote: quote + MeterialId + quote;
-                    string DisMatId = LabelType == LabelType.QRCODE? quote + MeterialId + quote : IsBatch ? quote + MeterialId + " " + BatchNo + quote : quote + MeterialId + quote;
-                    long Qty = long.Parse(Row.Cells[(int)BarcodePrintGridColumn.QTY].Value.ToString());
+                    string PMrp = double.Parse(Row.Cells[(int)BarcodePrintGridColumn.MRP].Value.ToString()!).ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
+                    string PRate = double.Parse(Row.Cells[(int)BarcodePrintGridColumn.RATE].Value.ToString()!).ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
+                    string MatId = IsBatch ? quote + MeterialId + "#" + BatchNo + "#" + quote : quote + MeterialId + quote;
+                    string DisMatId = LabelType == LabelType.QRCODE ? quote + MeterialId + quote : IsBatch ? quote + MeterialId + " " + BatchNo + quote : quote + MeterialId + quote;
+                    long Qty = long.Parse(Row.Cells[(int)BarcodePrintGridColumn.QTY].Value.ToString()!);
                     if (Size == LabelSize.THREE)
                     {
-                        long Rows = (BufferCount+Qty) / 3;
-                        long Cols = (BufferCount+Qty) % 3;
+                        long Rows = (BufferCount + Qty) / 3;
+                        long Cols = (BufferCount + Qty) % 3;
                         string[] Print;
                         for (long i = 0; i < Rows; i++)
                         {
                             if (IsBufferString)
                             {
-                            Print = BufferPrint.Concat(BufferCount==1? new string[]{"A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"",
-                            "A506,158,2,2,1,1,N,"+quote+Product+quote+"",
-                            (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
-                            (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
-                            (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A509,30,2,3,1,1,N,"+quote+Mrp+quote+"",
-                            "A453,27,2,2,1,1,N,"+quote+PMrp+quote+"","A300,10,1,3,1,1,N,"+quote+Rate+quote+"",
-                            "A300,50,1,2,1,1,N,"+quote+PRate+quote+"",
-                            "A228,185,2,4,1,1,N,"+quote+CompanyName+quote+"","A228,153,2,2,1,1,N,"+quote+Product+quote+"",
-                            (LabelType == LabelType.QRCODE ? "b134,43,Q,m2,s4,eL," : "B209,126,2,1,1,2,41,N,")+MatId+"",
-                            (LabelType == LabelType.QRCODE ? "A246,55,1,1,1,1,N," : "A214,69,2,2,1,1,N,")+DisMatId+"",
-                            (LabelType == LabelType.QRCODE?"A123,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),
-                            "A231,30,2,3,1,1,N,"+quote+Mrp+quote+"","A175,27,2,2,1,1,N,"+quote+PMrp+quote+"",
-                            "A25,10,1,3,1,1,N,"+quote+Rate+quote+"",
-                            "A25,50,1,2,1,1,N,"+quote+PRate+quote+"","P1" }:new string[]{
-                            "A228,185,2,4,1,1,N,"+quote+CompanyName+quote+"","A228,153,2,2,1,1,N,"+quote+Product+quote+"",
-                            (LabelType == LabelType.QRCODE ? "b134,43,Q,m2,s4,eL," : "B209,126,2,1,1,2,41,N,")+MatId+"",
-                            (LabelType == LabelType.QRCODE ? "A246,55,1,1,1,1,N," : "A214,69,2,2,1,1,N,")+DisMatId+"",
-                            (LabelType == LabelType.QRCODE?"A123,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A231,30,2,3,1,1,N,"+quote+Mrp+quote+"",
-                            "A175,27,2,2,1,1,N,"+quote+PMrp+quote+"","A25,10,1,3,1,1,N,"+quote+Rate+quote+"",
-                            "A25,50,1,2,1,1,N,"+quote+PRate+quote+"","P1" }).ToArray();
+                                Print = BufferPrint.Concat(BufferCount == 1 ? new string[]{"A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"",
+                                    "A506,158,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A509,30,2,3,1,1,N,"+quote+Mrp+quote+"",
+                                    "A453,27,2,2,1,1,N,"+quote+PMrp+quote+"","A300,10,1,3,1,1,N,"+quote+Rate+quote+"",
+                                    "A300,50,1,2,1,1,N,"+quote+PRate+quote+"",
+                                    "A228,185,2,4,1,1,N,"+quote+CompanyName+quote+"","A228,153,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType == LabelType.QRCODE ? "b134,43,Q,m2,s4,eL," : "B209,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A246,55,1,1,1,1,N," : "A214,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A123,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),
+                                    "A231,30,2,3,1,1,N,"+quote+Mrp+quote+"","A175,27,2,2,1,1,N,"+quote+PMrp+quote+"",
+                                    "A25,10,1,3,1,1,N,"+quote+Rate+quote+"",
+                                    "A25,50,1,2,1,1,N,"+quote+PRate+quote+"","P1" } : new string[]{
+                                    "A228,185,2,4,1,1,N,"+quote+CompanyName+quote+"","A228,153,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType == LabelType.QRCODE ? "b134,43,Q,m2,s4,eL," : "B209,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A246,55,1,1,1,1,N," : "A214,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A123,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A231,30,2,3,1,1,N,"+quote+Mrp+quote+"",
+                                    "A175,27,2,2,1,1,N,"+quote+PMrp+quote+"","A25,10,1,3,1,1,N,"+quote+Rate+quote+"",
+                                    "A25,50,1,2,1,1,N,"+quote+PRate+quote+"","P1" }).ToArray();
                             }
                             else
                             {
-                            Print = new string[] {"I8,A", "q812", "O", "JF", "ZT", "Q200,25", 
-                            "N","A785,190,2,4,1,1,N,"+quote+CompanyName+quote+"","A785,158,2,2,1,1,N,"+quote+Product+quote+"",
-                            (LabelType==LabelType.QRCODE? "b689,43,Q,m2,s4,eL,":"B774,126,2,1,1,2,41,N,")+MatId+"",
-                            (LabelType == LabelType.QRCODE ? "A801,55,1,1,1,1,N," : "A774,69,2,2,1,1,N,")+DisMatId+"",
-                            (LabelType == LabelType.QRCODE?"A678,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A790,30,2,3,1,1,N,"+quote+Mrp+quote+"",
-                            "A735,27,2,2,1,1,N,"+quote+PMrp+quote+"","A580,10,1,3,1,1,N,"+quote+Rate+quote+"",
-                            "A580,50,1,2,1,1,N,"+quote+PRate+quote+"","A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"",
-                            "A506,158,2,2,1,1,N,"+quote+Product+quote+"",
-                            (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
-                            (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
-                            (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),
-                            "A509,30,2,3,1,1,N,"+quote+Mrp+quote+"","A453,27,2,2,1,1,N,"+quote+PMrp+quote+"",
-                            "A300,10,1,3,1,1,N,"+quote+Rate+quote+"","A300,50,1,2,1,1,N,"+quote+PRate+quote+"",
-                            "A228,185,2,4,1,1,N,"+quote+CompanyName+quote+"","A228,153,2,2,1,1,N,"+quote+Product+quote+"",
-                            (LabelType == LabelType.QRCODE ? "b134,43,Q,m2,s4,eL," : "B209,126,2,1,1,2,41,N,")+MatId+"",
-                            (LabelType == LabelType.QRCODE ? "A246,55,1,1,1,1,N," : "A214,69,2,2,1,1,N,")+DisMatId+"",
-                            (LabelType == LabelType.QRCODE?"A123,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),
-                            "A231,30,2,3,1,1,N,"+quote+Mrp+quote+"","A175,27,2,2,1,1,N,"+quote+PMrp+quote+"",
-                            "A25,10,1,3,1,1,N,"+quote+Rate+quote+"","A25,50,1,2,1,1,N,"+quote+PRate+quote+"","P1"};
+                                Print = new string[] {"I8,A", "q812", "O", "JF", "ZT", "Q200,25",
+                                    "N","A785,190,2,4,1,1,N,"+quote+CompanyName+quote+"","A785,158,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType==LabelType.QRCODE? "b689,43,Q,m2,s4,eL,":"B774,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A801,55,1,1,1,1,N," : "A774,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A678,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A790,30,2,3,1,1,N,"+quote+Mrp+quote+"",
+                                    "A735,27,2,2,1,1,N,"+quote+PMrp+quote+"","A580,10,1,3,1,1,N,"+quote+Rate+quote+"",
+                                    "A580,50,1,2,1,1,N,"+quote+PRate+quote+"","A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"",
+                                    "A506,158,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),
+                                    "A509,30,2,3,1,1,N,"+quote+Mrp+quote+"","A453,27,2,2,1,1,N,"+quote+PMrp+quote+"",
+                                    "A300,10,1,3,1,1,N,"+quote+Rate+quote+"","A300,50,1,2,1,1,N,"+quote+PRate+quote+"",
+                                    "A228,185,2,4,1,1,N,"+quote+CompanyName+quote+"","A228,153,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType == LabelType.QRCODE ? "b134,43,Q,m2,s4,eL," : "B209,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A246,55,1,1,1,1,N," : "A214,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A123,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),
+                                    "A231,30,2,3,1,1,N,"+quote+Mrp+quote+"","A175,27,2,2,1,1,N,"+quote+PMrp+quote+"",
+                                    "A25,10,1,3,1,1,N,"+quote+Rate+quote+"","A25,50,1,2,1,1,N,"+quote+PRate+quote+"","P1"};
                             }
                             PrintLabel(PrinterName, Print, i.ToString());
                             IsBufferString = false;
@@ -713,7 +864,7 @@ namespace fa.views.utils
                         {
                             if (TotalCount == CurrentCount)
                             {
-                                
+
                                 Print = new string[] {"I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N",
                                 "A785,190,2,4,1,1,N,"+quote+CompanyName+quote+"","A785,158,2,2,1,1,N,"+quote+Product+quote+"",
                                 (LabelType==LabelType.QRCODE? "b689,43,Q,m2,s4,eL,":"B774,126,2,1,1,2,41,N,")+MatId+"",
@@ -745,37 +896,37 @@ namespace fa.views.utils
                             {
                                 if (IsBufferString)
                                 {
-                                string[] TempPrint = IsBufferString ? BufferPrint : new string[] { "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N", };
-                                Print = TempPrint.Concat((BufferCount == 1 ? new string[] {
-                                "A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"",
-                                "A506,158,2,2,1,1,N,"+quote+Product+quote+"",
-                                (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
-                                (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
-                                (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A509,30,2,3,1,1,N,"+quote+Mrp+quote+"",
-                                "A453,27,2,2,1,1,N,"+quote+PMrp+quote+"","A300,10,1,3,1,1,N,"+quote+Rate+quote+"",
-                                "A300,50,1,2,1,1,N,"+quote+PRate+quote+"","P1"} : new string[] {
-                                "A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"","A506,158,2,2,1,1,N,"+quote+Product+quote+"",
-                                (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
-                                (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
-                                (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A509,30,2,3,1,1,N,"+quote+Mrp+quote+"",
-                                "A453,27,2,2,1,1,N,"+quote+PMrp+quote+"","A300,10,1,3,1,1,N,"+quote+Rate+quote+"",
-                                "A300,50,1,2,1,1,N,"+quote+PRate+quote+"","P1"})).ToArray();
+                                    string[] TempPrint = IsBufferString ? BufferPrint : new string[] { "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N", };
+                                    Print = TempPrint.Concat((BufferCount == 1 ? new string[] {
+                                    "A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"",
+                                    "A506,158,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A509,30,2,3,1,1,N,"+quote+Mrp+quote+"",
+                                    "A453,27,2,2,1,1,N,"+quote+PMrp+quote+"","A300,10,1,3,1,1,N,"+quote+Rate+quote+"",
+                                    "A300,50,1,2,1,1,N,"+quote+PRate+quote+"","P1"} : new string[] {
+                                    "A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"","A506,158,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A509,30,2,3,1,1,N,"+quote+Mrp+quote+"",
+                                    "A453,27,2,2,1,1,N,"+quote+PMrp+quote+"","A300,10,1,3,1,1,N,"+quote+Rate+quote+"",
+                                    "A300,50,1,2,1,1,N,"+quote+PRate+quote+"","P1"})).ToArray();
                                 }
                                 else
                                 {
-                                    
-                                Print = new string[] {"I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N","A785,190,2,4,1,1,N,"+quote+CompanyName+quote+"",
-                                "A785,158,2,2,1,1,N,"+quote+Product+quote+"",
-                                (LabelType==LabelType.QRCODE? "b689,43,Q,m2,s4,eL,":"B774,126,2,1,1,2,41,N,")+MatId+"",
-                                (LabelType == LabelType.QRCODE ? "A801,55,1,1,1,1,N," : "A774,69,2,2,1,1,N,")+DisMatId+"",
-                                (LabelType == LabelType.QRCODE?"A678,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A790,30,2,3,1,1,N,"+quote+Mrp+quote+"",
-                                "A735,27,2,2,1,1,N,"+quote+PMrp+quote+"","A580,10,1,3,1,1,N,"+quote+Rate+quote+"","A580,50,1,2,1,1,N,"+quote+PRate+quote+"",
-                                "A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"","A506,158,2,2,1,1,N,"+quote+Product+quote+"",
-                                (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
-                                (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
-                                (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),
-                                "A509,30,2,3,1,1,N,"+quote+Mrp+quote+"","A453,27,2,2,1,1,N,"+quote+PMrp+quote+"","A300,10,1,3,1,1,N,"+quote+Rate+quote+"",
-                                "A300,50,1,2,1,1,N,"+quote+PRate+quote+"","P1"};
+
+                                    Print = new string[] {"I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N","A785,190,2,4,1,1,N,"+quote+CompanyName+quote+"",
+                                    "A785,158,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType==LabelType.QRCODE? "b689,43,Q,m2,s4,eL,":"B774,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A801,55,1,1,1,1,N," : "A774,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A678,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),"A790,30,2,3,1,1,N,"+quote+Mrp+quote+"",
+                                    "A735,27,2,2,1,1,N,"+quote+PMrp+quote+"","A580,10,1,3,1,1,N,"+quote+Rate+quote+"","A580,50,1,2,1,1,N,"+quote+PRate+quote+"",
+                                    "A506,190,2,4,1,1,N,"+quote+CompanyName+quote+"","A506,158,2,2,1,1,N,"+quote+Product+quote+"",
+                                    (LabelType == LabelType.QRCODE ? "b412,43,Q,m2,s4,eL," : "B487,126,2,1,1,2,41,N,")+MatId+"",
+                                    (LabelType == LabelType.QRCODE ? "A524,55,1,1,1,1,N," : "A492,69,2,2,1,1,N,")+DisMatId+"",
+                                    (LabelType == LabelType.QRCODE?"A401,55,1,1,1,1,N," + quote + BatchNo + quote + "":""),
+                                    "A509,30,2,3,1,1,N,"+quote+Mrp+quote+"","A453,27,2,2,1,1,N,"+quote+PMrp+quote+"","A300,10,1,3,1,1,N,"+quote+Rate+quote+"",
+                                    "A300,50,1,2,1,1,N,"+quote+PRate+quote+"","P1"};
                                 }
                                 PrintLabel(PrinterName, Print, "");
                                 IsBufferString = false;
@@ -808,29 +959,29 @@ namespace fa.views.utils
                         for (long i = 0; i < Rows; i++)
                         {
                             Print = new string[] {"I8,A","q812","O","JF","ZT","Q200,25","N","A796,180,2,4,1,1,N,"+quote+CompanyName+quote+"",
-                    "A796,147,2,3,1,1,N,"+quote+Product+quote+"","B770,115,2,1C,4,8,39,N,"+MatId+"","A668,69,2,3,1,1,N,"+MatId+"",
-                    "A796,41,2,3,1,1,N,"+quote+Mrp+quote+"","A740,38,2,2,1,1,N," + quote + PMrp + quote + "","A548,41,2,3,1,1,N,"+ quote + Rate + quote +"","A478,38,2,2,1,1,N," + quote + PRate + quote + "",
-                    "A380,180,2,4,1,1,N,"+quote+CompanyName+quote+"","A380,147,2,3,1,1,N,"+quote+Product+quote+"","B354,115,2,1C,4,8,39,N,"+MatId+"",
-                    "A252,69,2,3,1,1,N,"+MatId+"","A380,41,2,3,1,1,N,"+ quote + Mrp + quote +"","A324,38,2,2,1,1,N,"+ quote + PMrp + quote +"","A132,41,2,3,1,1,N,"+ quote + Rate + quote +"",
-                    "A62,38,2,2,1,1,N,"+ quote + PRate + quote +"","P1"};
-                            PrintLabel(PrinterName, Print,i.ToString());
+                                "A796,147,2,3,1,1,N,"+quote+Product+quote+"","B770,115,2,1C,4,8,39,N,"+MatId+"","A668,69,2,3,1,1,N,"+MatId+"",
+                                "A796,41,2,3,1,1,N,"+quote+Mrp+quote+"","A740,38,2,2,1,1,N," + quote + PMrp + quote + "","A548,41,2,3,1,1,N,"+ quote + Rate + quote +"","A478,38,2,2,1,1,N," + quote + PRate + quote + "",
+                                "A380,180,2,4,1,1,N,"+quote+CompanyName+quote+"","A380,147,2,3,1,1,N,"+quote+Product+quote+"","B354,115,2,1C,4,8,39,N,"+MatId+"",
+                                "A252,69,2,3,1,1,N,"+MatId+"","A380,41,2,3,1,1,N,"+ quote + Mrp + quote +"","A324,38,2,2,1,1,N,"+ quote + PMrp + quote +"","A132,41,2,3,1,1,N,"+ quote + Rate + quote +"",
+                                "A62,38,2,2,1,1,N,"+ quote + PRate + quote +"","P1"};
+                            PrintLabel(PrinterName, Print, i.ToString());
                         }
                         if (Cols != 0)
                         {
                             Print = new string[] {"I8,A","q812","O","JF","ZT","Q200,25","N","A796,180,2,4,1,1,N,"+quote+CompanyName+quote+"",
-                    "A796,147,2,3,1,1,N,"+quote+Product+quote+"","B770,115,2,1C,4,8,39,N,"+quote+Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()+quote+"","A668,69,2,3,1,1,N,"+quote+Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()+quote+"",
-                    "A796,41,2,3,1,1,N,"+quote+Mrp+quote+"","A740,38,2,2,1,1,N," + quote + PMrp + quote + "","A548,41,2,3,1,1,N,"+ quote + Rate + quote +"","A478,38,2,2,1,1,N," + quote + PRate + quote + "",
-                    "P1"};
-                            PrintLabel(PrinterName, Print,"");
-                        }                       
+                                "A796,147,2,3,1,1,N,"+quote+Product+quote+"","B770,115,2,1C,4,8,39,N,"+quote+Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()+quote+"","A668,69,2,3,1,1,N,"+quote+Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()+quote+"",
+                                "A796,41,2,3,1,1,N,"+quote+Mrp+quote+"","A740,38,2,2,1,1,N," + quote + PMrp + quote + "","A548,41,2,3,1,1,N,"+ quote + Rate + quote +"","A478,38,2,2,1,1,N," + quote + PRate + quote + "",
+                                "P1"};
+                            PrintLabel(PrinterName, Print, "");
+                        }
                     }
                     else if (Size == LabelSize.ONE)
-                    {                      
+                    {
                         string[] Print = {"I8,A","q779","O","JF","ZT","Q184,25","N","A748,170,2,4,1,1,N,"+quote+CompanyName+quote+"",
-                    "A748,137,2,3,1,1,N,"+quote+Product+quote+"","B722,105,2,1C,5,10,39,N,"+quote+Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()+quote+"","A580,60,2,3,1,1,N,"+quote+Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()+quote+"",
-                    "A748,32,2,3,1,1,N,"+quote+Mrp+quote+"","A692,29,2,2,1,1,N,"+ quote + PMrp + quote +"","A420,32,2,3,1,1,N,"+ quote + Rate + quote +"","A350,29,2,2,1,1,N,"+ quote + PRate + quote +"",
-                    "P1"};
-                        PrintLabel(PrinterName, Print,"");
+                            "A748,137,2,3,1,1,N,"+quote+Product+quote+"","B722,105,2,1C,5,10,39,N,"+quote+Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()+quote+"","A580,60,2,3,1,1,N,"+quote+Row.Cells[(int)BarcodePrintGridColumn.ITEM_CODE].Value.ToString()+quote+"",
+                            "A748,32,2,3,1,1,N,"+quote+Mrp+quote+"","A692,29,2,2,1,1,N,"+ quote + PMrp + quote +"","A420,32,2,3,1,1,N,"+ quote + Rate + quote +"","A350,29,2,2,1,1,N,"+ quote + PRate + quote +"",
+                            "P1"};
+                        PrintLabel(PrinterName, Print, "");
                     }
                 }
             }
@@ -842,17 +993,17 @@ namespace fa.views.utils
             Patient PatientFromDB = PatientManager.Instance.GetPatientById(PatientId);
             int alength = PatientFromDB.Address != null ? PatientFromDB.Address.FullAddressInSingleLine.Length : 0;
             int plength = PatientFromDB.Name.Length;
-            var AboveBarcodeName = "Name :" + PatientFromDB.Name.Substring(0, (plength <= 25) ? plength : 25) + ((plength > 25) ? ".." : "")+ PatientFromDB.Guardians!=null && PatientFromDB.Guardians.Count>0?( "    Parent/Guardian  :" +  PatientFromDB.Guardians.First().Name):"" +"\n"
+            var AboveBarcodeName = "Name :" + PatientFromDB.Name.Substring(0, (plength <= 25) ? plength : 25) + ((plength > 25) ? ".." : "") + PatientFromDB.Guardians != null && PatientFromDB.Guardians.Count > 0 ? ("    Parent/Guardian  :" + PatientFromDB.Guardians.First().Name) : "" + "\n"
                 + "PNO  :" + PatientFromDB.PatientNumber + "    Sex  :" + PatientFromDB.Gender.ToString() + "\n"
                 + "DOB  :" + PatientFromDB.DateOfBirth.ToString(Global.Company.DateFormat) + "    Date :" + Global.getTransactionDate().ToString(Global.Company.DateFormat) + "\n"
                 + (PatientFromDB.Address != null ? ("Address:" + PatientFromDB.Address.FullAddressInSingleLine.Substring(0, (alength <= 70) ? alength : 70) + ((alength > 70) ? ".." : "")) : "");
-            
+
             string[] Address = new string[2];
-            Address[0]= PatientFromDB.Address != null ? PatientFromDB.Address.FullAddressInSingleLine.Substring(0, (alength <= 42) ? alength : 42):"";
-            Address[1] = PatientFromDB.Address != null ? (alength > 42 ? PatientFromDB.Address.FullAddressInSingleLine.Substring(42, (alength - 42)) + ((alength > 80) ? ".." : "") : ""):"";
+            Address[0] = PatientFromDB.Address != null ? PatientFromDB.Address.FullAddressInSingleLine.Substring(0, (alength <= 42) ? alength : 42) : "";
+            Address[1] = PatientFromDB.Address != null ? (alength > 42 ? PatientFromDB.Address.FullAddressInSingleLine.Substring(42, (alength - 42)) + ((alength > 80) ? ".." : "") : "") : "";
             string Parent = PatientFromDB.Guardians != null && PatientFromDB.Guardians.Count > 0 ? PatientFromDB.Guardians.First().Name : string.Empty;
-            string mobile = PatientFromDB.ContactInfo != null && !string.IsNullOrEmpty(PatientFromDB.ContactInfo.Phone) ? PatientFromDB.ContactInfo.Phone:string.Empty;
-            char quote = '"';       
+            string mobile = PatientFromDB.ContactInfo != null && !string.IsNullOrEmpty(PatientFromDB.ContactInfo.Phone) ? PatientFromDB.ContactInfo.Phone : string.Empty;
+            char quote = '"';
             if (Size == LabelSize.ONE)
             {
                 string[] Print;
@@ -882,7 +1033,7 @@ namespace fa.views.utils
                 PrintLabel(PrinterName, Print, "");
             }
         }
-        public void GenerateBarcodeLabelForPatientOPIP(long PatientId, LabelSize Size, long Qty, string PrinterName,bool IsOP)
+        public void GenerateBarcodeLabelForPatientOPIP(long PatientId, LabelSize Size, long Qty, string PrinterName, bool IsOP)
         {
             Patient PatientFromDB = PatientManager.Instance.GetPatientById(PatientId);
             int alength = PatientFromDB.Address != null ? PatientFromDB.Address.FullAddressInSingleLine.Length : 0;
@@ -899,11 +1050,11 @@ namespace fa.views.utils
             string mobile = PatientFromDB.ContactInfo != null && !string.IsNullOrEmpty(PatientFromDB.ContactInfo.Phone) ? PatientFromDB.ContactInfo.Phone : string.Empty;
             char quote = '"';
             string OPIPNO = string.Empty;
-            String Date= string.Empty;
-            if(IsOP)
+            String Date = string.Empty;
+            if (IsOP)
             {
-                Registration OP = OpManager.Instance.GetOpNumberByPatientId(PatientId,Global.getTransactionDate());
-                if(OP!=null)
+                Registration OP = OpManager.Instance.GetOpNumberByPatientId(PatientId, Global.getTransactionDate());
+                if (OP != null)
                 {
                     OPIPNO = OP.PatientOPNumber;
                     Date = OP.DateOfRegistration.ToString(Global.Company.DateFormat);
@@ -993,16 +1144,16 @@ namespace fa.views.utils
                 PrintLabel(PrinterName, Print, "");
             }
         }
-        public static void PrintLabel(string PrinterName,string[] Label,string sufix)
+        public static void PrintLabel(string PrinterName, string[] Label, string sufix)
         {
             MyPrinter.SetDefaultPrinter(PrinterName);
 
             SaveFileDialog sfDlg = new SaveFileDialog();
             sfDlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             sfDlg.RestoreDirectory = true;
-            sfDlg.FileName = "LabelPrint"+ sufix;
+            sfDlg.FileName = "LabelPrint" + sufix;
 
-            var windowsTempPath = Path.GetTempPath(); 
+            var windowsTempPath = Path.GetTempPath();
             Directory.CreateDirectory(windowsTempPath + "");
             var printFilePath = String.Format("{0}\\{1}.prn", windowsTempPath, sfDlg.FileName);
             try
@@ -1012,10 +1163,10 @@ namespace fa.views.utils
                 {
                     //if (PdfPrinter.Print(false))
                     //{
-                        string Filepath = @printFilePath;
-                        string Filename = sfDlg.FileName+ ".prn";
-                        IPrinter printer = new Printer();
-                        printer.PrintRawFile(PrinterName, Filepath, Filename);
+                    string Filepath = @printFilePath;
+                    string Filename = sfDlg.FileName + ".prn";
+                    IPrinter printer = new Printer();
+                    printer.PrintRawFile(PrinterName, Filepath, Filename);
                     //}
                     //else
                     //{
@@ -1041,10 +1192,10 @@ namespace fa.views.utils
                     {
                         //if (PdfPrinter.Print(false))
                         //{
-                            string Filepath = @printFilePathCatch;
-                            string Filename = sfDlg.FileName+ randomFileName + ".prn";
-                            IPrinter printer = new Printer();
-                            printer.PrintRawFile(PrinterName, Filepath, Filename);
+                        string Filepath = @printFilePathCatch;
+                        string Filename = sfDlg.FileName + randomFileName + ".prn";
+                        IPrinter printer = new Printer();
+                        printer.PrintRawFile(PrinterName, Filepath, Filename);
                         //}
                         //else
                         //{
@@ -1056,7 +1207,40 @@ namespace fa.views.utils
                         MessageBox.Show("Printer " + PrinterName + " is offline");
                     }
                 }
-            }    
-        }      
+            }
+        }
+        public void GenerateSampleCollectionBarCodeLabel(string sampleId, long qty, string printerName, int labelColumn)
+        {
+            char quote = '"';
+            string barcodeData = sampleId;
+            string displayText = sampleId;
+
+            switch (labelColumn)
+            {
+                case 1:
+                    // 1-column logic
+                    for (long i = 0; i < qty; i++)
+                    {
+                        string[] printCommands = {
+                    // 1-column commands
+                };
+                        PrintLabel(printerName, printCommands, i.ToString());
+                    }
+                    break;
+
+                case 2:
+                    // 2-column logic
+                    // ... existing 2-column code ...
+                    break;
+
+                case 3:
+                    // 3-column logic (if needed)
+                    // Implement similar to 2-column but with 3 barcodes
+                    break;
+
+                default:
+                    throw new ArgumentException("Invalid label column value. Use 1, 2, or 3.");
+            }
+        }
     }
 }
