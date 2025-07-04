@@ -27,6 +27,7 @@ namespace Fa.views.catalog
         public static string EnterAddedCostPercentageErrorMsg = "Please enter added cost percentage";
 
         FormBase parent = null!;
+        public static decimal MrpPercentage = 120; // Default MRP percentage
         public FormItemSpecialPriceCalculator(object sender)
         {
             if (sender is FormCatalog)
@@ -42,10 +43,35 @@ namespace Fa.views.catalog
 
         private void FormItemSpecialPriceCalculator_Load(object sender, EventArgs e)
         {
+            comboMrpPercentage.Items.AddRange(new object[] { 50, 70, 100, 120 });
+            comboMrpPercentage.SelectedItem = 120; // Set default to 120%
+
             // Set default percentages
             TextBoxAddedCostPercentage.Text = "15";
             TextBoxRetailMargin.Text = "30";    // Default 30% retail margin
             TextBoxWholesaleMargin.Text = "40"; // Default 40% wholesale margin
+            //try
+            //{
+            //    var repository = new ProductSalePercentageRepository(new ApplicationDbContext());
+            //    var savedPercentages = await repository.GetByProductCodeAsync(TextBoxProductCode.Text, Global.Company.Id);
+
+            //    if (savedPercentages != null)
+            //    {
+            //        TextBoxAddedCostPercentage.Text = savedPercentages.AddedCostPercentage.ToString();
+            //        TextBoxRetailMargin.Text = savedPercentages.RetailMarginPercentage.ToString();
+            //        TextBoxWholesaleMargin.Text = savedPercentages.WholesaleMarginPercentage.ToString();
+
+            //        // Set saved MRP percentage if it exists in the predefined values
+            //        if (new decimal[] { 50, 70, 100, 120 }.Contains(savedPercentages.MrpPercentage))
+            //        {
+            //            comboMrpPercentage.SelectedItem = savedPercentages.MrpPercentage;
+            //        }
+            //    }
+            //}
+            //catch
+            //{
+            //    // Use defaults if loading fails
+            //}
 
             if (parent is FormCatalog)
             {
@@ -215,8 +241,9 @@ namespace Fa.views.catalog
                 decimal productCost = purchasePrice + (purchasePrice * addedCostPercentage / 100);
                 TextBoxProductCost.Text = productCost.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
 
-                // Calculate MRP (220% of purchase price)
-                TextBoxMrpPrice.Text = (purchasePrice * 2.2m).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                // Calculate MRP using selected percentage (convert to multiplier)
+                decimal mrpMultiplier = 1 + (MrpPercentage / 100);
+                TextBoxMrpPrice.Text = (productCost * mrpMultiplier).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
             }
         }
 
@@ -293,6 +320,15 @@ namespace Fa.views.catalog
         private void TextBoxXFactorWholeSale_KeyPress(object sender, KeyPressEventArgs e)
         {
             KeypressValidation.Instance.Keypress_Num(sender, e);
+        }
+
+        private void comboMrpPercentage_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboMrpPercentage.SelectedItem != null)
+            {
+                MrpPercentage = Convert.ToDecimal(comboMrpPercentage.SelectedItem);
+                UpdateAllCalculations(); // Recalculate all prices
+            }
         }
     }
 }

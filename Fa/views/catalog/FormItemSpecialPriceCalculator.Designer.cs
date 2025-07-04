@@ -57,6 +57,8 @@
             label11 = new Label();
             TextBoxMrpPrice = new fa.views.controls.text.CurrencyTextBox();
             label12 = new Label();
+            label13 = new Label();
+            comboMrpPercentage = new ComboBox();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -334,7 +336,7 @@
             // 
             TextBoxMrpPrice.Decimals = 2;
             TextBoxMrpPrice.Length = 10;
-            TextBoxMrpPrice.Location = new Point(19, 169);
+            TextBoxMrpPrice.Location = new Point(149, 159);
             TextBoxMrpPrice.Name = "TextBoxMrpPrice";
             TextBoxMrpPrice.Size = new Size(120, 23);
             TextBoxMrpPrice.TabIndex = 475;
@@ -345,17 +347,38 @@
             // 
             label12.AutoSize = true;
             label12.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label12.Location = new Point(16, 153);
+            label12.Location = new Point(146, 143);
             label12.Name = "label12";
             label12.Size = new Size(63, 13);
             label12.TabIndex = 476;
             label12.Text = "MRP Price";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label13.Location = new Point(13, 143);
+            label13.Name = "label13";
+            label13.Size = new Size(100, 13);
+            label13.TabIndex = 478;
+            label13.Text = "MRP Percentage";
+            // 
+            // comboMrpPercentage
+            // 
+            comboMrpPercentage.FormattingEnabled = true;
+            comboMrpPercentage.Location = new Point(13, 159);
+            comboMrpPercentage.Name = "comboMrpPercentage";
+            comboMrpPercentage.Size = new Size(121, 23);
+            comboMrpPercentage.TabIndex = 479;
+            comboMrpPercentage.SelectedIndexChanged += comboMrpPercentage_SelectedIndexChanged;
             // 
             // FormItemSpecialPriceCalculator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(390, 354);
+            Controls.Add(comboMrpPercentage);
+            Controls.Add(label13);
             Controls.Add(TextBoxMrpPrice);
             Controls.Add(label12);
             Controls.Add(label11);
@@ -420,6 +443,8 @@
             Controls.SetChildIndex(label11, 0);
             Controls.SetChildIndex(label12, 0);
             Controls.SetChildIndex(TextBoxMrpPrice, 0);
+            Controls.SetChildIndex(label13, 0);
+            Controls.SetChildIndex(comboMrpPercentage, 0);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -456,5 +481,7 @@
         private Label label11;
         private fa.views.controls.text.CurrencyTextBox TextBoxMrpPrice;
         private Label label12;
+        private Label label13;
+        private ComboBox comboMrpPercentage;
     }
 }
