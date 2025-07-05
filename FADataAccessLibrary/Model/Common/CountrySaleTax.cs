@@ -16,14 +16,20 @@ namespace FADataAccessLibrary.Model.Common
     {
         [Key]
         public long Id { get; set; }
+
         public long CountryId { get; set; }
+
         [ForeignKey("CountryId")]
         public virtual Country Country { get; set; }
+
         public string Name { get; set; }
         public string Discription { get; set; }
         public string Rule { get; set; }
-        public DateTime EffectiveFrom { get; set; }
-        public DateTime EffectiveTo { get; set; }
-        
+
+        [Column(TypeName = "datetime")] // MySQL compatible
+        public DateTime EffectiveFrom { get; set; } = new DateTime(2020, 1, 1);
+
+        [Column(TypeName = "datetime")] // MySQL compatible
+        public DateTime EffectiveTo { get; set; } = new DateTime(2400, 1, 1);
     }
 }

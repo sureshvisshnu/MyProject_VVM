@@ -293,7 +293,7 @@ namespace fa.context
         public DbSet<SystemFunction> SystemFunctions { get; set; }
 
 
-
+        // Catalog
         public DbSet<CatalogItem> CatalogItems { get; set; } 
         public DbSet<Category> Categories { get; set; }
         public DbSet<ProductFamily> ProductFamilies { get; set; }
@@ -302,7 +302,7 @@ namespace fa.context
         public DbSet<DayBook> DoubleEntries { get; set; }
         public DbSet<ItemTax> ItemTaxs { get; set; }
         public DbSet<ItemSalesTaxMap> ItemSalesTaxMaps { get; set; }
-
+        public DbSet<ProductPercentage> ProductPercentages { get; set; }
         //Purcahse
         public DbSet<PurchaseEntry> PurchaseEntry { get; set; }
         public DbSet<PurchaseAttachment> PurchaseAttachments { get; set; }
