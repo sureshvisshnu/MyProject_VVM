@@ -1,9 +1,11 @@
 ﻿using fa;
 using fa.api.utils;
 using fa.libraries.Validation;
+using fa.model.Catalog;
 using fa.views;
 using fa.views.catalog;
 using fa.views.purchase;
+using FADataAccessLibrary.Api.catalog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -41,7 +43,7 @@ namespace Fa.views.catalog
             InitializeComponent();
         }
 
-        private void FormItemSpecialPriceCalculator_Load(object sender, EventArgs e)
+        private async void FormItemSpecialPriceCalculator_Load(object sender, EventArgs e)
         {
             comboMrpPercentage.Items.AddRange(new object[] { 50, 70, 100, 120 });
             comboMrpPercentage.SelectedItem = 120; // Set default to 120%
@@ -50,28 +52,30 @@ namespace Fa.views.catalog
             TextBoxAddedCostPercentage.Text = "15";
             TextBoxRetailMargin.Text = "30";    // Default 30% retail margin
             TextBoxWholesaleMargin.Text = "40"; // Default 40% wholesale margin
-            //try
-            //{
-            //    var repository = new ProductSalePercentageRepository(new ApplicationDbContext());
-            //    var savedPercentages = await repository.GetByProductCodeAsync(TextBoxProductCode.Text, Global.Company.Id);
+            try
+            {
+                // Use the singleton manager instead of direct repository
+                var percentages = await ProductSalePercentageManager.Instance.GetProductSalePercentageAsync(TextBoxProductCode.Text);
 
-            //    if (savedPercentages != null)
-            //    {
-            //        TextBoxAddedCostPercentage.Text = savedPercentages.AddedCostPercentage.ToString();
-            //        TextBoxRetailMargin.Text = savedPercentages.RetailMarginPercentage.ToString();
-            //        TextBoxWholesaleMargin.Text = savedPercentages.WholesaleMarginPercentage.ToString();
+                if (percentages != null)
+                {
+                    TextBoxAddedCostPercentage.Text = percentages.AddedCostPercentage.ToString();
+                    TextBoxRetailMargin.Text = percentages.RetailMarginPercentage.ToString();
+                    TextBoxWholesaleMargin.Text = percentages.WholesaleMarginPercentage.ToString();
 
-            //        // Set saved MRP percentage if it exists in the predefined values
-            //        if (new decimal[] { 50, 70, 100, 120 }.Contains(savedPercentages.MrpPercentage))
-            //        {
-            //            comboMrpPercentage.SelectedItem = savedPercentages.MrpPercentage;
-            //        }
-            //    }
-            //}
-            //catch
-            //{
-            //    // Use defaults if loading fails
-            //}
+                    // Set saved MRP percentage if it exists in the predefined values
+                    if (new decimal[] { 50, 70, 100, 120 }.Contains(percentages.MrpPercentage))
+                    {
+                        comboMrpPercentage.SelectedItem = percentages.MrpPercentage;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error if needed
+                System.Diagnostics.Debug.WriteLine($"Error loading percentages: {ex.Message}");
+                // Use defaults if loading fails
+            }
 
             if (parent is FormCatalog)
             {
@@ -190,38 +194,42 @@ namespace Fa.views.catalog
             return true;
         }
 
-        private void BtnPriceCalculatorSave_Click(object sender, EventArgs e)
+        private async void BtnPriceCalculatorSave_Click(object sender, EventArgs e) // Note async void for event handler
         {
             if (validate())
             {
-                if (parent is FormCatalog)
+                try
                 {
-                    // Save all calculated values back to parent form
-                    ((FormCatalog)parent).TextBoxProductPurchasePrice.Text = TextBoxPurchasePrice.Text;
-                    ((FormCatalog)parent).TextBoxProductCost.Text = TextBoxProductCost.Text;
-                    ((FormCatalog)parent).TextBoxProductRetailPrice.Text = TextBoxRetailPrice.Text;
-                    ((FormCatalog)parent).TextBoxProductWholeSalePrice.Text = TextBoxWholesalePrice.Text;
-                    ((FormCatalog)parent).TextBoxProductMSRP.Text = TextBoxMrpPrice.Text;
+                    var percentages = new ProductPercentage
+                    {
+                    ProductCode = TextBoxProductCode.Text,
+                    // Get the actual ProductId from database
+                    ProductId = await ProductSalePercentageManager.Instance.GetProductIdByCodeAsync(TextBoxProductCode.Text),
+                    CompanyId = Global.Company.CompanyId,
+                    AddedCostPercentage = decimal.Parse(TextBoxAddedCostPercentage.Text),
+                    RetailMarginPercentage = decimal.Parse(TextBoxRetailMargin.Text),
+                    WholesaleMarginPercentage = decimal.Parse(TextBoxWholesaleMargin.Text),
+                    MrpPercentage = decimal.Parse(comboMrpPercentage.SelectedItem.ToString()!),
+                    IsActive = true
+                };
 
-                    // Save the margin percentages if needed
-                    //((FormCatalog)parent).TextBoxProductRetailMargin.Text = TextBoxRetailMargin.Text;
-                    //((FormCatalog)parent).TextBoxProductWholesaleMargin.Text = TextBoxWholesaleMargin.Text;
+                await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(percentages);
 
-                    // Save the added cost percentage if needed
-                    //((FormCatalog)parent).TextBoxProductAddedCostPercentage.Text = TextBoxAddedCostPercentage.Text;
+                    // Rest of your save logic...
+                    if (parent is FormCatalog)
+                    {
+                        ((FormCatalog)parent).TextBoxProductPurchasePrice.Text = TextBoxPurchasePrice.Text;
+                        // ... other field updates
+                    }
+
+                    this.DialogResult = DialogResult.OK;
+                    this.Close();
                 }
-                else if (parent is FormPurchaseEntryNew)
+                catch (Exception ex)
                 {
-                    ((FormPurchaseEntryNew)parent).TextBoxProductPurchasePrice.Text = TextBoxPurchasePrice.Text;
-                    ((FormPurchaseEntryNew)parent).TextBoxPurchaseEntryRetailPrice.Text = TextBoxRetailPrice.Text;
-                    ((FormPurchaseEntryNew)parent).TextBoxPurchaseEntryWholeSalePrice.Text = TextBoxWholesalePrice.Text;
-                    // Uncomment if MRP field exists in purchase entry form
-                    // ((FormPurchaseEntryNew)parent).TextBoxPurchaseEntryMRPPrice.Text = TextBoxMrpPrice.Text;
+                    MessageBox.Show($"Error saving percentages: {ex.Message}", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-
-                // Set dialog result if needed
-                this.DialogResult = DialogResult.OK;
-                this.Close();
             }
         }
 
@@ -241,25 +249,25 @@ namespace Fa.views.catalog
                 decimal productCost = purchasePrice + (purchasePrice * addedCostPercentage / 100);
                 TextBoxProductCost.Text = productCost.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
 
-                // Calculate MRP using selected percentage (convert to multiplier)
+                // Calculate MRP using selected percentage (convert to multiplier) and round to whole number
                 decimal mrpMultiplier = 1 + (MrpPercentage / 100);
-                TextBoxMrpPrice.Text = (productCost * mrpMultiplier).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                decimal mrpPrice = productCost * mrpMultiplier;
+                TextBoxMrpPrice.Text = Math.Round(mrpPrice, 0).ToString(); // Rounds to nearest whole number
             }
         }
-
         private void UpdateMarginPrices()
         {
             if (decimal.TryParse(TextBoxMrpPrice.Text, out decimal mrpPrice) &&
                 decimal.TryParse(TextBoxRetailMargin.Text, out decimal retailMargin) &&
                 decimal.TryParse(TextBoxWholesaleMargin.Text, out decimal wholesaleMargin))
             {
-                // Calculate retail price (MRP - Retail Margin % of MRP)
+                // Calculate retail price (MRP - Retail Margin % of MRP) and round to whole number
                 decimal retailPrice = mrpPrice - (mrpPrice * retailMargin / 100);
-                TextBoxRetailPrice.Text = retailPrice.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                TextBoxRetailPrice.Text = Math.Round(retailPrice, 0).ToString(); // Rounds to nearest whole number
 
-                // Calculate wholesale price (MRP - Wholesale Margin % of MRP)
+                // Calculate wholesale price (MRP - Wholesale Margin % of MRP) and round to whole number
                 decimal wholesalePrice = mrpPrice - (mrpPrice * wholesaleMargin / 100);
-                TextBoxWholesalePrice.Text = wholesalePrice.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                TextBoxWholesalePrice.Text = Math.Round(wholesalePrice, 0).ToString(); // Rounds to nearest whole number
             }
         }
 

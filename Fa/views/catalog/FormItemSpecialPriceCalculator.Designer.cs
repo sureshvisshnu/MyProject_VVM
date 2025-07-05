@@ -128,7 +128,7 @@
             TextBoxWholesaleMargin.Location = new Point(16, 257);
             TextBoxWholesaleMargin.Name = "TextBoxWholesaleMargin";
             TextBoxWholesaleMargin.Size = new Size(120, 23);
-            TextBoxWholesaleMargin.TabIndex = 456;
+            TextBoxWholesaleMargin.TabIndex = 6;
             TextBoxWholesaleMargin.Text = "0.00";
             TextBoxWholesaleMargin.TextAlign = HorizontalAlignment.Right;
             TextBoxWholesaleMargin.TextChanged += TextBoxWholesaleMargin_TextChanged;
@@ -140,7 +140,7 @@
             TextBoxRetailMargin.Location = new Point(16, 217);
             TextBoxRetailMargin.Name = "TextBoxRetailMargin";
             TextBoxRetailMargin.Size = new Size(120, 23);
-            TextBoxRetailMargin.TabIndex = 455;
+            TextBoxRetailMargin.TabIndex = 5;
             TextBoxRetailMargin.Text = "0.00";
             TextBoxRetailMargin.TextAlign = HorizontalAlignment.Right;
             TextBoxRetailMargin.TextChanged += TextBoxRetailMargin_TextChanged;
@@ -152,7 +152,7 @@
             TextBoxPurchasePrice.Location = new Point(15, 117);
             TextBoxPurchasePrice.Name = "TextBoxPurchasePrice";
             TextBoxPurchasePrice.Size = new Size(120, 23);
-            TextBoxPurchasePrice.TabIndex = 453;
+            TextBoxPurchasePrice.TabIndex = 2;
             TextBoxPurchasePrice.Text = "0.00";
             TextBoxPurchasePrice.TextAlign = HorizontalAlignment.Right;
             TextBoxPurchasePrice.TextChanged += TextBoxPurchasePrice_TextChanged;
@@ -185,7 +185,7 @@
             BtnPriceCalculatorSave.Location = new Point(258, 285);
             BtnPriceCalculatorSave.Name = "BtnPriceCalculatorSave";
             BtnPriceCalculatorSave.Size = new Size(91, 23);
-            BtnPriceCalculatorSave.TabIndex = 457;
+            BtnPriceCalculatorSave.TabIndex = 7;
             BtnPriceCalculatorSave.Text = "Save [F8]";
             BtnPriceCalculatorSave.UseVisualStyleBackColor = true;
             BtnPriceCalculatorSave.Click += BtnPriceCalculatorSave_Click;
@@ -196,7 +196,7 @@
             BtnPriceCalculatorCancel.Location = new Point(163, 285);
             BtnPriceCalculatorCancel.Name = "BtnPriceCalculatorCancel";
             BtnPriceCalculatorCancel.Size = new Size(89, 23);
-            BtnPriceCalculatorCancel.TabIndex = 458;
+            BtnPriceCalculatorCancel.TabIndex = 8;
             BtnPriceCalculatorCancel.Text = "Cancel [Esc]";
             BtnPriceCalculatorCancel.UseVisualStyleBackColor = true;
             BtnPriceCalculatorCancel.Click += BtnPriceCalculatorCancel_Click;
@@ -247,7 +247,7 @@
             TextBoxProductName.Name = "TextBoxProductName";
             TextBoxProductName.ReadOnly = true;
             TextBoxProductName.Size = new Size(333, 23);
-            TextBoxProductName.TabIndex = 466;
+            TextBoxProductName.TabIndex = 1;
             TextBoxProductName.TabStop = false;
             // 
             // TextBoxProductCode
@@ -256,7 +256,7 @@
             TextBoxProductCode.Name = "TextBoxProductCode";
             TextBoxProductCode.ReadOnly = true;
             TextBoxProductCode.Size = new Size(139, 23);
-            TextBoxProductCode.TabIndex = 463;
+            TextBoxProductCode.TabIndex = 0;
             TextBoxProductCode.TabStop = false;
             // 
             // label3
@@ -317,7 +317,7 @@
             TextBoxAddedCostPercentage.Location = new Point(148, 117);
             TextBoxAddedCostPercentage.Name = "TextBoxAddedCostPercentage";
             TextBoxAddedCostPercentage.Size = new Size(100, 23);
-            TextBoxAddedCostPercentage.TabIndex = 473;
+            TextBoxAddedCostPercentage.TabIndex = 3;
             TextBoxAddedCostPercentage.Text = "0.00";
             TextBoxAddedCostPercentage.TextAlign = HorizontalAlignment.Right;
             TextBoxAddedCostPercentage.TextChanged += TextBoxAddedPercentsage_TextChanged;
@@ -369,7 +369,7 @@
             comboMrpPercentage.Location = new Point(13, 159);
             comboMrpPercentage.Name = "comboMrpPercentage";
             comboMrpPercentage.Size = new Size(121, 23);
-            comboMrpPercentage.TabIndex = 479;
+            comboMrpPercentage.TabIndex = 4;
             comboMrpPercentage.SelectedIndexChanged += comboMrpPercentage_SelectedIndexChanged;
             // 
             // FormItemSpecialPriceCalculator
