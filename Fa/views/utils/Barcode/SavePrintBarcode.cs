@@ -12,6 +12,7 @@ using fa.model.Hms.Master;
 using fa.model.Hms.Op;
 using fa.model.OrderManagement;
 using fa.views.purchase;
+using FADataAccessLibrary.Api.catalog;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using Microsoft.Win32;
@@ -26,6 +27,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using VisioForge.Libs.MediaFoundation.OPM;
+using Rectangle = iTextSharp.text.Rectangle;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
 
 namespace fa.views.utils
@@ -37,7 +39,13 @@ namespace fa.views.utils
     }
     public class SavePrintBarcode
     {
-        public string PrinterName;
+        public string? PrinterName;
+
+        // Font size adjustments (add these constants at the top of your class)
+        private const int COMPANY_FONT_SIZE = 11; // Reduced from 12
+        private const int MRP_UOM_FONT_SIZE = 7;  // Reduced from 8
+        private const int SECRET_CODE_FONT_SIZE = 10; // Reduced from 12 (assuming original was same as 
+
         //a4 sheet barcode by item
         public void GenerateBarcodeA4(long ProductId, string fileName, string fileExtension, bool isPrint, string Location, int Qty, string PrinterName)
         {
@@ -65,7 +73,7 @@ namespace fa.views.utils
 
             PdfPTable ReportMainTable = new PdfPTable(Cols);
 
-            float[] widths = null;
+            float[] widths = null!;
 
             widths = new float[] { 280f, 270f, 260f };
             ReportMainTable.SetWidths(widths);
@@ -1305,13 +1313,13 @@ namespace fa.views.utils
         {
             return new string[]
             {
-        "I8,A",    // 203 DPI, font A
-        "q295",    // Label height = 295 dots (~35mm)
-        "O",       // Reverse printing (optional)
-        "JF",      // Field justification
-        "ZT",      // Thermal transfer mode
-        "Q200,25", // Label width = 200 dots (~25mm)
-        "N"        // Normal printing mode
+                "I8,A",    // 203 DPI, font A
+                "q295",    // Label height = 295 dots (~35mm)
+                "O",       // Reverse printing (optional)
+                "JF",      // Field justification
+                "ZT",      // Thermal transfer mode
+                "Q200,25", // Label width = 200 dots (~25mm)
+                "N"        // Normal printing mode
             };
         }
 
@@ -1322,36 +1330,549 @@ namespace fa.views.utils
             var quote = '"';
             return new string[]
             {
-        // Adjusted coordinates for 35x25mm labels
-        $"A{xOffset},100,2,{largeFontSize},1,1,N,{quote}{companyName}{quote}",
-        $"A{xOffset},80,2,{smallFontSize},1,1,N,{quote}{productName}{quote}",
-        $"B{xOffset-11},60,2,1,1,3,30,N,{quote}{product.MaterialId}{quote}",  // Smaller barcode
-        $"A{xOffset-11},30,2,{smallFontSize},1,1,N,{quote}{product.MaterialId}{quote}",
-        $"A{xOffset+5},20,2,{largeFontSize},1,1,N,{quote}{priceInfo.MrpText}{quote}",
-        $"A{xOffset-30},15,2,{largeFontSize},1,1,N,{quote}{priceInfo.FormattedMrp}{quote}"
+                // Adjusted coordinates for 35x25mm labels
+                $"A{xOffset},100,2,{largeFontSize},1,1,N,{quote}{companyName}{quote}",
+                $"A{xOffset},80,2,{smallFontSize},1,1,N,{quote}{productName}{quote}",
+                $"B{xOffset-11},60,2,1,1,3,30,N,{quote}{product.MaterialId}{quote}",  // Smaller barcode
+                $"A{xOffset-11},30,2,{smallFontSize},1,1,N,{quote}{product.MaterialId}{quote}",
+                $"A{xOffset+5},20,2,{largeFontSize},1,1,N,{quote}{priceInfo.MrpText}{quote}",
+                $"A{xOffset-30},15,2,{largeFontSize},1,1,N,{quote}{priceInfo.FormattedMrp}{quote}"
             };
         }
         // ===== SPECIAL DESIGN ---
-        public void GenerateCompactBarcodeLabel(long productId, long quantity, string printerName)
+        public void GenerateSpecialBarcodeLabel(long ProductId, long Qty, string PrinterName)
         {
-            Product product = CatalogProductManager.Instance.GetProductInfoById(productId);
+            Product ProductFromDB = CatalogProductManager.Instance.GetProductInfoById(ProductId);
+            var length = ProductFromDB.Name.Length;
+            var Product = ProductFromDB.Name.Substring(0, (length <= 15) ? length : 15) + ((length > 15) ? ".." : "");
+            length = Global.Company.Name.Length;
+            var CompanyName = Global.Company.Name.Substring(0, (length <= 15) ? length : 15) + ((length > 15) ? ".." : "");
 
-            // Format text fields with appropriate lengths
-            string companyName = TruncateWithEllipsis(Global.Company.Name, 20);
-            string productName = TruncateWithEllipsis(product.Name, 20);
-            string productCode = product.MaterialId;
+            // Get percentage values (assuming they're stored in ProductFromDB)
+            var (retailPercent, wholesalePercent) = GetProductPercentages(ProductId);
 
-            // Prepare pricing information
-            string mrp = product.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
-            string rate = (Global.Company.BusinessType == BuisnessType.Wholesale
-                          ? product.WholdSalePrice
-                          : product.RetailPrice)
-                         .ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
+            // Format NGL value (use retail percentage)
+            string nglValue = "NGL" +
+                (retailPercent % 10 == 0 ? (retailPercent / 10).ToString("0") :
+                                          (retailPercent / 10).ToString("0.#"));
 
-            // Generate labels
-            PrintCompactLabels(printerName, companyName, productName, productCode, mrp, rate, quantity);
+            // Get UOM from catalog
+            string uom = ProductFromDB.UOM ?? ""; // Replace with actual UOM field
+
+            // Format secret code (convert retail price digits to letters)
+            decimal retailPrice = Global.Company.BusinessType == BuisnessType.Wholesale ?
+                                (decimal)ProductFromDB.WholdSalePrice : (decimal)ProductFromDB.RetailPrice;
+            string secretCode = ConvertToSecretCode(retailPrice.ToString(""));
+
+            string lMrp = ProductFromDB.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
+            string lRate = retailPrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
+
+            char quote = '"';
+            string MrpLabel = "MRP:";
+            string NglLabel = nglValue;
+            string UomLabel = uom;
+
+            long Rows = Qty / 3;
+            long Cols = Qty % 3;
+            string[] Print;
+
+            for (long i = 0; i < Rows; i++)
+            {
+                Print = new string[]
+                {
+                    "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N",
+
+                    // 1st Label
+                    $"A785,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    $"A785,150,2,2,1,1,N,{quote}{Product}{quote}",
+                    $"B774,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A774,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A800,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                    $"A740,35,2,2,1,1,N,{quote}{lMrp}{quote}",
+                    $"A650,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
+
+                    // 2nd Label
+                    $"A506,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    $"A506,150,2,2,1,1,N,{quote}{Product}{quote}",
+                    $"B487,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A492,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A530,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                    $"A460,35,2,2,1,1,N,{quote}{lMrp}{quote}",
+                    $"A370,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
+
+                    // 3rd Label
+                    $"A228,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    $"A228,150,2,2,1,1,N,{quote}{Product}{quote}",
+                    $"B209,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A214,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A250,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                    $"A180,35,2,2,1,1,N,{quote}{lMrp}{quote}",
+                    $"A90,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
+
+                    "P1"
+                };
+                PrintLabel(PrinterName, Print, i.ToString());
+            }
+
+            if (Cols > 0)
+            {
+                List<string> partial = new() { "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N" };
+
+                if (Cols >= 1)
+                {
+                    partial.AddRange(new string[]
+                    {
+                        $"A785,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                        $"A785,150,2,2,1,1,N,{quote}{Product}{quote}",
+                        $"B774,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                        $"A774,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                        $"A800,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                        $"A740,35,2,2,1,1,N,{quote}{lMrp}{quote}",
+                        $"A650,35,2,2,1,1,N,{quote}{UomLabel}{quote}"
+                    });
+                }
+
+                if (Cols == 2)
+                {
+                    partial.AddRange(new string[]
+                    {
+                        $"A506,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                        $"A506,150,2,2,1,1,N,{quote}{Product}{quote}",
+                        $"B487,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                        $"A492,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                        $"A530,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                        $"A460,35,2,2,1,1,N,{quote}{lMrp}{quote}",
+                        $"A370,35,2,2,1,1,N,{quote}{UomLabel}{quote}"
+                    });
+                }
+
+                partial.Add("P1");
+                PrintLabel(PrinterName, partial.ToArray(), "");
+            }
         }
 
+        private string ConvertToSecretCode(string price)
+        {
+            Dictionary<char, char> secretMap = new()
+            {
+                {'0', 'O'}, {'1', 'M'}, {'2', 'A'}, {'3', 'R'},
+                {'4', 'K'}, {'5', 'E'}, {'6', 'T'}, {'7', 'I'},
+                {'8', 'N'}, {'9', 'G'}, {'.', '.'}
+            };
+
+            return string.Concat(price.Select(c => secretMap.TryGetValue(c, out var mapped) ? mapped : c));
+        }
+
+        private string FormatSecretCode(string code)
+        {
+            return $"^FD{code}^FS^A0N,{SECRET_CODE_FONT_SIZE},10^FB500,1,0,C^FO15,20";
+        }
+        
+        public void GenerateSpecialBarcodeLabelv1(long ProductId, long Qty, string PrinterName)
+        {
+            Product ProductFromDB = CatalogProductManager.Instance.GetProductInfoById(ProductId);
+            var length = ProductFromDB.Name.Length;
+            var Product = ProductFromDB.Name.Substring(0, (length <= 15) ? length : 15) + ((length > 15) ? ".." : "");
+            length = Global.Company.Name.Length;
+            var CompanyName = Global.Company.Name.Substring(0, (length <= 15) ? length : 15) + ((length > 15) ? ".." : "");
+
+            string lMrp = ProductFromDB.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
+            string lRate = (Global.Company.BusinessType == BuisnessType.Wholesale
+                            ? ProductFromDB.WholdSalePrice
+                            : ProductFromDB.RetailPrice)
+                            .ToString(Global.Company.PrimaryCurrency.CurrencyFormat)
+                            .Replace(",", "");
+
+            char quote = '"';
+            string MrpLabel = "MRP:";
+            string RateLabel = "Rate:";
+
+            long Rows = Qty / 3;
+            long Cols = Qty % 3;
+            string[] Print;
+
+            for (long i = 0; i < Rows; i++)
+            {
+                Print = new string[]
+                {
+            "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N",
+
+            // 1st Label
+            $"A785,180,2,4,1,1,N,{quote}{CompanyName}{quote}",
+            $"A785,150,2,2,1,1,N,{quote}{Product}{quote}",
+            $"B774,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A774,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A790,30,2,4,1,1,N,{quote}{MrpLabel}{quote}",
+            $"A735,27,2,4,1,1,N,{quote}{lMrp}{quote}",
+
+            // 2nd Label
+            $"A506,180,2,4,1,1,N,{quote}{CompanyName}{quote}",
+            $"A506,150,2,2,1,1,N,{quote}{Product}{quote}",
+            $"B487,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A492,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A509,30,2,4,1,1,N,{quote}{MrpLabel}{quote}",
+            $"A453,27,2,4,1,1,N,{quote}{lMrp}{quote}",
+
+            // 3rd Label
+            $"A228,180,2,4,1,1,N,{quote}{CompanyName}{quote}",
+            $"A228,150,2,2,1,1,N,{quote}{Product}{quote}",
+            $"B209,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A214,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A231,30,2,4,1,1,N,{quote}{MrpLabel}{quote}",
+            $"A175,27,2,4,1,1,N,{quote}{lMrp}{quote}",
+
+            "P1"
+                };
+                PrintLabel(PrinterName, Print, i.ToString());
+            }
+
+            // Partial label if Qty % 3 != 0
+            if (Cols > 0)
+            {
+                List<string> partial = new() { "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N" };
+
+                if (Cols >= 1)
+                {
+                    partial.AddRange(new string[]
+                    {
+                $"A785,180,2,4,1,1,N,{quote}{CompanyName}{quote}",
+                $"A785,150,2,2,1,1,N,{quote}{Product}{quote}",
+                $"B774,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                $"A774,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                $"A790,30,2,4,1,1,N,{quote}{MrpLabel}{quote}",
+                $"A735,27,2,4,1,1,N,{quote}{lMrp}{quote}"
+                    });
+                }
+
+                if (Cols == 2)
+                {
+                    partial.AddRange(new string[]
+                    {
+                $"A506,180,2,4,1,1,N,{quote}{CompanyName}{quote}",
+                $"A506,150,2,2,1,1,N,{quote}{Product}{quote}",
+                $"B487,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                $"A492,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                $"A509,30,2,4,1,1,N,{quote}{MrpLabel}{quote}",
+                $"A453,27,2,4,1,1,N,{quote}{lMrp}{quote}"
+                    });
+                }
+
+                partial.Add("P1");
+                PrintLabel(PrinterName, partial.ToArray(), "");
+            }
+        }
+
+        public void GenerateCompactBarcodeLabel(long productId, string fileName, string fileExtension,
+                                      bool isPrint, string location, int qty, string printerName)
+        {
+            // Use the proven working pattern from GenerateBarcodeA4
+            using (MemoryStream myMemoryStream = new MemoryStream())
+            {
+                Document pdfDoc = new Document(PageSize.A4, -60, -60, 35, 25);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
+                pdfDoc.Open();
+
+                // Use your NEW compact table design but with proper null checks
+                PdfPTable reportTable = CreateCompactLabelTableSafe(productId, location, qty);
+
+                pdfDoc.Add(reportTable);
+                pdfDoc.Close();
+
+                PdfGeneration.SaveMemoryStreamBarcode(printerName, myMemoryStream, fileName, fileExtension, isPrint, PaperTypes.A4_PORTRAIT);
+            }
+        }
+
+        private PdfPTable CreateCompactLabelTableSafe(long productId, string location, int qty)
+        {
+            // 1. Initialize a 3-column table (A4 page layout)
+            PdfPTable table = new PdfPTable(3);
+            table.SetWidths(new float[] { 280f, 270f, 260f }); // Column widths
+            table.DefaultCell.Border = Rectangle.NO_BORDER;
+
+            // 2. Fetch product data (with null checks)
+            Product product = CatalogProductManager.Instance?.GetProductInfoById(productId);
+            if (product == null || qty <= 0)
+            {
+                // Add a visible error cell instead of returning empty
+                PdfPCell errorCell = new PdfPCell(new Phrase("Invalid product/quantity",
+                    PdfDataAlignment.GetFont("Font_Normal_10_Red")));
+                errorCell.Colspan = 3;
+                table.AddCell(errorCell);
+                return table;
+            }
+
+            // 3. Format content (as per BarCode Sample.png)
+            string companyName = (Global.Company?.Name ?? "").Trim();
+            string productCode = product.MaterialId ?? "N/A";
+            string mrp = product.Msrp.ToString("0.00");
+            string rate = (Global.Company?.BusinessType == BuisnessType.Wholesale
+                          ? product.WholdSalePrice
+                          : product.RetailPrice).ToString("0.00");
+
+            // 4. Generate barcode (with fallback to text)
+            iTextSharp.text.Image barcodeImage = null!;
+            try
+            {
+                using (var stream = new MemoryStream())
+                {
+                    var image = BarCode.GenerateImageBarcode1(productCode);
+                    if (image != null)
+                    {
+                        image.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                        barcodeImage = iTextSharp.text.Image.GetInstance(stream.ToArray());
+                        barcodeImage.ScaleAbsolute(150, 40); // Match your sample dimensions
+                    }
+                }
+            }
+            catch { /* Barcode fails silently -> fallback to text */ }
+
+            // 5. Build labels (qty times)
+            for (int i = 0; i < qty; i++)
+            {
+                PdfPCell cell = new PdfPCell();
+                cell.MinimumHeight = 90; // Fixed height (like your sample)
+                cell.Border = Rectangle.NO_BORDER;
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+
+                // Top: Company Name (bold, single line)
+                if (!string.IsNullOrEmpty(companyName))
+                    cell.AddElement(new Phrase(companyName, PdfDataAlignment.GetFont("Font_Bold_12_Black")));
+
+                // Middle: Barcode or Product Code
+                if (barcodeImage != null)
+                    cell.AddElement(barcodeImage);
+                else
+                    cell.AddElement(new Phrase(productCode, PdfDataAlignment.GetFont("Font_Normal_10_Black")));
+
+                // Bottom: MRP + Rate (compact)
+                cell.AddElement(new Phrase($"MRP: {mrp}  RATE: {rate}",
+                    PdfDataAlignment.GetFont("Font_Normal_8_Black")));
+
+                table.AddCell(cell);
+            }
+
+            return table;
+        }
+
+        public void GenerateCompactBarcodeLabelyy(long productId, string fileName, string fileExtension,
+                                      bool isPrint, string location, int qty, string printerName)
+        {
+            // Validate all required parameters first
+            if (productId <= 0) throw new ArgumentException("Invalid Product ID");
+            if (string.IsNullOrWhiteSpace(fileName)) throw new ArgumentException("File name cannot be empty");
+            if (string.IsNullOrWhiteSpace(fileExtension)) throw new ArgumentException("File extension cannot be empty");
+            if (qty <= 0) throw new ArgumentException("Quantity must be positive");
+            if (string.IsNullOrWhiteSpace(printerName)) throw new ArgumentException("Printer name cannot be empty");
+
+            Document pdfDoc = null!;
+            MemoryStream myMemoryStream = null!;
+
+            try
+            {
+                myMemoryStream = new MemoryStream();
+
+                // 1. Create document with validation
+                pdfDoc = new Document(PageSize.A4, -60, -60, 35, 25);
+                if (pdfDoc == null) throw new Exception("Failed to create PDF document");
+
+                // 2. Create writer with validation
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
+                if (writer == null) throw new Exception("Failed to create PDF writer");
+
+                pdfDoc.Open();
+
+                // 3. Create table with validation
+                PdfPTable reportTable = CreateCompactLabelTable(productId, location, qty);
+                if (reportTable == null) throw new Exception("Failed to create label table");
+
+                // 4. Add content to document
+                pdfDoc.Add(reportTable);
+
+                // 5. Handle printing/saving
+                if (isPrint)
+                {
+                    if (!PdfGeneration.SaveMemoryStreamBarcode(printerName, myMemoryStream, fileName, fileExtension, true, PaperTypes.A4_PORTRAIT))
+                    {
+                        throw new Exception("Failed to print barcode");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log detailed error
+                Debug.WriteLine($"Error in GenerateCompactBarcodeLabel: {ex}");
+                throw new Exception($"Barcode generation failed: {ex.Message}", ex);
+            }
+            finally
+            {
+                // Ensure proper cleanup
+                pdfDoc?.Close();
+                myMemoryStream?.Dispose();
+            }
+        }
+
+        private PdfPTable CreateCompactLabelTable(long productId, string location, int qty)
+        {
+            try
+            {
+                // Validate product exists
+                Product product = CatalogProductManager.Instance?.GetProductInfoById(productId)!;
+                if (product == null) throw new Exception("Product not found");
+
+                // Validate company info
+                if (Global.Company == null) throw new Exception("Company information not available");
+                if (Global.Company.PrimaryCurrency == null) throw new Exception("Currency not set");
+
+                // Create and configure table
+                PdfPTable table = new PdfPTable(3);
+                table.SetWidths(new float[] { 280f, 270f, 260f });
+                table.DefaultCell.Border = Rectangle.NO_BORDER;
+
+                // [Rest of your table creation logic...]
+
+                return table;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error creating label table: {ex}");
+                return null;
+            }
+        }
+        public void GenerateCompactBarcodeLabelxx(long productId, string fileName, string fileExtension,
+                                      bool isPrint, string location, int qty, string printerName)
+        {
+            using (MemoryStream myMemoryStream = new MemoryStream())
+            {
+                Document pdfDoc = new Document(PageSize.A4, -60, -60, 35, 25);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
+                pdfDoc.Open();
+
+                PdfPTable reportTable = CreateCompactLabelTable(productId, location, qty);
+                pdfDoc.Add(reportTable);
+                pdfDoc.Close();
+
+                PdfGeneration.SaveMemoryStreamBarcode(printerName, myMemoryStream, fileName, fileExtension, isPrint, PaperTypes.A4_PORTRAIT);
+            }
+        }
+
+        private PdfPTable CreateCompactLabelTablexx(long productId, string location, int qty)
+        {
+            try
+            {
+                Product product = CatalogProductManager.Instance.GetProductInfoById(productId);
+                if (product == null) return null;
+
+                // Validate location format
+                if (string.IsNullOrEmpty(location) || !location.Contains(','))
+                {
+                    location = "1,1"; // Default starting position
+                }
+
+                // Format text fields - shorter for compact display
+                string companyName = TruncateWithEllipsis(Global.Company.Name, 15);
+                string productCode = product.MaterialId;
+
+                // Get pricing information
+                string mrp = product.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
+
+                // Get retail percentage (new modification)
+                decimal retailPercentage = GetRetailPercentage(productId); // You'll need to implement this
+                string nglCode = "NGL" + Math.Floor(retailPercentage / 10); // Gets first digit (e.g., 40% becomes NGL4)
+
+                // Prepare pricing information
+                string rate = (Global.Company.BusinessType == BuisnessType.Wholesale
+                             ? product.WholdSalePrice
+                             : product.RetailPrice)
+                            .ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
+
+                // Parse starting location
+                string[] startCell = location.Split(',');
+                int printStartCellCount = (((int.Parse(startCell[0]) - 1) * 3) + int.Parse(startCell[1]));
+                int printStartCell = (printStartCellCount == 0) ? 0 : (printStartCellCount - 1);
+
+                // Create table with 3 columns
+                PdfPTable table = new PdfPTable(3);
+                table.SetWidths(new float[] { 280f, 270f, 260f });
+                table.DefaultCell.Border = Rectangle.NO_BORDER;
+
+
+                // Add empty cells for starting position
+                for (int p = 0; p < printStartCell; p++)
+                {
+                    table.AddCell(new PdfPCell() { MinimumHeight = 97, Border = Rectangle.NO_BORDER });
+                }
+
+                // Generate barcode image once
+                MemoryStream barcodeStream = new MemoryStream();
+                var barcodeImage = BarCode.GenerateImageBarcode1(productCode);
+                barcodeImage.Save(barcodeStream, System.Drawing.Imaging.ImageFormat.Png);
+                iTextSharp.text.Image image = iTextSharp.text.Image.GetInstance(barcodeStream.ToArray());
+                image.ScaleAbsoluteHeight(40); // Slightly taller barcode
+                image.ScaleAbsoluteWidth(150); // Slightly wider barcode
+
+                // Add label cells
+                for (int i = 0; i < qty; i++)
+                {
+                    PdfPCell cell = new PdfPCell();
+                    cell.MinimumHeight = 97;
+                    cell.Border = Rectangle.NO_BORDER;
+                    cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                    cell.PaddingTop = 5f;
+
+                    // Company Name (top)
+                    cell.AddElement(new Phrase(companyName, PdfDataAlignment.GetFont("Font_Bold_12_Black")));
+                    cell.AddElement(new Phrase("\n"));
+
+                    // Barcode (center)
+                    cell.AddElement(image);
+                    cell.AddElement(new Phrase("\n"));
+
+                    // Product Code (below barcode)
+                    cell.AddElement(new Phrase(productCode, PdfDataAlignment.GetFont("Font_Normal_10_Black")));
+                    cell.AddElement(new Phrase("\n"));
+
+                    // Modified pricing line - now shows NGL code and MRP
+                    cell.AddElement(new Phrase($"{nglCode}  MRP: {mrp}",
+                                             PdfDataAlignment.GetFont("Font_Normal_8_Black")));
+
+                    table.AddCell(cell);
+                }
+
+                // Fill remaining cells in last row if needed
+                int addColumn = (printStartCell + qty) % 3;
+                if (addColumn > 0)
+                {
+                    for (int i = 0; i < (3 - addColumn); i++)
+                    {
+                        table.AddCell(new PdfPCell() { Border = Rectangle.NO_BORDER });
+                    }
+                }
+
+                return table;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating compact label table: {ex}");
+                return null!;
+            }
+        }
+
+        private (decimal RetailPercentage, decimal WholesalePercentage) GetProductPercentages(long productId)
+        {
+            var percentages = ProductSalePercentageManager.Instance.GetProductSalePercentage(productId);
+            return (
+                percentages.RetailMarginPercentage,
+                percentages.WholesaleMarginPercentage // Assuming this property exists
+            );
+        }
+
+        private decimal GetRetailPercentage(long productId)
+        {
+            // Implement your actual percentage lookup logic here
+            // This is just a placeholder - replace with your actual database query
+            var productpercentage = ProductSalePercentageManager.Instance.GetProductSalePercentage(productId);
+            return productpercentage.RetailMarginPercentage; // Assuming your Product model has this property
+        }
         private void PrintCompactLabels(string printerName, string companyName, string productName,
                                       string productCode, string mrp, string rate, long quantity)
         {
@@ -1413,13 +1934,13 @@ namespace fa.views.utils
         {
             return new string[]
             {
-        "I8,A",    // 203 DPI, font A
-        "q295",    // Label height = 295 dots (~35mm)
-        "O",       // Reverse printing (optional)
-        "JF",      // Field justification
-        "ZT",      // Thermal transfer mode
-        "Q200,25", // Label width = 200 dots (~25mm)
-        "N"        // Normal printing mode
+                "I8,A",    // 203 DPI, font A
+                "q295",    // Label height = 295 dots (~35mm)
+                "O",       // Reverse printing (optional)
+                "JF",      // Field justification
+                "ZT",      // Thermal transfer mode
+                "Q200,25", // Label width = 200 dots (~25mm)
+                "N"        // Normal printing mode
             };
         }
 
@@ -1429,21 +1950,21 @@ namespace fa.views.utils
             var quote = '"';
             return new string[]
             {
-        // Company Name (top line)
-        $"A{xOffset},100,2,2,1,1,N,{quote}{companyName}{quote}",
+                // Company Name (top line)
+                $"A{xOffset},100,2,2,1,1,N,{quote}{companyName}{quote}",
         
-        // Product Name (middle line)
-        $"A{xOffset},70,2,1,1,1,N,{quote}{productName}{quote}",
+                // Product Name (middle line)
+                $"A{xOffset},70,2,1,1,1,N,{quote}{productName}{quote}",
         
-        // Barcode (centered)
-        $"B{xOffset-30},50,2,1,1,2,30,N,{quote}{productCode}{quote}",
+                // Barcode (centered)
+                $"B{xOffset-30},50,2,1,1,2,30,N,{quote}{productCode}{quote}",
         
-        // Product Code (below barcode)
-        $"A{xOffset-30},30,2,1,1,1,N,{quote}{productCode}{quote}",
+                // Product Code (below barcode)
+                $"A{xOffset-30},30,2,1,1,1,N,{quote}{productCode}{quote}",
         
-        // MRP and Rate (bottom line)
-        $"A{xOffset},15,2,1,1,1,N,{quote}MRP:{mrp} RATE:{rate}{quote}"
-            };
+                // MRP and Rate (bottom line)
+                $"A{xOffset},15,2,1,1,1,N,{quote}MRP:{mrp} RATE:{rate}{quote}"
+                    };
         }
     }
 }

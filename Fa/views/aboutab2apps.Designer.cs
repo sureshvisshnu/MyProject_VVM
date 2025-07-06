@@ -35,14 +35,14 @@
             pictureBox1 = new PictureBox();
             label3 = new Label();
             groupBox1 = new GroupBox();
+            pictureBox4 = new PictureBox();
             pictureBox2 = new PictureBox();
             pictureBox3 = new PictureBox();
-            pictureBox4 = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox4).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -53,7 +53,7 @@
             label1.Location = new Point(8, 225);
             label1.Margin = new Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new Size(181, 29);
+            label1.Size = new Size(145, 23);
             label1.TabIndex = 1;
             label1.Text = "VVM Software";
             label1.Click += label1_Click;
@@ -76,7 +76,7 @@
             label2.Location = new Point(9, 250);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
-            label2.Size = new Size(305, 21);
+            label2.Size = new Size(236, 16);
             label2.TabIndex = 3;
             label2.Text = "Vadasery, Nagercoil, TamilNadu 629001";
             label2.Click += label2_Click;
@@ -98,7 +98,7 @@
             label3.Location = new Point(9, 193);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(527, 21);
+            label3.Size = new Size(406, 16);
             label3.TabIndex = 5;
             label3.Text = "Hospital/Pharmacy Management System, developed and supported by";
             // 
@@ -114,11 +114,21 @@
             groupBox1.TabIndex = 6;
             groupBox1.TabStop = false;
             // 
+            // pictureBox4
+            // 
+            pictureBox4.BackgroundImage = (Image)resources.GetObject("pictureBox4.BackgroundImage");
+            pictureBox4.BackgroundImageLayout = ImageLayout.Stretch;
+            pictureBox4.Location = new Point(466, 17);
+            pictureBox4.Name = "pictureBox4";
+            pictureBox4.Size = new Size(131, 165);
+            pictureBox4.TabIndex = 9;
+            pictureBox4.TabStop = false;
+            // 
             // pictureBox2
             // 
             pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
             pictureBox2.BackgroundImageLayout = ImageLayout.Stretch;
-            pictureBox2.Location = new Point(265, 17);
+            pictureBox2.Location = new Point(134, 17);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Size = new Size(332, 165);
             pictureBox2.TabIndex = 7;
@@ -134,19 +144,9 @@
             pictureBox3.TabIndex = 8;
             pictureBox3.TabStop = false;
             // 
-            // pictureBox4
-            // 
-            pictureBox4.BackgroundImage = (Image)resources.GetObject("pictureBox4.BackgroundImage");
-            pictureBox4.BackgroundImageLayout = ImageLayout.Stretch;
-            pictureBox4.Location = new Point(134, 17);
-            pictureBox4.Name = "pictureBox4";
-            pictureBox4.Size = new Size(131, 165);
-            pictureBox4.TabIndex = 9;
-            pictureBox4.TabStop = false;
-            // 
             // AboutAB2Apps
             // 
-            AutoScaleDimensions = new SizeF(9F, 19F);
+            AutoScaleDimensions = new SizeF(7F, 16F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             ClientSize = new Size(607, 321);
@@ -167,9 +167,9 @@
             Text = "About Therapia";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             groupBox1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
-            ((System.ComponentModel.ISupportInitialize)pictureBox4).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }

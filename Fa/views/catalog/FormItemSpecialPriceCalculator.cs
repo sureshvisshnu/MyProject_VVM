@@ -6,6 +6,7 @@ using fa.views;
 using fa.views.catalog;
 using fa.views.purchase;
 using FADataAccessLibrary.Api.catalog;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -200,39 +201,64 @@ namespace Fa.views.catalog
             {
                 try
                 {
+                    var productId = await ProductSalePercentageManager.Instance.GetProductIdByCodeAsync(TextBoxProductCode.Text.Trim());
+                    if (productId <= 0)
+                    {
+                        MessageBox.Show("Product not found! Please save the product first.",
+                                      "Validation Error",
+                                      MessageBoxButtons.OK,
+                                      MessageBoxIcon.Warning);
+                        return;
+                    }
+
                     var percentages = new ProductPercentage
                     {
-                    ProductCode = TextBoxProductCode.Text,
-                    // Get the actual ProductId from database
-                    ProductId = await ProductSalePercentageManager.Instance.GetProductIdByCodeAsync(TextBoxProductCode.Text),
-                    CompanyId = Global.Company.CompanyId,
-                    AddedCostPercentage = decimal.Parse(TextBoxAddedCostPercentage.Text),
-                    RetailMarginPercentage = decimal.Parse(TextBoxRetailMargin.Text),
-                    WholesaleMarginPercentage = decimal.Parse(TextBoxWholesaleMargin.Text),
-                    MrpPercentage = decimal.Parse(comboMrpPercentage.SelectedItem.ToString()!),
-                    IsActive = true
-                };
+                        ProductCode = TextBoxProductCode.Text,
+                        // Get the actual ProductId from database
+                        ProductId = await ProductSalePercentageManager.Instance.GetProductIdByCodeAsync(TextBoxProductCode.Text),
+                        CompanyId = Global.Company.CompanyId,
+                        AddedCostPercentage = decimal.Parse(TextBoxAddedCostPercentage.Text),
+                        RetailMarginPercentage = decimal.Parse(TextBoxRetailMargin.Text),
+                        WholesaleMarginPercentage = decimal.Parse(TextBoxWholesaleMargin.Text),
+                        MrpPercentage = decimal.Parse(comboMrpPercentage.SelectedItem.ToString()!),
+                        IsActive = true
+                    };
 
-                await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(percentages);
+                    await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(percentages);
 
                     // Rest of your save logic...
-                    if (parent is FormCatalog)
+                    if (parent is FormCatalog catalogParent)
                     {
-                        ((FormCatalog)parent).TextBoxProductPurchasePrice.Text = TextBoxPurchasePrice.Text;
-                        // ... other field updates
+                        UpdateParentForm(catalogParent);
                     }
+
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
+                catch (FormatException)
+                {
+                    MessageBox.Show("Please enter valid numeric values for all percentages",
+                                  "Invalid Input",
+                                  MessageBoxButtons.OK,
+                                  MessageBoxIcon.Warning);
+                }
+                catch (DbUpdateException dbEx)
+                {
+                    MessageBox.Show($"Database error: {dbEx.InnerException?.Message ?? dbEx.Message}",
+                                  "Save Failed",
+                                  MessageBoxButtons.OK,
+                                  MessageBoxIcon.Error);
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error saving percentages: {ex.Message}", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Unexpected error: {ex.Message}",
+                                  "Error",
+                                  MessageBoxButtons.OK,
+                                  MessageBoxIcon.Error);
                 }
             }
         }
-
 
         private void UpdateProductCostAndMRP()
         {
@@ -338,5 +364,53 @@ namespace Fa.views.catalog
                 UpdateAllCalculations(); // Recalculate all prices
             }
         }
+        #region Helper Methods
+        private decimal ValidatePercentage(string input, string fieldName)
+        {
+            if (!decimal.TryParse(input, out var value) || value < 0 || value > 100)
+            {
+                throw new ArgumentException($"Invalid {fieldName} percentage (0-100)");
+            }
+            return value;
+        }
+
+        private decimal ValidateMrpPercentage()
+        {
+            if (comboMrpPercentage.SelectedItem == null)
+            {
+                throw new ArgumentException("Please select an MRP percentage");
+            }
+            return decimal.Parse(comboMrpPercentage.SelectedItem.ToString()!);
+        }
+
+        private async Task SavePercentagesWithRetry(ProductPercentage percentages)
+        {
+            const int maxRetries = 2;
+            int attempt = 0;
+
+            while (true)
+            {
+                try
+                {
+                    await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(percentages);
+                    return;
+                }
+                catch (DbUpdateConcurrencyException) when (attempt++ < maxRetries)
+                {
+                    // Wait and retry
+                    await Task.Delay(500);
+                }
+            }
+        }
+
+        private void UpdateParentForm(FormCatalog catalogParent)
+        {
+            catalogParent.TextBoxProductPurchasePrice.Text = TextBoxPurchasePrice.Text;
+            catalogParent.TextBoxProductCost.Text = TextBoxProductCost.Text;
+            catalogParent.TextBoxProductRetailPrice.Text = TextBoxRetailPrice.Text;
+            catalogParent.TextBoxProductWholeSalePrice.Text = TextBoxWholesalePrice.Text;
+            catalogParent.TextBoxProductMSRP.Text = TextBoxMrpPrice.Text;
+        }
+        #endregion
     }
 }

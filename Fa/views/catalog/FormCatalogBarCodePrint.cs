@@ -48,6 +48,15 @@ namespace fa.views.catalog
                     if (ProductId != 0L)
                     {
                         SavePrintBarcode.GenerateBarcodeA4(ProductId, "A4SheetBarCode", "pdf", true, TextBoxStartLocation.Text, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                        //SavePrintBarcode.GenerateCompactBarcodeLabel(
+                        //    ProductId,  // First parameter should be the product ID
+                        //    "A4SheetBarCode",
+                        //    "pdf",
+                        //    true,
+                        //    TextBoxStartLocation.Text,
+                        //    int.Parse(TextBoxPrintQuantity.Text),
+                        //    ComboBoxDefaultPrinter.Text
+                        //);
                     }
                     else
                     {
@@ -58,31 +67,98 @@ namespace fa.views.catalog
                 {
                     if (ProductId != 0L)
                     {
+                        //try
+                        //{
+                            if (!int.TryParse(TextBoxPrintQuantity.Text, out int quantity) || quantity <= 0)
+                            {
+                                MessageBox.Show("Please enter a valid quantity (1 or more)");
+                                return;
+                            }
+
+                            var savePrint = new SavePrintBarcode();
+
                         if (ComboBoxLabelSize.Text == "35 mm * 25 mm")
                         {
-                            SavePrintBarcode SavePrintBarcode = new SavePrintBarcode();
-                            SavePrintBarcode.GenerateBarcodeLabel(ProductId, LabelSize.THREE, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                            //savePrint.GenerateCompactBarcodeLabel(123, "test.pdf", ".pdf", false, "", 5, "PrinterName");
+                            //savePrint.GenerateBarcodeA4(ProductId, "A4SheetBarCode", "pdf", true, TextBoxStartLocation.Text, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                            //savePrint.GenerateCompactBarcodeLabel(
+                            //        ProductId,
+                            //        "A4SheetBarCode",
+                            //        "pdf",
+                            //        true,
+                            //        TextBoxStartLocation.Text,
+                            //        quantity,
+                            //        ComboBoxDefaultPrinter.Text
+                            //    );
+                            savePrint.GenerateSpecialBarcodeLabel(ProductId, long.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
                         }
                         else if (ComboBoxLabelSize.Text == "50 mm * 25 mm")
                         {
-                            SavePrintBarcode SavePrintBarcode = new SavePrintBarcode();
-                            SavePrintBarcode.GenerateBarcodeLabel(ProductId, LabelSize.TWO, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                            savePrint.GenerateBarcodeLabel(ProductId, LabelSize.TWO, quantity, ComboBoxDefaultPrinter.Text);
                         }
-                        else if (ComboBoxLabelSize.Text == "100 mm* 23 mm")
+                        else if (ComboBoxLabelSize.Text == "100 mm * 23 mm")
                         {
-                            SavePrintBarcode SavePrintBarcode = new SavePrintBarcode();
-                            SavePrintBarcode.GenerateBarcodeLabel(ProductId, LabelSize.ONE, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                            savePrint.GenerateBarcodeLabel(ProductId, LabelSize.ONE, quantity, ComboBoxDefaultPrinter.Text);
                         }
+                        else
+                        {
+                            MessageBox.Show("Please select a valid label size");
+                        }
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    MessageBox.Show($"Error generating barcode: {ex.Message}");
+                        //    Console.WriteLine(ex.ToString());
+                        //}
                     }
-                    else if(IsIP || IsOP)
+                    else if (IsIP || IsOP)
                     {
-                        SavePrintBarcode SavePrintBarcode = new SavePrintBarcode();
-                        SavePrintBarcode.GenerateBarcodeLabelForPatientOPIP(PatientId, LabelSize.ONE, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text,IsOP);
+                        try
+                        {
+                            if (!int.TryParse(TextBoxPrintQuantity.Text, out int quantity) || quantity <= 0)
+                            {
+                                MessageBox.Show("Please enter a valid quantity (1 or more)");
+                                return;
+                            }
+
+                            var savePrint = new SavePrintBarcode();
+                            savePrint.GenerateBarcodeLabelForPatientOPIP(
+                                PatientId,
+                                LabelSize.ONE,
+                                quantity,
+                                ComboBoxDefaultPrinter.Text,
+                                IsOP
+                            );
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error generating patient barcode: {ex.Message}");
+                            Console.WriteLine(ex.ToString());
+                        }
                     }
                     else
                     {
-                        SavePrintBarcode SavePrintBarcode = new SavePrintBarcode();
-                        SavePrintBarcode.GenerateBarcodeLabelForPatient(PatientId, LabelSize.ONE, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                        try
+                        {
+                            if (!int.TryParse(TextBoxPrintQuantity.Text, out int quantity) || quantity <= 0)
+                            {
+                                MessageBox.Show("Please enter a valid quantity (1 or more)");
+                                return;
+                            }
+
+                            var savePrint = new SavePrintBarcode();
+                            savePrint.GenerateBarcodeLabelForPatient(
+                                PatientId,
+                                LabelSize.ONE,
+                                quantity,
+                                ComboBoxDefaultPrinter.Text
+                            );
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error generating patient barcode: {ex.Message}");
+                            Console.WriteLine(ex.ToString());
+                        }
                     }
                 }
                 Cursor.Current = Cursors.Default;

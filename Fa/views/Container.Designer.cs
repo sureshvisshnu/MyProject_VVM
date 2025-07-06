@@ -1554,7 +1554,7 @@
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.BackColor = SystemColors.ControlLight;
+            tableLayoutPanel1.BackColor = SystemColors.ControlLightLight;
             tableLayoutPanel1.BackgroundImageLayout = ImageLayout.Stretch;
             tableLayoutPanel1.ColumnCount = 3;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.52917F));
