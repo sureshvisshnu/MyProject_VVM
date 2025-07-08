@@ -1451,6 +1451,84 @@ namespace fa.views.utils
             }
         }
 
+        public void GenerateSpecialBarcodeLabel4Ups(long ProductId, long Qty, string PrinterName)
+        {
+            Product ProductFromDB = CatalogProductManager.Instance.GetProductInfoById(ProductId);
+            var length = ProductFromDB.Name.Length;
+            var Product = ProductFromDB.Name.Substring(0, (length <= 10) ? length : 10) + ((length > 10) ? ".." : ""); // Shorter for small labels
+            length = Global.Company.Name.Length;
+            var CompanyName = Global.Company.Name.Substring(0, (length <= 8) ? length : 8) + ((length > 8) ? ".." : ""); // Shorter company name
+
+            // Get percentages and format values (same as before)
+            var (retailPercent, wholesalePercent) = GetProductPercentages(ProductId);
+            string nglValue = "NGL" + (retailPercent % 10 == 0 ? (retailPercent / 10).ToString("0") : (retailPercent / 10).ToString("0.#"));
+            string uom = ProductFromDB.UOM ?? "";
+            decimal retailPrice = Global.Company.BusinessType == BuisnessType.Wholesale ?
+                                (decimal)ProductFromDB.WholdSalePrice : (decimal)ProductFromDB.RetailPrice;
+            string secretCode = ConvertToSecretCode(retailPrice.ToString(""));
+            string lMrp = ProductFromDB.Msrp.ToString("0.00"); // Simplified format for small labels
+
+            char quote = '"';
+            long Rows = Qty / 4; // 4 labels per row
+            long Cols = Qty % 4;
+            string[] Print;
+
+            // Label dimensions (25mm x 20mm ≈ 200x160 dots at 8 dots/mm)
+            int labelWidth = 200;
+            int labelHeight = 160;
+            int margin = 15;
+
+            for (long i = 0; i < Rows; i++)
+            {
+                Print = new string[]
+                {
+            "^XA", // Start of label
+            $"^PW{labelWidth * 4 + margin * 2}", // Total width for 4 labels
+            "^LL" + (labelHeight + margin), // Label length
+            "^LS0", // Label shift
+            "^XZ", // End of label (temporary)
+
+            // 1st Label (position: 0,0)
+            $"^FO{margin},{margin}^A0N,15,10^FD{CompanyName}^FS",
+            $"^FO{margin + 120},{margin}^A0N,10,10^FD{secretCode}^FS",
+            $"^FO{margin},{margin + 20}^A0N,12,10^FD{Product}^FS",
+            $"^FO{margin},{margin + 40}^BY1^BEN,30,Y,N^FD{ProductFromDB.MaterialId}^FS",
+            //$"^FO{margin},{margin + 75}^A0N,10,10^FD{NglValue}^FS",
+            $"^FO{margin + 60},{margin + 75}^A0N,10,10^FD{lMrp}^FS",
+            $"^FO{margin + 120},{margin + 75}^A0N,10,10^FD{uom}^FS",
+
+            // 2nd Label (position: 200,0)
+            $"^FO{margin + labelWidth},{margin}^A0N,15,10^FD{CompanyName}^FS",
+            // ... repeat same elements with X offset by labelWidth ...
+
+            // 3rd Label (position: 400,0)
+            // ... repeat with X offset by 2*labelWidth ...
+
+            // 4th Label (position: 600,0)
+            // ... repeat with X offset by 3*labelWidth ...
+
+            "^XZ" // End of label
+                };
+                PrintLabel(PrinterName, Print, i.ToString());
+            }
+
+            // Handle partial rows (1-3 remaining labels)
+            if (Cols > 0)
+            {
+                List<string> partial = new() { "^XA", $"^PW{labelWidth * Cols + margin * 2}", "^LL" + (labelHeight + margin), "^LS0" };
+
+                for (int j = 0; j < Cols; j++)
+                {
+                    partial.AddRange(new string[]
+                    {
+                $"^FO{margin + j * labelWidth},{margin}^A0N,15,10^FD{CompanyName}^FS",
+                        // ... add all other elements with X offset by j*labelWidth ...
+                    });
+                }
+                partial.Add("^XZ");
+                PrintLabel(PrinterName, partial.ToArray(), "");
+            }
+        }
         private string ConvertToSecretCode(string price)
         {
             Dictionary<char, char> secretMap = new()
