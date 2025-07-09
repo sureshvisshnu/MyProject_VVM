@@ -1106,7 +1106,7 @@ namespace fa.views.sales
             if (SalesManager.GetSaleEntry(long.Parse(TextBoxSaleReturnId.Text)) != null)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                PrinterSetup.SalePrintSetup(long.Parse(TextBoxSaleReturnId.Text), false, Entrytype.RETURN);
+                PrinterSetup.SalePrintSetupNew(long.Parse(TextBoxSaleReturnId.Text), false, Entrytype.RETURN);
                 Cursor.Current = Cursors.Default;
             }
             else

@@ -395,7 +395,7 @@ namespace fa.views.sales
             if (SalesManager.GetSaleEntry(long.Parse(TextBoxSalesQuotesId.Text)) != null)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                PrinterSetup.SalePrintSetup(long.Parse(TextBoxSalesQuotesId.Text), false, Entrytype.QUOTE);
+                PrinterSetup.SalePrintSetupNew(long.Parse(TextBoxSalesQuotesId.Text), false, Entrytype.QUOTE);
                 Cursor.Current = Cursors.Default;
             }
             else

@@ -162,10 +162,14 @@ namespace Fa.views.utils.Sale
 
                         DataRow SaleDetailsTableNewRow = SaleDetailsTable.NewRow();
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.SNO] = count.ToString();
-                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.MFRID] = lSaleDetail.Product.ProductFamily?.Name?.ToString()?? "";
-                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.DESC] = SaleDetails.Product?.Name?.ToString()?? "";
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.MFRID] = lSaleDetail.Product.ProductFamily?.Name?.ToString() ?? "";
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.DESC] = SaleDetails.Product?.Name?.ToString() ?? "";
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.UOM] = SaleDetails.Uom?.ToString() ?? "";
-                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.HSN] = SaleDetails.Product?.HSNCode?.ToString() ?? "";
+                        // Original line:
+                        // SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.DESC] = SaleDetails.Product?.Name?.ToString()?? "";
+
+                        // Modified line:
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.DESC] = TruncateString(SaleDetails.Product?.Name ?? "", 25);
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.BATCH] = (SaleDetails.BatchNo?.ToString() ?? "") + "\n" + (SaleDetails.ExpDate != DateTime.MinValue ? SaleDetails.ExpDate.ToString("MM-yy") : "");
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.QTY] = Qty.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision));
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.FREE] = SaleDetails.FreeQuantity.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision));
@@ -253,7 +257,7 @@ namespace Fa.views.utils.Sale
                     {
                         var temp = i < rows ? dataTable.Rows[i][j].ToString() : " ";
                         rowCell = new PdfPCell(new Phrase(temp, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
-                        
+
                         if (j < 12)
                         {
                             rowCell.BorderWidthRight = (float)BorderStyle.None;
@@ -349,7 +353,7 @@ namespace Fa.views.utils.Sale
             rowCell.BorderWidthBottom = (float)BorderStyle.None;
             rowCell.UseVariableBorders = true;
             table.AddCell(rowCell);
-            
+
             rowCell = new PdfPCell(new Phrase(ConvertToINR(totalSaleAmount), PdfDataAlignment.GetFont("Font_Bold_Italic_9_Black")));
             rowCell.MinimumHeight = MinimumHeight;
             rowCell.Colspan = 8;
@@ -409,7 +413,7 @@ namespace Fa.views.utils.Sale
             rowCell.BorderWidthBottom = (float)BorderStyle.None;
             rowCell.BackgroundColor = new BaseColor(200, 200, 200);
             taxPdfTable.AddCell(rowCell);
-            
+
             for (int nt = 0; nt < 2; nt++)
             {
                 rowCell = new PdfPCell(new Phrase("%", PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
@@ -550,7 +554,7 @@ namespace Fa.views.utils.Sale
             rowCell.BorderWidthBottom = (float)BorderStyle.None;
             rowCell.BorderWidthRight = (float)BorderStyle.None;
             taxPdfTable.AddCell(rowCell);
-            
+
             rowCell = new PdfPCell(new Phrase(TotalTaxValue.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
             rowCell.MinimumHeight = MinimumHeight;
             rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
@@ -571,7 +575,7 @@ namespace Fa.views.utils.Sale
             rowCell.BorderWidthBottom = (float)BorderStyle.None;
             rowCell.BorderWidthRight = (float)BorderStyle.None;
             taxPdfTable.AddCell(rowCell);
-            
+
             rowCell = new PdfPCell(new Phrase("", PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
             rowCell.MinimumHeight = MinimumHeight;
             rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
@@ -585,13 +589,13 @@ namespace Fa.views.utils.Sale
             rowCell.BorderWidthBottom = (float)BorderStyle.None;
             rowCell.BorderWidthRight = (float)BorderStyle.None;
             taxPdfTable.AddCell(rowCell);
-            
+
             rowCell = new PdfPCell(new Phrase(TotalGSTAmount.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
             rowCell.MinimumHeight = MinimumHeight;
             rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             rowCell.BorderWidthBottom = (float)BorderStyle.None;
             taxPdfTable.AddCell(rowCell);
-            
+
             rowCell = new PdfPCell(new Phrase("Tax Amount (in words) : " + ConvertToINR(double.Parse(TotalGSTAmount.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)))), PdfDataAlignment.GetFont("Font_Bold_Italic_9_Black")));
             rowCell.MinimumHeight = 15;
             rowCell.Colspan = 8;
@@ -897,7 +901,7 @@ namespace Fa.views.utils.Sale
             HeadCell.BorderWidthBottom = (float)BorderStyle.None;
             HeadCell.MinimumHeight = 10;
             HeadTable.AddCell(HeadCell);
-            
+
             HeadCell = new PdfPCell(new Phrase(SaleEntry.SaleMethod.ToString(), PdfDataAlignment.GetFont("Font_Bold_Italic_10_Black")));
             HeadCell.HorizontalAlignment = Element.ALIGN_LEFT;
             HeadCell.BorderWidthBottom = (float)BorderStyle.None;
@@ -1087,6 +1091,15 @@ namespace Fa.views.utils.Sale
             }
 
             return words.Trim();
+        }
+        private static string TruncateString(string input, int maxLength, bool addEllipsis = true)
+        {
+            if (string.IsNullOrEmpty(input)) return "";
+            if (input.Length <= maxLength) return input;
+
+            return addEllipsis
+                ? input.Substring(0, maxLength - 3) + "..."
+                : input.Substring(0, maxLength);
         }
     }
 }

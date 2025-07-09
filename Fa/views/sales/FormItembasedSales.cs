@@ -6,6 +6,7 @@ using fa.api.Log;
 using fa.api.OrderManagement;
 using fa.api.System;
 using fa.api.utils;
+using fa.context;
 using fa.libraries.utils;
 using fa.libraries.Validation;
 using fa.model.Accounting.Masters;
@@ -27,16 +28,20 @@ using fa.views.purchase;
 using fa.views.utils;
 using Fa.api.catalog;
 using Fa.report.accounting.master;
+using fa.views.sales;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Windows.Forms;
-using VisioForge.MediaFramework.Helpers;
-using VisioForge.Libs.NDI;
 using Syncfusion.Styles;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+using VisioForge.Libs.NDI;
+using VisioForge.MediaFramework.Helpers;
 
 namespace fa.views.sales
 {
@@ -97,15 +102,37 @@ namespace fa.views.sales
         public long OPId = 0L;
         public long LocationId = 0L;
         public long FormLocationId = 0L;
+
+        private const string BarcodePrefix = "{SCAN}";
+        private bool _isScannerInput = false;
+        private string _scannedBarcode = string.Empty;
+        private bool _isProcessingBarcode = false;
+        private bool _isManualSearchRequested = false;
+        private bool _isBarcodeProcessing = false;
+        private DateTime _lastBarcodeTime = DateTime.MinValue;
+        private DateTime _lastScannerInput = DateTime.MinValue;
+        private StringBuilder _scannerBuffer = new StringBuilder();
+        private DateTime _lastKeyTime = DateTime.MinValue;
+        private const int SCANNER_THRESHOLD_MS = 30;
+        private DateTime _lastKeyPressTime = DateTime.MinValue;
+        private StringBuilder _barcodeBuffer = new StringBuilder();
+        private const int SCANNER_MAX_DELAY_MS = 50;
+        private const int BarcodeThresholdMs = 100; // Max time between barcode chars
         public FormItembasedSales()
         {
             InitializeComponent();
+            checkBoxGST.CheckedChanged += checkBoxGST_CheckedChanged!;
             SalesManager = SalesManager.Instance;
             excludedObjects = new string[] { "toolStrip1", "groupBox2", "DiscountAdditinalChargeGrid", "ToolStripStatusLabelErrorPurchase", "ComboBoxSaleInventoryLocation", "SaleProductDetails" };
+            GridViewSalesItem.EditingControlShowing += GridViewSalesItem_EditingControlShowing!;
+            GridViewSalesItem.CellEndEdit += GridViewSalesItem_CellEndEdit!;
+            GridViewSalesItem.KeyPress += GridViewSalesItem_KeyPress!;
+            InitializeScannerHandling();
         }
         private void FormItembasedSales_Load(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
+            InitializePrintingComboBox();
             LoadUomTax(0L);
             this.Visible = false;
             setSize();
@@ -414,10 +441,10 @@ namespace fa.views.sales
             double _roundoff = 0.00;
             if (Round > 0)
             {
-                double mod = TotalAmount % (Round*2);
+                double mod = TotalAmount % (Round * 2);
                 if (mod >= Round)
                 {
-                    _roundoff = (Round*2) - mod;
+                    _roundoff = (Round * 2) - mod;
                 }
                 else
                 {
@@ -554,7 +581,7 @@ namespace fa.views.sales
             if (SalesManager.GetSaleEntry(long.Parse(TextBoxSalesId.Text)) != null)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                PrinterSetup.SalePrintSetup(long.Parse(TextBoxSalesId.Text), true, Entrytype.SALE);
+                PrinterSetup.SalePrintSetup(long.Parse(TextBoxSalesId.Text), true, Entrytype.SALE, false);
                 Cursor.Current = Cursors.Default;
             }
             else
@@ -568,12 +595,50 @@ namespace fa.views.sales
             if (SalesManager.GetSaleEntry(long.Parse(TextBoxSalesId.Text)) != null)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                PrinterSetup.SalePrintSetup(long.Parse(TextBoxSalesId.Text), false, Entrytype.SALE);
+
+                // Get the selected paper format from the combo box
+                string paperFormatName;
+                //var selectedFormat = ComboBoxPrintingPaper.SelectedItem as PrintPaperFormat;
+                if (ComboBoxPrintingPaper.SelectedItem is PrintPaperFormat selectedFormat)
+                {
+                    // Use selected format's name
+                    paperFormatName = selectedFormat.DisplayName!;
+                }
+                else if (ComboBoxPrintingPaper.Items.Count > 0)
+                {
+                    // Fallback to first item's name if nothing selected
+                    if (ComboBoxPrintingPaper.Items[0] is PrintPaperFormat firstFormat)
+                    {
+                        paperFormatName = firstFormat.DisplayName!;
+                    }
+                    else
+                    {
+                        // If casting fails, use the displayed text
+                        paperFormatName = ComboBoxPrintingPaper.Text;
+                    }
+                }
+                else
+                {
+                    // If combo box is empty, use the displayed text
+                    paperFormatName = ComboBoxPrintingPaper.Text;
+                }
+
+                // Determine print type based on checkbox
+                bool isGSTPrint = checkBoxGST.Checked;
+
+                // Call print function with GST status and selected paper format
+                PrinterSetup.SalePrintSetup(
+                    long.Parse(TextBoxSalesId.Text),
+                    false,
+                    Entrytype.SALE,
+                    isGSTPrint,
+                    paperFormatName!); // Pass the selected paper format name
+
                 Cursor.Current = Cursors.Default;
             }
             else
             {
-                DisplaySystemError("Somting went wrong, please check this sale is still valid.");
+                DisplaySystemError("Something went wrong, please check this sale is still valid.");
                 return;
             }
         }
@@ -655,7 +720,7 @@ namespace fa.views.sales
                                     lSalesQuote.isSaleLocked = true;
                                     SalesManager.UpdateSaleEntry(lSalesQuote);
                                 }
-                                lSalesFromDB = SalesManager.AddSaleEntry(lSales);                               
+                                lSalesFromDB = SalesManager.AddSaleEntry(lSales);
                             }
                             catch (Exception ex)
                             {
@@ -867,7 +932,7 @@ namespace fa.views.sales
                                 for (int k = 0; k < Count - 1; k++)
                                 {
                                     var Batch1 = GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.BATNO].Value;
-                                    if (i != k && GridViewSalesItem.Rows[k].Cells[(int)SaleEntryTableColumn.ID].Value!=null && PId == (long)GridViewSalesItem.Rows[k].Cells[(int)SaleEntryTableColumn.ID].Value)
+                                    if (i != k && GridViewSalesItem.Rows[k].Cells[(int)SaleEntryTableColumn.ID].Value != null && PId == (long)GridViewSalesItem.Rows[k].Cells[(int)SaleEntryTableColumn.ID].Value)
                                     {
                                         var Batch2 = GridViewSalesItem.Rows[k].Cells[(int)SaleEntryTableColumn.BATNO].Value;
                                         string lUom = GridViewSalesItem.Rows[k].Cells[(int)SaleEntryTableColumn.UOM].Value.ToString();
@@ -1069,7 +1134,7 @@ namespace fa.views.sales
         }
         private void ResetForm()
         {
-            
+
             if (FormLocationId != 0L)
             {
                 InventoryLocation Location = HospitalInventoryManager.Instance.GetLocationById(FormLocationId);
@@ -1677,7 +1742,17 @@ namespace fa.views.sales
         public double Price = 0.00;
         private void GridViewSalesItem_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            
+            if (e.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT && !_isBarcodeProcessing)
+            {
+                var barcode = GridViewSalesItem.Rows[e.RowIndex].Cells[e.ColumnIndex].Value?.ToString();
+                if (!string.IsNullOrEmpty(barcode))
+                {
+                    _isBarcodeProcessing = true;
+                    SearchProductByBarCode(barcode);
+                    _isBarcodeProcessing = false;
+                }
+            }
+
             if (e.ColumnIndex == (int)SaleEntryTableColumn.QTY ||
                 e.ColumnIndex == (int)SaleEntryTableColumn.FREE ||
                 e.ColumnIndex == (int)SaleEntryTableColumn.PRICE ||
@@ -1729,8 +1804,8 @@ namespace fa.views.sales
                         {
                             ToolStripStatusLabelErrorPurchase.Text = "Please select item Batch.";
                         }
-                        else 
-                        { 
+                        else
+                        {
                             Cursor.Current = Cursors.WaitCursor;
                             if (IsOverrideTabCtr)
                             {
@@ -1755,7 +1830,7 @@ namespace fa.views.sales
                             }
                             Cursor.Current = Cursors.Default;
                         }
-                        
+
                     }
                 }
                 Row_Added();
@@ -1950,6 +2025,15 @@ namespace fa.views.sales
         {
             ((ComboBox)GridViewSalesItem.EditingControl).DroppedDown = false;
         }
+        
+        private void HandleCellValue(string input)
+        {
+            if (input.StartsWith("[SCAN]") && input.EndsWith("[END]"))
+            {
+                string barcode = input.Replace("[SCAN]", "").Replace("[END]", "");
+                SearchProductByBarCode(barcode);
+            }
+        }
         private void LoadPrice(int Index, string Uom)
         {
             if (GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ID].Value != null)
@@ -2030,6 +2114,14 @@ namespace fa.views.sales
         }
         private void GridViewSalesItem_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
+            if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+            {
+                if (e.Control is TextBox textBox)
+                {
+                    textBox.KeyDown -= ProductTextBox_KeyDown;
+                    textBox.KeyDown += ProductTextBox_KeyDown;
+                }
+            }
             if (e.Control is DataGridViewComboBoxEditingControl && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.UOM)
             {
                 ((ComboBox)e.Control).DropDownStyle = ComboBoxStyle.DropDown;
@@ -2105,6 +2197,99 @@ namespace fa.views.sales
             }
         }
         private void ProductTextChange(object sender, EventArgs e)
+        {
+            if (((TextBox)sender).Modified && GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.BATNO
+                && GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.UOM)
+            {
+                if (!string.IsNullOrEmpty(((TextBox)sender).Text))
+                {
+                    Cursor.Current = Cursors.WaitCursor;
+                    bool IsDirty = this.formIsDirty;
+                    GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = ((TextBox)sender).Text;
+                    DirtyFlag(IsDirty);
+
+                    // Check if this looks like a barcode scan (typically rapid input)
+                    // You might want to add additional barcode validation logic here if needed
+                    if (IsLikelyBarcode(((TextBox)sender).Text))
+                    {
+                        // Delay slightly to allow the text to be fully entered
+                        Task.Delay(100).ContinueWith(_ =>
+                        {
+                            this.Invoke((MethodInvoker)delegate {
+                                SearchProduct();
+                                // After search, move focus to quantity column if product was found
+                                if (ProductId != 0)
+                                {
+                                    GridViewSalesItem.CurrentCell = GridViewSalesItem[(int)SaleEntryTableColumn.QTY, GridViewSalesItem.CurrentRow.Index];
+                                    GridViewSalesItem.BeginEdit(true);
+                                }
+                            });
+                        });
+                        return;
+                    }
+
+                    IList<Product> Product = CatalogProductManager.Instance.GetProductByExactSearchQuery(((TextBox)sender).Text, Global.Company.CompanyId);
+                    if (Product.Count > 0)
+                    {
+                        IsScanner = true;
+                        if (Product.Count > 1)
+                        {
+                            SearchProduct();
+                            if (ProductId != 0)
+                            {
+                                DirtyFlag(IsDirty);
+                                return;
+                            }
+                        }
+                        long CheckForAddRow = (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null) ? (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
+                        //for tax update Sales
+                        if (GridViewSalesItem.Rows[GridViewSalesItem.CurrentRow.Index].Cells[(int)SaleEntryTableColumn.SALESDETAILID].Value != null &&
+                        CheckForAddRow == Product.First().Id)
+                        {
+                            DialogResult Result = MessageBox.Show(ResetItemTaxConfirmText, "Confirm",
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+                            if (Result == DialogResult.No)
+                            {
+                                return;
+                            }
+                        }
+                        LoadUomTax(Product.First().Id);
+                        LoadProductAdditinalDetails(CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(Product.First().Id));
+                        GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                        if (CheckForAddRow == 0 && GridViewSalesItem.Rows.Count - 1 == GridViewSalesItem.CurrentRow.Index)
+                        {
+                            GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                            GridViewSalesItem.Rows.Add();
+                        }
+                        GridViewSalesItem.Rows[GridViewSalesItem.CurrentRow.Index].Cells[(int)SaleEntryTableColumn.PRODUCT].Value = Product.First().Name;
+
+                        // Move focus to quantity column after product is found
+                        GridViewSalesItem.CurrentCell = GridViewSalesItem[(int)SaleEntryTableColumn.QTY, GridViewSalesItem.CurrentRow.Index];
+                        GridViewSalesItem.BeginEdit(true);
+                    }
+                    else
+                    {
+                        ResetProductDetails(GridViewSalesItem.CurrentRow.Index);
+                        DirtyFlag(IsDirty);
+                    }
+                    Cursor.Current = Cursors.Default;
+                }
+                else
+                {
+                    ResetProductDetails(GridViewSalesItem.CurrentRow.Index);
+                }
+            }
+        }
+
+        // Helper method to detect barcode input
+        private bool IsLikelyBarcode(string input)
+        {
+            // Add your barcode detection logic here
+            // This could be based on length, pattern, or other characteristics
+            // For now, we'll assume any input longer than 6 chars is a barcode
+            return input.Length >= 6;
+        }
+        private void ProductTextChangeOld(object sender, EventArgs e)
         {
             if (((TextBox)sender).Modified && GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.BATNO
                 && GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.UOM)
@@ -2288,10 +2473,28 @@ namespace fa.views.sales
             SaleProductDetails.Clear();
             ComputeFormTotal();
         }
-        
+
 
         private void GridViewSalesItem_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+            {
+                // Record key press time
+                var currentTime = DateTime.Now;
+                var timeSinceLastKey = (currentTime - _lastKeyPressTime).TotalMilliseconds;
+                _lastKeyPressTime = currentTime;
+
+                // If keys are coming fast, assume scanner
+                if (timeSinceLastKey < SCANNER_MAX_DELAY_MS)
+                {
+                    _barcodeBuffer.Append(e.KeyChar);
+                }
+                else
+                {
+                    _barcodeBuffer.Clear();
+                    _barcodeBuffer.Append(e.KeyChar);
+                }
+            }
             GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
             if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO)
             {
@@ -2396,8 +2599,16 @@ namespace fa.views.sales
                 ProductId = long.Parse(ProductIdTransport.Text);
             }
         }
+        private void SearchPreviousPrice()
+        {
+            //FormSalsePriceSeeking FormSalsePriceSeeking = new FormSalsePriceSeeking(this);
+            //FormSalsePriceSeeking.ShowDialog();
+        }
+        
         private void SearchProduct()
         {
+            if (_isBarcodeProcessing)
+                return;
             FormSearchItems FormSearchItems = new FormSearchItems(this);
             Cursor.Current = Cursors.WaitCursor;
             bool IsDirty = this.formIsDirty;
@@ -2565,7 +2776,7 @@ namespace fa.views.sales
                         double TotalStock = 0.00;
                         foreach (InventoryBatch Detail in InventoryBatch)
                         {
-                            TotalStock += (((Detail.StockDate!=null && Detail.StockDate<=DatetimePickerSalesDate.Date?Detail.OpeningStock:0)+ Detail.QuantityOnHand) * (Product.RetailUOM == Uom ? (Detail.WholesaleXFactor * Detail.RetailXFactor) : Detail.WholesaleXFactor));
+                            TotalStock += (((Detail.StockDate != null && Detail.StockDate <= DatetimePickerSalesDate.Date ? Detail.OpeningStock : 0) + Detail.QuantityOnHand) * (Product.RetailUOM == Uom ? (Detail.WholesaleXFactor * Detail.RetailXFactor) : Detail.WholesaleXFactor));
                         }
                         return TotalStock;
                     }
@@ -2773,6 +2984,10 @@ namespace fa.views.sales
         bool IsOverrideTabCtr = true;
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
+            {
+                return base.ProcessCmdKey(ref msg, keyData);
+            }
             if (keyData == Keys.Tab && BtnSalesQuotesSearch.Selected == true && Global.Company.BusinessType != BuisnessType.Hospital)
             {
                 YesNoRbtSalesMethod.Focus();
@@ -2837,11 +3052,63 @@ namespace fa.views.sales
             }
             try
             {
-                if ((keyData == Keys.F2) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+                if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
                 {
-                    SearchProduct();
+                    return base.ProcessCmdKey(ref msg, keyData);
+                }
+
+                // 1. Handle F2 - ONLY opens SearchProduct()
+                if (keyData == Keys.F2)
+                {
+                    if (!_isBarcodeProcessing) // Ensure we're not scanning
+                    {
+                        SearchProduct();
+                    }
                     return true;
                 }
+
+                // 2. Handle Enter key - ONLY for barcode scanning
+                if (keyData == Keys.Enter && !_isBarcodeProcessing)
+                {
+                    // Debounce check (200ms)
+                    if ((DateTime.Now - _lastBarcodeTime).TotalMilliseconds < 200)
+                        return true;
+
+                    _lastBarcodeTime = DateTime.Now;
+                    _isBarcodeProcessing = true;
+
+                    var barcode = GridViewSalesItem.CurrentCell.Value?.ToString();
+                    if (!string.IsNullOrEmpty(barcode))
+                    {
+                        // DIRECTLY call barcode search - no form opening
+                        SearchProductByBarCode(barcode);
+                    }
+
+                    _isBarcodeProcessing = false;
+                    return true;
+                }
+
+                /*
+                if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+                {
+                    var cellValue = GridViewSalesItem.CurrentCell.Value?.ToString();
+
+                    // Barcode case (has prefix)
+                    if (keyData == Keys.Enter && cellValue?.StartsWith(BarcodePrefix) == true)
+                    {
+                        var barcode = cellValue.Substring(BarcodePrefix.Length);
+                        if (SearchProductByBarCode(barcode))
+                        {
+                            return true;
+                        }
+                    }
+                    // Manual F2 case
+                    else if (keyData == Keys.F2)
+                    {
+                        SearchProduct();
+                        return true;
+                    }
+                } */
                 if ((keyData == Keys.F2) && !GridViewSalesItem.CurrentCell.ReadOnly && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO)
                 {
                     if (ComboBoxSaleInventoryLocation.SelectedIndex < 0)
@@ -2856,6 +3123,11 @@ namespace fa.views.sales
                         SearchBatch();
                         return true;
                     }
+                }
+                if ((keyData == Keys.F3) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+                {
+                    SearchPreviousPrice();
+                    return true;
                 }
                 if (keyData == (Keys.Tab) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.FREE)
                 {
@@ -2919,11 +3191,12 @@ namespace fa.views.sales
                     }
                 }
             }
-#pragma warning disable 0168
             catch (Exception ex)
             {
+                _isBarcodeProcessing = false;
+                Console.WriteLine($"Error: {ex.Message}");
+                return true;
             }
-#pragma warning restore 0168
             return base.ProcessCmdKey(ref msg, keyData);
         }
         private void BtnSalesSave_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -3232,7 +3505,7 @@ namespace fa.views.sales
                                         GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.DIS].Value = 0.00;
                                         GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.DISP].Value = 0.00;
                                         GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.AMOUNT].Value = 0.00;
-                                        
+
                                         GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ISBAT].Value = false;
                                         GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
                                         index++;
@@ -3502,5 +3775,291 @@ namespace fa.views.sales
         {
 
         }
+
+        private void checkBoxGST_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxGST.Text = checkBoxGST.Checked ? "GST Print" : "Non-GST Print";
+
+            // Optional: You can also update the print button text if needed
+            // BtnSalesPrint.Text = checkBoxGST.Checked ? "Print GST Invoice" : "Print Non-GST Invoice";
+        }
+
+        private void InitializePrintingComboBox()
+        {
+            try
+            {
+                DateTime YearStartDate = Global.getCurrentFiscalYearStartDate();
+                DateTime YearEndDate = Global.getCurrentFiscalYearEndDate();
+
+                // Get the print paper format ID for SALES entries
+                long? PrintPaperId = Global.Company.IdSpaces.FirstOrDefault(x =>
+                        x.YearStartDate == YearStartDate &&
+                        x.YearEndDate == YearEndDate &&
+                        x.EntryType == EntryType.SALES)?.PrintPaperFormat?.Id;
+
+                // Initialize the combo box with all paper formats
+                var allPaperFormats = PaperFormatManager.Instance.ListPrintPaperFormat();
+                ComboBoxPrintingPaper.DataSource = allPaperFormats;
+                ComboBoxPrintingPaper.DisplayMember = "Name";
+                ComboBoxPrintingPaper.ValueMember = "Id";
+
+                // Try to find A4 PORTRAIT format
+                var a4Portrait = allPaperFormats.FirstOrDefault(x => x.Name == "A4 PORTRAIT");
+
+                // Set selection priority:
+                // 1. Previously saved PrintPaperId (if exists)
+                // 2. A4 PORTRAIT (if available)
+                // 3. First item in the list
+                if (PrintPaperId.HasValue)
+                {
+                    ComboBoxPrintingPaper.SelectedValue = PrintPaperId.Value;
+
+                    // Fallback if the value wasn't found
+                    if (ComboBoxPrintingPaper.SelectedIndex == -1 && a4Portrait != null)
+                    {
+                        ComboBoxPrintingPaper.SelectedValue = a4Portrait.Id;
+                    }
+                }
+                else if (a4Portrait != null)
+                {
+                    ComboBoxPrintingPaper.SelectedValue = a4Portrait.Id;
+                }
+                else if (allPaperFormats.Count > 0)
+                {
+                    ComboBoxPrintingPaper.SelectedIndex = 0;
+                }
+
+                // Optional: Sort the items with A4 PORTRAIT first
+                var sortedFormats = allPaperFormats
+                    .OrderByDescending(x => x.Name == "A4 PORTRAIT")
+                    .ThenBy(x => x.Name)
+                    .ToList();
+                ComboBoxPrintingPaper.DataSource = sortedFormats;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error initializing print format: {ex.Message}");
+                // Consider logging the error properly
+                // Fallback initialization if error occurs
+                ComboBoxPrintingPaper.DataSource = new List<PrintPaperFormat>
+                {
+                    new PrintPaperFormat { FormatId = 1, DisplayName = "A4 PORTRAIT" },
+                    new PrintPaperFormat { FormatId = 2, DisplayName = "A5 LANDSCAPE" }
+                };
+                ComboBoxPrintingPaper.DisplayMember = "Name";
+                ComboBoxPrintingPaper.ValueMember = "Id";
+                ComboBoxPrintingPaper.SelectedIndex = 0;
+            }
+        }
+        private bool SearchProductByBarCode(string barcode)
+        {
+            if (string.IsNullOrWhiteSpace(barcode))
+            {
+                DisplaySystemError("Please enter a valid barcode");
+                return false;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                // Search product by barcode (MaterialId)
+                var product = CatalogProductManager.Instance.GetProductByBarcode(Global.Company.CompanyId, barcode.Trim());
+                if (product == null)
+                {
+                    DisplaySystemError($"Product with barcode '{barcode}' not found");
+                    GridViewSalesItem.CurrentCell = GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT];
+                    GridViewSalesItem.BeginEdit(true);
+                    return false;
+                }
+
+                // Product found - handle it directly
+                ProductId = product.Id;
+
+                // Check if product already exists in grid (for combine logic)
+                bool isCombineProduct = Global.Company.CompanySalesSetup.CombineItem;
+                if (isCombineProduct)
+                {
+                    foreach (DataGridViewRow row in GridViewSalesItem.Rows)
+                    {
+                        if (row.Cells[(int)SaleEntryTableColumn.ID].Value != null &&
+                            long.TryParse(row.Cells[(int)SaleEntryTableColumn.ID].Value.ToString(), out long rowProductId) &&
+                            rowProductId == ProductId)
+                        {
+                            if (int.TryParse(row.Cells[(int)SaleEntryTableColumn.QTY].Value?.ToString(), out int prevQty))
+                            {
+                                row.Cells[(int)SaleEntryTableColumn.QTY].Value = (prevQty + 1).ToString();
+                                ComputeFormTotal();
+
+                                GridViewSalesItem.CurrentCell = row.Cells[(int)SaleEntryTableColumn.QTY];
+                                GridViewSalesItem.BeginEdit(true);
+                                var quantityTextBox = GridViewSalesItem.EditingControl as TextBox;
+                                if (quantityTextBox != null)
+                                {
+                                    quantityTextBox.SelectAll();
+                                }
+                                return true;
+                            }
+                        }
+                    }
+                }
+
+                // New product - load details
+                LoadUomTax(ProductId);
+                LoadProductAdditinalDetails(product);
+
+                // Add new row if needed
+                if (GridViewSalesItem.Rows.Count - 1 == GridViewSalesItem.CurrentRow.Index)
+                {
+                    GridViewSalesItem.Rows.Add();
+                }
+
+                // Set default quantity to 1 for new items
+                GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.QTY].Value = "1";
+
+                // Focus on quantity and select all text
+                GridViewSalesItem.CurrentCell = GridViewSalesItem[
+                    (int)SaleEntryTableColumn.QTY,
+                    GridViewSalesItem.CurrentRow.Index];
+                GridViewSalesItem.BeginEdit(true);
+                var qtyTextBox = GridViewSalesItem.EditingControl as TextBox;
+                if (qtyTextBox != null)
+                {
+                    qtyTextBox.SelectAll();
+                }
+
+                ComputeFormTotal();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                DisplaySystemError($"Error processing barcode: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+        private static ConcurrentDictionary<string, Product> _barcodeCache = new();
+
+        
+        public void ClearBarcodeCache()
+        {
+            _barcodeCache.Clear();
+        }
+        private void InitializeBarcodeHandling()
+        {
+            GridViewSalesItem.EditingControlShowing += (sender, e) =>
+            {
+                if (e.Control is TextBox textBox &&
+                    GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+                {
+                    textBox.KeyDown -= ProductTextBox_KeyDown;
+                    textBox.KeyDown += ProductTextBox_KeyDown;
+                    textBox.PreviewKeyDown -= ProductTextBox_PreviewKeyDown;
+                    textBox.PreviewKeyDown += ProductTextBox_PreviewKeyDown;
+                }
+            };
+        }
+        private void InitializeScannerHandling()
+        {
+            GridViewSalesItem.CellEndEdit += (sender, e) =>
+            {
+                if (e.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+                {
+                    HandlePotentialBarcodeInput();
+                }
+            };
+        }
+
+        private async void HandlePotentialBarcodeInput()
+        {
+            // Debounce check (200ms threshold)
+            if ((DateTime.Now - _lastScannerInput).TotalMilliseconds < 200)
+                return;
+
+            _lastScannerInput = DateTime.Now;
+
+            var cell = GridViewSalesItem.CurrentCell;
+            if (cell == null || cell.Value == null) return;
+
+            var barcode = cell.Value.ToString();
+            if (string.IsNullOrWhiteSpace(barcode)) return;
+
+            try
+            {
+                _isScannerInput = true;
+
+                // Process barcode directly
+                if (!SearchProductByBarCode(barcode))
+                {
+                    // Product not found - keep focus in cell
+                    GridViewSalesItem.BeginEdit(true);
+                }
+            }
+            finally
+            {
+                await Task.Delay(300); // Safety delay
+                _isScannerInput = false;
+            }
+        }
+        private void ProductTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.Handled = true;
+                e.SuppressKeyPress = true;
+
+                var textBox = (TextBox)sender;
+                if (!string.IsNullOrEmpty(textBox.Text))
+                {
+                    // Debounce check
+                    if ((DateTime.Now - _lastBarcodeTime).TotalMilliseconds < 200) return;
+                    _lastBarcodeTime = DateTime.Now;
+
+                    // Direct barcode processing
+                    SearchProductByBarCode(textBox.Text);
+                }
+            }
+        }
+        private void ProductTextBox_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            // Mark Enter as not input key so ProcessCmdKey won't handle it
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.IsInputKey = false;
+            }
+        }
+
+
+        private void InitializePrintingComboBoxxxx()
+        {
+            try
+            {
+
+                IList<PrintPaperFormat> formats = (IList<PrintPaperFormat>)PaperFormatManager.Instance.ListPrintPaperFormat();
+
+                ComboBoxPrintingPaper.DataSource = formats;
+                ComboBoxPrintingPaper.DisplayMember = "DisplayName";
+                ComboBoxPrintingPaper.ValueMember = "FormatId";
+
+            // Optional: Format how items appear in the dropdown
+                ComboBoxPrintingPaper.Format += (sender, e) =>
+                {
+                    if (e.ListItem is PrintPaperFormat format)
+                        e.Value = $"{format.DisplayName} ({format.Dimensions})";
+                };
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to load paper formats: {ex.Message}");
+            }
+        }
+    }
+    public class PrintPaperFormat
+    {
+        public int FormatId { get; set; }
+        public string? DisplayName { get; set; }
+        public string? Dimensions { get; set; }
     }
 }

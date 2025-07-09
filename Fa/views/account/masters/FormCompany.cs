@@ -2880,31 +2880,47 @@ namespace fa.views.account.masters
                     GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.HASDOTMATRIX].Value = IdSpace.HasDotMatrix;
                     if (IdSpace.HasPrinterSetup)
                     {
-                        (GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] as DataGridViewComboBoxCell)!.DataSource = null;
-                        if (IdSpace.EntryType == EntryType.SALES || IdSpace.EntryType == EntryType.SALES_QUOTE || IdSpace.EntryType == EntryType.SALES_RETURN)
+                        var comboCell = GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] as DataGridViewComboBoxCell;
+                        if (comboCell == null)
                         {
-                            (GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] as DataGridViewComboBoxCell)!.DataSource = PrintPaperFormat.Where(x => x.Name != "A5 PORTRAIT").ToList();
+                            GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] =
+                                new DataGridViewComboBoxCell();
+                            comboCell = (DataGridViewComboBoxCell)GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE];
+                        }
+
+                        comboCell.DataSource = null;
+
+                        IList<PrintPaperFormat> filteredFormats;
+                        if (IdSpace.EntryType == EntryType.SALES ||
+                            IdSpace.EntryType == EntryType.SALES_QUOTE ||
+                            IdSpace.EntryType == EntryType.SALES_RETURN)
+                        {
+                            // Include all formats except none (or apply your specific business rules)
+                            filteredFormats = PrintPaperFormat.ToList(); // Now includes A5 PORTRAIT
                         }
                         else if (IdSpace.EntryType == EntryType.PRESCRIPTION)
                         {
-                            (GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] as DataGridViewComboBoxCell)!.DataSource = PrintPaperFormat.Where(x => x.Name == "A4 PORTRAIT" || x.Name == "A5 LANDSCAPE").ToList();
+                            filteredFormats = PrintPaperFormat.Where(x => x.Name == "A4 PORTRAIT" || x.Name == "A5 LANDSCAPE").ToList();
                         }
                         else
                         {
-                            (GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] as DataGridViewComboBoxCell)!.DataSource = PrintPaperFormat.Where(x => x.Name == "A5 LANDSCAPE").ToList();
+                            filteredFormats = PrintPaperFormat.Where(x => x.Name == "A5 LANDSCAPE").ToList();
                         }
-                        (GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] as DataGridViewComboBoxCell)!.ValueMember = "Id";
-                        (GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] as DataGridViewComboBoxCell)!.DisplayMember = "Name";
-                        GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE].Value = IdSpace.PrintPaperFormat_Id == null ? ((PrintPaperFormat)(GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.PRINTTYPE] as DataGridViewComboBoxCell)!.Items[0]).Id : IdSpace.PrintPaperFormat_Id;
-                        if (IdSpace.HasDotMatrix)
-                        {
-                            GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.DOTMATRIX].Value = IdSpace.IsDotMatrix;
-                        }
-                        else
-                        {
-                            GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.DOTMATRIX] = new DataGridViewTextBoxCell();
-                            GridViewCompanyYear.Rows[i].Cells[(int)CompanyReferenceTableColumn.DOTMATRIX].ReadOnly = true;
-                        }
+
+                        // Sort formats with A4 PORTRAIT first
+                        filteredFormats = filteredFormats
+                            .OrderByDescending(x => x.Name == "A4 PORTRAIT")
+                            .ThenBy(x => x.Name)
+                            .ToList();
+
+                        comboCell.DataSource = filteredFormats;
+                        comboCell.ValueMember = "Id";
+                        comboCell.DisplayMember = "Name";
+
+                        // Set default to A4 PORTRAIT if available
+                        var defaultFormat = filteredFormats.FirstOrDefault(x => x.Name == "A4 PORTRAIT");
+                        comboCell.Value = IdSpace.PrintPaperFormat_Id ??
+                            (defaultFormat?.Id ?? (filteredFormats.Count > 0 ? filteredFormats[0].Id : null));
                     }
                     else
                     {

@@ -1,4 +1,6 @@
-﻿using fa.model.OrderManagement;
+﻿using fa.model.Accounting.Masters;
+using fa.model.OrderManagement;
+using fa.report;
 using fa.views.utils.Bills;
 using fa.views.utils.Creditnote;
 using fa.views.utils.Debitnote;
@@ -8,24 +10,23 @@ using fa.views.utils.Journal;
 using fa.views.utils.Payments;
 using fa.views.utils.Receipts;
 using fa.views.utils.Sale;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Linq;
-using fa.model.Accounting.Masters;
-using fa.report;
 using Fa.views.utils.Report.Purchase;
 using Fa.views.utils.Sale;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using static log4net.Appender.RollingFileAppender;
 
 namespace fa.views.utils
 {
     public enum PaperTypes
     {
-        A2, A3,MM_105,A4_PORTRAIT, A4_LANDSCAPE,A5_PORTRAIT,A5_LANDSCAPE
+        A2, A3, MM_105, A4_PORTRAIT, A4_LANDSCAPE, A5_PORTRAIT, A5_LANDSCAPE
     }
     public enum TransactionTypes
     {
-        PAYMENT,RECEIPT,EXPENSE,INVOICE,BILL,JOURNAL,CREDITNOTE,DEBITNOTE
+        PAYMENT, RECEIPT, EXPENSE, INVOICE, BILL, JOURNAL, CREDITNOTE, DEBITNOTE
     }
     public enum AlignmentTypes
     {
@@ -33,15 +34,139 @@ namespace fa.views.utils
     }
     public enum LabelType
     {
-        BARCODE,QRCODE
+        BARCODE, QRCODE
     }
     public class PrinterSetup
     {
-        public static void SalePrintSetup(long SaleId ,bool IsExport, Entrytype entrytype)
+        public static void SalePrintSetup(long SaleId, bool IsExport, Entrytype entrytype, bool isGSTInvoice, string selectedPrintPaper = null!) // Add optional parameter for selected paper
+        {
+            string PrintPaper = selectedPrintPaper;
+            DateTime YearStartDatex = Global.getCurrentFiscalYearStartDate();
+            DateTime YearEndDatex = Global.getCurrentFiscalYearEndDate();
+
+            // Get configured paper format
+            if (string.IsNullOrEmpty(PrintPaper))
+            {
+                DateTime YearStartDate = Global.getCurrentFiscalYearStartDate();
+                DateTime YearEndDate = Global.getCurrentFiscalYearEndDate();
+
+                if (entrytype == Entrytype.SALE)
+                {
+                    PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x =>
+                        x.YearStartDate == YearStartDate &&
+                        x.YearEndDate == YearEndDate &&
+                        x.EntryType == EntryType.SALES)?.PrintPaperFormat.Name!;
+                }
+                else if (entrytype == Entrytype.QUOTE)
+                {
+                    PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x =>
+                        x.YearStartDate == YearStartDate &&
+                        x.YearEndDate == YearEndDate &&
+                        x.EntryType == EntryType.SALES_QUOTE)?.PrintPaperFormat.Name!;
+                }
+                else if (entrytype == Entrytype.RETURN)
+                {
+                    PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x =>
+                        x.YearStartDate == YearStartDate &&
+                        x.YearEndDate == YearEndDate &&
+                        x.EntryType == EntryType.SALES_RETURN)?.PrintPaperFormat.Name!;
+                }
+            }
+
+
+            bool IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x =>
+                x.YearStartDate == YearStartDatex &&
+                x.YearEndDate == YearEndDatex &&
+                x.EntryType == EntryType.SALES)?.IsDotMatrix ?? false;
+
+            string PrintFormat = IsDotMatrix && !IsExport ? "Dotmatrix" : "Laser";
+
+            // Handle print formats
+            if (PrintPaper == "105 MM ROLL" || PrintPaper == "80 MM ROLL")
+            {
+                if (PrintFormat == "Dotmatrix" && !IsExport)
+                {
+                    new SalePrintSaveDotmatrix105mm().ExportToFileOrPrint(SaleId, "pdf", !IsExport);
+                }
+                else
+                {
+                    new SalePrintSave105mm().ExportToFileOrPrint(SaleId, "pdf", !IsExport);
+                }
+            }
+            else if (!isGSTInvoice && (PrintPaper == "A5 PORTRAIT" || PrintPaper == "A5 LANDSCAPE"))
+            {
+                // Non-GST A5 paper - use simplified format
+                bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");
+                new SalePrintSaveA5SimplifiedFormat().ExportToFileOrPrint(
+                    SaleId,
+                    PrintPaper,
+                    PrintFormat,
+                    !IsExport,
+                    isLandscape);
+            }
+            else if (!isGSTInvoice && (PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE"))
+            {
+                bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");
+                if (ShouldUseSpecialA4Format(SaleId))
+                {
+                    new SalePrintSaveA4SimplifiedFormat().ExportToFileOrPrint(
+                        SaleId,
+                        PrintPaper,
+                        PrintFormat,
+                        !IsExport,
+                        isLandscape);
+                }
+                else
+                {
+                    // Use regular A4 format
+                    new SalePrintSaveA4EinvoiceFormat().ExportToFileOrPrint(
+                        SaleId,
+                        PrintPaper,
+                        PrintFormat,
+                        !IsExport);
+                }
+            }
+            else if (isGSTInvoice || PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE")
+            {
+                // GST invoice or A4 paper - use existing GST logic
+                if (PrintPaper == "A4 PORTRAIT" && PrintFormat == "Laser")
+                {
+                    // Modified condition to use the new A4 format for specific cases
+                    if (ShouldUseSpecialA4Format(SaleId)) // Add your condition here
+                    {
+                        bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");
+                        new SalePrintSaveA4Format().ExportToFileOrPrint(
+                            SaleId,
+                            PrintPaper,
+                            PrintFormat,
+                            !IsExport,
+                            isLandscape);
+                    }
+                    else
+                    {
+                        new SalePrintSaveA4EinvoiceFormat().ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, !IsExport);
+                    }
+                }
+                else
+                {
+                    bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");
+                    new SalePrintSaveA4SimplifiedFormat().ExportToFileOrPrint(
+                    SaleId,
+                    PrintPaper,
+                    PrintFormat,
+                    !IsExport,
+                    isLandscape);
+                    //new SalePrintSaveA5A4().ExportToFileOrPrint(SaleId, PrintPaper!, PrintFormat, !IsExport);
+                }
+            }
+        }
+
+        public static void SalePrintSetupNew(long SaleId, bool IsExport, Entrytype entrytype)
         {
             string PrintPaper = "";
             DateTime YearStartDate = Global.getCurrentFiscalYearStartDate();
             DateTime YearEndDate = Global.getCurrentFiscalYearEndDate();
+
             if (entrytype == Entrytype.SALE)
             {
                 PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES).PrintPaperFormat.Name;
@@ -54,7 +179,74 @@ namespace fa.views.utils
             {
                 PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES_RETURN).PrintPaperFormat.Name;
             }
-            bool IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES). IsDotMatrix;
+
+            bool IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES).IsDotMatrix;
+            string PrintFormat = IsDotMatrix && !IsExport ? "Dotmatrix" : "Laser";
+
+            if (PrintPaper == "105 MM ROLL" || PrintPaper == "80 MM ROLL")
+            {
+                if (PrintFormat == "Dotmatrix" && !IsExport)
+                {
+                    SalePrintSaveDotmatrix105mm SalePrintSaveDotmatrix105mm = new SalePrintSaveDotmatrix105mm();
+                    SalePrintSaveDotmatrix105mm.ExportToFileOrPrint(SaleId, "pdf", IsExport ? false : true);
+                }
+                else
+                {
+                    SalePrintSave105mm SalePrintSave105mm = new SalePrintSave105mm();
+                    SalePrintSave105mm.ExportToFileOrPrint(SaleId, "pdf", IsExport ? false : true);
+                }
+            }
+            else if (PrintPaper == "A5 PORTRAIT" || PrintPaper == "A5 LANDSCAPE")
+            {
+                // Use the new simplified format for A5 paper
+                SalePrintSaveA5SimplifiedFormat printer = new SalePrintSaveA5SimplifiedFormat();
+                bool isLandscape = PrintPaper == "A5 LANDSCAPE";
+                printer.ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true, isLandscape);
+            }
+            else if (PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE")
+            {
+                if (PrintPaper == "A4 PORTRAIT" && PrintFormat == "Laser")
+                {
+                    SalePrintSaveA4EinvoiceFormat SalePrintSaveA5A4 = new SalePrintSaveA4EinvoiceFormat();
+                    SalePrintSaveA5A4.ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true);
+                }
+                else
+                {
+                    SalePrintSaveA5A4 SalePrintSaveA5A4 = new SalePrintSaveA5A4();
+                    SalePrintSaveA5A4.ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true);
+                }
+            }
+        }
+
+        // Add this helper method to determine when to use the special A4 format
+        private static bool ShouldUseSpecialA4Format(long saleId)
+        {
+            // Add your logic here to determine when to use the special A4 format
+            // For example:
+            // - Check if the sale has a specific customer
+            // - Check if the sale has a specific flag
+            // - Always return true if you want to always use it
+
+            return true; // Modify this as needed
+        }
+        public static void SalePrintSetupGST(long SaleId, bool IsExport, Entrytype entrytype)
+        {
+            string PrintPaper = "";
+            DateTime YearStartDate = Global.getCurrentFiscalYearStartDate();
+            DateTime YearEndDate = Global.getCurrentFiscalYearEndDate();
+            if (entrytype == Entrytype.SALE)
+            {
+                PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES)!.PrintPaperFormat.Name;
+            }
+            if (entrytype == Entrytype.QUOTE)
+            {
+                PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES_QUOTE)!.PrintPaperFormat.Name;
+            }
+            if (entrytype == Entrytype.RETURN)
+            {
+                PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES_RETURN)!.PrintPaperFormat.Name;
+            }
+            bool IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES)!.IsDotMatrix;
             string PrintFormat = IsDotMatrix && !IsExport ? "Dotmatrix" : "Laser";
             if (PrintPaper == "105 MM ROLL" || PrintPaper == "80 MM ROLL")
             {
@@ -94,7 +286,7 @@ namespace fa.views.utils
                 {
                     PurchasePrintSaveDotmatrix105mm PurchasePrintSaveDotmatrix105mm = new PurchasePrintSaveDotmatrix105mm();
                     PurchasePrintSaveDotmatrix105mm.ExportToFileOrPrint(PurchaseId, "pdf", IsExport ? false : true);
-                }                
+                }
             }
             else if (PrintPaper == "A5 LANDSCAPE" || PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE")
             {
@@ -105,7 +297,7 @@ namespace fa.views.utils
         public static void PurchasePrintSetup(long PurchaseId, bool IsExport)
         {
 
-            string PrintPaper = Global.Company.IdSpaces.FirstOrDefault( x => x.YearStartDate == Global.getCurrentFiscalYearStartDate() && x.YearEndDate == Global.getCurrentFiscalYearEndDate() && x.EntryType == EntryType.DEBIT_NOTE).PrintPaperFormat.Name;
+            string PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == Global.getCurrentFiscalYearStartDate() && x.YearEndDate == Global.getCurrentFiscalYearEndDate() && x.EntryType == EntryType.DEBIT_NOTE).PrintPaperFormat.Name;
             bool IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == Global.getCurrentFiscalYearStartDate() && x.YearEndDate == Global.getCurrentFiscalYearEndDate() && x.EntryType == EntryType.DEBIT_NOTE).IsDotMatrix;
             string PrintFormat = IsDotMatrix && !IsExport ? "Dotmatrix" : "Laser";
             if (PrintPaper == "105 MM ROLL" || PrintPaper == "80 MM ROLL")
@@ -129,7 +321,7 @@ namespace fa.views.utils
         }
         public static void TransactionPrintSetup(long TransactionId, TransactionTypes TransactionTypes)
         {
-            if(TransactionTypes== TransactionTypes.INVOICE)
+            if (TransactionTypes == TransactionTypes.INVOICE)
             {
                 InvoiceSavePrintA4 InvoiceSavePrintA4 = new InvoiceSavePrintA4();
                 InvoiceSavePrintA4.ExportToFileOrPrint(TransactionId, "pdf", true);

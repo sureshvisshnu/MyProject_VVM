@@ -1,5 +1,6 @@
 ﻿using fa.api.OrderManagement;
 using fa.context;
+using fa.Data;
 using fa.model.Accounting.Masters;
 using fa.model.catalog;
 using fa.model.Catalog;
@@ -622,8 +623,22 @@ namespace fa.api.catalog
             return ProductInfo;
         }
 
+        public Product GetProductByBarcode(long companyId, string barcode)
+        {
+            if (string.IsNullOrWhiteSpace(barcode))
+            {
+                return null;
+            }
 
-
+            using (AccountMasterContext context = new AccountMasterContext())
+            {
+                return context.Products
+                    .AsNoTracking()
+                    .FirstOrDefault(p => p.CompanyId == companyId
+                                     && p.Type == CatalogItemType.PRODUCT
+                                     && p.MaterialId == barcode.Trim());
+            }
+        }
 
         public IList<Product> ListProductByCompanyId(long LocationId, long CompanyId, AccountMasterContext Context)
         {
