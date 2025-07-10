@@ -105,7 +105,7 @@ namespace fa.views.sales
 
         private const string BarcodePrefix = "{SCAN}";
         private bool _isScannerInput = false;
-        private string _scannedBarcode = string.Empty;
+        private string ScannedBarcode = string.Empty;
         private bool _isProcessingBarcode = false;
         private bool _isManualSearchRequested = false;
         private bool _isBarcodeProcessing = false;
@@ -221,7 +221,7 @@ namespace fa.views.sales
             {
                 lSaleEntry.CostCenterId = Global.CostCenter.CostCenterId;
             }
-            float TotalAmount = float.Parse(GridViewPurchaseItemTotal.Rows[0].Cells[(int)SaleEntryTotalTableColumn.VALUE].Value.ToString());
+            float TotalAmount = float.Parse(GridViewPurchaseItemTotal.Rows[0].Cells[(int)SaleEntryTotalTableColumn.VALUE].Value.ToString()!);
             float TotalTaxAmount = 0;
             float TotalDiscountPercentage = 0;
             float TotalDiscountAmount = 0;
@@ -254,14 +254,14 @@ namespace fa.views.sales
                     double Quantity = 0;
                     if (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.QTY] != null)
                     {
-                        Quantity = double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.QTY].Value.ToString());
+                        Quantity = double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()!);
                     }
                     double FreeQuantity = 0;
                     if (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.FREE] != null)
                     {
                         FreeQuantity = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.FREE].Value == null) ? 0 : double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.FREE].Value.ToString());
                     }
-                    float Pprice = float.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.PRICE].Value.ToString());
+                    float Pprice = float.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.PRICE].Value.ToString()!);
                     if (FreeQuantity > 0)
                     {
                         SaleDetail.isFree = true;
@@ -3081,6 +3081,8 @@ namespace fa.views.sales
                     if (!string.IsNullOrEmpty(barcode))
                     {
                         // DIRECTLY call barcode search - no form opening
+                        ScannedBarcode = string.Empty; // Reset scanned barcode
+                        ScannedBarcode = barcode.StartsWith(BarcodePrefix) ? barcode.Substring(BarcodePrefix.Length) : barcode;
                         SearchProductByBarCode(barcode);
                     }
 
@@ -3954,10 +3956,10 @@ namespace fa.views.sales
                 if (e.Control is TextBox textBox &&
                     GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
                 {
-                    textBox.KeyDown -= ProductTextBox_KeyDown;
-                    textBox.KeyDown += ProductTextBox_KeyDown;
-                    textBox.PreviewKeyDown -= ProductTextBox_PreviewKeyDown;
-                    textBox.PreviewKeyDown += ProductTextBox_PreviewKeyDown;
+                    textBox.KeyDown -= ProductTextBox_KeyDown!;
+                    textBox.KeyDown += ProductTextBox_KeyDown!;
+                    textBox.PreviewKeyDown -= ProductTextBox_PreviewKeyDown!;
+                    textBox.PreviewKeyDown += ProductTextBox_PreviewKeyDown!;
                 }
             };
         }
