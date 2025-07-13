@@ -2025,7 +2025,7 @@ namespace fa.views.sales
         {
             ((ComboBox)GridViewSalesItem.EditingControl).DroppedDown = false;
         }
-        
+
         private void HandleCellValue(string input)
         {
             if (input.StartsWith("[SCAN]") && input.EndsWith("[END]"))
@@ -2166,6 +2166,7 @@ namespace fa.views.sales
                 ((TextBox)e.Control).CharacterCasing = CharacterCasing.Upper;
                 ((TextBox)e.Control).TextChanged -= ProductTextChange!;
                 ((TextBox)e.Control).TextChanged += ProductTextChange!;
+                //MoveFocusToQuantityColumn();
             }
             if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO)
             {
@@ -2197,127 +2198,232 @@ namespace fa.views.sales
             }
         }
         private void ProductTextChange(object sender, EventArgs e)
-{
-    if (_isBarcodeProcessing)
-        return;
-
-    var textBox = (TextBox)sender;
-    
-    // Only process if we're in the PRODUCT column and text is modified
-    if (!textBox.Modified || GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
-        return;
-
-    string inputText = textBox.Text;
-    
-    // Skip if empty
-    if (string.IsNullOrEmpty(inputText))
-    {
-        ResetProductDetails(GridViewSalesItem.CurrentRow.Index);
-        return;
-    }
-
-    // Handle barcode case separately - this will be processed by the barcode scanner logic
-    if (IsLikelyBarcode(inputText))
-    {
-        return;
-    }
-
-    // Normal product name search flow
-    ProcessProductSearch(inputText);
-}
-
-private void ProcessProductSearch(string searchText)
-{
-    Cursor.Current = Cursors.WaitCursor;
-    try
-    {
-        bool IsDirty = this.formIsDirty;
-        GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = searchText;
-        DirtyFlag(IsDirty);
-
-        IList<Product> products = CatalogProductManager.Instance.GetProductByExactSearchQuery(searchText, Global.Company.CompanyId);
-        
-        if (products.Count == 0)
         {
-            ResetProductDetails(GridViewSalesItem.CurrentRow.Index);
-            DirtyFlag(IsDirty);
-            return;
+            if (_isBarcodeProcessing)
+                return;
+
+            var textBox = (TextBox)sender;
+
+            // Only process if we're in the PRODUCT column and text is modified
+            if (!textBox.Modified || GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
+                return;
+
+            string inputText = textBox.Text;
+
+            // Skip if empty
+            if (string.IsNullOrEmpty(inputText))
+            {
+                ResetProductDetails(GridViewSalesItem.CurrentRow.Index);
+                return;
+            }
+
+            // Handle barcode case separately - this will be processed by the barcode scanner logic
+            if (IsLikelyBarcode(inputText))
+            {
+                return;
+            }
+
+            // Normal product name search flow
+            ProcessProductSearch(inputText);
         }
 
-        // Handle single product found
-        if (products.Count == 1)
+        private void ProcessProductSearch(string searchText)
         {
-            ProcessSingleProduct(products.First());
-            return;
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                bool IsDirty = this.formIsDirty;
+                GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = searchText;
+                DirtyFlag(IsDirty);
+
+                IList<Product> products = CatalogProductManager.Instance.GetProductByExactSearchQuery(searchText, Global.Company.CompanyId);
+
+                if (products.Count == 0)
+                {
+                    ResetProductDetails(GridViewSalesItem.CurrentRow.Index);
+                    DirtyFlag(IsDirty);
+                    return;
+                }
+
+                // Handle single product found
+                if (products.Count == 1)
+                {
+                    ProcessSingleProduct(products.First());
+                    return;
+                }
+
+                // Multiple products found - show search dialog
+                IsScanner = true;
+                SearchProduct();
+                if (ProductId != 0)
+                {
+                    DirtyFlag(IsDirty);
+                    // After search dialog, focus on quantity
+                    MoveFocusToQuantityColumn();
+                }
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
         }
 
-        // Multiple products found - show search dialog
-        IsScanner = true;
-        SearchProduct();
-        if (ProductId != 0)
+        private void ProcessSingleProduct(Product product)
         {
-            DirtyFlag(IsDirty);
-            // After search dialog, focus on quantity
+            long currentProductId = product.Id;
+            long existingRowProductId = GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null ?
+                (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
+
+            // Check if we need to reset tax for existing product
+            if (existingRowProductId == currentProductId &&
+                GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.SALESDETAILID].Value != null &&
+                !string.IsNullOrEmpty(TextBoxSalesId.Text))
+            {
+                DialogResult result = MessageBox.Show(ResetItemTaxConfirmText, "Confirm",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
+            LoadUomTax(currentProductId);
+            LoadProductAdditinalDetails(CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(currentProductId));
+
+            // Add new row if needed
+            if (existingRowProductId == 0 && GridViewSalesItem.Rows.Count - 1 == GridViewSalesItem.CurrentRow.Index)
+            {
+                GridViewSalesItem.Rows.Add();
+            }
+
+            GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = product.Name;
+
+            // Focus on quantity column
             MoveFocusToQuantityColumn();
         }
-    }
-    finally
-    {
-        Cursor.Current = Cursors.Default;
-    }
-}
 
-private void ProcessSingleProduct(Product product)
-{
-    long currentProductId = product.Id;
-    long existingRowProductId = GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null ? 
-        (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
-
-    // Check if we need to reset tax for existing product
-    if (existingRowProductId == currentProductId && 
-        GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.SALESDETAILID].Value != null &&
-        !string.IsNullOrEmpty(TextBoxSalesId.Text))
-    {
-        DialogResult result = MessageBox.Show(ResetItemTaxConfirmText, "Confirm",
-            MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
-        if (result == DialogResult.No)
+        private void MoveFocusToQuantityColumn(string productId)
         {
-            return;
+            // Step 1: Find and update the product if it exists
+            foreach (DataGridViewRow row in GridViewSalesItem.Rows)
+            {
+                var idCell = row.Cells[(int)SaleEntryTableColumn.ID];
+                if (idCell.Value != null && idCell.Value.ToString() == productId)
+                {
+                    // Update QTY
+                    var qtyCell = row.Cells[(int)SaleEntryTableColumn.QTY];
+                    int currentQty = int.Parse(qtyCell.Value?.ToString() ?? "0");
+                    qtyCell.Value = (currentQty + 1).ToString();
+
+                    ComputeFormTotal(); // Update totals
+
+                    // Step 2: FORCE FOCUS to the QTY cell (100% working method)
+                    this.BeginInvoke((MethodInvoker)delegate
+                    {
+                        // Ensure the row is selected (sometimes needed for focus)
+                        row.Selected = true;
+                        GridViewSalesItem.CurrentCell = qtyCell;
+
+                        // REQUIRED: Call BeginEdit TWICE with DoEvents (ensures editing control loads)
+                        GridViewSalesItem.BeginEdit(true);
+                        Application.DoEvents(); // Forces UI to process pending events
+                        GridViewSalesItem.BeginEdit(true); // Ensures the textbox is ready
+
+                        // Select all text in the QTY cell
+                        if (GridViewSalesItem.EditingControl is TextBox qtyTextBox)
+                        {
+                            qtyTextBox.Focus();
+                            qtyTextBox.SelectAll();
+                        }
+                    });
+                    return;
+                }
+            }
+
+            // If product not found, add it here (your logic)
         }
-    }
-
-    LoadUomTax(currentProductId);
-    LoadProductAdditinalDetails(CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(currentProductId));
-
-    // Add new row if needed
-    if (existingRowProductId == 0 && GridViewSalesItem.Rows.Count - 1 == GridViewSalesItem.CurrentRow.Index)
-    {
-        GridViewSalesItem.Rows.Add();
-    }
-
-    GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = product.Name;
-
-    // Focus on quantity column
-    MoveFocusToQuantityColumn();
-}
-
-private void MoveFocusToQuantityColumn()
-{
-    // Use BeginInvoke to ensure this happens after the current operation completes
-    this.BeginInvoke((MethodInvoker)delegate {
-        GridViewSalesItem.CurrentCell = GridViewSalesItem[
-            (int)SaleEntryTableColumn.QTY,
-            GridViewSalesItem.CurrentRow.Index];
-        GridViewSalesItem.BeginEdit(true);
-        
-        // Select all text in quantity field for easy editing
-        var qtyTextBox = GridViewSalesItem.EditingControl as TextBox;
-        if (qtyTextBox != null)
+        private void MoveFocusToQuantityColumn()
         {
-            qtyTextBox.SelectAll();
+            // [1] First, ensure we're on the UI thread
+            if (this.InvokeRequired)
+            {
+                this.BeginInvoke(new Action(MoveFocusToQuantityColumn));
+                return;
+            }
+
+            // [3] Safety checks
+            if (GridViewSalesItem.CurrentRow == null || GridViewSalesItem.Columns.Count <= (int)SaleEntryTableColumn.QTY)
+            {
+                //MessageBox.Show("ERROR: No current row or QTY column doesn't exist");
+                return;
+            }
+
+            // [4] Get the target cell
+            var qtyCell = GridViewSalesItem[(int)SaleEntryTableColumn.QTY, GridViewSalesItem.CurrentRow.Index];
+
+            // [5] Triple-enforcement focus method
+            try
+            {
+                // Method A: Standard approach
+                GridViewSalesItem.CurrentCell = qtyCell;
+                qtyCell.Selected = true;
+                GridViewSalesItem.BeginEdit(true);
+
+                // Method B: Force after short delay
+                var t = new System.Windows.Forms.Timer { Interval = 50 };
+                t.Tick += (sender, e) =>
+                {
+                    t.Stop();
+                    t.Dispose();
+
+                    if (GridViewSalesItem.EditingControl is TextBox tb)
+                    {
+                        tb.Focus();
+                        tb.SelectAll();
+                    }
+                    else
+                    {
+                    }
+                };
+                t.Start();
+
+                // Method C: Win32 API nuclear option
+                if (GridViewSalesItem.EditingControl != null)
+                {
+                    SetFocus(GridViewSalesItem.EditingControl.Handle);
+                }
+
+                // [6] Final verification
+                this.BeginInvoke(new Action(() =>
+                {
+                    var _ = GridViewSalesItem.EditingControl?.Focused ?? false;
+                }));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"CRASH: {ex.Message}");
+            }
         }
-    });
-}
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern void SetFocus(IntPtr hWnd);
+        private void MoveFocusToQuantityColumnzzz()
+        {
+            // Use BeginInvoke to ensure this happens after the current operation completes
+            this.BeginInvoke((MethodInvoker)delegate
+            {
+                GridViewSalesItem.CurrentCell = GridViewSalesItem[
+                    (int)SaleEntryTableColumn.QTY,
+                    GridViewSalesItem.CurrentRow.Index];
+                GridViewSalesItem.BeginEdit(true);
+
+                // Select all text in quantity field for easy editing
+                var qtyTextBox = GridViewSalesItem.EditingControl as TextBox;
+                if (qtyTextBox != null)
+                {
+                    qtyTextBox.SelectAll();
+                }
+            });
+        }
 
         private void ProcessSingleProductxx(Product product)
         {
@@ -2387,7 +2493,8 @@ private void MoveFocusToQuantityColumn()
                         // Delay slightly to allow the text to be fully entered
                         Task.Delay(100).ContinueWith(_ =>
                         {
-                            this.Invoke((MethodInvoker)delegate {
+                            this.Invoke((MethodInvoker)delegate
+                            {
                                 SearchProduct();
                                 // After search, move focus to quantity column if product was found
                                 if (ProductId != 0)
@@ -2777,7 +2884,7 @@ private void MoveFocusToQuantityColumn()
             //FormSalsePriceSeeking FormSalsePriceSeeking = new FormSalsePriceSeeking(this);
             //FormSalsePriceSeeking.ShowDialog();
         }
-        
+
         private void SearchProduct()
         {
             if (_isBarcodeProcessing)
@@ -2788,7 +2895,7 @@ private void MoveFocusToQuantityColumn()
             long Check = (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null) ? (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
             ProductId = 0L;
             GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
-            FormSearchItems.SearchText = (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value != null) ? GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value.ToString() : null;
+            FormSearchItems.SearchText = (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value != null) ? GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value.ToString()! : null!;
             FormSearchItems.ShowDialog();
             if (ProductId != 0)
             {
@@ -2815,7 +2922,7 @@ private void MoveFocusToQuantityColumn()
                             {
                                 // row exists
 
-                                string prevQty = row.Cells[(int)SaleEntryTableColumn.QTY].Value.ToString();
+                                string prevQty = row.Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()!;
                                 int finalQty = int.Parse(prevQty) + 1;
                                 row.Cells[(int)SaleEntryTableColumn.QTY].Value = finalQty.ToString();
                                 ComputeFormTotal();
@@ -4224,7 +4331,7 @@ private void MoveFocusToQuantityColumn()
         }
         private static ConcurrentDictionary<string, Product> _barcodeCache = new();
 
-        
+
         public void ClearBarcodeCache()
         {
             _barcodeCache.Clear();
@@ -4325,7 +4432,7 @@ private void MoveFocusToQuantityColumn()
                 ComboBoxPrintingPaper.DisplayMember = "DisplayName";
                 ComboBoxPrintingPaper.ValueMember = "FormatId";
 
-            // Optional: Format how items appear in the dropdown
+                // Optional: Format how items appear in the dropdown
                 ComboBoxPrintingPaper.Format += (sender, e) =>
                 {
                     if (e.ListItem is PrintPaperFormat format)
@@ -4335,6 +4442,18 @@ private void MoveFocusToQuantityColumn()
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to load paper formats: {ex.Message}");
+            }
+        }
+
+        private void GridViewSalesItem_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (e.ColumnIndex == (int)SaleEntryTableColumn.QTY)
+            {
+                var editingControl = GridViewSalesItem.EditingControl as TextBox;
+                if (editingControl != null)
+                {
+                    editingControl.SelectAll();
+                }
             }
         }
     }

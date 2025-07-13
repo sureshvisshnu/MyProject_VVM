@@ -148,8 +148,8 @@
             PrevSalesReferenceNumber = new Label();
             checkBoxGST = new CheckBox();
             groupBoxPrintSetup = new GroupBox();
-            label6 = new Label();
             ComboBoxPrintingPaper = new fa.views.controls.ComboBoxSwapTextBox();
+            label6 = new Label();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).BeginInit();
             toolStrip1.SuspendLayout();
             StatusStripSales.SuspendLayout();
@@ -653,6 +653,7 @@
             GridViewSalesItem.ShowCellToolTips = false;
             GridViewSalesItem.Size = new Size(1067, 172);
             GridViewSalesItem.TabIndex = 9;
+            GridViewSalesItem.CellBeginEdit += GridViewSalesItem_CellBeginEdit;
             GridViewSalesItem.CellClick += GridViewSalesItem_CellClick;
             GridViewSalesItem.CellEndEdit += GridViewSalesItem_CellEndEdit;
             GridViewSalesItem.CellEnter += GridViewSalesItem_CellEnter;
@@ -1181,16 +1182,6 @@
             groupBoxPrintSetup.TabStop = false;
             groupBoxPrintSetup.Text = "Printing SetUp";
             // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label6.Location = new Point(129, 12);
-            label6.Name = "label6";
-            label6.Size = new Size(132, 13);
-            label6.TabIndex = 223;
-            label6.Text = "Printing Paper and Format";
-            // 
             // ComboBoxPrintingPaper
             // 
             ComboBoxPrintingPaper.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -1202,6 +1193,16 @@
             ComboBoxPrintingPaper.Size = new Size(200, 21);
             ComboBoxPrintingPaper.TabIndex = 222;
             ComboBoxPrintingPaper.TxtVisible = true;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label6.Location = new Point(129, 12);
+            label6.Name = "label6";
+            label6.Size = new Size(132, 13);
+            label6.TabIndex = 223;
+            label6.Text = "Printing Paper and Format";
             // 
             // FormItembasedSales
             // 
