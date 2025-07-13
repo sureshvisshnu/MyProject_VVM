@@ -2197,6 +2197,178 @@ namespace fa.views.sales
             }
         }
         private void ProductTextChange(object sender, EventArgs e)
+{
+    if (_isBarcodeProcessing)
+        return;
+
+    var textBox = (TextBox)sender;
+    
+    // Only process if we're in the PRODUCT column and text is modified
+    if (!textBox.Modified || GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
+        return;
+
+    string inputText = textBox.Text;
+    
+    // Skip if empty
+    if (string.IsNullOrEmpty(inputText))
+    {
+        ResetProductDetails(GridViewSalesItem.CurrentRow.Index);
+        return;
+    }
+
+    // Handle barcode case separately - this will be processed by the barcode scanner logic
+    if (IsLikelyBarcode(inputText))
+    {
+        return;
+    }
+
+    // Normal product name search flow
+    ProcessProductSearch(inputText);
+}
+
+private void ProcessProductSearch(string searchText)
+{
+    Cursor.Current = Cursors.WaitCursor;
+    try
+    {
+        bool IsDirty = this.formIsDirty;
+        GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = searchText;
+        DirtyFlag(IsDirty);
+
+        IList<Product> products = CatalogProductManager.Instance.GetProductByExactSearchQuery(searchText, Global.Company.CompanyId);
+        
+        if (products.Count == 0)
+        {
+            ResetProductDetails(GridViewSalesItem.CurrentRow.Index);
+            DirtyFlag(IsDirty);
+            return;
+        }
+
+        // Handle single product found
+        if (products.Count == 1)
+        {
+            ProcessSingleProduct(products.First());
+            return;
+        }
+
+        // Multiple products found - show search dialog
+        IsScanner = true;
+        SearchProduct();
+        if (ProductId != 0)
+        {
+            DirtyFlag(IsDirty);
+            // After search dialog, focus on quantity
+            MoveFocusToQuantityColumn();
+        }
+    }
+    finally
+    {
+        Cursor.Current = Cursors.Default;
+    }
+}
+
+private void ProcessSingleProduct(Product product)
+{
+    long currentProductId = product.Id;
+    long existingRowProductId = GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null ? 
+        (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
+
+    // Check if we need to reset tax for existing product
+    if (existingRowProductId == currentProductId && 
+        GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.SALESDETAILID].Value != null &&
+        !string.IsNullOrEmpty(TextBoxSalesId.Text))
+    {
+        DialogResult result = MessageBox.Show(ResetItemTaxConfirmText, "Confirm",
+            MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+        if (result == DialogResult.No)
+        {
+            return;
+        }
+    }
+
+    LoadUomTax(currentProductId);
+    LoadProductAdditinalDetails(CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(currentProductId));
+
+    // Add new row if needed
+    if (existingRowProductId == 0 && GridViewSalesItem.Rows.Count - 1 == GridViewSalesItem.CurrentRow.Index)
+    {
+        GridViewSalesItem.Rows.Add();
+    }
+
+    GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = product.Name;
+
+    // Focus on quantity column
+    MoveFocusToQuantityColumn();
+}
+
+private void MoveFocusToQuantityColumn()
+{
+    // Use BeginInvoke to ensure this happens after the current operation completes
+    this.BeginInvoke((MethodInvoker)delegate {
+        GridViewSalesItem.CurrentCell = GridViewSalesItem[
+            (int)SaleEntryTableColumn.QTY,
+            GridViewSalesItem.CurrentRow.Index];
+        GridViewSalesItem.BeginEdit(true);
+        
+        // Select all text in quantity field for easy editing
+        var qtyTextBox = GridViewSalesItem.EditingControl as TextBox;
+        if (qtyTextBox != null)
+        {
+            qtyTextBox.SelectAll();
+        }
+    });
+}
+
+        private void ProcessSingleProductxx(Product product)
+        {
+            long currentProductId = product.Id;
+            long existingRowProductId = GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null ?
+                (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
+
+            // Check if we need to reset tax for existing product
+            if (existingRowProductId == currentProductId &&
+                GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.SALESDETAILID].Value != null &&
+                !string.IsNullOrEmpty(TextBoxSalesId.Text))
+            {
+                DialogResult result = MessageBox.Show(ResetItemTaxConfirmText, "Confirm",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
+                if (result == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
+            LoadUomTax(currentProductId);
+            LoadProductAdditinalDetails(CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(currentProductId));
+
+            // Add new row if needed
+            if (existingRowProductId == 0 && GridViewSalesItem.Rows.Count - 1 == GridViewSalesItem.CurrentRow.Index)
+            {
+                GridViewSalesItem.Rows.Add();
+            }
+
+            GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = product.Name;
+
+            // Focus on quantity
+            GridViewSalesItem.CurrentCell = GridViewSalesItem[(int)SaleEntryTableColumn.QTY, GridViewSalesItem.CurrentRow.Index];
+            GridViewSalesItem.BeginEdit(true);
+        }
+
+        private bool IsLikelyBarcode(string input)
+        {
+            // Barcode detection logic
+            if (string.IsNullOrWhiteSpace(input))
+                return false;
+
+            // Typical barcode characteristics:
+            // - Minimum length (e.g., 6 characters)
+            // - No whitespace
+            // - Alphanumeric but not matching product name patterns
+            return input.Length >= 6 &&
+                   !input.Contains(" ") &&
+                   (input.All(char.IsDigit) || (input.Any(char.IsLetter) && input.Any(char.IsDigit)));
+        }
+        private void ProductTextChangezzz(object sender, EventArgs e)
         {
             if (((TextBox)sender).Modified && GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.BATNO
                 && GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.UOM)
@@ -2282,12 +2454,13 @@ namespace fa.views.sales
         }
 
         // Helper method to detect barcode input
-        private bool IsLikelyBarcode(string input)
+        private bool IsLikelyBarcodezzz(string input)
         {
             // Add your barcode detection logic here
             // This could be based on length, pattern, or other characteristics
             // For now, we'll assume any input longer than 6 chars is a barcode
-            return input.Length >= 6;
+            return input.Length >= 6 && !input.Contains(" ") && (input.All(char.IsDigit) ||
+            (input.Any(char.IsLetter) && input.Any(char.IsDigit)));
         }
         private void ProductTextChangeOld(object sender, EventArgs e)
         {
@@ -3854,6 +4027,113 @@ namespace fa.views.sales
             }
         }
         private bool SearchProductByBarCode(string barcode)
+        {
+            // First check if this is actually a barcode scan or just normal text entry
+            if (!IsLikelyBarcode(barcode))
+            {
+                return false; // Let normal product search handle this
+            }
+
+            if (string.IsNullOrWhiteSpace(barcode))
+            {
+                DisplaySystemError("Please enter a valid barcode");
+                return false;
+            }
+
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                // Clear any previous error
+                ToolStripStatusLabelErrorPurchase.Text = string.Empty;
+
+                // Search product by barcode (MaterialId) - only do this for actual barcodes
+                var product = CatalogProductManager.Instance.GetProductByBarcode(Global.Company.CompanyId, barcode.Trim());
+                if (product == null)
+                {
+                    DisplaySystemError($"Product with barcode '{barcode}' not found");
+                    // Reset the cell value since this was a failed barcode scan
+                    GridViewSalesItem.CurrentCell.Value = string.Empty;
+                    GridViewSalesItem.BeginEdit(true);
+                    return false;
+                }
+
+                // Product found - handle it directly
+                ProductId = product.Id;
+
+                // Check if product already exists in grid (for combine logic)
+                bool isCombineProduct = Global.Company.CompanySalesSetup.CombineItem;
+                if (isCombineProduct)
+                {
+                    foreach (DataGridViewRow row in GridViewSalesItem.Rows)
+                    {
+                        if (row.Cells[(int)SaleEntryTableColumn.ID].Value != null &&
+                            row.Cells[(int)SaleEntryTableColumn.ID].Value.ToString() == ProductId.ToString())
+                        {
+                            // Product exists - increment quantity
+                            double prevQty = row.Cells[(int)SaleEntryTableColumn.QTY].Value != null ?
+                                double.Parse(row.Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()) : 0;
+
+                            row.Cells[(int)SaleEntryTableColumn.QTY].Value = (prevQty + 1).ToString();
+                            ComputeFormTotal();
+
+                            // Focus and select quantity
+                            GridViewSalesItem.CurrentCell = row.Cells[(int)SaleEntryTableColumn.QTY];
+                            GridViewSalesItem.BeginEdit(true);
+
+                            var quantityTextBox = GridViewSalesItem.EditingControl as TextBox;
+                            if (quantityTextBox != null)
+                            {
+                                quantityTextBox.SelectAll();
+                            }
+
+                            return true;
+                        }
+                    }
+                }
+
+                // New product - load details
+                LoadUomTax(ProductId);
+                LoadProductAdditinalDetails(product);
+
+                // Set product details in current row
+                GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value = product.Id;
+                GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRODUCT].Value = product.Name;
+                GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.QTY].Value = "1"; // Default to 1 for scanned items
+
+                // Add new row if needed
+                if (GridViewSalesItem.Rows.Count - 1 == GridViewSalesItem.CurrentRow.Index)
+                {
+                    GridViewSalesItem.Rows.Add();
+                }
+
+                // Focus on quantity and select all text
+                GridViewSalesItem.CurrentCell = GridViewSalesItem[
+                    (int)SaleEntryTableColumn.QTY,
+                    GridViewSalesItem.CurrentRow.Index];
+                GridViewSalesItem.BeginEdit(true);
+
+                var qtyTextBox = GridViewSalesItem.EditingControl as TextBox;
+                if (qtyTextBox != null)
+                {
+                    qtyTextBox.SelectAll();
+                }
+
+                ComputeFormTotal();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex);
+                DisplaySystemError($"Error processing barcode: {ex.Message}");
+                return false;
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
+        private bool SearchProductByBarCodexxx(string barcode)
         {
             if (string.IsNullOrWhiteSpace(barcode))
             {
