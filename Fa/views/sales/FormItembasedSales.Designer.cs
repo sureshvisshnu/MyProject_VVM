@@ -662,6 +662,7 @@
             GridViewSalesItem.EditingControlShowing += GridViewSalesItem_EditingControlShowing;
             GridViewSalesItem.RowEnter += GridViewSalesItem_RowEnter;
             GridViewSalesItem.RowsAdded += GridViewSalesItem_RowsAdded;
+            GridViewSalesItem.SelectionChanged += GridViewSalesItem_SelectionChanged;
             GridViewSalesItem.Leave += GridViewSalesItem_Leave;
             // 
             // Column1

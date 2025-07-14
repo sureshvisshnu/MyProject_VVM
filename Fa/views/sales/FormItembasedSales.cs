@@ -1740,6 +1740,9 @@ namespace fa.views.sales
         }
         public double Oprice = 0.00;
         public double Price = 0.00;
+        private bool dont_jump;
+        private int col_index;
+        private int row_index;
         private void GridViewSalesItem_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             if (e.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT && !_isBarcodeProcessing)
@@ -1751,6 +1754,9 @@ namespace fa.views.sales
                     SearchProductByBarCode(barcode);
                     _isBarcodeProcessing = false;
                 }
+                dont_jump = true;
+                col_index = e.ColumnIndex + 2;
+                row_index = e.RowIndex;
             }
 
             if (e.ColumnIndex == (int)SaleEntryTableColumn.QTY ||
@@ -2344,65 +2350,43 @@ namespace fa.views.sales
         }
         private void MoveFocusToQuantityColumn()
         {
-            // [1] First, ensure we're on the UI thread
             if (this.InvokeRequired)
             {
                 this.BeginInvoke(new Action(MoveFocusToQuantityColumn));
                 return;
             }
 
-            // [3] Safety checks
-            if (GridViewSalesItem.CurrentRow == null || GridViewSalesItem.Columns.Count <= (int)SaleEntryTableColumn.QTY)
-            {
-                //MessageBox.Show("ERROR: No current row or QTY column doesn't exist");
-                return;
-            }
+            if (GridViewSalesItem.CurrentRow == null) return;
 
-            // [4] Get the target cell
+            // Get QTY cell
             var qtyCell = GridViewSalesItem[(int)SaleEntryTableColumn.QTY, GridViewSalesItem.CurrentRow.Index];
 
-            // [5] Triple-enforcement focus method
-            try
+            // Set current cell
+            GridViewSalesItem.CurrentCell = qtyCell;
+
+            // Start editing
+            GridViewSalesItem.BeginEdit(true);
+
+            // This replaces the MessageBox delay
+            var focusTimer = new System.Windows.Forms.Timer();
+            focusTimer.Interval = 50; // Same delay as MessageBox would create
+            focusTimer.Tick += (s, e) =>
             {
-                // Method A: Standard approach
-                GridViewSalesItem.CurrentCell = qtyCell;
-                qtyCell.Selected = true;
-                GridViewSalesItem.BeginEdit(true);
+                focusTimer.Stop();
 
-                // Method B: Force after short delay
-                var t = new System.Windows.Forms.Timer { Interval = 50 };
-                t.Tick += (sender, e) =>
-                {
-                    t.Stop();
-                    t.Dispose();
-
-                    if (GridViewSalesItem.EditingControl is TextBox tb)
-                    {
-                        tb.Focus();
-                        tb.SelectAll();
-                    }
-                    else
-                    {
-                    }
-                };
-                t.Start();
-
-                // Method C: Win32 API nuclear option
+                // Force focus to editing control
                 if (GridViewSalesItem.EditingControl != null)
                 {
-                    SetFocus(GridViewSalesItem.EditingControl.Handle);
-                }
+                    GridViewSalesItem.EditingControl.Focus();
 
-                // [6] Final verification
-                this.BeginInvoke(new Action(() =>
-                {
-                    var _ = GridViewSalesItem.EditingControl?.Focused ?? false;
-                }));
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"CRASH: {ex.Message}");
-            }
+                    // If it's a TextBox, select all text
+                    if (GridViewSalesItem.EditingControl is TextBox tb)
+                    {
+                        tb.SelectAll();
+                    }
+                }
+            };
+            focusTimer.Start();
         }
         [System.Runtime.InteropServices.DllImport("user32.dll")]
         private static extern void SetFocus(IntPtr hWnd);
@@ -4454,6 +4438,15 @@ namespace fa.views.sales
                 {
                     editingControl.SelectAll();
                 }
+            }
+        }
+
+        private void GridViewSalesItem_SelectionChanged(object sender, EventArgs e)
+        {
+            if (dont_jump)
+            {
+                dont_jump = false;
+                GridViewSalesItem.CurrentCell = GridViewSalesItem[col_index, row_index];
             }
         }
     }
