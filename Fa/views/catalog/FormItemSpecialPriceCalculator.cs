@@ -201,21 +201,11 @@ namespace Fa.views.catalog
             {
                 try
                 {
-                    var productId = await ProductSalePercentageManager.Instance.GetProductIdByCodeAsync(TextBoxProductCode.Text.Trim());
-                    if (productId <= 0)
-                    {
-                        MessageBox.Show("Product not found! Please save the product first.",
-                                      "Validation Error",
-                                      MessageBoxButtons.OK,
-                                      MessageBoxIcon.Warning);
-                        return;
-                    }
-
                     var percentages = new ProductPercentage
                     {
                         ProductCode = TextBoxProductCode.Text,
-                        // Get the actual ProductId from database
-                        ProductId = await ProductSalePercentageManager.Instance.GetProductIdByCodeAsync(TextBoxProductCode.Text),
+                        // Don't try to get ProductId here - let FormCatalog handle it
+                        ProductId = 0, // Temporary value
                         CompanyId = Global.Company.CompanyId,
                         AddedCostPercentage = decimal.Parse(TextBoxAddedCostPercentage.Text),
                         RetailMarginPercentage = decimal.Parse(TextBoxRetailMargin.Text),
@@ -224,14 +214,13 @@ namespace Fa.views.catalog
                         IsActive = true
                     };
 
-                    await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(percentages);
-
-                    // Rest of your save logic...
+                    // Return the percentages to FormCatalog
                     if (parent is FormCatalog catalogParent)
                     {
+                        // Store the percentages in FormCatalog
+                        catalogParent.PendingPercentages = percentages;
                         UpdateParentForm(catalogParent);
                     }
-
 
                     this.DialogResult = DialogResult.OK;
                     this.Close();
@@ -243,16 +232,9 @@ namespace Fa.views.catalog
                                   MessageBoxButtons.OK,
                                   MessageBoxIcon.Warning);
                 }
-                catch (DbUpdateException dbEx)
-                {
-                    MessageBox.Show($"Database error: {dbEx.InnerException?.Message ?? dbEx.Message}",
-                                  "Save Failed",
-                                  MessageBoxButtons.OK,
-                                  MessageBoxIcon.Error);
-                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Unexpected error: {ex.Message}",
+                    MessageBox.Show($"Error: {ex.Message}",
                                   "Error",
                                   MessageBoxButtons.OK,
                                   MessageBoxIcon.Error);

@@ -1,35 +1,36 @@
-﻿using fa.model.Catalog;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using fa.api.Accounting;
-using fa.libraries.utils;
+﻿using fa.api.Accounting;
 using fa.api.catalog;
+using fa.api.Hms;
+using fa.api.OrderManagement;
+using fa.api.utils;
+using fa.libraries.utils;
 using fa.libraries.Validation;
 using fa.model.Accounting.Masters;
-using System.Diagnostics;
-using fa.api.utils;
-using fa.model.OrderManagement;
-using fa.api.OrderManagement;
-using fa.views.controls;
-using fa.reports.catalog;
 using fa.model.catalog;
-using Fa.api.catalog;
+using fa.model.Catalog;
 using fa.model.hms.common;
-using fa.api.Hms;
-using System.Collections;
-using System.Data.Common;
-using static fa.api.catalog.CatalogItemManager;
-using System.Globalization;
+using fa.model.OrderManagement;
+using fa.reports.catalog;
+using fa.views.controls;
+using fa.views.purchase;
+using Fa.api.catalog;
 using Fa.api.OrderManagement;
 using Fa.views.catalog;
-using VisioForge.MediaFramework.Helpers;
+using FADataAccessLibrary.Api.catalog;
 using FADataAccessLibrary.Model.Common;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.Diagnostics;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
+using System.Windows.Forms;
 using VisioForge.Libs.MediaFoundation.OPM;
 using VisioForge.Libs.NDI;
-using fa.views.purchase;
+using VisioForge.MediaFramework.Helpers;
+using static fa.api.catalog.CatalogItemManager;
 
 namespace fa.views.catalog
 {
@@ -68,15 +69,18 @@ namespace fa.views.catalog
         public static string EnterMrpErrorMsg = "Please enter correct msrp.";
         public static string EnterCharErrorMsg = "Please enter minimum 2 character.";
 
+        public ProductPercentage PendingPercentages { get; set; }
+
         public bool CreateCatalogOnLoad = false;
-        AccountManager AccountManager = null;
-        CategoryManager CategoryManager = null;
-        CatalogProductManager CatalogProductManager = null;
-        CatalogProductFamilyManager CatalogProductFamilyManager = null;
+        AccountManager AccountManager = null!;
+        CategoryManager CategoryManager = null!;
+        CatalogProductManager CatalogProductManager = null!;
+        CatalogProductFamilyManager CatalogProductFamilyManager = null!;
         DateTime EffectiveStartDate = new DateTime(2017, 07, 01);
         DateTime EffectiveEndDate = new DateTime(2400, 12, 31);
         public long TaxCodeId = 0L;
-        FormBase parent = null;
+
+        FormBase parent = null!;
         public FormCatalog(object sender)
         {
             if (sender is FormSearchItems)
@@ -1385,7 +1389,7 @@ namespace fa.views.catalog
             }
             return;
         }
-        private void BtnCatalogSave_Click(object sender, EventArgs e)
+        private async void BtnCatalogSave_Click(object sender, EventArgs e)
         {
             try
             {
@@ -1488,6 +1492,7 @@ namespace fa.views.catalog
                     IsPerformSearch = false;
                     TextBoxCatalogSearch.ResetText();
                     Product lProduct = GetProductFromForm();
+
                     if (CatalogProductManager.ProductNameUniqueById(lProduct))
                     {
                         if (CatalogProductManager.FindMaterialIdUnique(lProduct))
@@ -1497,6 +1502,13 @@ namespace fa.views.catalog
                             {
                                 lProductFromDB = CatalogProductManager.AddProduct(lProduct);
 
+                                // Save percentages if they exist (async operation)
+                                if (this.PendingPercentages != null)
+                                {
+                                    this.PendingPercentages.ProductId = lProductFromDB.Id;
+                                    await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(this.PendingPercentages);
+                                    this.PendingPercentages = null;
+                                }
                             }
                             else
                             {
@@ -1504,19 +1516,40 @@ namespace fa.views.catalog
                                 if (lProductById != null)
                                 {
                                     lProductFromDB = CatalogProductManager.UpdateProduct(lProduct);
+
+                                    // Update percentages if they exist (async operation)
+                                    if (this.PendingPercentages != null)
+                                    {
+                                        this.PendingPercentages.ProductId = lProductFromDB.Id;
+                                        await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(this.PendingPercentages);
+                                        this.PendingPercentages = null;
+                                    }
                                 }
                                 else
                                 {
-                                    DisplaySystemError("Somting went wrong, please check this product is still valid.");
+                                    DisplaySystemError("Something went wrong, please check this product is still valid.");
                                     return;
                                 }
                             }
+
+                            // Rest of existing product save logic...
                             if (CreateCatalogOnLoad)
                             {
                                 this.formIsDirty = false;
                                 if (parent is FormSearchItems) { ((FormSearchItems)parent).IsReload = true; }
                                 this.Close();
                             }
+
+                            // Update form fields with saved prices
+                            if (lProductFromDB != null)
+                            {
+                                TextBoxProductPurchasePrice.Text = lProductFromDB.PurchasePrice.ToString();
+                                TextBoxProductCost.Text = lProductFromDB.CostPrice.ToString();
+                                TextBoxProductRetailPrice.Text = lProductFromDB.RetailPrice.ToString();
+                                TextBoxProductWholeSalePrice.Text = lProductFromDB.WholdSalePrice.ToString();
+                                TextBoxProductMSRP.Text = lProductFromDB.Msrp.ToString();
+                            }
+
                             ResetProductTab();
                             LoadProductCombo();
                             LoadCatalogWithFilter();
