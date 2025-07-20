@@ -19,14 +19,180 @@ namespace Fa.views.utils.Sale
     {
         readonly String[] SaleDetailsTableColumnName = new String[]
         {
-            "#", "Description", "Qty", "Rate", "Amount"
+            "S.No",
+            "Description",
+            "Qty",
+            "Unit",  // New column header
+            "Rate",
+            "Amount"
         };
 
         public enum SaleDetailsTableColumn
         {
-            SNO, DESC, QTY, RATE, TOTALAMOUNT
+            SNO,
+            DESC,
+            QTY,
+            UNIT,  // New column for UOM
+            RATE,
+            TOTALAMOUNT
         }
 
+        public void ExportToFileOrPrint20072025(long SalesId, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape = false)
+        {
+            SalesManager SalesManager = SalesManager.Instance;
+            SaleEntry SaleEntry = SalesManager.GetSaleEntry(SalesId);
+
+            if (SaleEntry == null)
+            {
+                MessageBox.Show("Something went wrong, the selected sale is not valid.");
+                return;
+            }
+
+            DataTable SaleDetailsTable = new DataTable();
+
+            // Create columns for the simplified table
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.SNO], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.DESC], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.QTY], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.UNIT], typeof(string)); // New column
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.RATE], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.TOTALAMOUNT], typeof(string));
+
+            if (SaleEntry.SaleDetails.Count != 0)
+            {
+                double TotalAmount = 0;
+                double TotalQty = 0;
+                int count = 0;
+
+                try
+                {
+                    foreach (SaleDetail SaleDetails in SaleEntry.SaleDetails.OrderBy(x => x.Id))
+                    {
+                        count++;
+                        SaleDetail lSaleDetail = SalesManager.GetSaleDetail(SaleDetails.Id);
+
+                        double Qty = SaleDetails.Quantity;
+                        double Price = SaleDetails.OverridePrice == 0 ? SaleDetails.Price : SaleDetails.OverridePrice;
+                        double DiscountAmount = lSaleDetail.Discounts.Sum(X => X.DiscountAmount);
+                        double LineTotal = (Qty * Price) - DiscountAmount;
+
+                        DataRow SaleDetailsTableNewRow = SaleDetailsTable.NewRow();
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.SNO] = count.ToString();
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.DESC] = TruncateString(SaleDetails.Product?.Name ?? "", 30);
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.QTY] = Qty.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.UNIT] = SaleDetails.Uom; // Add UOM
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.RATE] = Price.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.TOTALAMOUNT] = Math.Round(LineTotal, 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+
+                        SaleDetailsTable.Rows.Add(SaleDetailsTableNewRow);
+                        TotalAmount += LineTotal;
+                        TotalQty += Qty;
+                    }
+
+                    // Add total row
+                    DataRow TotalRow = SaleDetailsTable.NewRow();
+                    TotalRow[(int)SaleDetailsTableColumn.DESC] = "TOTAL";
+                    TotalRow[(int)SaleDetailsTableColumn.QTY] = TotalQty.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision));
+                    TotalRow[(int)SaleDetailsTableColumn.UNIT] = ""; // Empty for total row
+                    TotalRow[(int)SaleDetailsTableColumn.TOTALAMOUNT] = Math.Round(TotalAmount, 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                    SaleDetailsTable.Rows.Add(TotalRow);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error generating invoice: " + ex.Message);
+                    return;
+                }
+
+                if (fileExtension == "Laser")
+                {
+                    GeneratePDF(SaleDetailsTable, SaleEntry, PrintPaper, "pdf", isPrint, isLandscape, TotalAmount);
+                }
+            }
+        }
+        public void GeneratePDF20072025(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount)
+        {
+            using (MemoryStream myMemoryStream = new MemoryStream())
+            {
+                // Set page size based on orientation
+                var pageSize = isLandscape ? PageSize.A5.Rotate() : PageSize.A5;
+
+                Document pdfDoc = new Document(pageSize, 10, 10, 10, 10);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
+                pdfDoc.Open();
+
+                // Add header
+                PdfPTable DocHeader = InvoiceHeader("SALES INVOICE", saleEntry.RefNumber, saleEntry.SaleDate);
+                pdfDoc.Add(DocHeader);
+
+                // Add customer info
+                PdfPTable CustomerTable = CustomerDetails(saleEntry);
+                pdfDoc.Add(CustomerTable);
+
+                // Add space between sections
+                pdfDoc.Add(new Paragraph(" "));
+
+                // Create main items table
+                PdfPTable table = new PdfPTable(SaleDetailsTableColumnName.Length);
+
+                // Set column widths based on orientation
+                float[] widths = isLandscape
+                    ? new float[] { 8f, 60f, 15f, 15f, 25f, 30f }  // Added width for Unit column
+                    : new float[] { 8f, 40f, 12f, 12f, 20f, 25f }; // Added width for Unit column
+
+                table.SetWidths(widths);
+                table = CreateSalesMainTableHeader(table, dataTable);
+
+                // Add data rows
+                for (int i = 0; i < dataTable.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dataTable.Columns.Count; j++)
+                    {
+                        var temp = dataTable.Rows[i][j].ToString();
+                        var font = i == dataTable.Rows.Count - 1 // Last row (total)
+                            ? PdfDataAlignment.GetFont("Font_Bold_Italic_9_Black")
+                            : PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black");
+
+                        PdfPCell rowCell = new PdfPCell(new Phrase(temp, font));
+
+                        // Styling for total row
+                        if (i == dataTable.Rows.Count - 1)
+                        {
+                            rowCell.BackgroundColor = new BaseColor(220, 220, 220);
+                        }
+
+                        // Set alignment - right for numeric columns, left for others
+                        if (j == (int)SaleDetailsTableColumn.QTY || j == (int)SaleDetailsTableColumn.RATE || j == (int)SaleDetailsTableColumn.TOTALAMOUNT)
+                        {
+                            rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                        }
+                        else
+                        {
+                            rowCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                        }
+
+                        rowCell.MinimumHeight = 15;
+                        rowCell.BorderWidth = 0.5f;
+                        table.AddCell(rowCell);
+                    }
+                }
+
+                pdfDoc.Add(table);
+
+                // Add amount in words
+                pdfDoc.Add(new Paragraph(" "));
+                PdfPTable AmountInWords = AmtInWordsColumn(TotalAmount);
+                pdfDoc.Add(AmountInWords);
+
+                // Add signature line
+                pdfDoc.Add(new Paragraph(" "));
+                PdfPTable SignatureTable = SignatureColumn();
+                pdfDoc.Add(SignatureTable);
+
+                pdfDoc.Close();
+                PdfGeneration.SaveMemoryStream(myMemoryStream, "SaleInvoice", fileExtension, isPrint,
+                    isLandscape ? PaperTypes.A5_LANDSCAPE : PaperTypes.A5_PORTRAIT);
+            }
+        }
         public void ExportToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape = false)
         {
             SalesManager SalesManager = SalesManager.Instance;
@@ -235,7 +401,19 @@ namespace Fa.views.utils.Sale
 
             return table;
         }
-
+        private PdfPTable CreateSalesMainTableHeader20072025(PdfPTable table, DataTable dataTable)
+        {
+            // Create header row
+            for (int i = 0; i < SaleDetailsTableColumnName.Length; i++)
+            {
+                PdfPCell cell = new PdfPCell(new Phrase(SaleDetailsTableColumnName[i], PdfDataAlignment.GetFont("Font_Bold_9_Black")));
+                cell.HorizontalAlignment = Element.ALIGN_CENTER;
+                cell.BackgroundColor = new BaseColor(220, 220, 220);
+                cell.BorderWidth = 0.5f;
+                table.AddCell(cell);
+            }
+            return table;
+        }
         private PdfPTable CreateSalesMainTableHeader(PdfPTable table, DataTable dataTable)
         {
             for (int j = 0; j < dataTable.Columns.Count; j++)
