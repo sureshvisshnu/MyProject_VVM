@@ -136,8 +136,8 @@ namespace Fa.views.utils.Sale
 
                 // Set column widths based on orientation
                 float[] widths = isLandscape
-                    ? new float[] { 8f, 60f, 15f, 15f, 25f, 30f }  // Added width for Unit column
-                    : new float[] { 8f, 40f, 12f, 12f, 20f, 25f }; // Added width for Unit column
+                    ? new float[] { 8f, 70f, 20f, 20f, 25f, 30f }  // Added width for Unit column
+                    : new float[] { 8f, 40f, 15f, 15f, 20f, 25f }; // Added width for Unit column
 
                 table.SetWidths(widths);
                 table = CreateSalesMainTableHeader(table, dataTable);
@@ -210,6 +210,7 @@ namespace Fa.views.utils.Sale
             SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.SNO], typeof(string));
             SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.DESC], typeof(string));
             SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.QTY], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.UNIT], typeof(string));
             SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.RATE], typeof(string));
             SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.TOTALAMOUNT], typeof(string));
 
@@ -236,8 +237,9 @@ namespace Fa.views.utils.Sale
 
                         // Truncate product name if too long
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.DESC] = TruncateString(SaleDetails.Product?.Name ?? "", 30);
-
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.QTY] = Qty.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision));
+                        // Add UOM
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.UNIT] = SaleDetails.Uom;
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.RATE] = Price.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
                         SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.TOTALAMOUNT] = Math.Round(LineTotal, 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
 
@@ -273,7 +275,7 @@ namespace Fa.views.utils.Sale
                 // Set page size based on orientation
                 var pageSize = isLandscape ? PageSize.A5.Rotate() : PageSize.A5;
 
-                Document pdfDoc = new Document(pageSize, 10, 10, 10, 10);
+                Document pdfDoc = new Document(pageSize, 10, 10, 15, 15);
                 PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
                 pdfDoc.Open();
 
@@ -293,9 +295,9 @@ namespace Fa.views.utils.Sale
 
                 // Set column widths based on orientation
                 float[] widths = isLandscape
-                    ? new float[] { 8f, 90f, 20f, 25f, 30f }
-                    : new float[] { 8f, 60f, 15f, 20f, 25f };
-
+                    ? new float[] { 8f, 90f, 20f, 20f, 25f, 30f }
+                    : new float[] { 8f, 60f, 10f, 10f, 20f, 25f };
+                // { 8f, 40f, 12f, 12f, 20f, 25f };
                 table.SetWidths(widths);
                 table = CreateSalesMainTableHeader(table, dataTable);
 

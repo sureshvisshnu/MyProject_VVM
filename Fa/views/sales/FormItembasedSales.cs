@@ -4217,56 +4217,47 @@ namespace fa.views.sales
                 DateTime YearStartDate = Global.getCurrentFiscalYearStartDate();
                 DateTime YearEndDate = Global.getCurrentFiscalYearEndDate();
 
-                // Get the print paper format ID for SALES entries
-                long? PrintPaperId = Global.Company.IdSpaces.FirstOrDefault(x =>
-                        x.YearStartDate == YearStartDate &&
-                        x.YearEndDate == YearEndDate &&
-                        x.EntryType == EntryType.SALES)?.PrintPaperFormat?.Id;
+                // Get the saved print paper format ID
+                long? PrintPaperId = Global.Company.IdSpaces
+                    .FirstOrDefault(x => x.YearStartDate == YearStartDate &&
+                                         x.YearEndDate == YearEndDate &&
+                                         x.EntryType == EntryType.SALES)
+                    ?.PrintPaperFormat?.Id;
 
-                // Initialize the combo box with all paper formats
+                // Get all paper formats and sort with A4 PORTRAIT first
                 var allPaperFormats = PaperFormatManager.Instance.ListPrintPaperFormat();
-                ComboBoxPrintingPaper.DataSource = allPaperFormats;
-                ComboBoxPrintingPaper.DisplayMember = "Name";
-                ComboBoxPrintingPaper.ValueMember = "Id";
-
-                // Try to find A4 PORTRAIT format
-                var a4Portrait = allPaperFormats.FirstOrDefault(x => x.Name == "A4 PORTRAIT");
-
-                // Set selection priority:
-                // 1. Previously saved PrintPaperId (if exists)
-                // 2. A4 PORTRAIT (if available)
-                // 3. First item in the list
-                if (PrintPaperId.HasValue)
-                {
-                    ComboBoxPrintingPaper.SelectedValue = PrintPaperId.Value;
-
-                    // Fallback if the value wasn't found
-                    if (ComboBoxPrintingPaper.SelectedIndex == -1 && a4Portrait != null)
-                    {
-                        ComboBoxPrintingPaper.SelectedValue = a4Portrait.Id;
-                    }
-                }
-                else if (a4Portrait != null)
-                {
-                    ComboBoxPrintingPaper.SelectedValue = a4Portrait.Id;
-                }
-                else if (allPaperFormats.Count > 0)
-                {
-                    ComboBoxPrintingPaper.SelectedIndex = 0;
-                }
-
-                // Optional: Sort the items with A4 PORTRAIT first
                 var sortedFormats = allPaperFormats
                     .OrderByDescending(x => x.Name == "A4 PORTRAIT")
                     .ThenBy(x => x.Name)
                     .ToList();
+
+                // Bind the sorted list to ComboBox
                 ComboBoxPrintingPaper.DataSource = sortedFormats;
+                ComboBoxPrintingPaper.DisplayMember = "Name";
+                ComboBoxPrintingPaper.ValueMember = "Id";
+
+                // Try to select saved PrintPaperId
+                if (PrintPaperId.HasValue &&
+                    sortedFormats.Any(x => x.Id == PrintPaperId.Value))
+                {
+                    ComboBoxPrintingPaper.SelectedValue = PrintPaperId.Value;
+                }
+                // Else fallback to A4 PORTRAIT if available
+                else if (sortedFormats.Any(x => x.Name == "A4 PORTRAIT"))
+                {
+                    ComboBoxPrintingPaper.SelectedValue =
+                        sortedFormats.First(x => x.Name == "A4 PORTRAIT").Id;
+                }
+                // Else fallback to first item
+                else if (sortedFormats.Count > 0)
+                {
+                    ComboBoxPrintingPaper.SelectedIndex = 0;
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error initializing print format: {ex.Message}");
-                // Consider logging the error properly
-                // Fallback initialization if error occurs
+                // Fallback: hardcoded list
                 ComboBoxPrintingPaper.DataSource = new List<PrintPaperFormat>
                 {
                     new PrintPaperFormat { FormatId = 1, DisplayName = "A4 PORTRAIT" },
@@ -4277,6 +4268,7 @@ namespace fa.views.sales
                 ComboBoxPrintingPaper.SelectedIndex = 0;
             }
         }
+
         private bool SearchProductByBarCode(string barcode)
         {
             // First check if this is actually a barcode scan or just normal text entry
@@ -4609,7 +4601,7 @@ namespace fa.views.sales
                 GridViewSalesItem.CurrentCell = GridViewSalesItem[col_index, row_index];
             }
         }
-       
+
         private float GetBasePrice(Product product, string uom)
         {
             PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
