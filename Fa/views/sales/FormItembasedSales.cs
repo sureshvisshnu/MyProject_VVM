@@ -53,6 +53,8 @@ namespace fa.views.sales
     {
         NAME, VALUE
     }
+
+    // row.Cells[(int)SaleEntryTableColumn.PRICE].Value = lProduct.RetailPrice; 
     public partial class FormItembasedSales : FormBase
     {
         public static string SaveSuccessText = "Saved...";
@@ -127,6 +129,7 @@ namespace fa.views.sales
             GridViewSalesItem.EditingControlShowing += GridViewSalesItem_EditingControlShowing!;
             GridViewSalesItem.CellEndEdit += GridViewSalesItem_CellEndEdit!;
             GridViewSalesItem.KeyPress += GridViewSalesItem_KeyPress!;
+            ComboBoxInvoicePriceBy.SelectedIndexChanged += ComboBoxInvoicePriceBy_SelectedIndexChanged!;
             InitializeScannerHandling();
         }
         private void FormItembasedSales_Load(object sender, EventArgs e)
@@ -210,7 +213,7 @@ namespace fa.views.sales
             lSaleEntry.Memo = TextBoxSalesMemo.Text.Replace("\r", "").Replace(",", "").Replace("\n", ",");
             lSaleEntry.CustomerAddress = TextBoxSalesCustomerAddress.Text.Replace("\r", "").Replace(",", "").Replace("\n", ",");
             lSaleEntry.SaleMethod = (YesNoRbtSalesMethod.Checked) ? SaleMethod.Credit : SaleMethod.Cash;
-            lSaleEntry.SaleDate = (DateTime)DatetimePickerSalesDate.Date;
+            lSaleEntry.SaleDate = (DateTime)DatetimePickerSalesDate.Date!;
             //FOR SQL
             lSaleEntry.QuotaionExpireAt = DateTime.Now.Date;
             lSaleEntry.ReturnDate = DateTime.Now.Date;
@@ -1333,6 +1336,7 @@ namespace fa.views.sales
                         OPId = (long)Note.OpRegistrationId;
                     }
                 }
+                ComboBoxInvoicePriceBy.SelectedIndex = (int)Global.Company.CompanySalesSetup.PriceType;
                 if (SaleEntry.EntryType == Entrytype.SALE)
                 {
                     SalesReferenceNumber.Text = SaleEntry.RefNumber;
@@ -1366,7 +1370,7 @@ namespace fa.views.sales
                     ComboBoxreferedby.SelectedIndex = ComboBoxreferedby.FindStringExact(SaleEntry.ReferedBy.Name);
                 }
                 TextBoxSalesMemo.Text = !string.IsNullOrEmpty(SaleEntry.Memo) ? SaleEntry.Memo.Replace("\n", System.Environment.NewLine) : string.Empty;
-                DatetimePickerSalesDate.Date = (DateTime)DateUtils.ToDate(SaleEntry.SaleDate.ToString(Global.Company.DateFormat), Global.Company.DateFormat);
+                DatetimePickerSalesDate.Date = (DateTime)DateUtils.ToDate(SaleEntry.SaleDate.ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
                 YesNoRbtSalesMethod.Checked = (SaleEntry.SaleMethod == SaleMethod.Credit) ? true : false;
                 if (SaleEntry.SaleDetails.Count > 0)
                 {
@@ -1377,8 +1381,8 @@ namespace fa.views.sales
                         SaleDetail lSaleDetail = SalesManager.GetSaleDetail(SaleDetail.Id);
                         GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.SNO].Value = i + 1;
                         GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.PRODUCT].Value = lSaleDetail.Product.Name;
-                        (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell).Items.Add(lSaleDetail.Product.RetailUOM);
-                        (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell).Items.Add(lSaleDetail.Product.WholesaleUOM);
+                        (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell)!.Items.Add(lSaleDetail.Product.RetailUOM);
+                        (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell)!.Items.Add(lSaleDetail.Product.WholesaleUOM);
                         GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.UOM].Value = lSaleDetail.Product.RetailUOM == lSaleDetail.Uom ? lSaleDetail.Product.RetailUOM : lSaleDetail.Product.WholesaleUOM;
                         if (SaleEntry.EntryType == Entrytype.QUOTE)
                         {
@@ -1524,10 +1528,10 @@ namespace fa.views.sales
             double TotalQuantity = 0;
             for (int i = 0; i < GridViewSalesItem.Rows.Count - 1; i++)
             {
-                double Quantity = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.QTY].Value) == null ? 0.00 : (double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()));
-                double FreeQuantity = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.FREE].Value) == null ? 0.00 : (double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.FREE].Value.ToString()));
-                double Pprice = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.PRICE].Value) == null ? 0.00 : (double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.PRICE].Value.ToString()));
-                double Oprice = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.OPRICE].Value) == null ? 0.00 : (double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.OPRICE].Value.ToString()));
+                double Quantity = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.QTY].Value) == null ? 0.00 : (double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()!));
+                double FreeQuantity = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.FREE].Value) == null ? 0.00 : (double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.FREE].Value.ToString()!));
+                double Pprice = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.PRICE].Value) == null ? 0.00 : (double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.PRICE].Value.ToString()!));
+                double Oprice = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.OPRICE].Value) == null ? 0.00 : (double.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.OPRICE].Value.ToString()!));
                 TotalQuantity = TotalQuantity + Quantity;
                 double Amount = 0.00;
                 Amount = (Pprice * Quantity);
@@ -1865,7 +1869,7 @@ namespace fa.views.sales
                         if (row.Cells[(int)SaleEntryTableColumn.ID].Value != null && row.Cells[(int)SaleEntryTableColumn.ID].Value.ToString() == LocalProductId.ToString())
                         {
                             // row exists
-                            string prevQty = row.Cells[(int)SaleEntryTableColumn.QTY].Value.ToString();
+                            string prevQty = row.Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()!;
                             double finalQty = double.Parse(prevQty) + 1;
                             row.Cells[(int)SaleEntryTableColumn.QTY].Value = finalQty.ToString();
                             Product Product = CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(long.Parse(LocalProductId.ToString()));
@@ -1904,8 +1908,8 @@ namespace fa.views.sales
             }
             if (e.ColumnIndex == (int)SaleEntryTableColumn.BATNO && GridViewSalesItem.Rows[e.RowIndex].Cells[(int)SaleEntryTableColumn.BATCHID].Value != null)
             {
-                string Uom = GridViewSalesItem.Rows[e.RowIndex].Cells[(int)SaleEntryTableColumn.UOM].Value.ToString();
-                SaleProductDetails.BatchId = long.Parse(GridViewSalesItem.Rows[e.RowIndex].Cells[(int)SaleEntryTableColumn.BATCHID].Value.ToString());
+                string Uom = GridViewSalesItem.Rows[e.RowIndex].Cells[(int)SaleEntryTableColumn.UOM].Value.ToString()!;
+                SaleProductDetails.BatchId = long.Parse(GridViewSalesItem.Rows[e.RowIndex].Cells[(int)SaleEntryTableColumn.BATCHID].Value.ToString()!);
             }
         }
         private void BtnSalesNewCustomer_ItemClickedEvent(object sender, ToolStripItemClickedEventArgs e)
@@ -2049,6 +2053,85 @@ namespace fa.views.sales
                 if (Product != null)
                 {
                     double Tax = Product.UseHsnTax ? ProductTaxPercentage(Product) : ProductTaxPercentage(Product.SalesTax.ToList());
+
+                    // Get selected price type from combobox
+                    PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
+
+                    if ((bool)GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ISBAT].Value)
+                    {
+                        if (GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.BATCHID].Value != null)
+                        {
+                            InventoryBatch InventoryBatch = InventoryLocationManager.Instance.GetInventoryByBatchId(
+                                (long)GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.BATCHID].Value,
+                                LocationId);
+
+                            if (InventoryBatch != null)
+                            {
+                                double price = GetPriceByType(selectedPriceType, InventoryBatch);
+                                GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.PRICE].Value =
+                                    Global.Company.CompanySalesSetup.IncludingTax ?
+                                        price - ((price * (price * (Tax / 100))) / (price + (price * (Tax / 100)))) :
+                                        price;
+                                GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.MSRP].Value = InventoryBatch.MaxRetailPrice;
+                                SaleProductDetails.BatchId = InventoryBatch.Id;
+                            }
+                        }
+                        else
+                        {
+                            double price = GetPriceByType(selectedPriceType, Product);
+                            GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.PRICE].Value =
+                                Global.Company.CompanySalesSetup.IncludingTax ?
+                                    price - ((price * (price * (Tax / 100))) / (price + (price * (Tax / 100)))) :
+                                    price;
+                            SaleProductDetails.CurrentDate = DatetimePickerSalesDate.Date;
+                            SaleProductDetails.ProductId = Product.Id;
+                        }
+                    }
+                    else
+                    {
+                        double price = GetPriceByType(selectedPriceType, Product);
+                        GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.PRICE].Value =
+                            Global.Company.CompanySalesSetup.IncludingTax ?
+                                price - ((price * (price * (Tax / 100))) / (price + (price * (Tax / 100)))) :
+                                price;
+                        SaleProductDetails.CurrentDate = DatetimePickerSalesDate.Date;
+                        SaleProductDetails.ProductId = Product.Id;
+                    }
+                }
+            }
+        }
+
+        // Helper methods remain the same
+        private double GetPriceByType(PriceType priceType, InventoryBatch batch)
+        {
+            return priceType switch
+            {
+                PriceType.Retail => batch.RetailSalePrice,
+                PriceType.Wholesale => batch.WholeSalePrice,
+                PriceType.MaxRetailPrice => batch.MaxRetailPrice,
+                _ => batch.RetailSalePrice
+            };
+        }
+
+        private double GetPriceByType(PriceType priceType, Product product)
+        {
+            return priceType switch
+            {
+                PriceType.Retail => product.RetailPrice,
+                PriceType.Wholesale => product.WholdSalePrice,
+                PriceType.MaxRetailPrice => product.Msrp,
+                _ => product.RetailPrice
+            };
+        }
+        private void LoadPricexx(int Index, string Uom)
+        {
+            if (GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ID].Value != null)
+            {
+                LoadEditableStock(Index, Uom);
+                Product Product = CatalogProductManager.Instance.GetProductInfoById((long)GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ID].Value);
+                if (Product != null)
+                {
+                    double Tax = Product.UseHsnTax ? ProductTaxPercentage(Product) : ProductTaxPercentage(Product.SalesTax.ToList());
                     SaleProductDetails.LocationId = LocationId;
                     if ((bool)GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ISBAT].Value)
                     {
@@ -2124,8 +2207,8 @@ namespace fa.views.sales
             {
                 if (e.Control is TextBox textBox)
                 {
-                    textBox.KeyDown -= ProductTextBox_KeyDown;
-                    textBox.KeyDown += ProductTextBox_KeyDown;
+                    textBox.KeyDown -= ProductTextBox_KeyDown!;
+                    textBox.KeyDown += ProductTextBox_KeyDown!;
                 }
             }
             if (e.Control is DataGridViewComboBoxEditingControl && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.UOM)
@@ -2813,6 +2896,81 @@ namespace fa.views.sales
                 int index = GridViewSalesItem.CurrentRow.Index;
                 double Tax = Product.UseHsnTax ? ProductTaxPercentage(Product) : ProductTaxPercentage(Product.SalesTax.ToList());
                 bool UomCompare = false;
+                (GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell)!.Items.Clear();
+                (GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell)!.Items.Add(Product.RetailUOM);
+                UomCompare = Product.RetailUOM.Equals(Product.WholesaleUOM, StringComparison.OrdinalIgnoreCase);
+                if (!UomCompare)
+                {
+                    (GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell)!.Items.Add(Product.WholesaleUOM);
+                }
+
+                // Get price type from combobox instead of global setting
+                PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM].Value =
+                    selectedPriceType == PriceType.Wholesale ? Product.WholesaleUOM : Product.RetailUOM;
+
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM].Value = Global.Company.CompanySalesSetup.PriceType == PriceType.Wholesale ? Product.WholesaleUOM : Product.RetailUOM;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRODUCT].Value = Product.Name;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.QTY].Value = 0;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.FREE].Value = 0;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.BATNO].Value = null;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.EXPDATE].Value = null;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.BATCHID].Value = null;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.OPRICE].Value = 0.00;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.MSRP].Value = Product.Msrp;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.TAX].Value = 0.00;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.TAXP].Value = Tax;
+                //for tax update Sales
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.SALESDETAILID].Value = null;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.DIS].Value = 0.00;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.DISP].Value = Product.DefaultDiscount;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.AMOUNT].Value = 0.00;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ID].Value = Product.Id;
+                if (Product.isInventoryAtBatch != null && (bool)Product.isInventoryAtBatch)
+                {
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRICE].Value = 0.00;
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ISBAT].Value = Product.isInventoryAtBatch;
+                }
+                else
+                {
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRICE].Value = Global.Company.CompanySalesSetup.PriceType == PriceType.Retail ? (Global.Company.CompanySalesSetup.IncludingTax ? Product.RetailPrice - ((Product.RetailPrice * (Product.RetailPrice * (Tax / 100))) / (Product.RetailPrice + (Product.RetailPrice * (Tax / 100)))) : Product.RetailPrice) : Global.Company.CompanySalesSetup.PriceType == PriceType.Wholesale ? (Global.Company.CompanySalesSetup.IncludingTax ? Product.WholdSalePrice - ((Product.WholdSalePrice * (Product.WholdSalePrice * (Tax / 100))) / (Product.WholdSalePrice + (Product.WholdSalePrice * (Tax / 100)))) : Product.WholdSalePrice) : Product.Msrp - ((Product.Msrp * (Product.Msrp * (Tax / 100))) / (Product.Msrp + (Product.Msrp * (Tax / 100))));
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ISBAT].Value = false;
+                }
+
+                // Update price based on selected price type
+                if (Product.isInventoryAtBatch != null && (bool)Product.isInventoryAtBatch)
+                {
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRICE].Value = 0.00;
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ISBAT].Value = Product.isInventoryAtBatch;
+                }
+                else
+                {
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRICE].Value =
+                        selectedPriceType == PriceType.Retail ?
+                            (Global.Company.CompanySalesSetup.IncludingTax ?
+                                Product.RetailPrice - ((Product.RetailPrice * (Product.RetailPrice * (Tax / 100))) /
+                                (Product.RetailPrice + (Product.RetailPrice * (Tax / 100)))) :
+                                Product.RetailPrice) :
+                        selectedPriceType == PriceType.Wholesale ?
+                            (Global.Company.CompanySalesSetup.IncludingTax ?
+                                Product.WholdSalePrice - ((Product.WholdSalePrice * (Product.WholdSalePrice * (Tax / 100))) /
+                                (Product.WholdSalePrice + (Product.WholdSalePrice * (Tax / 100)))) :
+                                Product.WholdSalePrice) :
+                            Product.Msrp - ((Product.Msrp * (Product.Msrp * (Tax / 100))) / (Product.Msrp + (Product.Msrp * (Tax / 100))));
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ISBAT].Value = false;
+                }
+            }
+        }
+        private void LoadUomTaxxx(long ProductId)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            Product Product = CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(ProductId);
+            if (Product != null)
+            {
+                LoadProductCombo();
+                int index = GridViewSalesItem.CurrentRow.Index;
+                double Tax = Product.UseHsnTax ? ProductTaxPercentage(Product) : ProductTaxPercentage(Product.SalesTax.ToList());
+                bool UomCompare = false;
                 (GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell).Items.Clear();
                 (GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell).Items.Add(Product.RetailUOM);
                 UomCompare = Product.RetailUOM.Equals(Product.WholesaleUOM, StringComparison.OrdinalIgnoreCase);
@@ -3229,6 +3387,8 @@ namespace fa.views.sales
         {
             ComboUtils.InitializeReferedCombo(ComboBoxSoldby);
             ComboUtils.InitializeReferedCombo(ComboBoxreferedby);
+            ComboBoxInvoicePriceBy.SelectedIndex = (int)Global.Company.CompanySalesSetup.PriceType;
+            YesNoRadioPriceTo.Checked = true;
         }
         private void EnableProductAdditinalDetails()
         {
@@ -3953,7 +4113,7 @@ namespace fa.views.sales
             {
                 long PId = (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null) ? (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
                 SaleProductDetails.LocationId = LocationId;
-                InventoryLocation Location = null;
+                InventoryLocation Location = null!;
                 if (ComboBoxSaleInventoryLocation.SelectedIndex > -1)
                 {
                     Location = (InventoryLocation)ComboBoxSaleInventoryLocation.Items[ComboBoxSaleInventoryLocation.SelectedIndex];
@@ -4448,6 +4608,84 @@ namespace fa.views.sales
                 dont_jump = false;
                 GridViewSalesItem.CurrentCell = GridViewSalesItem[col_index, row_index];
             }
+        }
+       
+        private float GetBasePrice(Product product, string uom)
+        {
+            PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
+
+            // If product uses different prices per UOM, check that here
+            if (selectedPriceType == PriceType.MaxRetailPrice)
+                return product.Msrp;
+            else if (selectedPriceType == PriceType.Wholesale)
+                return product.WholdSalePrice;
+            else
+                return product.RetailPrice;
+        }
+        private decimal GetPriceByPriceType(Product product)
+        {
+            PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
+
+            switch (selectedPriceType)
+            {
+                case PriceType.Wholesale:
+                    return (decimal)product.WholdSalePrice;
+                case PriceType.MaxRetailPrice:
+                    return (decimal)product.Msrp;
+                default:
+                    return (decimal)product.RetailPrice;
+            }
+        }
+
+        private void ComboBoxInvoicePriceBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (YesNoRadioPriceTo.Checked) // "All" is selected
+            {
+                UpdateAllRowsPrices();
+            }
+            else // "Single" is selected
+            {
+                UpdateCurrentRowPrice();
+            }
+        }
+        private void UpdateCurrentRowPrice()
+        {
+            if (GridViewSalesItem.CurrentRow != null &&
+                GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null)
+            {
+                long productId = (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value;
+                string uom = GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.UOM].Value?.ToString()!;
+
+                if (!string.IsNullOrEmpty(uom))
+                {
+                    LoadPrice(GridViewSalesItem.CurrentRow.Index, uom);
+                    ComputeFormTotal();
+                }
+            }
+        }
+
+        private void UpdateAllRowsPrices()
+        {
+            foreach (DataGridViewRow row in GridViewSalesItem.Rows)
+            {
+                // Skip the empty row at the end if present
+                if (row.IsNewRow || row.Cells[(int)SaleEntryTableColumn.ID].Value == null)
+                    continue;
+
+                long productId = (long)row.Cells[(int)SaleEntryTableColumn.ID].Value;
+                string uom = row.Cells[(int)SaleEntryTableColumn.UOM].Value?.ToString()!;
+
+                if (!string.IsNullOrEmpty(uom))
+                {
+                    // Temporarily set current row to update prices correctly
+                    GridViewSalesItem.CurrentCell = row.Cells[0];
+
+                    // Load price for this row with the new price type
+                    LoadPrice(row.Index, uom);
+                }
+            }
+
+            ComputeFormTotal();
         }
     }
     public class PrintPaperFormat

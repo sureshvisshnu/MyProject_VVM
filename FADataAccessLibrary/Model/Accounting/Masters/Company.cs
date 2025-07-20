@@ -265,7 +265,7 @@ namespace fa.model.Accounting.Masters
     }
     public enum PriceType
     {
-        Retail, Wholesale,MaxRetailPrice
+        Retail, Wholesale, MaxRetailPrice
     }
     public enum SaleTaxType
     {
