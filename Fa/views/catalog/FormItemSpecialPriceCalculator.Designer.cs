@@ -388,6 +388,7 @@
             comboMrpPercentage.Size = new Size(121, 23);
             comboMrpPercentage.TabIndex = 4;
             comboMrpPercentage.SelectedIndexChanged += comboMrpPercentage_SelectedIndexChanged;
+            comboMrpPercentage.TextChanged += comboMrpPercentage_TextChanged;
             // 
             // FormItemSpecialPriceCalculator
             // 

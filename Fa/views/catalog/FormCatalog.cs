@@ -1497,18 +1497,13 @@ namespace fa.views.catalog
                     {
                         if (CatalogProductManager.FindMaterialIdUnique(lProduct))
                         {
-                            Product lProductFromDB = null;
+                            Product lProductFromDB = null!;
                             if (lProduct.Id == 0)
                             {
                                 lProductFromDB = CatalogProductManager.AddProduct(lProduct);
-
                                 // Save percentages if they exist (async operation)
-                                if (this.PendingPercentages != null)
-                                {
-                                    this.PendingPercentages.ProductId = lProductFromDB.Id;
-                                    await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(this.PendingPercentages);
-                                    this.PendingPercentages = null;
-                                }
+                                await SaveOrCalculateProductPercentage(lProductFromDB);
+
                             }
                             else
                             {
@@ -1518,12 +1513,8 @@ namespace fa.views.catalog
                                     lProductFromDB = CatalogProductManager.UpdateProduct(lProduct);
 
                                     // Update percentages if they exist (async operation)
-                                    if (this.PendingPercentages != null)
-                                    {
-                                        this.PendingPercentages.ProductId = lProductFromDB.Id;
-                                        await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(this.PendingPercentages);
-                                        this.PendingPercentages = null;
-                                    }
+                                    await SaveOrCalculateProductPercentage(lProductFromDB);
+
                                 }
                                 else
                                 {
@@ -3164,7 +3155,47 @@ namespace fa.views.catalog
                 }
             }
         }
+        private async Task SaveOrCalculateProductPercentage(Product product)
+        {
+            ProductPercentage toSave = this.PendingPercentages ?? CalculatePercentageFromPrices(product);
 
-        
+            if (toSave != null)
+            {
+                await ProductSalePercentageManager.Instance.SaveProductPercentagesAsync(toSave);
+                this.PendingPercentages = null!;
+            }
+        }
+
+        private ProductPercentage CalculatePercentageFromPrices(Product product)
+        {
+            decimal.TryParse(TextBoxProductPurchasePrice.Text, out decimal purchasePrice);
+            decimal.TryParse(TextBoxProductCost.Text, out decimal costPrice);
+            decimal.TryParse(TextBoxProductRetailPrice.Text, out decimal retailPrice);
+            decimal.TryParse(TextBoxProductWholeSalePrice.Text, out decimal wholesalePrice);
+            decimal.TryParse(TextBoxProductMSRP.Text, out decimal mrpPrice);
+
+            if (purchasePrice > 0 && costPrice > 0 && mrpPrice > 0)
+            {
+                var addedCostPct = ((costPrice - purchasePrice) / purchasePrice) * 100;
+                var retailMarginPct = ((mrpPrice - retailPrice) / mrpPrice) * 100;
+                var wholesaleMarginPct = ((mrpPrice - wholesalePrice) / mrpPrice) * 100;
+                var mrpPct = ((mrpPrice - costPrice) / costPrice) * 100 + 100;
+
+                return new ProductPercentage
+                {
+                    ProductId = product.Id,
+                    ProductCode = product.MaterialId,
+                    CompanyId = Global.Company.CompanyId,
+                    AddedCostPercentage = Math.Round(addedCostPct, 2),
+                    RetailMarginPercentage = Math.Round(retailMarginPct, 2),
+                    WholesaleMarginPercentage = Math.Round(wholesaleMarginPct, 2),
+                    MrpPercentage = Math.Round(mrpPct, 2),
+                    IsActive = true
+                };
+            }
+
+            return null!;
+        }
+
     }
 }

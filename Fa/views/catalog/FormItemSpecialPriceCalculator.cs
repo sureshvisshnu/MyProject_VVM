@@ -30,7 +30,8 @@ namespace Fa.views.catalog
         public static string EnterAddedCostPercentageErrorMsg = "Please enter added cost percentage";
 
         FormBase parent = null!;
-        public static decimal MrpPercentage = 120; // Default MRP percentage
+        public static decimal MrpPercentage = 100; // NOT nullable
+
         public FormItemSpecialPriceCalculator(object sender)
         {
             if (sender is FormCatalog)
@@ -47,7 +48,8 @@ namespace Fa.views.catalog
         private async void FormItemSpecialPriceCalculator_Load(object sender, EventArgs e)
         {
             comboMrpPercentage.Items.AddRange(new object[] { 50, 70, 100, 120 });
-            comboMrpPercentage.SelectedItem = 120; // Set default to 120%
+            comboMrpPercentage.DropDownStyle = ComboBoxStyle.DropDown; // Allow manual input
+            comboMrpPercentage.SelectedItem = 120;
 
             // Set default percentages
             TextBoxAddedCostPercentage.Text = "15";
@@ -55,21 +57,9 @@ namespace Fa.views.catalog
             TextBoxWholesaleMargin.Text = "40"; // Default 40% wholesale margin
             try
             {
+                GetPercentage();
                 // Use the singleton manager instead of direct repository
-                var percentages = await ProductSalePercentageManager.Instance.GetProductSalePercentageAsync(TextBoxProductCode.Text);
 
-                if (percentages != null)
-                {
-                    TextBoxAddedCostPercentage.Text = percentages.AddedCostPercentage.ToString();
-                    TextBoxRetailMargin.Text = percentages.RetailMarginPercentage.ToString();
-                    TextBoxWholesaleMargin.Text = percentages.WholesaleMarginPercentage.ToString();
-
-                    // Set saved MRP percentage if it exists in the predefined values
-                    if (new decimal[] { 50, 70, 100, 120 }.Contains(percentages.MrpPercentage))
-                    {
-                        comboMrpPercentage.SelectedItem = percentages.MrpPercentage;
-                    }
-                }
             }
             catch (Exception ex)
             {
@@ -101,6 +91,39 @@ namespace Fa.views.catalog
             }
         }
 
+        private async void GetPercentage()
+        {
+            var percentages = await ProductSalePercentageManager.Instance.GetProductSalePercentageAsync(TextBoxProductCode.Text);
+
+            decimal mrpToSet = 120; // fallback
+
+            if (percentages != null)
+            {
+                TextBoxAddedCostPercentage.Text = percentages.AddedCostPercentage.ToString();
+                TextBoxRetailMargin.Text = percentages.RetailMarginPercentage.ToString();
+                TextBoxWholesaleMargin.Text = percentages.WholesaleMarginPercentage.ToString();
+                mrpToSet = percentages.MrpPercentage;
+            }
+            else
+            {
+                var storage = await ProductSalePercentageManager.Instance.GetCompanyDefaultPercentagesAsync(Global.Company.CompanyId);
+                if (storage != null)
+                {
+                    TextBoxAddedCostPercentage.Text = storage.DefaultAddedCostPercentage.ToString();
+                    TextBoxRetailMargin.Text = storage.DefaultRetailMarginPercentage.ToString();
+                    TextBoxWholesaleMargin.Text = storage.DefaultWholesaleMarginPercentage.ToString();
+                    mrpToSet = storage.DefaultMrpPercentage;
+                }
+            }
+
+            // Add to combo box if not already in the list
+            if (!comboMrpPercentage.Items.Contains(mrpToSet))
+            {
+                comboMrpPercentage.Items.Add(mrpToSet);
+            }
+
+            comboMrpPercentage.SelectedItem = mrpToSet;
+        }
 
         private void MarginCalulator()
         {
@@ -394,5 +417,14 @@ namespace Fa.views.catalog
             catalogParent.TextBoxProductMSRP.Text = TextBoxMrpPrice.Text;
         }
         #endregion
+
+        private void comboMrpPercentage_TextChanged(object sender, EventArgs e)
+        {
+            if (decimal.TryParse(comboMrpPercentage.Text, out var mrp))
+            {
+                MrpPercentage = mrp;
+                UpdateAllCalculations(); // trigger recalculation
+            }
+        }
     }
 }

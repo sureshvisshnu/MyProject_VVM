@@ -44,6 +44,16 @@ namespace FADataAccessLibrary.Api.catalog
                     .FirstOrDefaultAsync(pp => pp.ProductCode == productCode && pp.IsActive);
             }
         }
+        public async Task<PercentageStorage?> GetCompanyDefaultPercentagesAsync(long companyId)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                return await context.PercentageStorages
+                                    .Where(p => p.CompanyId == companyId && p.IsActive)
+                                    .FirstOrDefaultAsync();
+            }
+        }
+
         public ProductPercentage GetProductSalePercentage(long productId)
         {
             ProductPercentage productPercentage = null;
