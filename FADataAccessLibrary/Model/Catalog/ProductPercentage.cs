@@ -60,4 +60,32 @@ namespace fa.model.Catalog
         [Timestamp]
         public byte[] RowVersion { get; set; }
     }
+
+    public class PercentageStorage : AuditableEntityForCompany
+    {
+        [Key]
+        public long Id { get; set; }
+
+        [Required]
+        [Range(0, 100)]
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal DefaultAddedCostPercentage { get; set; } = 15;
+
+        [Required]
+        [Range(0, 100)]
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal DefaultRetailMarginPercentage { get; set; } = 30;
+
+        [Required]
+        [Range(0, 100)]
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal DefaultWholesaleMarginPercentage { get; set; } = 40;
+
+        [Required]
+        [Range(0, 200)]
+        [Column(TypeName = "decimal(5,2)")]
+        public decimal DefaultMrpPercentage { get; set; } = 120;
+
+        public bool IsActive { get; set; } = true;
+    }
 }

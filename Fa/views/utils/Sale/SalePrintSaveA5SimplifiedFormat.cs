@@ -338,6 +338,7 @@ namespace Fa.views.utils.Sale
                 PdfPTable SignatureTable = SignatureColumn();
                 pdfDoc.Add(SignatureTable);
 
+
                 pdfDoc.Close();
                 PdfGeneration.SaveMemoryStream(myMemoryStream, "SaleInvoice", fileExtension, isPrint,
                     isLandscape ? PaperTypes.A5_LANDSCAPE : PaperTypes.A5_PORTRAIT);
@@ -563,3 +564,14 @@ namespace Fa.views.utils.Sale
         }
     }
 }
+/*
+ *  PdfFooter PdfFooter = new PdfFooter();
+                PdfFooter.IsReport = true;
+                PdfFooter.IsDate = true;
+                PdfFooter.Text = string.Empty;
+                PdfFooter.IsPageNumber = true;
+                PdfFooter.IsLandScape = true;
+                PdfFooter.PdfFile = myMemoryStream.ToArray();
+                byte[] PdfFileWithFooter = PdfFooter.GetPdfFileWithFooter();
+                myMemoryStream.Close();
+*/

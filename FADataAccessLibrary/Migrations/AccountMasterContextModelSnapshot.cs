@@ -118,7 +118,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Integrated Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 9, 21, 17, 40, 423, DateTimeKind.Local).AddTicks(7750),
+                            EffectiveTo = new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1671),
                             Name = "IGST",
                             Rule = "RunIGST()"
                         },
@@ -128,7 +128,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Central Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 9, 21, 17, 40, 423, DateTimeKind.Local).AddTicks(7776),
+                            EffectiveTo = new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1699),
                             Name = "CGST",
                             Rule = "RunCGST()"
                         },
@@ -138,7 +138,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "State Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 9, 21, 17, 40, 423, DateTimeKind.Local).AddTicks(7781),
+                            EffectiveTo = new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1705),
                             Name = "SGST",
                             Rule = "RunSGST()"
                         },
@@ -148,7 +148,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Tax at Source Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 9, 21, 17, 40, 423, DateTimeKind.Local).AddTicks(7785),
+                            EffectiveTo = new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1710),
                             Name = "TCS",
                             Rule = "RunTCS()"
                         });
@@ -4541,6 +4541,49 @@ namespace FADataAccessLibrary.Migrations
                     b.HasIndex("SalesTaxMapId");
 
                     b.ToTable("CatalogItemSalesTaxMaps");
+                });
+
+            modelBuilder.Entity("fa.model.Catalog.PercentageStorage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal>("DefaultAddedCostPercentage")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("DefaultMrpPercentage")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("DefaultRetailMarginPercentage")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<decimal>("DefaultWholesaleMarginPercentage")
+                        .HasColumnType("decimal(5,2)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("PercentageStorages");
                 });
 
             modelBuilder.Entity("fa.model.Catalog.ProductPercentage", b =>
@@ -14753,6 +14796,17 @@ namespace FADataAccessLibrary.Migrations
                     b.Navigation("CatalogItem");
 
                     b.Navigation("CompanySalesTaxAccountMap");
+                });
+
+            modelBuilder.Entity("fa.model.Catalog.PercentageStorage", b =>
+                {
+                    b.HasOne("fa.model.Accounting.Masters.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("fa.model.Catalog.ProductPercentage", b =>

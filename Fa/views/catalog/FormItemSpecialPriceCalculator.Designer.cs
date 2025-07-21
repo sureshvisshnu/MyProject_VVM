@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormItemSpecialPriceCalculator));
             statusStrip1 = new StatusStrip();
             CatalogErrorMsg = new ToolStripStatusLabel();
             TextBoxXFactorWholeSale = new TextBox();
@@ -62,12 +63,28 @@
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
+            // ProductIdTransport
+            // 
+            ProductIdTransport.Location = new Point(256, 306);
+            // 
+            // ProductBatchIdTransport
+            // 
+            ProductBatchIdTransport.Location = new Point(132, 306);
+            // 
+            // AccountIdTransport
+            // 
+            AccountIdTransport.Location = new Point(13, 306);
+            // 
+            // checkBoxIsPatient
+            // 
+            checkBoxIsPatient.Location = new Point(15, 285);
+            // 
             // statusStrip1
             // 
             statusStrip1.Items.AddRange(new ToolStripItem[] { CatalogErrorMsg });
-            statusStrip1.Location = new Point(0, 332);
+            statusStrip1.Location = new Point(0, 327);
             statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(390, 22);
+            statusStrip1.Size = new Size(360, 22);
             statusStrip1.TabIndex = 55;
             statusStrip1.Text = "VVMstatusPriceStrip";
             // 
@@ -160,10 +177,10 @@
             // TextBoxWholesalePrice
             // 
             TextBoxWholesalePrice.BackColor = SystemColors.Window;
-            TextBoxWholesalePrice.Location = new Point(221, 257);
+            TextBoxWholesalePrice.Location = new Point(228, 257);
             TextBoxWholesalePrice.Name = "TextBoxWholesalePrice";
             TextBoxWholesalePrice.ReadOnly = true;
-            TextBoxWholesalePrice.Size = new Size(127, 23);
+            TextBoxWholesalePrice.Size = new Size(120, 23);
             TextBoxWholesalePrice.TabIndex = 465;
             TextBoxWholesalePrice.TabStop = false;
             TextBoxWholesalePrice.TextAlign = HorizontalAlignment.Right;
@@ -171,10 +188,10 @@
             // TextBoxRetailPrice
             // 
             TextBoxRetailPrice.BackColor = SystemColors.Window;
-            TextBoxRetailPrice.Location = new Point(221, 217);
+            TextBoxRetailPrice.Location = new Point(228, 217);
             TextBoxRetailPrice.Name = "TextBoxRetailPrice";
             TextBoxRetailPrice.ReadOnly = true;
-            TextBoxRetailPrice.Size = new Size(127, 23);
+            TextBoxRetailPrice.Size = new Size(120, 23);
             TextBoxRetailPrice.TabIndex = 464;
             TextBoxRetailPrice.TabStop = false;
             TextBoxRetailPrice.TextAlign = HorizontalAlignment.Right;
@@ -182,7 +199,7 @@
             // BtnPriceCalculatorSave
             // 
             BtnPriceCalculatorSave.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnPriceCalculatorSave.Location = new Point(258, 285);
+            BtnPriceCalculatorSave.Location = new Point(257, 285);
             BtnPriceCalculatorSave.Name = "BtnPriceCalculatorSave";
             BtnPriceCalculatorSave.Size = new Size(91, 23);
             BtnPriceCalculatorSave.TabIndex = 7;
@@ -205,7 +222,7 @@
             // 
             label6.AutoSize = true;
             label6.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label6.Location = new Point(221, 241);
+            label6.Location = new Point(228, 241);
             label6.Name = "label6";
             label6.Size = new Size(82, 13);
             label6.TabIndex = 462;
@@ -215,7 +232,7 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(221, 201);
+            label7.Location = new Point(228, 201);
             label7.Name = "label7";
             label7.Size = new Size(60, 13);
             label7.TabIndex = 461;
@@ -293,7 +310,7 @@
             // 
             TextBoxProductCost.Decimals = 2;
             TextBoxProductCost.Length = 10;
-            TextBoxProductCost.Location = new Point(261, 117);
+            TextBoxProductCost.Location = new Point(228, 117);
             TextBoxProductCost.Name = "TextBoxProductCost";
             TextBoxProductCost.Size = new Size(120, 23);
             TextBoxProductCost.TabIndex = 471;
@@ -304,7 +321,7 @@
             // 
             label10.AutoSize = true;
             label10.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label10.Location = new Point(258, 101);
+            label10.Location = new Point(228, 101);
             label10.Name = "label10";
             label10.Size = new Size(63, 13);
             label10.TabIndex = 472;
@@ -316,7 +333,7 @@
             TextBoxAddedCostPercentage.Length = 6;
             TextBoxAddedCostPercentage.Location = new Point(148, 117);
             TextBoxAddedCostPercentage.Name = "TextBoxAddedCostPercentage";
-            TextBoxAddedCostPercentage.Size = new Size(100, 23);
+            TextBoxAddedCostPercentage.Size = new Size(54, 23);
             TextBoxAddedCostPercentage.TabIndex = 3;
             TextBoxAddedCostPercentage.Text = "0.00";
             TextBoxAddedCostPercentage.TextAlign = HorizontalAlignment.Right;
@@ -328,9 +345,9 @@
             label11.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             label11.Location = new Point(148, 101);
             label11.Name = "label11";
-            label11.Size = new Size(95, 13);
+            label11.Size = new Size(70, 13);
             label11.TabIndex = 474;
-            label11.Text = "Exp Percentage";
+            label11.Text = "Expense %";
             // 
             // TextBoxMrpPrice
             // 
@@ -338,7 +355,7 @@
             TextBoxMrpPrice.Length = 10;
             TextBoxMrpPrice.Location = new Point(149, 159);
             TextBoxMrpPrice.Name = "TextBoxMrpPrice";
-            TextBoxMrpPrice.Size = new Size(120, 23);
+            TextBoxMrpPrice.Size = new Size(54, 23);
             TextBoxMrpPrice.TabIndex = 475;
             TextBoxMrpPrice.Text = "0.00";
             TextBoxMrpPrice.TextAlign = HorizontalAlignment.Right;
@@ -376,7 +393,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(390, 354);
+            ClientSize = new Size(360, 349);
             Controls.Add(comboMrpPercentage);
             Controls.Add(label13);
             Controls.Add(TextBoxMrpPrice);
@@ -406,6 +423,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Controls.Add(statusStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormItemSpecialPriceCalculator";
