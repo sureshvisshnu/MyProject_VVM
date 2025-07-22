@@ -30,18 +30,18 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCatalog));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
             contextNewProductFamily = new ContextMenuStrip(components);
             newProductToolStripMenuItem = new ToolStripMenuItem();
             deleteToolStripMenuItem = new ToolStripMenuItem();
@@ -133,6 +133,7 @@
             label38 = new Label();
             TabControlProduct = new TabControl();
             ProductBasicInformation = new TabPage();
+            BtnPercentage = new Button();
             ComboBoxProductDiscountAc = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductSalesAc = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductWholeSaleUOM = new fa.views.controls.ComboBoxSwapTextBox();
@@ -564,25 +565,25 @@
             GridViewCategoryTaxDetails.AllowUserToResizeColumns = false;
             GridViewCategoryTaxDetails.AllowUserToResizeRows = false;
             GridViewCategoryTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            GridViewCategoryTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle13.BackColor = SystemColors.Control;
+            dataGridViewCellStyle13.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle13.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle13.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle13.WrapMode = DataGridViewTriState.True;
+            GridViewCategoryTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             GridViewCategoryTaxDetails.ColumnHeadersHeight = 20;
             GridViewCategoryTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewCategoryTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn7 });
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Window;
-            dataGridViewCellStyle4.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            GridViewCategoryTaxDetails.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.BackColor = SystemColors.Window;
+            dataGridViewCellStyle16.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle16.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle16.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle16.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle16.WrapMode = DataGridViewTriState.False;
+            GridViewCategoryTaxDetails.DefaultCellStyle = dataGridViewCellStyle16;
             GridViewCategoryTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewCategoryTaxDetails.EnableHeadersVisualStyles = false;
             GridViewCategoryTaxDetails.Location = new Point(532, 248);
@@ -610,9 +611,9 @@
             // 
             dataGridViewTextBoxColumn3.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn3.Currencylength = 6;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Format = "##.##";
-            dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle14.Format = "##.##";
+            dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle14;
             dataGridViewTextBoxColumn3.HeaderText = "Percentage";
             dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             dataGridViewTextBoxColumn3.ReadOnly = true;
@@ -620,8 +621,8 @@
             // 
             // dataGridViewTextBoxColumn7
             // 
-            dataGridViewCellStyle3.NullValue = "X";
-            dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.NullValue = "X";
+            dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle15;
             dataGridViewTextBoxColumn7.HeaderText = "";
             dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
             dataGridViewTextBoxColumn7.ReadOnly = true;
@@ -1062,14 +1063,14 @@
             GridViewProductFamilyChildProduct.AllowUserToResizeColumns = false;
             GridViewProductFamilyChildProduct.AllowUserToResizeRows = false;
             GridViewProductFamilyChildProduct.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            GridViewProductFamilyChildProduct.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle17.BackColor = SystemColors.Control;
+            dataGridViewCellStyle17.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle17.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle17.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle17.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle17.WrapMode = DataGridViewTriState.True;
+            GridViewProductFamilyChildProduct.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
             GridViewProductFamilyChildProduct.ColumnHeadersHeight = 20;
             GridViewProductFamilyChildProduct.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductFamilyChildProduct.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10 });
@@ -1164,25 +1165,25 @@
             GridViewProductFamilyTaxDetails.AllowUserToResizeColumns = false;
             GridViewProductFamilyTaxDetails.AllowUserToResizeRows = false;
             GridViewProductFamilyTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            GridViewProductFamilyTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle18.BackColor = SystemColors.Control;
+            dataGridViewCellStyle18.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle18.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle18.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle18.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle18.WrapMode = DataGridViewTriState.True;
+            GridViewProductFamilyTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle18;
             GridViewProductFamilyTaxDetails.ColumnHeadersHeight = 20;
             GridViewProductFamilyTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductFamilyTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn11, dataGridViewTextBoxColumn1, Column1 });
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = SystemColors.Window;
-            dataGridViewCellStyle8.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle8.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
-            GridViewProductFamilyTaxDetails.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle20.BackColor = SystemColors.Window;
+            dataGridViewCellStyle20.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle20.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle20.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle20.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle20.WrapMode = DataGridViewTriState.False;
+            GridViewProductFamilyTaxDetails.DefaultCellStyle = dataGridViewCellStyle20;
             GridViewProductFamilyTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewProductFamilyTaxDetails.EnableHeadersVisualStyles = false;
             GridViewProductFamilyTaxDetails.Location = new Point(532, 334);
@@ -1209,8 +1210,8 @@
             // 
             dataGridViewTextBoxColumn1.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn1.Currencylength = 6;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle19;
             dataGridViewTextBoxColumn1.HeaderText = "Percentage";
             dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -1332,6 +1333,7 @@
             ProductBasicInformation.Controls.Add(ComboBoxProductSupplier);
             ProductBasicInformation.Controls.Add(ComboBoxProductSchedule);
             ProductBasicInformation.Controls.Add(ComboBoxProductRackNumber);
+            ProductBasicInformation.Controls.Add(BtnPercentage);
             ProductBasicInformation.Controls.Add(EditProductTaxLink);
             ProductBasicInformation.Controls.Add(label50);
             ProductBasicInformation.Controls.Add(LabelRackNumber);
@@ -1393,6 +1395,17 @@
             ProductBasicInformation.TabIndex = 0;
             ProductBasicInformation.Text = "Product - Basic Information";
             ProductBasicInformation.UseVisualStyleBackColor = true;
+            // 
+            // BtnPercentage
+            // 
+            BtnPercentage.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            BtnPercentage.Location = new Point(212, 440);
+            BtnPercentage.Name = "BtnPercentage";
+            BtnPercentage.Size = new Size(150, 23);
+            BtnPercentage.TabIndex = 90;
+            BtnPercentage.Text = "Update Missing Percentage";
+            BtnPercentage.UseVisualStyleBackColor = true;
+            BtnPercentage.Click += BtnPercentage_Click;
             // 
             // ComboBoxProductDiscountAc
             // 
@@ -1930,25 +1943,25 @@
             GridViewProductTaxDetails.AllowUserToResizeColumns = false;
             GridViewProductTaxDetails.AllowUserToResizeRows = false;
             GridViewProductTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle9.BackColor = SystemColors.Control;
-            dataGridViewCellStyle9.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle9.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
-            GridViewProductTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle21.BackColor = SystemColors.Control;
+            dataGridViewCellStyle21.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle21.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle21.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle21.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle21.WrapMode = DataGridViewTriState.True;
+            GridViewProductTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
             GridViewProductTaxDetails.ColumnHeadersHeight = 20;
             GridViewProductTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn4 });
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = SystemColors.Window;
-            dataGridViewCellStyle11.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle11.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
-            GridViewProductTaxDetails.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle23.BackColor = SystemColors.Window;
+            dataGridViewCellStyle23.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle23.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle23.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle23.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle23.WrapMode = DataGridViewTriState.False;
+            GridViewProductTaxDetails.DefaultCellStyle = dataGridViewCellStyle23;
             GridViewProductTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewProductTaxDetails.EnableHeadersVisualStyles = false;
             GridViewProductTaxDetails.Location = new Point(535, 331);
@@ -1976,8 +1989,8 @@
             // 
             dataGridViewTextBoxColumn6.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn6.Currencylength = 6;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle22;
             dataGridViewTextBoxColumn6.HeaderText = "Percentage";
             dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             dataGridViewTextBoxColumn6.ReadOnly = true;
@@ -2207,8 +2220,8 @@
             // 
             // Column2
             // 
-            dataGridViewCellStyle12.NullValue = "X";
-            Column2.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle24.NullValue = "X";
+            Column2.DefaultCellStyle = dataGridViewCellStyle24;
             Column2.HeaderText = "";
             Column2.Name = "Column2";
             Column2.ReadOnly = true;
@@ -2556,5 +2569,6 @@
         private LinkLabel EditProductFamilyTaxLink;
         private LinkLabel EditCategoryTaxLink;
         public controls.text.CurrencyTextBox TextBoxProductMSRP;
+        private Button BtnPercentage;
     }
 }

@@ -55,43 +55,45 @@ namespace Fa.views.catalog
             TextBoxAddedCostPercentage.Text = "15";
             TextBoxRetailMargin.Text = "30";    // Default 30% retail margin
             TextBoxWholesaleMargin.Text = "40"; // Default 40% wholesale margin
+
+            // ✅ First: set product information from parent
+            if (parent is FormCatalog catalog)
+            {
+                TextBoxProductCode.Text = catalog.TextBoxProductCode.Text;
+                TextBoxProductName.Text = catalog.TextBoxProductName.Text;
+                TextBoxPurchasePrice.Text = catalog.TextBoxProductPurchasePrice.Text;
+                TextBoxXFactorRetail.Text = catalog.TextBoxProductXFactorRetail.Text;
+                TextBoxXFactorWholeSale.Text = catalog.TextBoxProductXFactorWholeSale.Text;
+
+                TextBoxPurchasePrice.Enabled = true;
+            }
+            else if (parent is FormPurchaseEntryNew entry)
+            {
+                TextBoxProductCode.Text = entry.TextBoxPurchaseEntryMaterialId.Text;
+                TextBoxProductName.Text = entry.TextBoxPurchaseEntryProductName.Text;
+                TextBoxPurchasePrice.Text = entry.TextBoxProductPurchasePrice.Text;
+                TextBoxXFactorRetail.Text = entry.TextBoxProductXFactorRetail.Text;
+                TextBoxXFactorWholeSale.Text = entry.TextBoxProductXFactorWholeSale.Text;
+
+                TextBoxPurchasePrice.Enabled = false;
+            }
+
+            // ✅ Then: fetch default or saved percentages using the correct product code
             try
             {
-                GetPercentage();
-                // Use the singleton manager instead of direct repository
-
+                await GetPercentage(); // await was missing here
             }
             catch (Exception ex)
             {
-                // Log error if needed
                 System.Diagnostics.Debug.WriteLine($"Error loading percentages: {ex.Message}");
-                // Use defaults if loading fails
+                // Use defaults already set
             }
 
-            if (parent is FormCatalog)
-            {
-                TextBoxProductCode.Text = ((FormCatalog)parent).TextBoxProductCode.Text;
-                TextBoxProductName.Text = ((FormCatalog)parent).TextBoxProductName.Text;
-                TextBoxPurchasePrice.Text = ((FormCatalog)parent).TextBoxProductPurchasePrice.Text;
-                TextBoxXFactorRetail.Text = ((FormCatalog)parent).TextBoxProductXFactorRetail.Text;
-                TextBoxXFactorWholeSale.Text = ((FormCatalog)parent).TextBoxProductXFactorWholeSale.Text;
-
-                UpdateAllCalculations();
-            }
-            else if (parent is FormPurchaseEntryNew)
-            {
-                TextBoxProductCode.Text = ((FormPurchaseEntryNew)parent).TextBoxPurchaseEntryMaterialId.Text;
-                TextBoxProductName.Text = ((FormPurchaseEntryNew)parent).TextBoxPurchaseEntryProductName.Text;
-                TextBoxPurchasePrice.Text = ((FormPurchaseEntryNew)parent).TextBoxProductPurchasePrice.Text;
-                TextBoxXFactorRetail.Text = ((FormPurchaseEntryNew)parent).TextBoxProductXFactorRetail.Text;
-                TextBoxXFactorWholeSale.Text = ((FormPurchaseEntryNew)parent).TextBoxProductXFactorWholeSale.Text;
-
-                UpdateAllCalculations();
-                TextBoxPurchasePrice.Enabled = false;
-            }
+            // ✅ Finally: update calculated values
+            UpdateAllCalculations();
         }
 
-        private async void GetPercentage()
+        private async Task GetPercentage()
         {
             var percentages = await ProductSalePercentageManager.Instance.GetProductSalePercentageAsync(TextBoxProductCode.Text);
 

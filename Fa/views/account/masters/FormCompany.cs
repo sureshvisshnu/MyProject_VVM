@@ -774,7 +774,7 @@ namespace fa.views.account.masters
                     CompanyCustomerLicenseMaster CompanyCustomerLicenseMaster = new CompanyCustomerLicenseMaster();
                     CompanyCustomerLicenseMaster.Id = CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.ID].Value == null ? 0L : (long)CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.ID].Value;
                     CompanyCustomerLicenseMaster.Name = CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.NAME].Value.ToString()!.Trim();
-                    CompanyCustomerLicenseMaster.DisplayName = CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.DNAME].Value?.ToString()?? "";
+                    CompanyCustomerLicenseMaster.DisplayName = CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.DNAME].Value?.ToString() ?? "";
                     CompanyCustomerLicenseMaster.Required = CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.REQUIR].Value != null ? (bool)CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.REQUIR].Value : false;
                     CompanyCustomerLicenseMaster.IncludeInReport = CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.REPORT].Value != null ? (bool)CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.REPORT].Value : false;
                     CompanyCustomerLicenseMaster.IncludeInInvoice = CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.INVOICE].Value != null ? (bool)CustomerTaxInfoGrid.Rows[i].Cells[(int)CustomerTaxInfoTableColumn.INVOICE].Value : false;

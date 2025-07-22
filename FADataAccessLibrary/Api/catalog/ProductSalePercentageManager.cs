@@ -142,5 +142,47 @@ namespace FADataAccessLibrary.Api.catalog
                 await context.SaveChangesAsync();
             }
         }
+
+        public async Task AddMissingProductPercentagesAsync()
+        {
+            using (var context = new AccountMasterContext())
+            {
+                var existingProductCodes = await context.ProductPercentages
+                    .Select(p => p.ProductCode)
+                    .ToListAsync();
+
+                var missingProducts = await context.Products
+                    .Where(ci => !existingProductCodes.Contains(ci.MaterialId) &&
+                                 ci.PurchasePrice > 0 &&
+                                 ci.CostPrice > 0 &&
+                                 ci.Msrp > 0)
+                    .ToListAsync();
+
+                foreach (var product in missingProducts)
+                {
+                    var addedCostPct = ((product.CostPrice - product.PurchasePrice) / product.PurchasePrice) * 100;
+                    var retailMarginPct = ((product.Msrp - product.RetailPrice) / product.Msrp) * 100;
+                    var wholesaleMarginPct = ((product.Msrp - product.WholdSalePrice) / product.Msrp) * 100;
+                    var mrpPct = ((product.Msrp - product.CostPrice) / product.CostPrice) * 100 + 100;
+
+                    var percentage = new ProductPercentage
+                    {
+                        ProductId = product.Id,
+                        ProductCode = product.MaterialId,
+                        CompanyId = product.CompanyId,
+                        AddedCostPercentage = Math.Round((decimal)addedCostPct, 0),
+                        RetailMarginPercentage = Math.Round((decimal)retailMarginPct, 0),
+                        WholesaleMarginPercentage = Math.Round((decimal)wholesaleMarginPct, 0),
+                        MrpPercentage = Math.Round((decimal)mrpPct, 0),
+                        IsActive = true,
+                        CreatedBy = "BulkInsertScript"
+                    };
+
+                    // Reuse your save method
+                    await SaveProductPercentagesAsync(percentage);
+                }
+            }
+        }
+
     }
 }

@@ -30,25 +30,25 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCompany));
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle60 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle58 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle59 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle62 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle63 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle61 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle65 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle66 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle64 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle68 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle69 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle67 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle72 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle70 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle71 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle75 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle73 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle74 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle76 = new DataGridViewCellStyle();
             ImageListCompany = new ImageList(components);
             statusStrip1 = new StatusStrip();
             toolStripStatusLabelError = new ToolStripStatusLabel();
@@ -59,9 +59,9 @@
             BtnCompanyNew = new Button();
             TabControlCompany = new TabControl();
             TabCompanyInfo = new TabPage();
-            ComboBoxCompanyCountry = new controls.ComboBoxSwapTextBox();
-            ComboBoxParentCompany = new controls.ComboBoxSwapTextBox();
-            AddressGroupBoxCompany = new controls.AddressGroupBoxWithStateSelection();
+            ComboBoxCompanyCountry = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxParentCompany = new fa.views.controls.ComboBoxSwapTextBox();
+            AddressGroupBoxCompany = new fa.views.controls.AddressGroupBoxWithStateSelection();
             TextBoxCompanySlogan = new TextBox();
             label14 = new Label();
             BtnCompanyDeleteLogo = new Button();
@@ -87,14 +87,14 @@
             LabelCompanyName = new Label();
             label7 = new Label();
             TabSettings = new TabPage();
-            ComboBoxCompanyDateFormat = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyCurrency = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyAccountMethod = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyFirstMonthIncomTaxYear = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyFirstMonthFinYear = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyType = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyQtyPricision = new controls.ComboBoxSwapTextBox();
-            ComboBoxBusinessType = new controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyDateFormat = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyCurrency = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyAccountMethod = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyFirstMonthIncomTaxYear = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyFirstMonthFinYear = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyType = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyQtyPricision = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxBusinessType = new fa.views.controls.ComboBoxSwapTextBox();
             CheckBoxMaintainRackNumber = new CheckBox();
             LabelCompanyQtyPricision = new Label();
             label11 = new Label();
@@ -108,18 +108,18 @@
             LabelCompanyFinancialMonth = new Label();
             LabelCompanyCompanyType = new Label();
             TabAccountPreference = new TabPage();
-            ComboBoxCompanyUndepositedFundAccount = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyCashOnHandAccount = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanySalesAccount = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyPurchaseAccount = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyAccountRecivable = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanyAccountPayable = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanySalesTaxPayableAccount = new controls.ComboBoxSwapTextBox();
-            ComboBoxCompanySalesReturnFeeAccount = new controls.ComboBoxSwapTextBox();
-            comboBoxCompanyRoundOffAccount = new controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyUndepositedFundAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyCashOnHandAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanySalesAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyPurchaseAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyAccountRecivable = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyAccountPayable = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanySalesTaxPayableAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCompanySalesReturnFeeAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            comboBoxCompanyRoundOffAccount = new fa.views.controls.ComboBoxSwapTextBox();
             label12 = new Label();
             label27 = new Label();
-            GridViewSalesTaxReceivable = new controls.DataViewVerticalScroll();
+            GridViewSalesTaxReceivable = new fa.views.controls.DataViewVerticalScroll();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewComboBoxColumn();
             Column6 = new DataGridViewTextBoxColumn();
@@ -134,18 +134,18 @@
             label3 = new Label();
             label10 = new Label();
             TabLicenseInfo = new TabPage();
-            CompanyTaxInfoGrid = new controls.DataViewVerticalScroll();
-            CompanyLicenceName = new controls.grid.DataGridViewNameColumn();
-            CompanyDisplayName = new controls.grid.DataGridViewNameColumn();
-            CompanyLicenseValue = new controls.grid.DataGridViewNameColumn();
+            CompanyTaxInfoGrid = new fa.views.controls.DataViewVerticalScroll();
+            CompanyLicenceName = new fa.views.controls.grid.DataGridViewNameColumn();
+            CompanyDisplayName = new fa.views.controls.grid.DataGridViewNameColumn();
+            CompanyLicenseValue = new fa.views.controls.grid.DataGridViewNameColumn();
             CompanyLicPrintOnInvoice = new DataGridViewCheckBoxColumn();
             CompanyLicPrintOnReport = new DataGridViewCheckBoxColumn();
             Delete = new DataGridViewButtonColumn();
             CompanyLicId = new DataGridViewTextBoxColumn();
             TabTaxInfo = new TabPage();
-            CustomerTaxInfoGrid = new controls.DataViewVerticalScroll();
-            CustomerTaxIdName = new controls.grid.DataGridViewNameColumn();
-            CustomerTaxIdDisplayName = new controls.grid.DataGridViewNameColumn();
+            CustomerTaxInfoGrid = new fa.views.controls.DataViewVerticalScroll();
+            CustomerTaxIdName = new fa.views.controls.grid.DataGridViewNameColumn();
+            CustomerTaxIdDisplayName = new fa.views.controls.grid.DataGridViewNameColumn();
             CustomerTaxIdRequired = new DataGridViewCheckBoxColumn();
             CustomerTaxIdDisplayOnReport = new DataGridViewCheckBoxColumn();
             CustomerTaxIdDisplayOnInvoice = new DataGridViewCheckBoxColumn();
@@ -153,22 +153,22 @@
             dataGridViewTextBoxColumn3 = new DataGridViewTextBoxColumn();
             label32 = new Label();
             label31 = new Label();
-            SupplierTaxInfoGrid = new controls.DataViewVerticalScroll();
-            SupplierTaxIdName = new controls.grid.DataGridViewNameColumn();
-            SupplierTaxIdDisplayName = new controls.grid.DataGridViewNameColumn();
+            SupplierTaxInfoGrid = new fa.views.controls.DataViewVerticalScroll();
+            SupplierTaxIdName = new fa.views.controls.grid.DataGridViewNameColumn();
+            SupplierTaxIdDisplayName = new fa.views.controls.grid.DataGridViewNameColumn();
             SupplierTaxIdRequired = new DataGridViewCheckBoxColumn();
             SupplierTaxIdDisplayOnReport = new DataGridViewCheckBoxColumn();
             SupplierLicDelete = new DataGridViewButtonColumn();
             SupplierLicId = new DataGridViewTextBoxColumn();
-            CompanyDataGridViewTaxType = new controls.DataViewVerticalScroll();
+            CompanyDataGridViewTaxType = new fa.views.controls.DataViewVerticalScroll();
             TaxType = new DataGridViewTextBoxColumn();
             Values = new DataGridViewTextBoxColumn();
             TabPurchase = new TabPage();
-            GridViewMiscellaneousTransPurchase = new controls.accounting.MiscellaneousTranscationalGrid();
+            GridViewMiscellaneousTransPurchase = new fa.views.controls.accounting.MiscellaneousTranscationalGrid();
             TabSales = new TabPage();
-            ComboBoxInvoicePriceBy = new controls.ComboBoxSwapTextBox();
+            ComboBoxInvoicePriceBy = new fa.views.controls.ComboBoxSwapTextBox();
             LabelUPIId = new Label();
-            TextBoxQRCode = new controls.text.NameTextBox(components);
+            TextBoxQRCode = new fa.views.controls.text.NameTextBox(components);
             CheckBoxPrintQRCode = new CheckBox();
             CheckBoxIncludeTax = new CheckBox();
             TextBoxCompanyDeclaration = new TextBox();
@@ -176,28 +176,28 @@
             CheckBoxIsNegativeStockAllow = new CheckBox();
             CheckBoxIsDelivery = new CheckBox();
             CheckBoxIsReceivePayment = new CheckBox();
-            YesNoRadioCombineItem = new controls.YesNoRadio();
+            YesNoRadioCombineItem = new fa.views.controls.YesNoRadio();
             label29 = new Label();
-            YesNoRbtSalesType = new controls.YesNoRadio();
+            YesNoRbtSalesType = new fa.views.controls.YesNoRadio();
             label23 = new Label();
             label28 = new Label();
-            GridViewMiscellaneousTransSales = new controls.accounting.MiscellaneousTranscationalGrid();
+            GridViewMiscellaneousTransSales = new fa.views.controls.accounting.MiscellaneousTranscationalGrid();
             label55 = new Label();
             CheckBoxDisplayBankDetails = new CheckBox();
             label56 = new Label();
             CheckBoxDisplayDeclaration = new CheckBox();
             TabReference = new TabPage();
-            ComboBoxCompanyYear = new controls.ComboBoxSwapTextBox();
+            ComboBoxCompanyYear = new fa.views.controls.ComboBoxSwapTextBox();
             BtnCompanyAddYear = new Button();
             label57 = new Label();
-            GridViewCompanyYear = new controls.DataViewVerticalScroll();
+            GridViewCompanyYear = new fa.views.controls.DataViewVerticalScroll();
             Type = new DataGridViewTextBoxColumn();
             Prefix = new DataGridViewTextBoxColumn();
-            Seed = new controls.grid.DataGridViewNumberColumn();
+            Seed = new fa.views.controls.grid.DataGridViewNumberColumn();
             DailyReset = new DataGridViewCheckBoxColumn();
             PrintType = new DataGridViewComboBoxColumn();
             IsDotMatrix = new DataGridViewCheckBoxColumn();
-            RoundOff = new controls.grid.DataGridViewCurrencyColumn();
+            RoundOff = new fa.views.controls.grid.DataGridViewCurrencyColumn();
             TypeId = new DataGridViewTextBoxColumn();
             HasRoundoff = new DataGridViewTextBoxColumn();
             HasPrinterSetup = new DataGridViewTextBoxColumn();
@@ -207,46 +207,46 @@
             BtnCompanyCancel = new Button();
             BtnCompanyEdit = new Button();
             checkBox3 = new CheckBox();
-            dataViewVerticalScroll1 = new controls.DataViewVerticalScroll();
+            dataViewVerticalScroll1 = new fa.views.controls.DataViewVerticalScroll();
             checkBox2 = new CheckBox();
             CheckBoxIsAllowNegativeStock = new CheckBox();
-            nameTextBox2 = new controls.text.NameTextBox(components);
-            numberTextBox3 = new controls.text.NumberTextBox(components);
-            numberTextBox2 = new controls.text.NumberTextBox(components);
-            nameTextBox1 = new controls.text.NameTextBox(components);
-            numberTextBox5 = new controls.text.NumberTextBox(components);
-            numberTextBox6 = new controls.text.NumberTextBox(components);
-            numberTextBox7 = new controls.text.NumberTextBox(components);
-            numberTextBox8 = new controls.text.NumberTextBox(components);
-            numberTextBox9 = new controls.text.NumberTextBox(components);
-            numberTextBox10 = new controls.text.NumberTextBox(components);
-            nameTextBox3 = new controls.text.NameTextBox(components);
-            nameTextBox4 = new controls.text.NameTextBox(components);
-            nameTextBox5 = new controls.text.NameTextBox(components);
-            nameTextBox6 = new controls.text.NameTextBox(components);
-            nameTextBox7 = new controls.text.NameTextBox(components);
-            nameTextBox8 = new controls.text.NameTextBox(components);
-            nameTextBox9 = new controls.text.NameTextBox(components);
+            nameTextBox2 = new fa.views.controls.text.NameTextBox(components);
+            numberTextBox3 = new fa.views.controls.text.NumberTextBox(components);
+            numberTextBox2 = new fa.views.controls.text.NumberTextBox(components);
+            nameTextBox1 = new fa.views.controls.text.NameTextBox(components);
+            numberTextBox5 = new fa.views.controls.text.NumberTextBox(components);
+            numberTextBox6 = new fa.views.controls.text.NumberTextBox(components);
+            numberTextBox7 = new fa.views.controls.text.NumberTextBox(components);
+            numberTextBox8 = new fa.views.controls.text.NumberTextBox(components);
+            numberTextBox9 = new fa.views.controls.text.NumberTextBox(components);
+            numberTextBox10 = new fa.views.controls.text.NumberTextBox(components);
+            nameTextBox3 = new fa.views.controls.text.NameTextBox(components);
+            nameTextBox4 = new fa.views.controls.text.NameTextBox(components);
+            nameTextBox5 = new fa.views.controls.text.NameTextBox(components);
+            nameTextBox6 = new fa.views.controls.text.NameTextBox(components);
+            nameTextBox7 = new fa.views.controls.text.NameTextBox(components);
+            nameTextBox8 = new fa.views.controls.text.NameTextBox(components);
+            nameTextBox9 = new fa.views.controls.text.NameTextBox(components);
             checkBox4 = new CheckBox();
             checkBox6 = new CheckBox();
             checkBox8 = new CheckBox();
             checkBox10 = new CheckBox();
-            comboBoxSwapTextBox1 = new controls.ComboBoxSwapTextBox();
-            comboBoxSwapTextBox4 = new controls.ComboBoxSwapTextBox();
-            comboBoxSwapTextBox3 = new controls.ComboBoxSwapTextBox();
-            comboBoxSwapTextBox6 = new controls.ComboBoxSwapTextBox();
-            comboBoxSwapTextBox5 = new controls.ComboBoxSwapTextBox();
-            comboBoxSwapTextBox8 = new controls.ComboBoxSwapTextBox();
-            comboBoxSwapTextBox7 = new controls.ComboBoxSwapTextBox();
+            comboBoxSwapTextBox1 = new fa.views.controls.ComboBoxSwapTextBox();
+            comboBoxSwapTextBox4 = new fa.views.controls.ComboBoxSwapTextBox();
+            comboBoxSwapTextBox3 = new fa.views.controls.ComboBoxSwapTextBox();
+            comboBoxSwapTextBox6 = new fa.views.controls.ComboBoxSwapTextBox();
+            comboBoxSwapTextBox5 = new fa.views.controls.ComboBoxSwapTextBox();
+            comboBoxSwapTextBox8 = new fa.views.controls.ComboBoxSwapTextBox();
+            comboBoxSwapTextBox7 = new fa.views.controls.ComboBoxSwapTextBox();
             checkBox12 = new CheckBox();
             checkBox14 = new CheckBox();
             checkBox16 = new CheckBox();
             checkBox18 = new CheckBox();
-            currencyTextBox2 = new controls.text.CurrencyTextBox();
-            numberTextBox4 = new controls.text.NumberTextBox(components);
-            nameTextBox10 = new controls.text.NameTextBox(components);
-            numberTextBox1 = new controls.text.NumberTextBox(components);
-            DelayedTextBoxCompanySearch = new controls.text.DelayedTextChangeTextBox();
+            currencyTextBox2 = new fa.views.controls.text.CurrencyTextBox();
+            numberTextBox4 = new fa.views.controls.text.NumberTextBox(components);
+            nameTextBox10 = new fa.views.controls.text.NameTextBox(components);
+            numberTextBox1 = new fa.views.controls.text.NumberTextBox(components);
+            DelayedTextBoxCompanySearch = new fa.views.controls.text.DelayedTextChangeTextBox();
             statusStrip1.SuspendLayout();
             TabControlCompany.SuspendLayout();
             TabCompanyInfo.SuspendLayout();
@@ -280,6 +280,10 @@
             // AccountIdTransport
             // 
             AccountIdTransport.Size = new Size(100, 21);
+            // 
+            // checkBoxIsPatient
+            // 
+            checkBoxIsPatient.Size = new Size(69, 17);
             // 
             // ImageListCompany
             // 
@@ -381,8 +385,8 @@
             // TabCompanyInfo
             // 
             TabCompanyInfo.BackColor = SystemColors.Window;
-            TabCompanyInfo.Controls.Add(ComboBoxCompanyCountry);
             TabCompanyInfo.Controls.Add(ComboBoxParentCompany);
+            TabCompanyInfo.Controls.Add(ComboBoxCompanyCountry);
             TabCompanyInfo.Controls.Add(AddressGroupBoxCompany);
             TabCompanyInfo.Controls.Add(TextBoxCompanySlogan);
             TabCompanyInfo.Controls.Add(label14);
@@ -457,6 +461,7 @@
             AddressGroupBoxCompany.Size = new Size(466, 204);
             AddressGroupBoxCompany.StateId = 0L;
             AddressGroupBoxCompany.StateName = "";
+            AddressGroupBoxCompany.StateSelectedIndex = -1;
             AddressGroupBoxCompany.TabIndex = 13;
             AddressGroupBoxCompany.PreviewKeyDown += AddressGroupBoxCompany_PreviewKeyDown;
             // 
@@ -766,7 +771,7 @@
             TabSettings.Location = new Point(4, 22);
             TabSettings.Name = "TabSettings";
             TabSettings.Padding = new Padding(3);
-            TabSettings.Size = new Size(758, 443);
+            TabSettings.Size = new Size(192, 74);
             TabSettings.TabIndex = 3;
             TabSettings.Text = "Settings";
             // 
@@ -1021,7 +1026,7 @@
             TabAccountPreference.Controls.Add(label10);
             TabAccountPreference.Location = new Point(4, 22);
             TabAccountPreference.Name = "TabAccountPreference";
-            TabAccountPreference.Size = new Size(758, 443);
+            TabAccountPreference.Size = new Size(192, 74);
             TabAccountPreference.TabIndex = 5;
             TabAccountPreference.Text = "Default Accounts";
             TabAccountPreference.UseVisualStyleBackColor = true;
@@ -1156,14 +1161,14 @@
             GridViewSalesTaxReceivable.ColumnHeadersHeight = 20;
             GridViewSalesTaxReceivable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewSalesTaxReceivable.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column6, Column4, Column5 });
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Window;
-            dataGridViewCellStyle3.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
-            GridViewSalesTaxReceivable.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle60.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle60.BackColor = SystemColors.Window;
+            dataGridViewCellStyle60.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle60.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle60.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle60.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle60.WrapMode = DataGridViewTriState.False;
+            GridViewSalesTaxReceivable.DefaultCellStyle = dataGridViewCellStyle60;
             GridViewSalesTaxReceivable.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewSalesTaxReceivable.EnableHeadersVisualStyles = false;
             GridViewSalesTaxReceivable.Location = new Point(212, 23);
@@ -1183,8 +1188,8 @@
             // 
             // Column1
             // 
-            dataGridViewCellStyle1.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            Column1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle58.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            Column1.DefaultCellStyle = dataGridViewCellStyle58;
             Column1.HeaderText = "Tax Name";
             Column1.MaxInputLength = 30;
             Column1.Name = "Column1";
@@ -1194,8 +1199,8 @@
             // 
             // Column2
             // 
-            dataGridViewCellStyle2.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            Column2.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle59.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            Column2.DefaultCellStyle = dataGridViewCellStyle59;
             Column2.FlatStyle = FlatStyle.Flat;
             Column2.HeaderText = "Linked A/C";
             Column2.Name = "Column2";
@@ -1306,7 +1311,7 @@
             TabLicenseInfo.Location = new Point(4, 22);
             TabLicenseInfo.Name = "TabLicenseInfo";
             TabLicenseInfo.Padding = new Padding(3);
-            TabLicenseInfo.Size = new Size(758, 443);
+            TabLicenseInfo.Size = new Size(192, 74);
             TabLicenseInfo.TabIndex = 9;
             TabLicenseInfo.Text = "Tax Info";
             TabLicenseInfo.UseVisualStyleBackColor = true;
@@ -1319,24 +1324,24 @@
             CompanyTaxInfoGrid.BackgroundColor = SystemColors.Control;
             CompanyTaxInfoGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             CompanyTaxInfoGrid.Columns.AddRange(new DataGridViewColumn[] { CompanyLicenceName, CompanyDisplayName, CompanyLicenseValue, CompanyLicPrintOnInvoice, CompanyLicPrintOnReport, Delete, CompanyLicId });
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.Window;
-            dataGridViewCellStyle5.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.False;
-            CompanyTaxInfoGrid.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle62.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle62.BackColor = SystemColors.Window;
+            dataGridViewCellStyle62.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle62.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle62.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle62.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle62.WrapMode = DataGridViewTriState.False;
+            CompanyTaxInfoGrid.DefaultCellStyle = dataGridViewCellStyle62;
             CompanyTaxInfoGrid.EditMode = DataGridViewEditMode.EditOnEnter;
             CompanyTaxInfoGrid.EnableHeadersVisualStyles = false;
             CompanyTaxInfoGrid.Location = new Point(12, 12);
             CompanyTaxInfoGrid.Name = "CompanyTaxInfoGrid";
             CompanyTaxInfoGrid.RowHeadersVisible = false;
-            dataGridViewCellStyle6.BackColor = Color.White;
-            dataGridViewCellStyle6.ForeColor = Color.Black;
-            dataGridViewCellStyle6.SelectionBackColor = Color.White;
-            dataGridViewCellStyle6.SelectionForeColor = Color.Black;
-            CompanyTaxInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle63.BackColor = Color.White;
+            dataGridViewCellStyle63.ForeColor = Color.Black;
+            dataGridViewCellStyle63.SelectionBackColor = Color.White;
+            dataGridViewCellStyle63.SelectionForeColor = Color.Black;
+            CompanyTaxInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle63;
             CompanyTaxInfoGrid.RowTemplate.Height = 20;
             CompanyTaxInfoGrid.ScrollBars = ScrollBars.Vertical;
             CompanyTaxInfoGrid.ShowCellToolTips = false;
@@ -1387,9 +1392,9 @@
             // 
             // Delete
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.NullValue = "X";
-            Delete.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle61.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle61.NullValue = "X";
+            Delete.DefaultCellStyle = dataGridViewCellStyle61;
             Delete.HeaderText = "...";
             Delete.Name = "Delete";
             Delete.Resizable = DataGridViewTriState.False;
@@ -1424,24 +1429,24 @@
             CustomerTaxInfoGrid.BackgroundColor = SystemColors.Control;
             CustomerTaxInfoGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             CustomerTaxInfoGrid.Columns.AddRange(new DataGridViewColumn[] { CustomerTaxIdName, CustomerTaxIdDisplayName, CustomerTaxIdRequired, CustomerTaxIdDisplayOnReport, CustomerTaxIdDisplayOnInvoice, dataGridViewButtonColumn1, dataGridViewTextBoxColumn3 });
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle8.BackColor = SystemColors.Window;
-            dataGridViewCellStyle8.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
-            CustomerTaxInfoGrid.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle65.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle65.BackColor = SystemColors.Window;
+            dataGridViewCellStyle65.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle65.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle65.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle65.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle65.WrapMode = DataGridViewTriState.False;
+            CustomerTaxInfoGrid.DefaultCellStyle = dataGridViewCellStyle65;
             CustomerTaxInfoGrid.EditMode = DataGridViewEditMode.EditOnEnter;
             CustomerTaxInfoGrid.EnableHeadersVisualStyles = false;
             CustomerTaxInfoGrid.Location = new Point(14, 23);
             CustomerTaxInfoGrid.Name = "CustomerTaxInfoGrid";
             CustomerTaxInfoGrid.RowHeadersVisible = false;
-            dataGridViewCellStyle9.BackColor = Color.White;
-            dataGridViewCellStyle9.ForeColor = Color.Black;
-            dataGridViewCellStyle9.SelectionBackColor = Color.White;
-            dataGridViewCellStyle9.SelectionForeColor = Color.Black;
-            CustomerTaxInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle66.BackColor = Color.White;
+            dataGridViewCellStyle66.ForeColor = Color.Black;
+            dataGridViewCellStyle66.SelectionBackColor = Color.White;
+            dataGridViewCellStyle66.SelectionForeColor = Color.Black;
+            CustomerTaxInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle66;
             CustomerTaxInfoGrid.RowTemplate.Height = 20;
             CustomerTaxInfoGrid.ScrollBars = ScrollBars.Vertical;
             CustomerTaxInfoGrid.ShowCellToolTips = false;
@@ -1491,9 +1496,9 @@
             // 
             // dataGridViewButtonColumn1
             // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.NullValue = "X";
-            dataGridViewButtonColumn1.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle64.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle64.NullValue = "X";
+            dataGridViewButtonColumn1.DefaultCellStyle = dataGridViewCellStyle64;
             dataGridViewButtonColumn1.HeaderText = "...";
             dataGridViewButtonColumn1.Name = "dataGridViewButtonColumn1";
             dataGridViewButtonColumn1.Resizable = DataGridViewTriState.False;
@@ -1532,24 +1537,24 @@
             SupplierTaxInfoGrid.ColumnHeadersHeight = 20;
             SupplierTaxInfoGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             SupplierTaxInfoGrid.Columns.AddRange(new DataGridViewColumn[] { SupplierTaxIdName, SupplierTaxIdDisplayName, SupplierTaxIdRequired, SupplierTaxIdDisplayOnReport, SupplierLicDelete, SupplierLicId });
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle11.BackColor = SystemColors.Window;
-            dataGridViewCellStyle11.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
-            SupplierTaxInfoGrid.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle68.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle68.BackColor = SystemColors.Window;
+            dataGridViewCellStyle68.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle68.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle68.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle68.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle68.WrapMode = DataGridViewTriState.False;
+            SupplierTaxInfoGrid.DefaultCellStyle = dataGridViewCellStyle68;
             SupplierTaxInfoGrid.EditMode = DataGridViewEditMode.EditOnEnter;
             SupplierTaxInfoGrid.EnableHeadersVisualStyles = false;
             SupplierTaxInfoGrid.Location = new Point(13, 200);
             SupplierTaxInfoGrid.Name = "SupplierTaxInfoGrid";
             SupplierTaxInfoGrid.RowHeadersVisible = false;
-            dataGridViewCellStyle12.BackColor = Color.White;
-            dataGridViewCellStyle12.ForeColor = Color.Black;
-            dataGridViewCellStyle12.SelectionBackColor = Color.White;
-            dataGridViewCellStyle12.SelectionForeColor = Color.Black;
-            SupplierTaxInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle69.BackColor = Color.White;
+            dataGridViewCellStyle69.ForeColor = Color.Black;
+            dataGridViewCellStyle69.SelectionBackColor = Color.White;
+            dataGridViewCellStyle69.SelectionForeColor = Color.Black;
+            SupplierTaxInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle69;
             SupplierTaxInfoGrid.RowTemplate.Height = 20;
             SupplierTaxInfoGrid.ScrollBars = ScrollBars.Vertical;
             SupplierTaxInfoGrid.ShowCellToolTips = false;
@@ -1594,9 +1599,9 @@
             // 
             // SupplierLicDelete
             // 
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle10.NullValue = "X";
-            SupplierLicDelete.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle67.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle67.NullValue = "X";
+            SupplierLicDelete.DefaultCellStyle = dataGridViewCellStyle67;
             SupplierLicDelete.Frozen = true;
             SupplierLicDelete.HeaderText = "...";
             SupplierLicDelete.Name = "SupplierLicDelete";
@@ -1622,9 +1627,9 @@
             CompanyDataGridViewTaxType.Margin = new Padding(2);
             CompanyDataGridViewTaxType.Name = "CompanyDataGridViewTaxType";
             CompanyDataGridViewTaxType.RowHeadersVisible = false;
-            dataGridViewCellStyle15.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle15.SelectionForeColor = SystemColors.ActiveCaptionText;
-            CompanyDataGridViewTaxType.RowsDefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle72.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle72.SelectionForeColor = SystemColors.ActiveCaptionText;
+            CompanyDataGridViewTaxType.RowsDefaultCellStyle = dataGridViewCellStyle72;
             CompanyDataGridViewTaxType.RowTemplate.Height = 24;
             CompanyDataGridViewTaxType.ScrollBars = ScrollBars.Vertical;
             CompanyDataGridViewTaxType.Size = new Size(731, 150);
@@ -1637,16 +1642,16 @@
             // 
             // TaxType
             // 
-            dataGridViewCellStyle13.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            TaxType.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle70.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            TaxType.DefaultCellStyle = dataGridViewCellStyle70;
             TaxType.HeaderText = "TaxType";
             TaxType.Name = "TaxType";
             TaxType.Width = 200;
             // 
             // Values
             // 
-            dataGridViewCellStyle14.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            Values.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle71.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            Values.DefaultCellStyle = dataGridViewCellStyle71;
             Values.HeaderText = "Values";
             Values.MaxInputLength = 20;
             Values.Name = "Values";
@@ -1766,7 +1771,7 @@
             // TextBoxCompanyDeclaration
             // 
             TextBoxCompanyDeclaration.BackColor = Color.White;
-            TextBoxCompanyDeclaration.Location = new Point(378, 133);
+            TextBoxCompanyDeclaration.Location = new Point(392, 131);
             TextBoxCompanyDeclaration.Multiline = true;
             TextBoxCompanyDeclaration.Name = "TextBoxCompanyDeclaration";
             TextBoxCompanyDeclaration.ReadOnly = true;
@@ -1777,7 +1782,7 @@
             // TextBoxCompanyBankDetails
             // 
             TextBoxCompanyBankDetails.BackColor = Color.White;
-            TextBoxCompanyBankDetails.Location = new Point(378, 30);
+            TextBoxCompanyBankDetails.Location = new Point(392, 23);
             TextBoxCompanyBankDetails.Multiline = true;
             TextBoxCompanyBankDetails.Name = "TextBoxCompanyBankDetails";
             TextBoxCompanyBankDetails.ReadOnly = true;
@@ -1885,7 +1890,7 @@
             // label55
             // 
             label55.AutoSize = true;
-            label55.Location = new Point(378, 10);
+            label55.Location = new Point(392, 10);
             label55.Name = "label55";
             label55.Size = new Size(112, 13);
             label55.TabIndex = 0;
@@ -1894,7 +1899,7 @@
             // CheckBoxDisplayBankDetails
             // 
             CheckBoxDisplayBankDetails.AutoSize = true;
-            CheckBoxDisplayBankDetails.Location = new Point(605, 6);
+            CheckBoxDisplayBankDetails.Location = new Point(629, 6);
             CheckBoxDisplayBankDetails.Name = "CheckBoxDisplayBankDetails";
             CheckBoxDisplayBankDetails.Size = new Size(110, 17);
             CheckBoxDisplayBankDetails.TabIndex = 66;
@@ -1904,7 +1909,7 @@
             // label56
             // 
             label56.AutoSize = true;
-            label56.Location = new Point(378, 118);
+            label56.Location = new Point(392, 118);
             label56.Name = "label56";
             label56.Size = new Size(134, 13);
             label56.TabIndex = 0;
@@ -1913,7 +1918,7 @@
             // CheckBoxDisplayDeclaration
             // 
             CheckBoxDisplayDeclaration.AutoSize = true;
-            CheckBoxDisplayDeclaration.Location = new Point(610, 117);
+            CheckBoxDisplayDeclaration.Location = new Point(629, 117);
             CheckBoxDisplayDeclaration.Name = "CheckBoxDisplayDeclaration";
             CheckBoxDisplayDeclaration.Size = new Size(110, 17);
             CheckBoxDisplayDeclaration.TabIndex = 68;
@@ -1977,14 +1982,14 @@
             GridViewCompanyYear.ColumnHeadersHeight = 20;
             GridViewCompanyYear.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewCompanyYear.Columns.AddRange(new DataGridViewColumn[] { Type, Prefix, Seed, DailyReset, PrintType, IsDotMatrix, RoundOff, TypeId, HasRoundoff, HasPrinterSetup, HasDotmatrix, HasDailyReset });
-            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle18.BackColor = SystemColors.Window;
-            dataGridViewCellStyle18.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle18.ForeColor = Color.Black;
-            dataGridViewCellStyle18.SelectionBackColor = Color.White;
-            dataGridViewCellStyle18.SelectionForeColor = Color.Black;
-            dataGridViewCellStyle18.WrapMode = DataGridViewTriState.False;
-            GridViewCompanyYear.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle75.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle75.BackColor = SystemColors.Window;
+            dataGridViewCellStyle75.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle75.ForeColor = Color.Black;
+            dataGridViewCellStyle75.SelectionBackColor = Color.White;
+            dataGridViewCellStyle75.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle75.WrapMode = DataGridViewTriState.False;
+            GridViewCompanyYear.DefaultCellStyle = dataGridViewCellStyle75;
             GridViewCompanyYear.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewCompanyYear.EnableHeadersVisualStyles = false;
             GridViewCompanyYear.Location = new Point(13, 54);
@@ -2017,8 +2022,8 @@
             // 
             // Seed
             // 
-            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.TopRight;
-            Seed.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle73.Alignment = DataGridViewContentAlignment.TopRight;
+            Seed.DefaultCellStyle = dataGridViewCellStyle73;
             Seed.HeaderText = "Seed";
             Seed.Name = "Seed";
             Seed.NumberLength = 6;
@@ -2049,8 +2054,8 @@
             // 
             // RoundOff
             // 
-            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.TopRight;
-            RoundOff.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle74.Alignment = DataGridViewContentAlignment.TopRight;
+            RoundOff.DefaultCellStyle = dataGridViewCellStyle74;
             RoundOff.HeaderText = "Round Off";
             RoundOff.Name = "RoundOff";
             RoundOff.Resizable = DataGridViewTriState.False;
@@ -2140,11 +2145,11 @@
             dataViewVerticalScroll1.Location = new Point(12, 12);
             dataViewVerticalScroll1.Name = "dataViewVerticalScroll1";
             dataViewVerticalScroll1.RowHeadersVisible = false;
-            dataGridViewCellStyle19.BackColor = Color.White;
-            dataGridViewCellStyle19.ForeColor = Color.Black;
-            dataGridViewCellStyle19.SelectionBackColor = Color.White;
-            dataGridViewCellStyle19.SelectionForeColor = Color.Black;
-            dataViewVerticalScroll1.RowsDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle76.BackColor = Color.White;
+            dataGridViewCellStyle76.ForeColor = Color.Black;
+            dataGridViewCellStyle76.SelectionBackColor = Color.White;
+            dataGridViewCellStyle76.SelectionForeColor = Color.Black;
+            dataViewVerticalScroll1.RowsDefaultCellStyle = dataGridViewCellStyle76;
             dataViewVerticalScroll1.ScrollBars = ScrollBars.Vertical;
             dataViewVerticalScroll1.Size = new Size(732, 340);
             dataViewVerticalScroll1.TabIndex = 19;
@@ -2583,6 +2588,7 @@
             Text = "Companies";
             FormClosing += FormCompany_FormClosing;
             Load += FormCompany_Load;
+            Controls.SetChildIndex(checkBoxIsPatient, 0);
             Controls.SetChildIndex(DelayedTextBoxCompanySearch, 0);
             Controls.SetChildIndex(BtnCompanyEdit, 0);
             Controls.SetChildIndex(BtnCompanyCancel, 0);

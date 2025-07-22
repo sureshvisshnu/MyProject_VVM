@@ -72,6 +72,8 @@ namespace fa.views.catalog
         public ProductPercentage PendingPercentages { get; set; }
 
         public bool CreateCatalogOnLoad = false;
+        private bool FixMissingPercentagesOnLoad = false;
+
         AccountManager AccountManager = null!;
         CategoryManager CategoryManager = null!;
         CatalogProductManager CatalogProductManager = null!;
@@ -103,6 +105,7 @@ namespace fa.views.catalog
                 Cursor.Current = Cursors.WaitCursor;
                 ResetCategoryTab();
                 LoadCategoryCombo();
+                CheckProductPercentage();
                 if (Global.softwareType == SoftwareType.VVMATRIX)
                 {
                     if (Global.Company.BusinessType != BuisnessType.Pharmacy)
@@ -154,7 +157,18 @@ namespace fa.views.catalog
                 Cursor.Current = Cursors.Default;
             }
         }
-
+        private void CheckProductPercentage()
+        {
+            if (Global.User.IsSuperAdmin) // or however your system defines it
+            {
+                BtnPercentage.Visible = true;
+                BtnPercentage.Enabled = true;
+            }
+            else
+            {
+                BtnPercentage.Visible = false;
+            }
+        }
         private IList<CatalogItem> ItemList = null;
         private void LoadCatalogWithFilter()
         {
@@ -3186,15 +3200,28 @@ namespace fa.views.catalog
                     ProductId = product.Id,
                     ProductCode = product.MaterialId,
                     CompanyId = Global.Company.CompanyId,
-                    AddedCostPercentage = Math.Round(addedCostPct, 2),
-                    RetailMarginPercentage = Math.Round(retailMarginPct, 2),
-                    WholesaleMarginPercentage = Math.Round(wholesaleMarginPct, 2),
-                    MrpPercentage = Math.Round(mrpPct, 2),
+                    AddedCostPercentage = Math.Round(addedCostPct, 0),         // Rounded to whole number
+                    RetailMarginPercentage = Math.Round(retailMarginPct, 0),   // Rounded to whole number
+                    WholesaleMarginPercentage = Math.Round(wholesaleMarginPct, 0), // Rounded
+                    MrpPercentage = Math.Round(mrpPct, 0),                     // Rounded
                     IsActive = true
                 };
             }
 
             return null!;
+        }
+
+        private async void BtnPercentage_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                await ProductSalePercentageManager.Instance.AddMissingProductPercentagesAsync();
+                CatalogErrorMsg.Text = "Missing product percentages added successfully.";
+            }
+            catch (Exception ex)
+            {
+                CatalogErrorMsg.Text = "Failed to update product percentages: " + ex.Message;
+            }
         }
 
     }
