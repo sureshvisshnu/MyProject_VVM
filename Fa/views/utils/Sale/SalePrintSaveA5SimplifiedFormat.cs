@@ -275,8 +275,11 @@ namespace Fa.views.utils.Sale
                 // Set page size based on orientation
                 var pageSize = isLandscape ? PageSize.A5.Rotate() : PageSize.A5;
 
-                Document pdfDoc = new Document(pageSize, 10, 10, 15, 15);
+                Document pdfDoc = new Document(pageSize, 20, 10, 15, 40);
+                PageNumberHelper pageNumberHelper = new PageNumberHelper { IsLandScape = isLandscape };
                 PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
+                writer.PageEvent = pageNumberHelper;
+
                 pdfDoc.Open();
 
                 // Add header
@@ -295,8 +298,8 @@ namespace Fa.views.utils.Sale
 
                 // Set column widths based on orientation
                 float[] widths = isLandscape
-                    ? new float[] { 8f, 90f, 20f, 20f, 25f, 30f }
-                    : new float[] { 8f, 60f, 10f, 10f, 20f, 25f };
+                    ? new float[] { 20f, 90f, 20f, 20f, 25f, 30f }
+                    : new float[] { 20f, 100f, 20f, 20f, 25f, 30f };
                 // { 8f, 40f, 12f, 12f, 20f, 25f };
                 table.SetWidths(widths);
                 table = CreateSalesMainTableHeader(table, dataTable);
@@ -311,7 +314,12 @@ namespace Fa.views.utils.Sale
                             ? PdfDataAlignment.GetFont("Font_Bold_Italic_9_Black")
                             : PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black");
 
-                        PdfPCell rowCell = new PdfPCell(new Phrase(temp, font));
+                        string truncated = temp.Length > 30 ? temp.Substring(0, 30) + "..." : temp;
+
+                        PdfPCell rowCell = new PdfPCell(new Phrase(truncated, font));
+                        rowCell.NoWrap = true;
+
+                        //PdfPCell rowCell = new PdfPCell(new Phrase(temp, font));
 
                         // Styling for total row
                         if (i == dataTable.Rows.Count - 1)
@@ -319,7 +327,13 @@ namespace Fa.views.utils.Sale
                             rowCell.BackgroundColor = new BaseColor(220, 220, 220);
                         }
 
-                        rowCell.HorizontalAlignment = j > 1 ? Element.ALIGN_RIGHT : Element.ALIGN_LEFT;
+                        if (j == 0)
+                            rowCell.HorizontalAlignment = Element.ALIGN_CENTER;  // S.No
+                        else if (j == 1)
+                            rowCell.HorizontalAlignment = Element.ALIGN_LEFT;   // Product Name
+                        else
+                            rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;  // Others
+
                         rowCell.MinimumHeight = 15;
                         rowCell.BorderWidth = 0.5f;
                         table.AddCell(rowCell);
@@ -563,6 +577,51 @@ namespace Fa.views.utils.Sale
             return words.Trim();
         }
     }
+    public class PageNumberHelper : PdfPageEventHelper
+    {
+        PdfContentByte cb;
+        PdfTemplate template;
+        BaseFont bf = null;
+        public bool IsLandScape { get; set; }
+
+        public override void OnOpenDocument(PdfWriter writer, Document document)
+        {
+            try
+            {
+                bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+                cb = writer.DirectContent;
+                template = cb.CreateTemplate(50, 50);
+            }
+            catch (DocumentException) { }
+            catch (IOException) { }
+        }
+
+        public override void OnEndPage(PdfWriter writer, Document document)
+        {
+            int pageN = writer.PageNumber;
+            string text = "Page " + pageN + " of ";
+            float len = bf.GetWidthPoint(text, 8);
+            float x = IsLandScape ? document.PageSize.Width - 100 : document.PageSize.Width - 80;
+            float y = document.PageSize.GetBottom(30);
+
+            cb.BeginText();
+            cb.SetFontAndSize(bf, 8);
+            cb.SetTextMatrix(x, y);
+            cb.ShowText(text);
+            cb.EndText();
+            cb.AddTemplate(template, x + len, y);
+        }
+
+        public override void OnCloseDocument(PdfWriter writer, Document document)
+        {
+            template.BeginText();
+            template.SetFontAndSize(bf, 8);
+            template.SetTextMatrix(0, 0);
+            template.ShowText("" + (writer.PageNumber - 1));
+            template.EndText();
+        }
+    }
+
 }
 /*
  *  PdfFooter PdfFooter = new PdfFooter();
