@@ -118,7 +118,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Integrated Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1671),
+                            EffectiveTo = new DateTime(2400, 7, 24, 21, 33, 16, 516, DateTimeKind.Local).AddTicks(4144),
                             Name = "IGST",
                             Rule = "RunIGST()"
                         },
@@ -128,7 +128,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Central Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1699),
+                            EffectiveTo = new DateTime(2400, 7, 24, 21, 33, 16, 516, DateTimeKind.Local).AddTicks(4174),
                             Name = "CGST",
                             Rule = "RunCGST()"
                         },
@@ -138,7 +138,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "State Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1705),
+                            EffectiveTo = new DateTime(2400, 7, 24, 21, 33, 16, 516, DateTimeKind.Local).AddTicks(4179),
                             Name = "SGST",
                             Rule = "RunSGST()"
                         },
@@ -148,7 +148,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Tax at Source Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1710),
+                            EffectiveTo = new DateTime(2400, 7, 24, 21, 33, 16, 516, DateTimeKind.Local).AddTicks(4183),
                             Name = "TCS",
                             Rule = "RunTCS()"
                         });
@@ -3400,6 +3400,27 @@ namespace FADataAccessLibrary.Migrations
                     b.HasIndex("SupplierId");
 
                     b.ToTable("SupplierLicenceDetails");
+                });
+
+            modelBuilder.Entity("fa.model.Accounting.Masters.SupplierProduct", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("SupplierId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("SupplierProducts");
                 });
 
             modelBuilder.Entity("fa.model.Accounting.Masters.TaxDocumentType", b =>
@@ -14354,6 +14375,25 @@ namespace FADataAccessLibrary.Migrations
                     b.Navigation("Supplier");
                 });
 
+            modelBuilder.Entity("fa.model.Accounting.Masters.SupplierProduct", b =>
+                {
+                    b.HasOne("fa.model.Catalog.Product", "Product")
+                        .WithMany("SupplierProducts")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fa.model.Accounting.Masters.Supplier", "Supplier")
+                        .WithMany("SupplierProducts")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("fa.model.Accounting.Transaction.Bill", b =>
                 {
                     b.HasOne("fa.model.Accounting.Masters.Company", "Company")
@@ -17336,11 +17376,15 @@ namespace FADataAccessLibrary.Migrations
             modelBuilder.Entity("fa.model.Accounting.Masters.Supplier", b =>
                 {
                     b.Navigation("SupplierLicenceDetail");
+
+                    b.Navigation("SupplierProducts");
                 });
 
             modelBuilder.Entity("fa.model.Catalog.Product", b =>
                 {
                     b.Navigation("Inventorys");
+
+                    b.Navigation("SupplierProducts");
                 });
 
             modelBuilder.Entity("fa.model.Catalog.ProductFamily", b =>

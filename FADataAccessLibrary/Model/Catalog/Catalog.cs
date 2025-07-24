@@ -575,6 +575,7 @@ namespace fa.model.Catalog
         public string RackNumber { get; set; }
         public string Schedule { get; set; }
         public virtual ICollection<Inventory> Inventorys { get;} = new List<Inventory>();
+        public virtual ICollection<SupplierProduct> SupplierProducts { get; set; } = new List<SupplierProduct>();
     }
 
     public class CatalogItemSalesTaxMap 
