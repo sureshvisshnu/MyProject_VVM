@@ -2,6 +2,7 @@
 using fa.model.Common;
 using Fa.model.Accounting.Masters;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace fa.model.Accounting.Masters
@@ -24,7 +25,8 @@ namespace fa.model.Accounting.Masters
         public TaxInfo TaxInfo { get; set; }
         public ICollection<SupplierLicenceDetail> SupplierLicenceDetail { get; set; } = new List<SupplierLicenceDetail>();
         public ICollection<SupplierProduct> SupplierProducts { get; set; } = new List<SupplierProduct>();
-
+        [MaxLength(20)]
+        public string GSTNo { get; set; }
     }
 
     [Table("SupplierProducts")]

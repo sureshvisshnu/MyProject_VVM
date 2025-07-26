@@ -35,5 +35,7 @@ namespace fa.model.Accounting.Masters
         public ICollection<CustomerLicenceDetail> CustomerLicenceDetail { get; set; }=new List<CustomerLicenceDetail>();
         public double? PaymentLimit {  get; set; }
         public bool LockBill {  get; set; }
+        [MaxLength(20)]
+        public string GSTNo { get; set; }
     }
 }
