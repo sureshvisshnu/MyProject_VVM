@@ -1,20 +1,22 @@
-﻿using System;
+﻿using ExcelDataReader;
+using fa.api.Accounting;
+using fa.api.catalog;
+using fa.api.utils;
+using fa.libraries.utils;
+using fa.libraries.Validation;
+using fa.model.Accounting.Masters;
+using fa.model.Catalog;
+using fa.model.Common;
+using fa.views.controls;
+using fa.views.hms.masters.upload;
+using Fa.model.Accounting.Masters;
+using Fa.Utils.utils;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
-using fa.api.Accounting;
-using fa.model.Accounting.Masters;
-using fa.model.Common;
-using fa.libraries.Validation;
-using fa.libraries.utils;
-using fa.views.controls;
-using Fa.model.Accounting.Masters;
-using System.Linq;
-using fa.views.hms.masters.upload;
 using System.IO;
-using ExcelDataReader;
-using Fa.Utils.utils;
-using fa.api.utils;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace fa.views.account.masters
 {
@@ -81,6 +83,7 @@ namespace fa.views.account.masters
                 EnableForm(false);
                 LoadComboBox();
                 LoadSupplierWithFilter();
+                LoadAllProductsToTreeView();
                 if (TreeViewSupplier.Nodes.Count == 0)
                 {
                     BtnSupplierNew.Focus();
@@ -454,22 +457,27 @@ namespace fa.views.account.masters
             {
                 TreeNode node = e.Node;
                 node.SelectedImageIndex = node.ImageIndex;
+
                 ResetForm();
                 LoadComboBox();
                 LoadSupplierInfo();
                 EnableForm(false);
                 this.formIsDirty = false;
-            }
-            catch
-            {
 
+                // ✅ Load all products fresh (reset both trees)
+                LoadAllProductsToTreeView();
+
+                // ✅ Then load selected products based on current supplier
+                Supplier selectedSupplier = GetSupplierInfo();
+                if (selectedSupplier != null)
+                {
+                    LoadLinkedProductsForSupplier(selectedSupplier);
+                }
             }
             finally
             {
                 Cursor.Current = Cursors.Default;
             }
-
-
         }
         private void TextBoxSupplierSearch_TextChanged(object sender, EventArgs e)
         {
@@ -589,6 +597,7 @@ namespace fa.views.account.masters
             ResetForm();
             TabControlSupplier.SelectedTab = TabGeneralPage;
             LoadComboBox();
+            LoadAllProductsToTreeView();
             if (string.IsNullOrEmpty(TextBoxSupplierSearch.Text))
             {
                 if (TreeViewSupplier.Nodes.Count > 0)
@@ -613,6 +622,8 @@ namespace fa.views.account.masters
                 if (validateForm())
                 {
                     Supplier lSupplier = GetSupplierFromForm();
+                    // Fill selected products
+                    lSupplier.SupplierProducts = GetSelectedSupplierProducts(lSupplier.Id);
                     Supplier lSupplierFromDB = null;
                     if (lSupplier.Id == 0)
                     {
@@ -1210,5 +1221,258 @@ namespace fa.views.account.masters
             SupplierLicenceInfoGrid.Rows[e.RowIndex].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].ReadOnly = false;
             SupplierLicenceInfoGrid.Rows[e.RowIndex].Cells[(int)SupplierFormTaxInfoTableColumn.REPORT].ReadOnly = true;
         }
+        private void LoadSupplierProducts(Supplier supplier)
+        {
+            IList<Product> allProducts = CatalogProductManager.Instance.ListProductByCompanyId(Global.Company.CompanyId).ToArray<Product>();
+            if (allProducts == null || allProducts.Count == 0)
+            {
+                Console.WriteLine("No products found in the catalog");
+                return;
+            }
+        }
+        private void LoadAllProductsToTreeView()
+        {
+            TreeViewProduct.Nodes.Clear();
+            TreeViewSelectedProduct.Nodes.Clear();
+
+            string filterAvailable = TextBoxProductSearch.Text.Trim();
+
+            IList<Product> allProducts = CatalogProductManager.Instance
+                .ListProductByCompanyId(Global.Company.CompanyId)
+                .OrderBy(p => p.Name)
+                .ToList();
+
+            foreach (var product in allProducts)
+            {
+                if (string.IsNullOrEmpty(filterAvailable) || product.Name.IndexOf(filterAvailable, StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    TreeViewProduct.Nodes.Add(new TreeNode
+                    {
+                        Text = $"{product.MaterialId} - {product.Name}",
+                        Name = product.Id.ToString(),
+                        Tag = product
+                    });
+                }
+            }
+
+            TreeViewProduct.ExpandAll();
+        }
+        private void LoadLinkedProductsForSupplier(Supplier supplier)
+        {
+            if (supplier == null || supplier.SupplierProducts == null)
+                return;
+
+            string filterSelected = TextBoxSelectedProductSearch.Text.Trim();
+
+            // Track product IDs already added
+            HashSet<long> linkedProductIds = supplier.SupplierProducts.Select(sp => sp.ProductId).ToHashSet();
+
+            // Remove linked products from TreeViewProduct
+            foreach (TreeNode node in TreeViewProduct.Nodes.Cast<TreeNode>().ToList())
+            {
+                if (node.Tag is Product product && linkedProductIds.Contains(product.Id))
+                {
+                    TreeViewProduct.Nodes.Remove(node);
+
+                    if (string.IsNullOrEmpty(filterSelected) || product.Name.IndexOf(filterSelected, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        TreeViewSelectedProduct.Nodes.Add(new TreeNode
+                        {
+                            Text = node.Text,
+                            Name = node.Name,
+                            Tag = product
+                        });
+                    }
+                }
+            }
+
+            TreeViewSelectedProduct.ExpandAll();
+        }
+
+        private void LoadTreeViewProductsForSupplier()
+        {
+            string filterAvailable = TextBoxProductSearch.Text.Trim();
+            string filterSelected = TextBoxSelectedProductSearch.Text.Trim();
+
+            TreeViewProduct.Nodes.Clear();
+            TreeViewSelectedProduct.Nodes.Clear();
+            IList<Product> allProducts = CatalogProductManager.Instance.ListProductByCompanyId(Global.Company.CompanyId)
+                                                .OrderBy(p => p.Name).ToList();
+            Supplier supplier = new Supplier();
+            HashSet<long> linkedProductIds = supplier.SupplierProducts?.Select(sp => sp.ProductId).ToHashSet() ?? new HashSet<long>();
+
+            // Available Products
+            foreach (var product in allProducts)
+            {
+                if (!linkedProductIds.Contains(product.Id) &&
+                    (string.IsNullOrEmpty(filterAvailable) || product.Name.IndexOf(filterAvailable, StringComparison.OrdinalIgnoreCase) >= 0))
+                {
+                    TreeNode node = new TreeNode
+                    {
+                        Text = $"{product.MaterialId} - {product.Name}",
+                        Name = product.Id.ToString(),
+                        Tag = product
+                    };
+                    TreeViewProduct.Nodes.Add(node);
+                }
+            }
+
+            // Linked (Selected) Products
+            foreach (var product in allProducts)
+            {
+                if (linkedProductIds.Contains(product.Id) &&
+                    (string.IsNullOrEmpty(filterSelected) || product.Name.IndexOf(filterSelected, StringComparison.OrdinalIgnoreCase) >= 0))
+                {
+                    TreeNode node = new TreeNode
+                    {
+                        Text = $"{product.MaterialId} - {product.Name}",
+                        Name = product.Id.ToString(),
+                        Tag = product
+                    };
+                    TreeViewSelectedProduct.Nodes.Add(node);
+                }
+            }
+
+            TreeViewProduct.ExpandAll();
+            TreeViewSelectedProduct.ExpandAll();
+        }
+
+        private void TextBoxProductSearch_TextChanged(object sender, EventArgs e)
+        {
+            string filter = TextBoxProductSearch.Text.Trim();
+            TreeViewProduct.Nodes.Clear();
+
+            IList<Product> allProducts = CatalogProductManager.Instance.ListProductByCompanyId(Global.Company.CompanyId)
+                                                .OrderBy(p => p.Name).ToList();
+
+            // Get product IDs already shown in TreeViewSelectedProduct
+            HashSet<long> selectedProductIds = TreeViewSelectedProduct.Nodes.Cast<TreeNode>()
+                .Select(n => (n.Tag as Product)?.Id ?? 0)
+                .ToHashSet();
+
+            foreach (var product in allProducts)
+            {
+                if (selectedProductIds.Contains(product.Id)) continue;
+
+                if (string.IsNullOrEmpty(filter)
+                    || (!string.IsNullOrEmpty(product.Name) && product.Name.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                    || (!string.IsNullOrEmpty(product.MaterialId) && product.MaterialId.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                    || (!string.IsNullOrEmpty(product.HSNCode) && product.HSNCode.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                    || (!string.IsNullOrEmpty(product.UOM) && product.UOM.Contains(filter, StringComparison.OrdinalIgnoreCase)))
+                {
+                    TreeViewProduct.Nodes.Add(new TreeNode
+                    {
+                        Text = $"{product.MaterialId} - {product.Name}",
+                        Name = product.Id.ToString(),
+                        Tag = product
+                    });
+                }
+            }
+
+            TreeViewProduct.ExpandAll();
+        }
+
+        private void TextBoxSelectedProductSearch_TextChanged(object sender, EventArgs e)
+        {
+            string filter = TextBoxSelectedProductSearch.Text.Trim();
+            TreeViewSelectedProduct.Nodes.Clear();
+
+            foreach (TreeNode node in TreeViewSelectedProduct.Nodes.Cast<TreeNode>().ToList())
+            {
+                Product product = node.Tag as Product;
+                if (product == null) continue;
+
+                if (string.IsNullOrEmpty(filter)
+                    || (!string.IsNullOrEmpty(product.Name) && product.Name.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                    || (!string.IsNullOrEmpty(product.MaterialId) && product.MaterialId.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                    || (!string.IsNullOrEmpty(product.HSNCode) && product.HSNCode.Contains(filter, StringComparison.OrdinalIgnoreCase))
+                    || (!string.IsNullOrEmpty(product.UOM) && product.UOM.Contains(filter, StringComparison.OrdinalIgnoreCase)))
+                {
+                    TreeViewSelectedProduct.Nodes.Add(new TreeNode
+                    {
+                        Text = $"{product.MaterialId} - {product.Name}",
+                        Name = product.Id.ToString(),
+                        Tag = product
+                    });
+                }
+            }
+
+            TreeViewSelectedProduct.ExpandAll();
+        }
+
+        private void BtnSelectProduct_Click(object sender, EventArgs e)
+        {
+            TextBoxSelectedProductSearch.ResetText();
+
+            for (int i = TreeViewProduct.Nodes.Count - 1; i >= 0; i--)
+            {
+                TreeNode node = TreeViewProduct.Nodes[i];
+                if (node.Checked)
+                {
+                    MoveProductToSelected(node);
+                }
+            }
+        }
+
+        private void BtnRemoveProduct_Click(object sender, EventArgs e)
+        {
+            TextBoxProductSearch.ResetText();
+
+            for (int i = TreeViewSelectedProduct.Nodes.Count - 1; i >= 0; i--)
+            {
+                TreeNode node = TreeViewSelectedProduct.Nodes[i];
+                if (node.Checked)
+                {
+                    MoveProductToAvailable(node);
+                }
+            }
+        }
+        private void MoveProductToSelected(TreeNode node)
+        {
+            if (node?.Tag is Product product)
+            {
+                // Remove from available
+                TreeViewProduct.Nodes.Remove(node);
+
+                // Uncheck to avoid accidental double move
+                node.Checked = false;
+
+                // Add to selected
+                TreeViewSelectedProduct.Nodes.Add(node);
+            }
+        }
+        private void MoveProductToAvailable(TreeNode node)
+        {
+            if (node?.Tag is Product product)
+            {
+                // Remove from selected
+                TreeViewSelectedProduct.Nodes.Remove(node);
+
+                // Uncheck to avoid accidental double move
+                node.Checked = false;
+
+                // Add back to available
+                TreeViewProduct.Nodes.Add(node);
+            }
+        }
+        private List<SupplierProduct> GetSelectedSupplierProducts(long supplierId)
+        {
+            var selected = new List<SupplierProduct>();
+
+            foreach (TreeNode node in TreeViewSelectedProduct.Nodes)
+            {
+                if (node.Tag is Product product)
+                {
+                    selected.Add(new SupplierProduct
+                    {
+                        SupplierId = supplierId,
+                        ProductId = product.Id
+                    });
+                }
+            }
+
+            return selected;
+        }
+
     }
 }

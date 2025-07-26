@@ -35,10 +35,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSupplier));
             TabControlSupplier = new TabControl();
             TabGeneralPage = new TabPage();
-            ComboBoxSupplierParentAccount = new controls.ComboBoxSwapTextBox();
-            ComboBoxBalanceType = new controls.ComboBoxSwapTextBox();
-            TextBoxSupplierBalance = new controls.text.CurrencyTextBox();
-            DateTimePickerSupplier = new controls.text.DateWithCalendar();
+            ComboBoxSupplierParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
+            TextBoxSupplierBalance = new fa.views.controls.text.CurrencyTextBox();
+            DateTimePickerSupplier = new fa.views.controls.text.DateWithCalendar();
             LabelSupplierAsof = new Label();
             LabelSupplierBalance = new Label();
             LabelSupplierParent = new Label();
@@ -51,10 +51,10 @@
             LabelSupplierDisplayAs = new Label();
             LabelSupplierName = new Label();
             TabContactInfo = new TabPage();
-            AddressGroupBoxSupplier = new controls.AddressGroupBoxWithStateSelection();
+            AddressGroupBoxSupplier = new fa.views.controls.AddressGroupBoxWithStateSelection();
             label4 = new Label();
-            TextBoxSupplierMobile = new controls.text.PhoneTextBox();
-            TextBoxSupplierPhone = new controls.text.PhoneTextBox();
+            TextBoxSupplierMobile = new fa.views.controls.text.PhoneTextBox();
+            TextBoxSupplierPhone = new fa.views.controls.text.PhoneTextBox();
             TextBoxSupplierFax = new MaskedTextBox();
             TextBoxSupplierWebsite = new TextBox();
             TextBoxSupplierEmail = new TextBox();
@@ -64,16 +64,23 @@
             LabelSupplierMobile = new Label();
             LabelSupplierPhone = new Label();
             TabLicenseInfo = new TabPage();
-            SupplierLicenceInfoGrid = new controls.DataViewVerticalScroll();
-            SupplierTaxIdName = new controls.grid.DataGridViewNameColumn();
-            SupplierTaxDisplayName = new controls.grid.DataGridViewNameColumn();
-            SupplierTaxIdValue = new controls.grid.DataGridViewNameColumn();
+            SupplierLicenceInfoGrid = new fa.views.controls.DataViewVerticalScroll();
+            SupplierTaxIdName = new fa.views.controls.grid.DataGridViewNameColumn();
+            SupplierTaxDisplayName = new fa.views.controls.grid.DataGridViewNameColumn();
+            SupplierTaxIdValue = new fa.views.controls.grid.DataGridViewNameColumn();
             Column3 = new DataGridViewCheckBoxColumn();
             SupplierTaxIdPrintOnReport = new DataGridViewCheckBoxColumn();
             SupplierTaxIdDelete = new DataGridViewButtonColumn();
             CustomerTaxIdId = new DataGridViewTextBoxColumn();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewCheckBoxColumn();
+            supplierproduct = new TabPage();
+            TextBoxSelectedProductSearch = new fa.views.controls.text.NameTextBoxAllowSpace(components);
+            BtnRemoveProduct = new Button();
+            BtnSelectProduct = new Button();
+            TreeViewSelectedProduct = new TreeView();
+            TextBoxProductSearch = new fa.views.controls.text.NameTextBoxAllowSpace(components);
+            TreeViewProduct = new TreeView();
             BtnSupplierSave = new Button();
             BtnSupplierCancel = new Button();
             BtnSupplierEdit = new Button();
@@ -85,13 +92,14 @@
             BtnCurrencyExit = new Button();
             statusStrip1 = new StatusStrip();
             ToolStripStatusLabelErrorSupplier = new ToolStripStatusLabel();
-            CompanyDataGridViewTaxType = new controls.DataViewVerticalScroll();
-            TextBoxSupplierSearch = new controls.text.DelayedTextChangeTextBox();
+            CompanyDataGridViewTaxType = new fa.views.controls.DataViewVerticalScroll();
+            TextBoxSupplierSearch = new fa.views.controls.text.DelayedTextChangeTextBox();
             TabControlSupplier.SuspendLayout();
             TabGeneralPage.SuspendLayout();
             TabContactInfo.SuspendLayout();
             TabLicenseInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)SupplierLicenceInfoGrid).BeginInit();
+            supplierproduct.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)CompanyDataGridViewTaxType).BeginInit();
             SuspendLayout();
@@ -108,11 +116,16 @@
             // 
             AccountIdTransport.Size = new Size(100, 21);
             // 
+            // checkBoxIsPatient
+            // 
+            checkBoxIsPatient.Size = new Size(69, 17);
+            // 
             // TabControlSupplier
             // 
             TabControlSupplier.Controls.Add(TabGeneralPage);
             TabControlSupplier.Controls.Add(TabContactInfo);
             TabControlSupplier.Controls.Add(TabLicenseInfo);
+            TabControlSupplier.Controls.Add(supplierproduct);
             TabControlSupplier.Location = new Point(258, 12);
             TabControlSupplier.Name = "TabControlSupplier";
             TabControlSupplier.SelectedIndex = 0;
@@ -123,8 +136,8 @@
             // TabGeneralPage
             // 
             TabGeneralPage.BackColor = SystemColors.Window;
-            TabGeneralPage.Controls.Add(ComboBoxSupplierParentAccount);
             TabGeneralPage.Controls.Add(ComboBoxBalanceType);
+            TabGeneralPage.Controls.Add(ComboBoxSupplierParentAccount);
             TabGeneralPage.Controls.Add(TextBoxSupplierBalance);
             TabGeneralPage.Controls.Add(DateTimePickerSupplier);
             TabGeneralPage.Controls.Add(LabelSupplierAsof);
@@ -191,7 +204,7 @@
             DateTimePickerSupplier.Format = "MM/dd/yyyy";
             DateTimePickerSupplier.Location = new Point(199, 265);
             DateTimePickerSupplier.MaxDate = new DateTime(9997, 12, 31, 7, 44, 56, 0);
-            DateTimePickerSupplier.MinDate = new DateTime(1900, 1, 1, 20, 22, 46, 0);
+            DateTimePickerSupplier.MinDate = new DateTime(1900, 1, 1, 21, 36, 19, 0);
             DateTimePickerSupplier.Name = "DateTimePickerSupplier";
             DateTimePickerSupplier.ReadOnly = false;
             DateTimePickerSupplier.Size = new Size(93, 21);
@@ -356,6 +369,7 @@
             AddressGroupBoxSupplier.Size = new Size(474, 190);
             AddressGroupBoxSupplier.StateId = 0L;
             AddressGroupBoxSupplier.StateName = "";
+            AddressGroupBoxSupplier.StateSelectedIndex = -1;
             AddressGroupBoxSupplier.TabIndex = 20;
             AddressGroupBoxSupplier.PreviewKeyDown += AddressGroupBoxSupplier_PreviewKeyDown;
             // 
@@ -581,6 +595,82 @@
             Column2.SortMode = DataGridViewColumnSortMode.Automatic;
             Column2.Visible = false;
             // 
+            // supplierproduct
+            // 
+            supplierproduct.Controls.Add(TextBoxSelectedProductSearch);
+            supplierproduct.Controls.Add(BtnRemoveProduct);
+            supplierproduct.Controls.Add(BtnSelectProduct);
+            supplierproduct.Controls.Add(TreeViewSelectedProduct);
+            supplierproduct.Controls.Add(TextBoxProductSearch);
+            supplierproduct.Controls.Add(TreeViewProduct);
+            supplierproduct.Location = new Point(4, 22);
+            supplierproduct.Name = "supplierproduct";
+            supplierproduct.Padding = new Padding(3);
+            supplierproduct.Size = new Size(699, 415);
+            supplierproduct.TabIndex = 3;
+            supplierproduct.Text = "Product Linking";
+            supplierproduct.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxSelectedProductSearch
+            // 
+            TextBoxSelectedProductSearch.Location = new Point(399, 23);
+            TextBoxSelectedProductSearch.MaxLength = 50;
+            TextBoxSelectedProductSearch.Name = "TextBoxSelectedProductSearch";
+            TextBoxSelectedProductSearch.Size = new Size(239, 21);
+            TextBoxSelectedProductSearch.TabIndex = 29;
+            TextBoxSelectedProductSearch.TextChanged += TextBoxSelectedProductSearch_TextChanged;
+            // 
+            // BtnRemoveProduct
+            // 
+            BtnRemoveProduct.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnRemoveProduct.Location = new Point(306, 269);
+            BtnRemoveProduct.Name = "BtnRemoveProduct";
+            BtnRemoveProduct.Size = new Size(84, 23);
+            BtnRemoveProduct.TabIndex = 28;
+            BtnRemoveProduct.Text = "<-- Remove";
+            BtnRemoveProduct.UseVisualStyleBackColor = true;
+            BtnRemoveProduct.Click += BtnRemoveProduct_Click;
+            // 
+            // BtnSelectProduct
+            // 
+            BtnSelectProduct.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSelectProduct.Location = new Point(306, 142);
+            BtnSelectProduct.Name = "BtnSelectProduct";
+            BtnSelectProduct.Size = new Size(84, 23);
+            BtnSelectProduct.TabIndex = 27;
+            BtnSelectProduct.Text = "Select -->";
+            BtnSelectProduct.UseVisualStyleBackColor = true;
+            BtnSelectProduct.Click += BtnSelectProduct_Click;
+            // 
+            // TreeViewSelectedProduct
+            // 
+            TreeViewSelectedProduct.CheckBoxes = true;
+            TreeViewSelectedProduct.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            TreeViewSelectedProduct.HideSelection = false;
+            TreeViewSelectedProduct.Location = new Point(399, 50);
+            TreeViewSelectedProduct.Name = "TreeViewSelectedProduct";
+            TreeViewSelectedProduct.Size = new Size(239, 341);
+            TreeViewSelectedProduct.TabIndex = 26;
+            // 
+            // TextBoxProductSearch
+            // 
+            TextBoxProductSearch.Location = new Point(61, 23);
+            TextBoxProductSearch.MaxLength = 50;
+            TextBoxProductSearch.Name = "TextBoxProductSearch";
+            TextBoxProductSearch.Size = new Size(239, 21);
+            TextBoxProductSearch.TabIndex = 24;
+            TextBoxProductSearch.TextChanged += TextBoxProductSearch_TextChanged;
+            // 
+            // TreeViewProduct
+            // 
+            TreeViewProduct.CheckBoxes = true;
+            TreeViewProduct.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            TreeViewProduct.HideSelection = false;
+            TreeViewProduct.Location = new Point(61, 50);
+            TreeViewProduct.Name = "TreeViewProduct";
+            TreeViewProduct.Size = new Size(239, 341);
+            TreeViewProduct.TabIndex = 25;
+            // 
             // BtnSupplierSave
             // 
             BtnSupplierSave.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
@@ -747,6 +837,7 @@
             Text = "Suppliers (Vendor)";
             FormClosing += FormSupplier_FormClosing;
             Load += FormSupplier_Load;
+            Controls.SetChildIndex(checkBoxIsPatient, 0);
             Controls.SetChildIndex(TextBoxSupplierSearch, 0);
             Controls.SetChildIndex(ProductIdTransport, 0);
             Controls.SetChildIndex(ProductBatchIdTransport, 0);
@@ -768,6 +859,8 @@
             TabContactInfo.PerformLayout();
             TabLicenseInfo.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)SupplierLicenceInfoGrid).EndInit();
+            supplierproduct.ResumeLayout(false);
+            supplierproduct.PerformLayout();
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)CompanyDataGridViewTaxType).EndInit();
@@ -830,5 +923,12 @@
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewCheckBoxColumn Column2;
         private controls.AddressGroupBoxWithStateSelection AddressGroupBoxSupplier;
+        private TabPage supplierproduct;
+        private controls.text.NameTextBoxAllowSpace TextBoxSelectedProductSearch;
+        private Button BtnRemoveProduct;
+        private Button BtnSelectProduct;
+        public TreeView TreeViewSelectedProduct;
+        private controls.text.NameTextBoxAllowSpace TextBoxProductSearch;
+        public TreeView TreeViewProduct;
     }
 }

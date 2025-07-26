@@ -304,6 +304,7 @@ namespace fa.context
         public DbSet<ItemSalesTaxMap> ItemSalesTaxMaps { get; set; }
         public DbSet<ProductPercentage> ProductPercentages { get; set; }
         public DbSet<PercentageStorage> PercentageStorages { get; set; }
+        public DbSet<SupplierProduct> SupplierProducts { get; set; }
         //Purcahse
         public DbSet<PurchaseEntry> PurchaseEntry { get; set; }
         public DbSet<PurchaseAttachment> PurchaseAttachments { get; set; }

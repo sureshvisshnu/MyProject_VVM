@@ -51,34 +51,6 @@ namespace FADataAccessLibrary.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.UpdateData(
-                table: "CountrySaleTaxs",
-                keyColumn: "Id",
-                keyValue: 1L,
-                column: "EffectiveTo",
-                value: new DateTime(2400, 7, 24, 21, 33, 16, 516, DateTimeKind.Local).AddTicks(4144));
-
-            migrationBuilder.UpdateData(
-                table: "CountrySaleTaxs",
-                keyColumn: "Id",
-                keyValue: 2L,
-                column: "EffectiveTo",
-                value: new DateTime(2400, 7, 24, 21, 33, 16, 516, DateTimeKind.Local).AddTicks(4174));
-
-            migrationBuilder.UpdateData(
-                table: "CountrySaleTaxs",
-                keyColumn: "Id",
-                keyValue: 3L,
-                column: "EffectiveTo",
-                value: new DateTime(2400, 7, 24, 21, 33, 16, 516, DateTimeKind.Local).AddTicks(4179));
-
-            migrationBuilder.UpdateData(
-                table: "CountrySaleTaxs",
-                keyColumn: "Id",
-                keyValue: 4L,
-                column: "EffectiveTo",
-                value: new DateTime(2400, 7, 24, 21, 33, 16, 516, DateTimeKind.Local).AddTicks(4183));
-
             migrationBuilder.CreateIndex(
                 name: "IX_SupplierProducts_ProductId",
                 table: "SupplierProducts",
@@ -108,33 +80,6 @@ namespace FADataAccessLibrary.Migrations
                 oldNullable: true)
                 .OldAnnotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.ComputedColumn);
 
-            migrationBuilder.UpdateData(
-                table: "CountrySaleTaxs",
-                keyColumn: "Id",
-                keyValue: 1L,
-                column: "EffectiveTo",
-                value: new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1671));
-
-            migrationBuilder.UpdateData(
-                table: "CountrySaleTaxs",
-                keyColumn: "Id",
-                keyValue: 2L,
-                column: "EffectiveTo",
-                value: new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1699));
-
-            migrationBuilder.UpdateData(
-                table: "CountrySaleTaxs",
-                keyColumn: "Id",
-                keyValue: 3L,
-                column: "EffectiveTo",
-                value: new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1705));
-
-            migrationBuilder.UpdateData(
-                table: "CountrySaleTaxs",
-                keyColumn: "Id",
-                keyValue: 4L,
-                column: "EffectiveTo",
-                value: new DateTime(2400, 7, 21, 21, 14, 13, 216, DateTimeKind.Local).AddTicks(1710));
         }
     }
 }

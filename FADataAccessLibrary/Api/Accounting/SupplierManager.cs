@@ -184,6 +184,86 @@ namespace fa.api.Accounting
         public Supplier UpdateSupplier(Supplier Supplier)
         {
             Supplier SupplierInfo = null;
+
+            using (AccountMasterContext Context = new AccountMasterContext())
+            {
+                using (var dbContextTransaction = Context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        SupplierInfo = Context.Suppliers.Find(Supplier.Id);
+
+                        if (SupplierInfo != null)
+                        {
+                            Supplier SupplierInfoFromDB = Context.Suppliers
+                                .Include("ContactInfo")
+                                .Include("Address")
+                                .Include("SupplierLicenceDetail")
+                                .Include("SupplierProducts") // ✅ Include products
+                                .FirstOrDefault(x => x.Id == Supplier.Id);
+
+                            // 🔁 Sync SupplierLicenceDetail
+                            foreach (SupplierLicenceDetail OldInfo in SupplierInfoFromDB.SupplierLicenceDetail.ToList())
+                            {
+                                SupplierLicenceDetail NewInfo = Supplier.SupplierLicenceDetail
+                                    .FirstOrDefault(x => x.SupplierLicenceId == OldInfo.SupplierLicenceId);
+
+                                if (NewInfo == null)
+                                {
+                                    Context.SupplierLicenceDetails.Remove(OldInfo);
+                                }
+                                else
+                                {
+                                    Supplier.SupplierLicenceDetail.Remove(NewInfo);
+                                    NewInfo.SupplierId = Supplier.Id;
+                                    Context.Entry(Context.SupplierLicenceDetails.Find(NewInfo.SupplierLicenceId)).CurrentValues.SetValues(NewInfo);
+                                }
+
+                                Context.SaveChanges();
+                            }
+
+                            // ✅ Sync SupplierProducts
+                            Context.SupplierProducts.RemoveRange(SupplierInfoFromDB.SupplierProducts);
+                            Context.SaveChanges();
+
+                            foreach (var productLink in Supplier.SupplierProducts)
+                            {
+                                productLink.SupplierId = Supplier.Id;
+                                Context.SupplierProducts.Add(productLink);
+                            }
+                            Context.SaveChanges();
+
+                            // 📝 Update Supplier base info
+                            Context.Entry(SupplierInfo).CurrentValues.SetValues(Supplier);
+                            Context.SaveChanges();
+
+                            // ➕ Add remaining new licence details
+                            foreach (SupplierLicenceDetail LInfo in Supplier.SupplierLicenceDetail)
+                            {
+                                LInfo.SupplierId = Supplier.Id;
+                                Context.SupplierLicenceDetails.Add(LInfo);
+                                Context.SaveChanges();
+                            }
+
+                            dbContextTransaction.Commit();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        SupplierInfo = null;
+                        dbContextTransaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+
+            return SupplierInfo;
+        }
+
+        public Supplier UpdateSupplierxx(Supplier Supplier)
+        {
+            Supplier SupplierInfo = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
                 using (var dbContextTransaction = Context.Database.BeginTransaction())
