@@ -1,17 +1,18 @@
-﻿using System;
+﻿using fa;
+using fa.api.OrderManagement;
+using fa.api.utils;
+using fa.model.Accounting.Masters;
+using fa.model.OrderManagement;
+using fa.views.utils;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 using Rectangle = iTextSharp.text.Rectangle;
-using fa.model.OrderManagement;
-using fa.api.OrderManagement;
-using fa.views.utils;
-using fa;
-using fa.api.utils;
 
 namespace Fa.views.utils.Sale
 {
@@ -37,7 +38,7 @@ namespace Fa.views.utils.Sale
             TOTALAMOUNT
         }
 
-        public void ExportToFileOrPrint20072025(long SalesId, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape = false)
+        public void ExportToFileOrPrint20072025(long SalesId, string PrintPaper, string fileExtension, bool isPrint, Entrytype entrytype, bool isLandscape = false)
         {
             SalesManager SalesManager = SalesManager.Instance;
             SaleEntry SaleEntry = SalesManager.GetSaleEntry(SalesId);
@@ -105,7 +106,8 @@ namespace Fa.views.utils.Sale
 
                 if (fileExtension == "Laser")
                 {
-                    GeneratePDF(SaleDetailsTable, SaleEntry, PrintPaper, "pdf", isPrint, isLandscape, TotalAmount);
+
+                    GeneratePDF(SaleDetailsTable, SaleEntry, PrintPaper, "pdf", isPrint, isLandscape, TotalAmount, entrytype);
                 }
             }
         }
@@ -193,7 +195,7 @@ namespace Fa.views.utils.Sale
                     isLandscape ? PaperTypes.A5_LANDSCAPE : PaperTypes.A5_PORTRAIT);
             }
         }
-        public void ExportToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape = false)
+        public void ExportToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint, Entrytype entrytype, bool isLandscape = false)
         {
             SalesManager SalesManager = SalesManager.Instance;
             SaleEntry SaleEntry = SalesManager.GetSaleEntry(SalesId);
@@ -263,12 +265,14 @@ namespace Fa.views.utils.Sale
 
                 if (fileExtension == "Laser")
                 {
-                    GeneratePDF(SaleDetailsTable, SaleEntry, PrintPaper, "pdf", isPrint, isLandscape, TotalAmount);
+                    GeneratePDF(SaleDetailsTable, SaleEntry, PrintPaper, "pdf", isPrint, isLandscape, TotalAmount, entrytype);
                 }
             }
         }
 
-        public void GeneratePDF(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount)
+        //public void GeneratePDF(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount)
+        public void GeneratePDF(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount, Entrytype entrytype)
+
         {
             using (MemoryStream myMemoryStream = new MemoryStream())
             {
@@ -283,7 +287,8 @@ namespace Fa.views.utils.Sale
                 pdfDoc.Open();
 
                 // Add header
-                PdfPTable DocHeader = InvoiceHeader("SALES INVOICE", saleEntry.RefNumber, saleEntry.SaleDate);
+                //PdfPTable DocHeader = InvoiceHeader("SALES INVOICE", saleEntry.RefNumber, saleEntry.SaleDate);
+                string title = entrytype == Entrytype.QUOTE ? "SALES QUOTE" : "SALES INVOICE"; PdfPTable DocHeader = InvoiceHeader(title, saleEntry.RefNumber, saleEntry.SaleDate);
                 pdfDoc.Add(DocHeader);
 
                 // Add customer info

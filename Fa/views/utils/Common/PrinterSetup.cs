@@ -102,6 +102,7 @@ namespace fa.views.utils
                     PrintPaper,
                     PrintFormat,
                     !IsExport,
+                    entrytype,
                     isLandscape);
             }
             else if (!isGSTInvoice && (PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE"))
@@ -169,7 +170,7 @@ namespace fa.views.utils
 
             if (entrytype == Entrytype.SALE)
             {
-                PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES).PrintPaperFormat.Name;
+                PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES)!.PrintPaperFormat.Name;
             }
             if (entrytype == Entrytype.QUOTE)
             {
@@ -180,7 +181,7 @@ namespace fa.views.utils
                 PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES_RETURN).PrintPaperFormat.Name;
             }
 
-            bool IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES).IsDotMatrix;
+            bool IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES)!.IsDotMatrix;
             string PrintFormat = IsDotMatrix && !IsExport ? "Dotmatrix" : "Laser";
 
             if (PrintPaper == "105 MM ROLL" || PrintPaper == "80 MM ROLL")
@@ -201,7 +202,9 @@ namespace fa.views.utils
                 // Use the new simplified format for A5 paper
                 SalePrintSaveA5SimplifiedFormat printer = new SalePrintSaveA5SimplifiedFormat();
                 bool isLandscape = PrintPaper == "A5 LANDSCAPE";
-                printer.ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true, isLandscape);
+                //printer.ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true, isLandscape);
+                printer.ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true, entrytype, isLandscape);
+
             }
             else if (PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE")
             {
