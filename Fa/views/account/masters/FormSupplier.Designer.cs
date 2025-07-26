@@ -35,8 +35,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSupplier));
             TabControlSupplier = new TabControl();
             TabGeneralPage = new TabPage();
-            ComboBoxSupplierParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            TextBoxGSTNo = new TextBox();
+            labelGSTNo = new Label();
             ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxSupplierParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
             TextBoxSupplierBalance = new fa.views.controls.text.CurrencyTextBox();
             DateTimePickerSupplier = new fa.views.controls.text.DateWithCalendar();
             LabelSupplierAsof = new Label();
@@ -138,6 +140,8 @@
             TabGeneralPage.BackColor = SystemColors.Window;
             TabGeneralPage.Controls.Add(ComboBoxBalanceType);
             TabGeneralPage.Controls.Add(ComboBoxSupplierParentAccount);
+            TabGeneralPage.Controls.Add(TextBoxGSTNo);
+            TabGeneralPage.Controls.Add(labelGSTNo);
             TabGeneralPage.Controls.Add(TextBoxSupplierBalance);
             TabGeneralPage.Controls.Add(DateTimePickerSupplier);
             TabGeneralPage.Controls.Add(LabelSupplierAsof);
@@ -158,17 +162,25 @@
             TabGeneralPage.TabIndex = 0;
             TabGeneralPage.Text = "Supplier";
             // 
-            // ComboBoxSupplierParentAccount
+            // TextBoxGSTNo
             // 
-            ComboBoxSupplierParentAccount.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxSupplierParentAccount.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxSupplierParentAccount.FormattingEnabled = true;
-            ComboBoxSupplierParentAccount.Location = new Point(19, 222);
-            ComboBoxSupplierParentAccount.Name = "ComboBoxSupplierParentAccount";
-            ComboBoxSupplierParentAccount.Size = new Size(356, 21);
-            ComboBoxSupplierParentAccount.TabIndex = 11;
-            ComboBoxSupplierParentAccount.TxtVisible = true;
-            ComboBoxSupplierParentAccount.KeyPress += ComboBoxSupplierParentAccount_KeyPress;
+            TextBoxGSTNo.BackColor = SystemColors.Window;
+            TextBoxGSTNo.Location = new Point(19, 312);
+            TextBoxGSTNo.MaxLength = 100;
+            TextBoxGSTNo.Name = "TextBoxGSTNo";
+            TextBoxGSTNo.ReadOnly = true;
+            TextBoxGSTNo.Size = new Size(356, 21);
+            TextBoxGSTNo.TabIndex = 27;
+            // 
+            // labelGSTNo
+            // 
+            labelGSTNo.AutoSize = true;
+            labelGSTNo.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            labelGSTNo.Location = new Point(19, 296);
+            labelGSTNo.Name = "labelGSTNo";
+            labelGSTNo.Size = new Size(42, 13);
+            labelGSTNo.TabIndex = 26;
+            labelGSTNo.Text = "GST No";
             // 
             // ComboBoxBalanceType
             // 
@@ -181,6 +193,18 @@
             ComboBoxBalanceType.Size = new Size(40, 21);
             ComboBoxBalanceType.TabIndex = 13;
             ComboBoxBalanceType.TxtVisible = true;
+            // 
+            // ComboBoxSupplierParentAccount
+            // 
+            ComboBoxSupplierParentAccount.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxSupplierParentAccount.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxSupplierParentAccount.FormattingEnabled = true;
+            ComboBoxSupplierParentAccount.Location = new Point(19, 222);
+            ComboBoxSupplierParentAccount.Name = "ComboBoxSupplierParentAccount";
+            ComboBoxSupplierParentAccount.Size = new Size(356, 21);
+            ComboBoxSupplierParentAccount.TabIndex = 11;
+            ComboBoxSupplierParentAccount.TxtVisible = true;
+            ComboBoxSupplierParentAccount.KeyPress += ComboBoxSupplierParentAccount_KeyPress;
             // 
             // TextBoxSupplierBalance
             // 
@@ -225,7 +249,7 @@
             // 
             LabelSupplierBalance.AutoSize = true;
             LabelSupplierBalance.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            LabelSupplierBalance.Location = new Point(20, 248);
+            LabelSupplierBalance.Location = new Point(19, 248);
             LabelSupplierBalance.Name = "LabelSupplierBalance";
             LabelSupplierBalance.Size = new Size(44, 13);
             LabelSupplierBalance.TabIndex = 24;
@@ -235,7 +259,7 @@
             // 
             LabelSupplierParent.AutoSize = true;
             LabelSupplierParent.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            LabelSupplierParent.Location = new Point(18, 204);
+            LabelSupplierParent.Location = new Point(19, 204);
             LabelSupplierParent.Name = "LabelSupplierParent";
             LabelSupplierParent.Size = new Size(39, 13);
             LabelSupplierParent.TabIndex = 22;
@@ -245,7 +269,7 @@
             // 
             LabelSupplierBranch.AutoSize = true;
             LabelSupplierBranch.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            LabelSupplierBranch.Location = new Point(18, 165);
+            LabelSupplierBranch.Location = new Point(19, 165);
             LabelSupplierBranch.Name = "LabelSupplierBranch";
             LabelSupplierBranch.Size = new Size(40, 13);
             LabelSupplierBranch.TabIndex = 21;
@@ -255,7 +279,7 @@
             // 
             CheckBoxSupplierIsbranch.AutoSize = true;
             CheckBoxSupplierIsbranch.Enabled = false;
-            CheckBoxSupplierIsbranch.Location = new Point(21, 184);
+            CheckBoxSupplierIsbranch.Location = new Point(19, 184);
             CheckBoxSupplierIsbranch.Name = "CheckBoxSupplierIsbranch";
             CheckBoxSupplierIsbranch.Size = new Size(43, 17);
             CheckBoxSupplierIsbranch.TabIndex = 10;
@@ -305,7 +329,7 @@
             // 
             LabelSupplierDescription.AutoSize = true;
             LabelSupplierDescription.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            LabelSupplierDescription.Location = new Point(16, 96);
+            LabelSupplierDescription.Location = new Point(19, 96);
             LabelSupplierDescription.Name = "LabelSupplierDescription";
             LabelSupplierDescription.Size = new Size(60, 13);
             LabelSupplierDescription.TabIndex = 2;
@@ -315,7 +339,7 @@
             // 
             LabelSupplierDisplayAs.AutoSize = true;
             LabelSupplierDisplayAs.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            LabelSupplierDisplayAs.Location = new Point(16, 56);
+            LabelSupplierDisplayAs.Location = new Point(19, 56);
             LabelSupplierDisplayAs.Name = "LabelSupplierDisplayAs";
             LabelSupplierDisplayAs.Size = new Size(56, 13);
             LabelSupplierDisplayAs.TabIndex = 1;
@@ -325,7 +349,7 @@
             // 
             LabelSupplierName.AutoSize = true;
             LabelSupplierName.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            LabelSupplierName.Location = new Point(16, 16);
+            LabelSupplierName.Location = new Point(19, 16);
             LabelSupplierName.Name = "LabelSupplierName";
             LabelSupplierName.Size = new Size(39, 13);
             LabelSupplierName.TabIndex = 0;
@@ -347,10 +371,10 @@
             TabContactInfo.Controls.Add(LabelSupplierMobile);
             TabContactInfo.Controls.Add(LabelSupplierPhone);
             TabContactInfo.ForeColor = SystemColors.WindowText;
-            TabContactInfo.Location = new Point(4, 24);
+            TabContactInfo.Location = new Point(4, 22);
             TabContactInfo.Name = "TabContactInfo";
             TabContactInfo.Padding = new Padding(3);
-            TabContactInfo.Size = new Size(699, 413);
+            TabContactInfo.Size = new Size(699, 415);
             TabContactInfo.TabIndex = 1;
             TabContactInfo.Text = "Contact Info";
             // 
@@ -491,10 +515,10 @@
             // TabLicenseInfo
             // 
             TabLicenseInfo.Controls.Add(SupplierLicenceInfoGrid);
-            TabLicenseInfo.Location = new Point(4, 24);
+            TabLicenseInfo.Location = new Point(4, 22);
             TabLicenseInfo.Name = "TabLicenseInfo";
             TabLicenseInfo.Padding = new Padding(3);
-            TabLicenseInfo.Size = new Size(699, 413);
+            TabLicenseInfo.Size = new Size(699, 415);
             TabLicenseInfo.TabIndex = 2;
             TabLicenseInfo.Text = "Tax Info";
             TabLicenseInfo.UseVisualStyleBackColor = true;
@@ -930,5 +954,7 @@
         public TreeView TreeViewSelectedProduct;
         private controls.text.NameTextBoxAllowSpace TextBoxProductSearch;
         public TreeView TreeViewProduct;
+        private TextBox TextBoxGSTNo;
+        private Label labelGSTNo;
     }
 }

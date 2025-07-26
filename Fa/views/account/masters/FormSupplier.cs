@@ -45,17 +45,17 @@ namespace fa.views.account.masters
         public static string TaxInfoGrid_MantatoryFiledErrorMsg = "Please enter {0}.";
         public static string ChooseStateErrorMsg = "Please choose state";
         public bool CreateSupplierOnLoad = false;
-        public string ParentId;
-        public string Id;
-        SupplierManager SupplierManager = null;
-        StateManager StateManager = null;
-        CountryManager CountryManager = null;
-        AddressManager AddressManager = null;
-        ContactInfoManager ContactInfoManager = null;
-        TaxinfoManager TaxinfoManager = null;
-        KeypressValidation KeypressValidation = null;
-        DateValidation DateValidation = null;
-        FormBase parent = null;
+        public string? ParentId;
+        public string? Id;
+        SupplierManager SupplierManager = null!;
+        StateManager StateManager = null!;
+        CountryManager CountryManager = null!;
+        AddressManager AddressManager = null!;
+        ContactInfoManager ContactInfoManager = null!;
+        TaxinfoManager TaxinfoManager = null!;
+        KeypressValidation KeypressValidation = null!;
+        DateValidation DateValidation = null!;
+        FormBase parent = null!;
         public FormSupplier(object sender)
         {
             if (sender is FormBase)
@@ -106,7 +106,7 @@ namespace fa.views.account.masters
                     if (Id == null)
                     {
                         this.Text = CreateSupplierOnloadText;
-                        BtnSupplierNew_Click(this, null);
+                        BtnSupplierNew_Click(this, null!);
                     }
                     else
                     {
@@ -114,7 +114,7 @@ namespace fa.views.account.masters
                         TreeNode TreeNode = new TreeNode();
                         TreeNode = ParentId == "" ? TreeViewSupplier.Nodes[Id] : TreeViewSupplier.Nodes[ParentId].Nodes[Id];
                         TreeViewSupplier.SelectedNode = TreeNode;
-                        BtnSupplierEdit_Click(this, null);
+                        BtnSupplierEdit_Click(this, null!);
                     }
                 }
                 this.formIsDirty = false;
@@ -136,7 +136,7 @@ namespace fa.views.account.masters
                     return OpenFileDialog1.FileName;
                 }
             }
-            return null;
+            return null!;
         }
         string TextBoxFileName = string.Empty;
         private void ImportSypplier()
@@ -146,7 +146,7 @@ namespace fa.views.account.masters
             {
                 TextBoxFileName = FileName;
             }
-            using (var stream = File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            using (var stream = File.Open(FileName!, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {
                 using (var reader = ExcelReaderFactory.CreateReader(stream))
                 {
@@ -166,7 +166,7 @@ namespace fa.views.account.masters
                                     row++;
                                     continue;
                                 }
-                                Name = reader.GetValue(0) != null ? reader.GetValue(0).ToString().Trim() : string.Empty;
+                                Name = reader.GetValue(0) != null ? reader.GetValue(0).ToString()!.Trim() : string.Empty;
                                 string[] Dl = new string[2];
                                 Dl[0] = reader.GetString(1);
                                 Dl[1] = reader.GetString(2);
@@ -293,7 +293,7 @@ namespace fa.views.account.masters
                     return SupplierFromDB;
                 }
             }
-            return null;
+            return null!;
         }
         private void LoadSupplierInfo()
         {
@@ -305,7 +305,7 @@ namespace fa.views.account.masters
                 TextBoxSupplierDisplayAs.Text = SupplierFromDB.DisplayAs;
                 TextBoxSupplierDescription.Text = SupplierFromDB.Discription;
                 CheckBoxSupplierIsbranch.Checked = SupplierFromDB.IsSubAccount;
-                DateTimePickerSupplier.Date = (DateTime)DateUtils.ToDate(SupplierFromDB.BalanceAsOf.Date.ToString(Global.Company.DateFormat), Global.Company.DateFormat);
+                DateTimePickerSupplier.Date = (DateTime)DateUtils.ToDate(SupplierFromDB.BalanceAsOf.Date.ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
                 TextBoxSupplierBalance.Text = Math.Abs(SupplierFromDB.Balance).ToString(TextUtils.DecimalPlace(TextBoxSupplierBalance.Decimals));
                 ComboBoxBalanceType.SelectedIndex = SupplierFromDB.Balance < 0 ? 1 : 0;
                 if (SupplierFromDB.AddressId != null)
@@ -335,7 +335,7 @@ namespace fa.views.account.masters
                 {
                     foreach (DataGridViewRow Row in SupplierLicenceInfoGrid.Rows)
                     {
-                        SupplierLicenceDetail SupplierLicenceDetail = SupplierFromDB.SupplierLicenceDetail.FirstOrDefault(x => x.CompanySupplierLicenseMasterId == (long)Row.Cells[(int)SupplierFormTaxInfoTableColumn.MASTERID].Value);
+                        SupplierLicenceDetail SupplierLicenceDetail = SupplierFromDB.SupplierLicenceDetail.FirstOrDefault(x => x.CompanySupplierLicenseMasterId == (long)Row.Cells[(int)SupplierFormTaxInfoTableColumn.MASTERID].Value)!;
                         if (SupplierLicenceDetail != null)
                         {
                             Row.Cells[(int)SupplierFormTaxInfoTableColumn.DNAME].Value = SupplierLicenceDetail.DisplayName;
@@ -347,7 +347,7 @@ namespace fa.views.account.masters
 
                 if (SupplierFromDB.IsSubAccount)
                 {
-                    Supplier Supplier = SupplierManager.GetSupplierById((long)SupplierFromDB.ParentAccountId);
+                    Supplier Supplier = SupplierManager.GetSupplierById((long)SupplierFromDB.ParentAccountId!);
                     if (Supplier != null)
                     {
                         ComboUtils.InitializeSupplierCombo(ComboBoxSupplierParentAccount, Global.Company.CompanyId);
@@ -389,9 +389,10 @@ namespace fa.views.account.masters
             lSupplier.DisplayAs = TextBoxSupplierDisplayAs.Text.Trim();
             float Balance = string.IsNullOrEmpty(TextBoxSupplierBalance.Text) ? 0 : float.Parse(TextBoxSupplierBalance.Text);
             lSupplier.Balance = (Balance != 0 && ComboBoxBalanceType.SelectedIndex == 1) ? -Balance : Balance;
-            lSupplier.BalanceAsOf = (DateTime)DateTimePickerSupplier.Date;
+            lSupplier.BalanceAsOf = (DateTime)DateTimePickerSupplier.Date!;
             lSupplier.CompanyId = Global.Company.CompanyId;
             lSupplier.AccountType = AccountType.SUPPLIER;
+            lSupplier.GSTNo = TextBoxGSTNo.Text.Trim();
             if (CheckBoxSupplierIsbranch.Checked == true)
             {
                 if (ComboBoxSupplierParentAccount.SelectedIndex > -1)
@@ -420,8 +421,8 @@ namespace fa.views.account.masters
                     SupplierLicenceDetail SupplierLicenceDetail = new SupplierLicenceDetail();
                     SupplierLicenceDetail.CompanySupplierLicenseMasterId = SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.MASTERID].Value == null ? 0L : (long)SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.MASTERID].Value;
                     SupplierLicenceDetail.SupplierLicenceId = SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.ID].Value == null ? 0L : (long)SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.ID].Value;
-                    SupplierLicenceDetail.DisplayName = SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.DNAME].Value.ToString().Trim();
-                    SupplierLicenceDetail.Value = SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value != null ? SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value.ToString().Trim() : null;
+                    SupplierLicenceDetail.DisplayName = SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.DNAME].Value.ToString()!.Trim();
+                    SupplierLicenceDetail.Value = SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value != null ? SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value.ToString()!.Trim() : null;
                     SupplierLicenceDetail.CompanyId = Global.Company.CompanyId;
 
                     lSupplier.SupplierLicenceDetail.Add(SupplierLicenceDetail);
@@ -455,7 +456,7 @@ namespace fa.views.account.masters
             Cursor.Current = Cursors.WaitCursor;
             try
             {
-                TreeNode node = e.Node;
+                TreeNode node = e.Node!;
                 node.SelectedImageIndex = node.ImageIndex;
 
                 ResetForm();
@@ -624,7 +625,7 @@ namespace fa.views.account.masters
                     Supplier lSupplier = GetSupplierFromForm();
                     // Fill selected products
                     lSupplier.SupplierProducts = GetSelectedSupplierProducts(lSupplier.Id);
-                    Supplier lSupplierFromDB = null;
+                    Supplier lSupplierFromDB = null!;
                     if (lSupplier.Id == 0)
                     {
                         Supplier lSupplierName = SupplierManager.GetSupplierByName(lSupplier.Name, Global.Company.CompanyId);
@@ -654,8 +655,8 @@ namespace fa.views.account.masters
                                 ContactInfo lContactInfo = GetSupplierContactInfoFromForm();
                                 lSupplier.ContactInfoId = lSupplierById.ContactInfoId;
                                 lSupplier.AddressId = lSupplierById.AddressId;
-                                lContactInfo.Id = (long)lSupplier.ContactInfoId;
-                                lAddress.AddressId = (long)lSupplier.AddressId;
+                                lContactInfo.Id = (long)lSupplier.ContactInfoId!;
+                                lAddress.AddressId = (long)lSupplier.AddressId!;
                                 lSupplierFromDB = SupplierManager.UpdateSupplier(lSupplier);
                                 Address lAddress1 = AddressManager.UpdateAddress(lAddress);
                                 ContactInfo llContactInfo = ContactInfoManager.UpdateContactInfo(lContactInfo);
@@ -780,7 +781,7 @@ namespace fa.views.account.masters
             {
                 for (int i = 0; i < SupplierLicenceInfoGrid.Rows.Count; i++)
                 {
-                    if ((SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value == null || string.IsNullOrEmpty(SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value.ToString().Trim())) && (bool)SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.REQUIR].Value)
+                    if ((SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value == null || string.IsNullOrEmpty(SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value.ToString()!.Trim())) && (bool)SupplierLicenceInfoGrid.Rows[i].Cells[(int)SupplierFormTaxInfoTableColumn.REQUIR].Value)
                     {
                         ToolStripStatusLabelErrorSupplier.Text = string.Format(TaxInfoGrid_MantatoryFiledErrorMsg, SupplierLicenceInfoGrid.Columns[(int)SupplierFormTaxInfoTableColumn.VALUE].HeaderText);
                         TabControlSupplier.SelectedTab = TabLicenseInfo;
@@ -813,8 +814,8 @@ namespace fa.views.account.masters
             ComboBoxSupplierParentAccount.SelectedIndex = -1;
             ComboBoxBalanceType.SelectedIndex = 0;
             DateTimePickerSupplier.Format = Global.Company.DateFormat;
-            DateTimePickerSupplier.MaxDate = (DateTime)DateUtils.ToDate(Global.getTransactionDate().ToString(Global.Company.DateFormat), Global.Company.DateFormat);
-            DateTimePickerSupplier.Date = (DateTime)DateUtils.ToDate(Global.getTransactionDate().ToString(Global.Company.DateFormat), Global.Company.DateFormat);
+            DateTimePickerSupplier.MaxDate = (DateTime)DateUtils.ToDate(Global.getTransactionDate().ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
+            DateTimePickerSupplier.Date = (DateTime)DateUtils.ToDate(Global.getTransactionDate().ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
         }
         private void EnableForm(Boolean enable)
         {
@@ -1168,7 +1169,7 @@ namespace fa.views.account.masters
                         }
                     }
 
-                    if (keyData == (Keys.Tab | Keys.Shift) && SupplierLicenceInfoGrid.CurrentCell.ColumnIndex == (int)SupplierFormTaxInfoTableColumn.DNAME)
+                    if (keyData == (Keys.Tab | Keys.Shift) && SupplierLicenceInfoGrid.CurrentCell!.ColumnIndex == (int)SupplierFormTaxInfoTableColumn.DNAME)
                     {
                         if (SupplierLicenceInfoGrid.CurrentRow.Index != 0)
                         {
@@ -1379,7 +1380,7 @@ namespace fa.views.account.masters
 
             foreach (TreeNode node in TreeViewSelectedProduct.Nodes.Cast<TreeNode>().ToList())
             {
-                Product product = node.Tag as Product;
+                Product? product = node.Tag as Product;
                 if (product == null) continue;
 
                 if (string.IsNullOrEmpty(filter)

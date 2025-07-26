@@ -350,6 +350,7 @@ namespace fa.views.account.masters
             lCustomer.Balance = (Balance != 0 && ComboBoxBalanceType.SelectedIndex == 1) ? -Balance : Balance;
             lCustomer.BalanceAsOf = (DateTime)DateTimePickerCustomer.Date!;
             lCustomer.AccountType = AccountType.CUSTOMER;
+            lCustomer.GSTNo = TextBoxGSTNo.Text.Trim();
             if (CheckBoxCustomerIsbranch.Checked == true)
             {
                 if (ComboBoxCustomerParentAccount.SelectedIndex > -1)

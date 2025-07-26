@@ -34,10 +34,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCustomers));
             TabControlCustomer = new TabControl();
             TabCustomer = new TabPage();
-            ComboBoxBalanceType = new controls.ComboBoxSwapTextBox();
-            ComboBoxCustomerParentAccount = new controls.ComboBoxSwapTextBox();
-            TextBoxCustomerBalance = new controls.text.CurrencyTextBox();
-            DateTimePickerCustomer = new controls.text.DateWithCalendar();
+            ComboBoxCustomerParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
+            TextBoxCustomerBalance = new fa.views.controls.text.CurrencyTextBox();
+            DateTimePickerCustomer = new fa.views.controls.text.DateWithCalendar();
             TextBoxCustomerNameonCheck = new TextBox();
             CheckBoxUseDisplayName = new CheckBox();
             CheckBoxCustomerIsbranch = new CheckBox();
@@ -53,12 +53,12 @@
             LabelCustomerAsof = new Label();
             LabelCustomerParent = new Label();
             TabBillingInfo = new TabPage();
-            ComboBoxCustomerPaymentMethod = new controls.ComboBoxSwapTextBox();
-            ComboBoxCustomerPaymentTerm = new controls.ComboBoxSwapTextBox();
-            BillingAddressGroupBoxCustomer = new controls.AddressGroupBoxWithStateSelection();
+            ComboBoxCustomerPaymentMethod = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCustomerPaymentTerm = new fa.views.controls.ComboBoxSwapTextBox();
+            BillingAddressGroupBoxCustomer = new fa.views.controls.AddressGroupBoxWithStateSelection();
             label4 = new Label();
-            RadioCustomerLockBill = new controls.YesNoRadio();
-            TextBoxCustomerPaymentLimit = new controls.text.CurrencyTextBox();
+            RadioCustomerLockBill = new fa.views.controls.YesNoRadio();
+            TextBoxCustomerPaymentLimit = new fa.views.controls.text.CurrencyTextBox();
             label1 = new Label();
             label2 = new Label();
             BtnCustomerAddNewTerm = new Button();
@@ -66,12 +66,12 @@
             BtnCustomerAddNewPayment = new Button();
             LabelCustomerPaymentMethod = new Label();
             TabShippingInfo = new TabPage();
-            ShippingAddressGroupBoxCustomer = new controls.AddressGroupBoxWithStateSelection();
+            ShippingAddressGroupBoxCustomer = new fa.views.controls.AddressGroupBoxWithStateSelection();
             label3 = new Label();
             CheckBoxCustomerUseBillingAddress = new CheckBox();
             TabContactInfo = new TabPage();
-            TextBoxCustomerMobile = new controls.text.PhoneTextBox();
-            TextBoxCustomerPhone = new controls.text.PhoneTextBox();
+            TextBoxCustomerMobile = new fa.views.controls.text.PhoneTextBox();
+            TextBoxCustomerPhone = new fa.views.controls.text.PhoneTextBox();
             TextBoxCustomerFax = new MaskedTextBox();
             TextBoxCustomerWebsite = new TextBox();
             TextBoxCustomerEmail = new TextBox();
@@ -81,10 +81,10 @@
             LabelCustomerMobile = new Label();
             LabelCustomerPhone = new Label();
             TabLicenseInfo = new TabPage();
-            CustomerLicenceInfoGrid = new controls.DataViewVerticalScroll();
-            CustomerTaxIdName = new controls.grid.DataGridViewNameColumn();
-            CustomerTaxDisplayName = new controls.grid.DataGridViewNameColumn();
-            CustomerTaxIdValue = new controls.grid.DataGridViewNameColumn();
+            CustomerLicenceInfoGrid = new fa.views.controls.DataViewVerticalScroll();
+            CustomerTaxIdName = new fa.views.controls.grid.DataGridViewNameColumn();
+            CustomerTaxDisplayName = new fa.views.controls.grid.DataGridViewNameColumn();
+            CustomerTaxIdValue = new fa.views.controls.grid.DataGridViewNameColumn();
             CustomerTaxIdPrintOnInvoice = new DataGridViewCheckBoxColumn();
             CustomerTaxIdPrintOnReport = new DataGridViewCheckBoxColumn();
             CustomerTaxIdDelete = new DataGridViewButtonColumn();
@@ -103,7 +103,9 @@
             toolTip1 = new ToolTip(components);
             statusStrip1 = new StatusStrip();
             ToolStripStatusLabelErrorCustomer = new ToolStripStatusLabel();
-            TextBoxCustomerSearch = new controls.text.DelayedTextChangeTextBox();
+            TextBoxCustomerSearch = new fa.views.controls.text.DelayedTextChangeTextBox();
+            TextBoxGSTNo = new TextBox();
+            labelGSTNo = new Label();
             TabControlCustomer.SuspendLayout();
             TabCustomer.SuspendLayout();
             TabBillingInfo.SuspendLayout();
@@ -126,6 +128,10 @@
             // 
             AccountIdTransport.Size = new Size(100, 21);
             // 
+            // checkBoxIsPatient
+            // 
+            checkBoxIsPatient.Size = new Size(69, 17);
+            // 
             // TabControlCustomer
             // 
             TabControlCustomer.Controls.Add(TabCustomer);
@@ -144,9 +150,11 @@
             // TabCustomer
             // 
             TabCustomer.BackColor = SystemColors.Window;
-            TabCustomer.Controls.Add(ComboBoxCustomerParentAccount);
             TabCustomer.Controls.Add(ComboBoxBalanceType);
+            TabCustomer.Controls.Add(TextBoxGSTNo);
+            TabCustomer.Controls.Add(labelGSTNo);
             TabCustomer.Controls.Add(TextBoxCustomerBalance);
+            TabCustomer.Controls.Add(ComboBoxCustomerParentAccount);
             TabCustomer.Controls.Add(DateTimePickerCustomer);
             TabCustomer.Controls.Add(TextBoxCustomerNameonCheck);
             TabCustomer.Controls.Add(CheckBoxUseDisplayName);
@@ -158,8 +166,8 @@
             TabCustomer.Controls.Add(LabelCustomerDisplayAs);
             TabCustomer.Controls.Add(LabelCustomerDescription);
             TabCustomer.Controls.Add(LabelCustomerBranch);
-            TabCustomer.Controls.Add(LabelCustomerNameonCheck);
             TabCustomer.Controls.Add(LabelCustomerBalance);
+            TabCustomer.Controls.Add(LabelCustomerNameonCheck);
             TabCustomer.Controls.Add(LabelCustomerAsof);
             TabCustomer.Controls.Add(LabelCustomerParent);
             TabCustomer.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
@@ -169,18 +177,6 @@
             TabCustomer.Size = new Size(699, 340);
             TabCustomer.TabIndex = 0;
             TabCustomer.Text = "Customer";
-            // 
-            // ComboBoxBalanceType
-            // 
-            ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxBalanceType.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxBalanceType.FormattingEnabled = true;
-            ComboBoxBalanceType.Items.AddRange(new object[] { "DR", "CR" });
-            ComboBoxBalanceType.Location = new Point(122, 310);
-            ComboBoxBalanceType.Name = "ComboBoxBalanceType";
-            ComboBoxBalanceType.Size = new Size(40, 21);
-            ComboBoxBalanceType.TabIndex = 14;
-            ComboBoxBalanceType.TxtVisible = true;
             // 
             // ComboBoxCustomerParentAccount
             // 
@@ -194,12 +190,24 @@
             ComboBoxCustomerParentAccount.TxtVisible = true;
             ComboBoxCustomerParentAccount.KeyPress += ComboBoxCustomerParentAccount_KeyPress;
             // 
+            // ComboBoxBalanceType
+            // 
+            ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxBalanceType.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxBalanceType.FormattingEnabled = true;
+            ComboBoxBalanceType.Items.AddRange(new object[] { "DR", "CR" });
+            ComboBoxBalanceType.Location = new Point(495, 308);
+            ComboBoxBalanceType.Name = "ComboBoxBalanceType";
+            ComboBoxBalanceType.Size = new Size(40, 21);
+            ComboBoxBalanceType.TabIndex = 14;
+            ComboBoxBalanceType.TxtVisible = true;
+            // 
             // TextBoxCustomerBalance
             // 
             TextBoxCustomerBalance.BackColor = SystemColors.Window;
             TextBoxCustomerBalance.Decimals = 2;
             TextBoxCustomerBalance.Length = 10;
-            TextBoxCustomerBalance.Location = new Point(19, 310);
+            TextBoxCustomerBalance.Location = new Point(392, 308);
             TextBoxCustomerBalance.Name = "TextBoxCustomerBalance";
             TextBoxCustomerBalance.ReadOnly = true;
             TextBoxCustomerBalance.Size = new Size(100, 21);
@@ -214,7 +222,7 @@
             DateTimePickerCustomer.Date = null;
             DateTimePickerCustomer.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             DateTimePickerCustomer.Format = "MM/dd/yyyy";
-            DateTimePickerCustomer.Location = new Point(202, 310);
+            DateTimePickerCustomer.Location = new Point(575, 308);
             DateTimePickerCustomer.MaxDate = new DateTime(9997, 12, 31, 9, 16, 13, 0);
             DateTimePickerCustomer.MinDate = new DateTime(1900, 1, 1, 19, 20, 54, 0);
             DateTimePickerCustomer.Name = "DateTimePickerCustomer";
@@ -358,7 +366,7 @@
             // 
             LabelCustomerBalance.AutoSize = true;
             LabelCustomerBalance.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            LabelCustomerBalance.Location = new Point(16, 294);
+            LabelCustomerBalance.Location = new Point(389, 292);
             LabelCustomerBalance.Name = "LabelCustomerBalance";
             LabelCustomerBalance.Size = new Size(44, 13);
             LabelCustomerBalance.TabIndex = 35;
@@ -368,7 +376,7 @@
             // 
             LabelCustomerAsof.AutoSize = true;
             LabelCustomerAsof.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            LabelCustomerAsof.Location = new Point(199, 294);
+            LabelCustomerAsof.Location = new Point(572, 292);
             LabelCustomerAsof.Name = "LabelCustomerAsof";
             LabelCustomerAsof.Size = new Size(38, 13);
             LabelCustomerAsof.TabIndex = 36;
@@ -445,6 +453,7 @@
             BillingAddressGroupBoxCustomer.Size = new Size(536, 220);
             BillingAddressGroupBoxCustomer.StateId = 0L;
             BillingAddressGroupBoxCustomer.StateName = "";
+            BillingAddressGroupBoxCustomer.StateSelectedIndex = -1;
             BillingAddressGroupBoxCustomer.TabIndex = 20;
             BillingAddressGroupBoxCustomer.Load += BillingAddressGroupBoxCustomer_Leave;
             BillingAddressGroupBoxCustomer.PreviewKeyDown += BillingAddressGroupBoxCustomer_PreviewKeyDown;
@@ -573,6 +582,7 @@
             ShippingAddressGroupBoxCustomer.Size = new Size(536, 220);
             ShippingAddressGroupBoxCustomer.StateId = 0L;
             ShippingAddressGroupBoxCustomer.StateName = "";
+            ShippingAddressGroupBoxCustomer.StateSelectedIndex = -1;
             ShippingAddressGroupBoxCustomer.TabIndex = 22;
             ShippingAddressGroupBoxCustomer.PreviewKeyDown += ShippingAddressGroupBoxCustomer_PreviewKeyDown;
             // 
@@ -966,6 +976,26 @@
             TextBoxCustomerSearch.TextChanged += TextBoxCustomerSearch_TextChanged;
             TextBoxCustomerSearch.KeyDown += TextBoxCustomerSearch_KeyDown;
             // 
+            // TextBoxGSTNo
+            // 
+            TextBoxGSTNo.BackColor = SystemColors.Window;
+            TextBoxGSTNo.Location = new Point(19, 308);
+            TextBoxGSTNo.MaxLength = 100;
+            TextBoxGSTNo.Name = "TextBoxGSTNo";
+            TextBoxGSTNo.ReadOnly = true;
+            TextBoxGSTNo.Size = new Size(356, 21);
+            TextBoxGSTNo.TabIndex = 38;
+            // 
+            // labelGSTNo
+            // 
+            labelGSTNo.AutoSize = true;
+            labelGSTNo.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            labelGSTNo.Location = new Point(19, 292);
+            labelGSTNo.Name = "labelGSTNo";
+            labelGSTNo.Size = new Size(42, 13);
+            labelGSTNo.TabIndex = 37;
+            labelGSTNo.Text = "GST No";
+            // 
             // FormCustomers
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
@@ -992,6 +1022,7 @@
             Text = "Customers";
             FormClosing += FormCustomers_FormClosing;
             Load += FormCustomers_Load;
+            Controls.SetChildIndex(checkBoxIsPatient, 0);
             Controls.SetChildIndex(TextBoxCustomerSearch, 0);
             Controls.SetChildIndex(ProductIdTransport, 0);
             Controls.SetChildIndex(ProductBatchIdTransport, 0);
@@ -1096,5 +1127,7 @@
         private controls.text.DelayedTextChangeTextBox TextBoxCustomerSearch;
         private controls.AddressGroupBoxWithStateSelection BillingAddressGroupBoxCustomer;
         private controls.AddressGroupBoxWithStateSelection ShippingAddressGroupBoxCustomer;
+        private TextBox TextBoxGSTNo;
+        private Label labelGSTNo;
     }
 }
