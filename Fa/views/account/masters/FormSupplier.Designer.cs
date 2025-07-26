@@ -138,8 +138,8 @@
             // TabGeneralPage
             // 
             TabGeneralPage.BackColor = SystemColors.Window;
-            TabGeneralPage.Controls.Add(ComboBoxBalanceType);
             TabGeneralPage.Controls.Add(ComboBoxSupplierParentAccount);
+            TabGeneralPage.Controls.Add(ComboBoxBalanceType);
             TabGeneralPage.Controls.Add(TextBoxGSTNo);
             TabGeneralPage.Controls.Add(labelGSTNo);
             TabGeneralPage.Controls.Add(TextBoxSupplierBalance);
@@ -371,10 +371,10 @@
             TabContactInfo.Controls.Add(LabelSupplierMobile);
             TabContactInfo.Controls.Add(LabelSupplierPhone);
             TabContactInfo.ForeColor = SystemColors.WindowText;
-            TabContactInfo.Location = new Point(4, 22);
+            TabContactInfo.Location = new Point(4, 24);
             TabContactInfo.Name = "TabContactInfo";
             TabContactInfo.Padding = new Padding(3);
-            TabContactInfo.Size = new Size(699, 415);
+            TabContactInfo.Size = new Size(699, 413);
             TabContactInfo.TabIndex = 1;
             TabContactInfo.Text = "Contact Info";
             // 

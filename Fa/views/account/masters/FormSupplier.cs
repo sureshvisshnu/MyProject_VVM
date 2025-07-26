@@ -811,6 +811,7 @@ namespace fa.views.account.masters
             TextBoxSupplierPhone.ResetText();
             TextBoxSupplierMobile.ResetText();
             TextBoxSupplierWebsite.ResetText();
+            TextBoxGSTNo.ResetText();
             ComboBoxSupplierParentAccount.SelectedIndex = -1;
             ComboBoxBalanceType.SelectedIndex = 0;
             DateTimePickerSupplier.Format = Global.Company.DateFormat;
@@ -841,6 +842,7 @@ namespace fa.views.account.masters
             TextBoxSupplierDisplayAs.ReadOnly = !enable;
             TextBoxSupplierDescription.ReadOnly = !enable;
             TextBoxSupplierBalance.ReadOnly = !enable;
+            TextBoxGSTNo.ReadOnly = !enable;
             TextBoxSupplierName.TabStop = enable;
             TextBoxSupplierPhone.TabStop = enable;
             TextBoxSupplierWebsite.TabStop = enable;

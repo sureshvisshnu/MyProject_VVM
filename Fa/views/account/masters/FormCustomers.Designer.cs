@@ -29,16 +29,16 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCustomers));
             TabControlCustomer = new TabControl();
             TabCustomer = new TabPage();
             ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCustomerParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
             TextBoxGSTNo = new TextBox();
             labelGSTNo = new Label();
             TextBoxCustomerBalance = new fa.views.controls.text.CurrencyTextBox();
-            ComboBoxCustomerParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
             DateTimePickerCustomer = new fa.views.controls.text.DateWithCalendar();
             TextBoxCustomerNameonCheck = new TextBox();
             CheckBoxUseDisplayName = new CheckBox();
@@ -55,8 +55,8 @@
             LabelCustomerAsof = new Label();
             LabelCustomerParent = new Label();
             TabBillingInfo = new TabPage();
-            ComboBoxCustomerPaymentMethod = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxCustomerPaymentTerm = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCustomerPaymentMethod = new fa.views.controls.ComboBoxSwapTextBox();
             BillingAddressGroupBoxCustomer = new fa.views.controls.AddressGroupBoxWithStateSelection();
             label4 = new Label();
             RadioCustomerLockBill = new fa.views.controls.YesNoRadio();
@@ -150,8 +150,8 @@
             // TabCustomer
             // 
             TabCustomer.BackColor = SystemColors.Window;
-            TabCustomer.Controls.Add(ComboBoxBalanceType);
             TabCustomer.Controls.Add(ComboBoxCustomerParentAccount);
+            TabCustomer.Controls.Add(ComboBoxBalanceType);
             TabCustomer.Controls.Add(TextBoxGSTNo);
             TabCustomer.Controls.Add(labelGSTNo);
             TabCustomer.Controls.Add(TextBoxCustomerBalance);
@@ -190,6 +190,18 @@
             ComboBoxBalanceType.TabIndex = 15;
             ComboBoxBalanceType.TxtVisible = true;
             // 
+            // ComboBoxCustomerParentAccount
+            // 
+            ComboBoxCustomerParentAccount.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxCustomerParentAccount.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxCustomerParentAccount.FormattingEnabled = true;
+            ComboBoxCustomerParentAccount.Location = new Point(19, 208);
+            ComboBoxCustomerParentAccount.Name = "ComboBoxCustomerParentAccount";
+            ComboBoxCustomerParentAccount.Size = new Size(356, 21);
+            ComboBoxCustomerParentAccount.TabIndex = 10;
+            ComboBoxCustomerParentAccount.TxtVisible = true;
+            ComboBoxCustomerParentAccount.KeyPress += ComboBoxCustomerParentAccount_KeyPress;
+            // 
             // TextBoxGSTNo
             // 
             TextBoxGSTNo.BackColor = SystemColors.Window;
@@ -222,18 +234,6 @@
             TextBoxCustomerBalance.TabIndex = 14;
             TextBoxCustomerBalance.Text = "0.00";
             TextBoxCustomerBalance.TextAlign = HorizontalAlignment.Right;
-            // 
-            // ComboBoxCustomerParentAccount
-            // 
-            ComboBoxCustomerParentAccount.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxCustomerParentAccount.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxCustomerParentAccount.FormattingEnabled = true;
-            ComboBoxCustomerParentAccount.Location = new Point(19, 208);
-            ComboBoxCustomerParentAccount.Name = "ComboBoxCustomerParentAccount";
-            ComboBoxCustomerParentAccount.Size = new Size(356, 21);
-            ComboBoxCustomerParentAccount.TabIndex = 10;
-            ComboBoxCustomerParentAccount.TxtVisible = true;
-            ComboBoxCustomerParentAccount.KeyPress += ComboBoxCustomerParentAccount_KeyPress;
             // 
             // DateTimePickerCustomer
             // 
@@ -429,9 +429,21 @@
             TabBillingInfo.Location = new Point(4, 22);
             TabBillingInfo.Name = "TabBillingInfo";
             TabBillingInfo.Padding = new Padding(3);
-            TabBillingInfo.Size = new Size(699, 340);
+            TabBillingInfo.Size = new Size(192, 74);
             TabBillingInfo.TabIndex = 1;
             TabBillingInfo.Text = "Billing Details";
+            // 
+            // ComboBoxCustomerPaymentTerm
+            // 
+            ComboBoxCustomerPaymentTerm.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxCustomerPaymentTerm.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxCustomerPaymentTerm.FormattingEnabled = true;
+            ComboBoxCustomerPaymentTerm.Location = new Point(28, 77);
+            ComboBoxCustomerPaymentTerm.Name = "ComboBoxCustomerPaymentTerm";
+            ComboBoxCustomerPaymentTerm.Size = new Size(131, 21);
+            ComboBoxCustomerPaymentTerm.TabIndex = 17;
+            ComboBoxCustomerPaymentTerm.TxtVisible = true;
+            ComboBoxCustomerPaymentTerm.KeyPress += ComboBoxCustomerPaymentTerm_KeyPress;
             // 
             // ComboBoxCustomerPaymentMethod
             // 
@@ -445,18 +457,6 @@
             ComboBoxCustomerPaymentMethod.TxtVisible = true;
             ComboBoxCustomerPaymentMethod.KeyPress += ComboBoxCustomerPaymentMethod_KeyPress;
             ComboBoxCustomerPaymentMethod.PreviewKeyDown += ComboBoxCustomerPaymentMethod_PreviewKeyDown;
-            // 
-            // ComboBoxCustomerPaymentTerm
-            // 
-            ComboBoxCustomerPaymentTerm.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxCustomerPaymentTerm.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxCustomerPaymentTerm.FormattingEnabled = true;
-            ComboBoxCustomerPaymentTerm.Location = new Point(28, 77);
-            ComboBoxCustomerPaymentTerm.Name = "ComboBoxCustomerPaymentTerm";
-            ComboBoxCustomerPaymentTerm.Size = new Size(131, 21);
-            ComboBoxCustomerPaymentTerm.TabIndex = 17;
-            ComboBoxCustomerPaymentTerm.TxtVisible = true;
-            ComboBoxCustomerPaymentTerm.KeyPress += ComboBoxCustomerPaymentTerm_KeyPress;
             // 
             // BillingAddressGroupBoxCustomer
             // 
@@ -778,11 +778,11 @@
             CustomerLicenceInfoGrid.Location = new Point(14, 16);
             CustomerLicenceInfoGrid.Name = "CustomerLicenceInfoGrid";
             CustomerLicenceInfoGrid.RowHeadersVisible = false;
-            dataGridViewCellStyle2.BackColor = Color.White;
-            dataGridViewCellStyle2.ForeColor = Color.Black;
-            dataGridViewCellStyle2.SelectionBackColor = Color.White;
-            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
-            CustomerLicenceInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.BackColor = Color.White;
+            dataGridViewCellStyle4.ForeColor = Color.Black;
+            dataGridViewCellStyle4.SelectionBackColor = Color.White;
+            dataGridViewCellStyle4.SelectionForeColor = Color.Black;
+            CustomerLicenceInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle4;
             CustomerLicenceInfoGrid.RowTemplate.Height = 20;
             CustomerLicenceInfoGrid.ScrollBars = ScrollBars.Vertical;
             CustomerLicenceInfoGrid.ShowCellToolTips = false;
@@ -831,9 +831,9 @@
             // 
             // CustomerTaxIdDelete
             // 
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.NullValue = "X";
-            CustomerTaxIdDelete.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.NullValue = "X";
+            CustomerTaxIdDelete.DefaultCellStyle = dataGridViewCellStyle3;
             CustomerTaxIdDelete.HeaderText = "...";
             CustomerTaxIdDelete.Name = "CustomerTaxIdDelete";
             CustomerTaxIdDelete.Resizable = DataGridViewTriState.False;

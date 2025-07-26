@@ -916,7 +916,7 @@ namespace fa.views.account.masters
             CheckBoxCustomerUseBillingAddress.Checked = false;
             TextBoxCustomerDescription.ResetText();
             TextBoxCustomerNameonCheck.ResetText();
-
+            TextBoxGSTNo.ResetText();
             TextBoxCustomerEmail.ResetText();
             TextBoxCustomerFax.ResetText();
             TextBoxCustomerPhone.ResetText();
@@ -967,6 +967,7 @@ namespace fa.views.account.masters
             TextBoxCustomerMobile.ReadOnly = !enable;
             TextBoxCustomerWebsite.ReadOnly = !enable;
             TextBoxCustomerBalance.ReadOnly = !enable;
+            TextBoxGSTNo.ReadOnly = !enable;
             if (user.IsSuperAdmin)
             {
                 TextBoxCustomerPaymentLimit.ReadOnly = !enable;
