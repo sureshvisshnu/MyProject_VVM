@@ -395,12 +395,24 @@ namespace fa.views.sales
             if (SalesManager.GetSaleEntry(long.Parse(TextBoxSalesQuotesId.Text)) != null)
             {
                 Cursor.Current = Cursors.WaitCursor;
-                PrinterSetup.SalePrintSetupNew(long.Parse(TextBoxSalesQuotesId.Text), false, Entrytype.QUOTE);
+
+                // ✅ Set default print format and GST flag
+                string paperFormatName = "A5 PORTRAIT";
+                bool isGSTPrint = false;
+
+                // ✅ Unified print method — same as FormItemBasedSales
+                PrinterSetup.SalePrintSetup(
+                    long.Parse(TextBoxSalesQuotesId.Text),
+                    false,
+                    Entrytype.QUOTE,
+                    isGSTPrint,
+                    paperFormatName);
+
                 Cursor.Current = Cursors.Default;
             }
             else
             {
-                DisplaySystemError("Somting went wrong, please check this sale quote is still valid.");
+                DisplaySystemError("Something went wrong, please check this sale quote is still valid.");
                 return;
             }
         }
