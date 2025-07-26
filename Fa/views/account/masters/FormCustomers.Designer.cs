@@ -34,9 +34,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCustomers));
             TabControlCustomer = new TabControl();
             TabCustomer = new TabPage();
-            ComboBoxCustomerParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
+            TextBoxGSTNo = new TextBox();
+            labelGSTNo = new Label();
             TextBoxCustomerBalance = new fa.views.controls.text.CurrencyTextBox();
+            ComboBoxCustomerParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
             DateTimePickerCustomer = new fa.views.controls.text.DateWithCalendar();
             TextBoxCustomerNameonCheck = new TextBox();
             CheckBoxUseDisplayName = new CheckBox();
@@ -48,8 +50,8 @@
             LabelCustomerDisplayAs = new Label();
             LabelCustomerDescription = new Label();
             LabelCustomerBranch = new Label();
-            LabelCustomerNameonCheck = new Label();
             LabelCustomerBalance = new Label();
+            LabelCustomerNameonCheck = new Label();
             LabelCustomerAsof = new Label();
             LabelCustomerParent = new Label();
             TabBillingInfo = new TabPage();
@@ -104,8 +106,6 @@
             statusStrip1 = new StatusStrip();
             ToolStripStatusLabelErrorCustomer = new ToolStripStatusLabel();
             TextBoxCustomerSearch = new fa.views.controls.text.DelayedTextChangeTextBox();
-            TextBoxGSTNo = new TextBox();
-            labelGSTNo = new Label();
             TabControlCustomer.SuspendLayout();
             TabCustomer.SuspendLayout();
             TabBillingInfo.SuspendLayout();
@@ -151,10 +151,10 @@
             // 
             TabCustomer.BackColor = SystemColors.Window;
             TabCustomer.Controls.Add(ComboBoxBalanceType);
+            TabCustomer.Controls.Add(ComboBoxCustomerParentAccount);
             TabCustomer.Controls.Add(TextBoxGSTNo);
             TabCustomer.Controls.Add(labelGSTNo);
             TabCustomer.Controls.Add(TextBoxCustomerBalance);
-            TabCustomer.Controls.Add(ComboBoxCustomerParentAccount);
             TabCustomer.Controls.Add(DateTimePickerCustomer);
             TabCustomer.Controls.Add(TextBoxCustomerNameonCheck);
             TabCustomer.Controls.Add(CheckBoxUseDisplayName);
@@ -178,6 +178,51 @@
             TabCustomer.TabIndex = 0;
             TabCustomer.Text = "Customer";
             // 
+            // ComboBoxBalanceType
+            // 
+            ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxBalanceType.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxBalanceType.FormattingEnabled = true;
+            ComboBoxBalanceType.Items.AddRange(new object[] { "DR", "CR" });
+            ComboBoxBalanceType.Location = new Point(495, 308);
+            ComboBoxBalanceType.Name = "ComboBoxBalanceType";
+            ComboBoxBalanceType.Size = new Size(40, 21);
+            ComboBoxBalanceType.TabIndex = 15;
+            ComboBoxBalanceType.TxtVisible = true;
+            // 
+            // TextBoxGSTNo
+            // 
+            TextBoxGSTNo.BackColor = SystemColors.Window;
+            TextBoxGSTNo.Location = new Point(19, 308);
+            TextBoxGSTNo.MaxLength = 100;
+            TextBoxGSTNo.Name = "TextBoxGSTNo";
+            TextBoxGSTNo.ReadOnly = true;
+            TextBoxGSTNo.Size = new Size(356, 21);
+            TextBoxGSTNo.TabIndex = 13;
+            // 
+            // labelGSTNo
+            // 
+            labelGSTNo.AutoSize = true;
+            labelGSTNo.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            labelGSTNo.Location = new Point(19, 292);
+            labelGSTNo.Name = "labelGSTNo";
+            labelGSTNo.Size = new Size(42, 13);
+            labelGSTNo.TabIndex = 37;
+            labelGSTNo.Text = "GST No";
+            // 
+            // TextBoxCustomerBalance
+            // 
+            TextBoxCustomerBalance.BackColor = SystemColors.Window;
+            TextBoxCustomerBalance.Decimals = 2;
+            TextBoxCustomerBalance.Length = 10;
+            TextBoxCustomerBalance.Location = new Point(392, 308);
+            TextBoxCustomerBalance.Name = "TextBoxCustomerBalance";
+            TextBoxCustomerBalance.ReadOnly = true;
+            TextBoxCustomerBalance.Size = new Size(100, 21);
+            TextBoxCustomerBalance.TabIndex = 14;
+            TextBoxCustomerBalance.Text = "0.00";
+            TextBoxCustomerBalance.TextAlign = HorizontalAlignment.Right;
+            // 
             // ComboBoxCustomerParentAccount
             // 
             ComboBoxCustomerParentAccount.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -189,31 +234,6 @@
             ComboBoxCustomerParentAccount.TabIndex = 10;
             ComboBoxCustomerParentAccount.TxtVisible = true;
             ComboBoxCustomerParentAccount.KeyPress += ComboBoxCustomerParentAccount_KeyPress;
-            // 
-            // ComboBoxBalanceType
-            // 
-            ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxBalanceType.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxBalanceType.FormattingEnabled = true;
-            ComboBoxBalanceType.Items.AddRange(new object[] { "DR", "CR" });
-            ComboBoxBalanceType.Location = new Point(495, 308);
-            ComboBoxBalanceType.Name = "ComboBoxBalanceType";
-            ComboBoxBalanceType.Size = new Size(40, 21);
-            ComboBoxBalanceType.TabIndex = 14;
-            ComboBoxBalanceType.TxtVisible = true;
-            // 
-            // TextBoxCustomerBalance
-            // 
-            TextBoxCustomerBalance.BackColor = SystemColors.Window;
-            TextBoxCustomerBalance.Decimals = 2;
-            TextBoxCustomerBalance.Length = 10;
-            TextBoxCustomerBalance.Location = new Point(392, 308);
-            TextBoxCustomerBalance.Name = "TextBoxCustomerBalance";
-            TextBoxCustomerBalance.ReadOnly = true;
-            TextBoxCustomerBalance.Size = new Size(100, 21);
-            TextBoxCustomerBalance.TabIndex = 13;
-            TextBoxCustomerBalance.Text = "0.00";
-            TextBoxCustomerBalance.TextAlign = HorizontalAlignment.Right;
             // 
             // DateTimePickerCustomer
             // 
@@ -228,7 +248,7 @@
             DateTimePickerCustomer.Name = "DateTimePickerCustomer";
             DateTimePickerCustomer.ReadOnly = false;
             DateTimePickerCustomer.Size = new Size(93, 21);
-            DateTimePickerCustomer.TabIndex = 15;
+            DateTimePickerCustomer.TabIndex = 16;
             DateTimePickerCustomer.PreviewKeyDown += DateTimePickerCustomer_PreviewKeyDown;
             // 
             // TextBoxCustomerNameonCheck
@@ -352,16 +372,6 @@
             LabelCustomerBranch.TabIndex = 17;
             LabelCustomerBranch.Text = "Branch";
             // 
-            // LabelCustomerNameonCheck
-            // 
-            LabelCustomerNameonCheck.AutoSize = true;
-            LabelCustomerNameonCheck.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            LabelCustomerNameonCheck.Location = new Point(16, 231);
-            LabelCustomerNameonCheck.Name = "LabelCustomerNameonCheck";
-            LabelCustomerNameonCheck.Size = new Size(91, 13);
-            LabelCustomerNameonCheck.TabIndex = 22;
-            LabelCustomerNameonCheck.Text = "Name On Cheque";
-            // 
             // LabelCustomerBalance
             // 
             LabelCustomerBalance.AutoSize = true;
@@ -371,6 +381,16 @@
             LabelCustomerBalance.Size = new Size(44, 13);
             LabelCustomerBalance.TabIndex = 35;
             LabelCustomerBalance.Text = "Balance";
+            // 
+            // LabelCustomerNameonCheck
+            // 
+            LabelCustomerNameonCheck.AutoSize = true;
+            LabelCustomerNameonCheck.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            LabelCustomerNameonCheck.Location = new Point(16, 231);
+            LabelCustomerNameonCheck.Name = "LabelCustomerNameonCheck";
+            LabelCustomerNameonCheck.Size = new Size(91, 13);
+            LabelCustomerNameonCheck.TabIndex = 22;
+            LabelCustomerNameonCheck.Text = "Name On Cheque";
             // 
             // LabelCustomerAsof
             // 
@@ -394,8 +414,8 @@
             // TabBillingInfo
             // 
             TabBillingInfo.BackColor = SystemColors.Window;
-            TabBillingInfo.Controls.Add(ComboBoxCustomerPaymentMethod);
             TabBillingInfo.Controls.Add(ComboBoxCustomerPaymentTerm);
+            TabBillingInfo.Controls.Add(ComboBoxCustomerPaymentMethod);
             TabBillingInfo.Controls.Add(BillingAddressGroupBoxCustomer);
             TabBillingInfo.Controls.Add(label4);
             TabBillingInfo.Controls.Add(RadioCustomerLockBill);
@@ -409,7 +429,7 @@
             TabBillingInfo.Location = new Point(4, 22);
             TabBillingInfo.Name = "TabBillingInfo";
             TabBillingInfo.Padding = new Padding(3);
-            TabBillingInfo.Size = new Size(192, 74);
+            TabBillingInfo.Size = new Size(699, 340);
             TabBillingInfo.TabIndex = 1;
             TabBillingInfo.Text = "Billing Details";
             // 
@@ -975,26 +995,6 @@
             TextBoxCustomerSearch.TabIndex = 0;
             TextBoxCustomerSearch.TextChanged += TextBoxCustomerSearch_TextChanged;
             TextBoxCustomerSearch.KeyDown += TextBoxCustomerSearch_KeyDown;
-            // 
-            // TextBoxGSTNo
-            // 
-            TextBoxGSTNo.BackColor = SystemColors.Window;
-            TextBoxGSTNo.Location = new Point(19, 308);
-            TextBoxGSTNo.MaxLength = 100;
-            TextBoxGSTNo.Name = "TextBoxGSTNo";
-            TextBoxGSTNo.ReadOnly = true;
-            TextBoxGSTNo.Size = new Size(356, 21);
-            TextBoxGSTNo.TabIndex = 38;
-            // 
-            // labelGSTNo
-            // 
-            labelGSTNo.AutoSize = true;
-            labelGSTNo.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            labelGSTNo.Location = new Point(19, 292);
-            labelGSTNo.Name = "labelGSTNo";
-            labelGSTNo.Size = new Size(42, 13);
-            labelGSTNo.TabIndex = 37;
-            labelGSTNo.Text = "GST No";
             // 
             // FormCustomers
             // 

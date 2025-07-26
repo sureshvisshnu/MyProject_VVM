@@ -35,10 +35,10 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSupplier));
             TabControlSupplier = new TabControl();
             TabGeneralPage = new TabPage();
-            TextBoxGSTNo = new TextBox();
-            labelGSTNo = new Label();
             ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxSupplierParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            TextBoxGSTNo = new TextBox();
+            labelGSTNo = new Label();
             TextBoxSupplierBalance = new fa.views.controls.text.CurrencyTextBox();
             DateTimePickerSupplier = new fa.views.controls.text.DateWithCalendar();
             LabelSupplierAsof = new Label();
@@ -162,26 +162,6 @@
             TabGeneralPage.TabIndex = 0;
             TabGeneralPage.Text = "Supplier";
             // 
-            // TextBoxGSTNo
-            // 
-            TextBoxGSTNo.BackColor = SystemColors.Window;
-            TextBoxGSTNo.Location = new Point(19, 312);
-            TextBoxGSTNo.MaxLength = 100;
-            TextBoxGSTNo.Name = "TextBoxGSTNo";
-            TextBoxGSTNo.ReadOnly = true;
-            TextBoxGSTNo.Size = new Size(356, 21);
-            TextBoxGSTNo.TabIndex = 27;
-            // 
-            // labelGSTNo
-            // 
-            labelGSTNo.AutoSize = true;
-            labelGSTNo.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            labelGSTNo.Location = new Point(19, 296);
-            labelGSTNo.Name = "labelGSTNo";
-            labelGSTNo.Size = new Size(42, 13);
-            labelGSTNo.TabIndex = 26;
-            labelGSTNo.Text = "GST No";
-            // 
             // ComboBoxBalanceType
             // 
             ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -205,6 +185,26 @@
             ComboBoxSupplierParentAccount.TabIndex = 11;
             ComboBoxSupplierParentAccount.TxtVisible = true;
             ComboBoxSupplierParentAccount.KeyPress += ComboBoxSupplierParentAccount_KeyPress;
+            // 
+            // TextBoxGSTNo
+            // 
+            TextBoxGSTNo.BackColor = SystemColors.Window;
+            TextBoxGSTNo.Location = new Point(19, 312);
+            TextBoxGSTNo.MaxLength = 100;
+            TextBoxGSTNo.Name = "TextBoxGSTNo";
+            TextBoxGSTNo.ReadOnly = true;
+            TextBoxGSTNo.Size = new Size(356, 21);
+            TextBoxGSTNo.TabIndex = 15;
+            // 
+            // labelGSTNo
+            // 
+            labelGSTNo.AutoSize = true;
+            labelGSTNo.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            labelGSTNo.Location = new Point(19, 296);
+            labelGSTNo.Name = "labelGSTNo";
+            labelGSTNo.Size = new Size(42, 13);
+            labelGSTNo.TabIndex = 26;
+            labelGSTNo.Text = "GST No";
             // 
             // TextBoxSupplierBalance
             // 
@@ -515,10 +515,10 @@
             // TabLicenseInfo
             // 
             TabLicenseInfo.Controls.Add(SupplierLicenceInfoGrid);
-            TabLicenseInfo.Location = new Point(4, 22);
+            TabLicenseInfo.Location = new Point(4, 24);
             TabLicenseInfo.Name = "TabLicenseInfo";
             TabLicenseInfo.Padding = new Padding(3);
-            TabLicenseInfo.Size = new Size(699, 415);
+            TabLicenseInfo.Size = new Size(699, 413);
             TabLicenseInfo.TabIndex = 2;
             TabLicenseInfo.Text = "Tax Info";
             TabLicenseInfo.UseVisualStyleBackColor = true;
@@ -627,10 +627,10 @@
             supplierproduct.Controls.Add(TreeViewSelectedProduct);
             supplierproduct.Controls.Add(TextBoxProductSearch);
             supplierproduct.Controls.Add(TreeViewProduct);
-            supplierproduct.Location = new Point(4, 22);
+            supplierproduct.Location = new Point(4, 24);
             supplierproduct.Name = "supplierproduct";
             supplierproduct.Padding = new Padding(3);
-            supplierproduct.Size = new Size(699, 415);
+            supplierproduct.Size = new Size(699, 413);
             supplierproduct.TabIndex = 3;
             supplierproduct.Text = "Product Linking";
             supplierproduct.UseVisualStyleBackColor = true;
