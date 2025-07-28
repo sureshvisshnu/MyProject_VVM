@@ -1106,8 +1106,7 @@ namespace fa.api.OrderManagement
             using (var context = new AccountMasterContext())
             {
                 return context.SaleDetail
-                    .Include(sd => sd.Sale) // Include SaleEntry for date info
-                    .ThenInclude(sd => sd.SaleDate) // Include Product for price info
+                    .Include(sd => sd.Sale)
                     .Where(sd => sd.ProductId == productId
                               && sd.Sale.CompanyId == companyId
                               && sd.Sale.AccountsId == customerId)
@@ -1116,5 +1115,6 @@ namespace fa.api.OrderManagement
                     .ToList();
             }
         }
+
     }
 }

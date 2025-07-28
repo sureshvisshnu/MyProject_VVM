@@ -3028,6 +3028,7 @@ namespace fa.views.sales
             using (var form = new FormSalsePriceSeeking(this))
             {
                 form.ProductId = GridViewSalesItem.CurrentRow?.Cells[(int)SaleEntryTableColumn.ID]?.Value as long? ?? 0L;
+                form.CustomerId = CustomerId; // Get customer ID from the current form context
                 form.ShowDialog();
                 //if (form.ShowDialog() == DialogResult.OK && form.GridViewItems.CurrentRow != null)
                 //{

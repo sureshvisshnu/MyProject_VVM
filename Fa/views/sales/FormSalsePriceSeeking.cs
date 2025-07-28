@@ -19,16 +19,14 @@ namespace Fa.views.sales
     {
         public long LocationId = 0L;
         public long ProductId { get; set; } // Set from FormItembasedSales
+        public long ProductBatchId { get; set; } // Set from FormItembasedSales
+        public long CustomerId { get; set; } // Set from FormItembasedSales
         public FormSalsePriceSeeking(object sender)
         {
             InitializeComponent();
             //this.Shown += FormSalsePriceSeeking_Shown; // Load data when form is shown
         }
-
-        private void BtnSearchSelect_Click(object sender, EventArgs e)
-        {
-            LoadPreviousPrices();
-        }
+        
         private void LoadPreviousPrices()
         {
             try
@@ -43,28 +41,29 @@ namespace Fa.views.sales
                 // Get last 5 sales prices
                 var sales = SalesManager.Instance.GetLastPricesByProductAndCustomer(Global.Company.CompanyId,
                     productId: this.ProductId,
-                    customerId: customerId
+                    customerId: this.CustomerId
                 );
 
                 // Populate the grid
                 int rowNum = 1;
+
                 foreach (var sale in sales)
                 {
                     GridViewItems.Rows.Add(
                         rowNum++,
-                        sale.Sale.SaleDate,
-                        sale.Price,
-                        sale.Id  // Hidden ID column
+                        sale.Sale?.SaleDate.ToString(Global.Company.DateFormat), // formatted date
+                        sale.Price.ToString(Global.Company.PrimaryCurrency.CurrencyFormat), // correct
+                        sale.Id
                     );
                 }
-
+                GridViewItems.ClearSelection();
                 // Update product details
                 using (var context = new AccountMasterContext())
                 {
                     var product = context.Products.FirstOrDefault(p => p.Id == ProductId);
                     if (product != null)
                     {
-                        // TextBoxCategory.Text = product.c;
+                        //TextBoxCategory.Text = product.c;
                         //TextBoxProductFamily.Text = product.ProductFamily;
                         //TextBoxManufacturer.Text = product.Manufacturer;
                         //TextBoxSupplier.Text = product.Supplier;
@@ -82,5 +81,14 @@ namespace Fa.views.sales
             }
         }
 
+        private void FormSalsePriceSeeking_Load(object sender, EventArgs e)
+        {
+            LoadPreviousPrices();
+        }
+
+        private void BtnOKExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
     }
 }
