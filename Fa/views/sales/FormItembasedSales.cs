@@ -25,10 +25,11 @@ using fa.views.controls.accounting;
 using fa.views.controls.grid;
 using fa.views.hms.helper;
 using fa.views.purchase;
+using fa.views.sales;
 using fa.views.utils;
 using Fa.api.catalog;
 using Fa.report.accounting.master;
-using fa.views.sales;
+using Fa.views.sales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using Syncfusion.Styles;
@@ -3023,8 +3024,19 @@ namespace fa.views.sales
         }
         private void SearchPreviousPrice()
         {
-            //FormSalsePriceSeeking FormSalsePriceSeeking = new FormSalsePriceSeeking(this);
-            //FormSalsePriceSeeking.ShowDialog();
+            Cursor.Current = Cursors.WaitCursor;
+            using (var form = new FormSalsePriceSeeking(this))
+            {
+                form.ProductId = GridViewSalesItem.CurrentRow?.Cells[(int)SaleEntryTableColumn.ID]?.Value as long? ?? 0L;
+                form.ShowDialog();
+                //if (form.ShowDialog() == DialogResult.OK && form.GridViewItems.CurrentRow != null)
+                //{
+                //    // Apply selected price to current row
+                //    decimal selectedPrice = Convert.ToDecimal(form.GridViewItems.CurrentRow.Cells["price"].Value);
+                //    GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.PRICE].Value = selectedPrice;
+                //}
+            }
+            Cursor.Current = Cursors.Default;
         }
 
         private void SearchProduct()

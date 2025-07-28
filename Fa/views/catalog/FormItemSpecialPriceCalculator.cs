@@ -235,7 +235,7 @@ namespace Fa.views.catalog
                         AddedCostPercentage = decimal.Parse(TextBoxAddedCostPercentage.Text),
                         RetailMarginPercentage = decimal.Parse(TextBoxRetailMargin.Text),
                         WholesaleMarginPercentage = decimal.Parse(TextBoxWholesaleMargin.Text),
-                        MrpPercentage = decimal.Parse(comboMrpPercentage.SelectedItem.ToString()!),
+                        MrpPercentage = decimal.Parse(TextBoxMrpPercentage.Text),
                         IsActive = true
                     };
 
@@ -368,6 +368,7 @@ namespace Fa.views.catalog
             if (comboMrpPercentage.SelectedItem != null)
             {
                 MrpPercentage = Convert.ToDecimal(comboMrpPercentage.SelectedItem);
+                TextBoxMrpPercentage.Text = MrpPercentage.ToString();
                 UpdateAllCalculations(); // Recalculate all prices
             }
         }
@@ -425,6 +426,7 @@ namespace Fa.views.catalog
             if (decimal.TryParse(comboMrpPercentage.Text, out var mrp))
             {
                 MrpPercentage = mrp;
+                TextBoxMrpPercentage.Text = MrpPercentage.ToString();
                 UpdateAllCalculations(); // trigger recalculation
             }
         }

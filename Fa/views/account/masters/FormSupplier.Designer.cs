@@ -35,8 +35,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSupplier));
             TabControlSupplier = new TabControl();
             TabGeneralPage = new TabPage();
-            ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxSupplierParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
             TextBoxGSTNo = new TextBox();
             labelGSTNo = new Label();
             TextBoxSupplierBalance = new fa.views.controls.text.CurrencyTextBox();
@@ -138,8 +138,8 @@
             // TabGeneralPage
             // 
             TabGeneralPage.BackColor = SystemColors.Window;
-            TabGeneralPage.Controls.Add(ComboBoxSupplierParentAccount);
             TabGeneralPage.Controls.Add(ComboBoxBalanceType);
+            TabGeneralPage.Controls.Add(ComboBoxSupplierParentAccount);
             TabGeneralPage.Controls.Add(TextBoxGSTNo);
             TabGeneralPage.Controls.Add(labelGSTNo);
             TabGeneralPage.Controls.Add(TextBoxSupplierBalance);
@@ -162,18 +162,6 @@
             TabGeneralPage.TabIndex = 0;
             TabGeneralPage.Text = "Supplier";
             // 
-            // ComboBoxBalanceType
-            // 
-            ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxBalanceType.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxBalanceType.FormattingEnabled = true;
-            ComboBoxBalanceType.Items.AddRange(new object[] { "DR", "CR" });
-            ComboBoxBalanceType.Location = new Point(122, 265);
-            ComboBoxBalanceType.Name = "ComboBoxBalanceType";
-            ComboBoxBalanceType.Size = new Size(40, 21);
-            ComboBoxBalanceType.TabIndex = 13;
-            ComboBoxBalanceType.TxtVisible = true;
-            // 
             // ComboBoxSupplierParentAccount
             // 
             ComboBoxSupplierParentAccount.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -185,6 +173,18 @@
             ComboBoxSupplierParentAccount.TabIndex = 11;
             ComboBoxSupplierParentAccount.TxtVisible = true;
             ComboBoxSupplierParentAccount.KeyPress += ComboBoxSupplierParentAccount_KeyPress;
+            // 
+            // ComboBoxBalanceType
+            // 
+            ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxBalanceType.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxBalanceType.FormattingEnabled = true;
+            ComboBoxBalanceType.Items.AddRange(new object[] { "DR", "CR" });
+            ComboBoxBalanceType.Location = new Point(122, 265);
+            ComboBoxBalanceType.Name = "ComboBoxBalanceType";
+            ComboBoxBalanceType.Size = new Size(40, 21);
+            ComboBoxBalanceType.TabIndex = 13;
+            ComboBoxBalanceType.TxtVisible = true;
             // 
             // TextBoxGSTNo
             // 
@@ -627,10 +627,10 @@
             supplierproduct.Controls.Add(TreeViewSelectedProduct);
             supplierproduct.Controls.Add(TextBoxProductSearch);
             supplierproduct.Controls.Add(TreeViewProduct);
-            supplierproduct.Location = new Point(4, 24);
+            supplierproduct.Location = new Point(4, 22);
             supplierproduct.Name = "supplierproduct";
             supplierproduct.Padding = new Padding(3);
-            supplierproduct.Size = new Size(699, 413);
+            supplierproduct.Size = new Size(699, 415);
             supplierproduct.TabIndex = 3;
             supplierproduct.Text = "Product Linking";
             supplierproduct.UseVisualStyleBackColor = true;
@@ -760,6 +760,7 @@
             TreeViewSupplier.Size = new Size(239, 410);
             TreeViewSupplier.TabIndex = 2;
             TreeViewSupplier.AfterSelect += TreeViewSupplier_AfterSelect;
+            TreeViewSupplier.NodeMouseClick += TreeViewSupplier_NodeMouseClick;
             // 
             // ImageListSupplier
             // 

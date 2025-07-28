@@ -123,7 +123,7 @@ namespace Fa.views.utils.Sale
                 pdfDoc.Open();
 
                 // Add header
-                PdfPTable DocHeader = InvoiceHeader("SALES INVOICE", saleEntry.RefNumber, saleEntry.SaleDate);
+                PdfPTable DocHeader = InvoiceHeader("SALES INVOICE", saleEntry.RefNumber, saleEntry.SaleDate, Entrytype.SALE);
                 pdfDoc.Add(DocHeader);
 
                 // Add customer info
@@ -288,7 +288,7 @@ namespace Fa.views.utils.Sale
 
                 // Add header
                 //PdfPTable DocHeader = InvoiceHeader("SALES INVOICE", saleEntry.RefNumber, saleEntry.SaleDate);
-                string title = entrytype == Entrytype.QUOTE ? "SALES QUOTE" : "SALES INVOICE"; PdfPTable DocHeader = InvoiceHeader(title, saleEntry.RefNumber, saleEntry.SaleDate);
+                string title = entrytype == Entrytype.QUOTE ? "QUOTATION" : "SALES INVOICE"; PdfPTable DocHeader = InvoiceHeader(title, saleEntry.RefNumber, saleEntry.SaleDate, entrytype);
                 pdfDoc.Add(DocHeader);
 
                 // Add customer info
@@ -364,7 +364,7 @@ namespace Fa.views.utils.Sale
             }
         }
 
-        private PdfPTable InvoiceHeader(string Heading, string invoiceNo, DateTime invoiceDate)
+        private PdfPTable InvoiceHeader(string Heading, string invoiceNo, DateTime invoiceDate, Entrytype entrytype)
         {
             PdfPTable HeadTable = new PdfPTable(1);
             HeadTable.WidthPercentage = 100;
@@ -385,8 +385,10 @@ namespace Fa.views.utils.Sale
             HeadCell.PaddingTop = 5f;
             HeadTable.AddCell(HeadCell);
 
-            HeadCell = new PdfPCell(new Phrase($"Invoice No: {invoiceNo}   Date: {invoiceDate.ToString(Global.Company.DateFormat)}",
+            string label = entrytype == Entrytype.QUOTE ? "Quotation No:" : "Invoice No:";
+            HeadCell = new PdfPCell(new Phrase($"{label} {invoiceNo}   Date: {invoiceDate.ToString(Global.Company.DateFormat)}",
                 PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+
             HeadCell.Border = Rectangle.NO_BORDER;
             HeadCell.HorizontalAlignment = Element.ALIGN_CENTER;
             HeadTable.AddCell(HeadCell);

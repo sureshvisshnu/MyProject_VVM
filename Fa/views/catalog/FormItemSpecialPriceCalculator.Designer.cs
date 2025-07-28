@@ -60,6 +60,7 @@
             label12 = new Label();
             label13 = new Label();
             comboMrpPercentage = new ComboBox();
+            TextBoxMrpPercentage = new fa.views.controls.text.CurrencyTextBox();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -390,11 +391,24 @@
             comboMrpPercentage.SelectedIndexChanged += comboMrpPercentage_SelectedIndexChanged;
             comboMrpPercentage.TextChanged += comboMrpPercentage_TextChanged;
             // 
+            // TextBoxMrpPercentage
+            // 
+            TextBoxMrpPercentage.Decimals = 2;
+            TextBoxMrpPercentage.Length = 6;
+            TextBoxMrpPercentage.Location = new Point(256, 159);
+            TextBoxMrpPercentage.Name = "TextBoxMrpPercentage";
+            TextBoxMrpPercentage.Size = new Size(54, 23);
+            TextBoxMrpPercentage.TabIndex = 479;
+            TextBoxMrpPercentage.Text = "0.00";
+            TextBoxMrpPercentage.TextAlign = HorizontalAlignment.Right;
+            TextBoxMrpPercentage.Visible = false;
+            // 
             // FormItemSpecialPriceCalculator
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(360, 349);
+            Controls.Add(TextBoxMrpPercentage);
             Controls.Add(comboMrpPercentage);
             Controls.Add(label13);
             Controls.Add(TextBoxMrpPrice);
@@ -464,6 +478,7 @@
             Controls.SetChildIndex(TextBoxMrpPrice, 0);
             Controls.SetChildIndex(label13, 0);
             Controls.SetChildIndex(comboMrpPercentage, 0);
+            Controls.SetChildIndex(TextBoxMrpPercentage, 0);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -502,5 +517,6 @@
         private Label label12;
         private Label label13;
         private ComboBox comboMrpPercentage;
+        private fa.views.controls.text.CurrencyTextBox TextBoxMrpPercentage;
     }
 }

@@ -1,6 +1,7 @@
-﻿using fa.model.Accounting.Masters;
-using fa.context;
+﻿using fa.context;
+using fa.model.Accounting.Masters;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace fa.api.Accounting
 {
@@ -311,5 +312,15 @@ namespace fa.api.Accounting
             }
             return SupplierInfo;
         }
+        public static Supplier GetSupplierWithProductsById(long supplierId)
+        {
+            using (AccountMasterContext Context = new AccountMasterContext())
+            {
+                return Context.Suppliers
+                    .Include("SupplierProducts.Product")
+                    .FirstOrDefault(x => x.Id == supplierId);
+            }
+        }
+
     }
 }

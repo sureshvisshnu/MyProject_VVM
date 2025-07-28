@@ -648,8 +648,8 @@ namespace fa.api.OrderManagement
             {
                 using (var dbContextTransaction = Context.Database.BeginTransaction())
                 {
-                    //try
-                    //{
+                    try
+                    {
                         SaleEntry SaleEntryInfo = GetSaleEntry(SaleEntryId);
                         if (SaleEntryInfo.EntryType == Entrytype.SALE)
                         {
@@ -732,13 +732,13 @@ namespace fa.api.OrderManagement
 
                         dbContextTransaction.Commit();
                         Deleted = true;
-                    //}
-                    //catch (Exception e)
-                    //{
-                    //    dbContextTransaction.Rollback();
-                    //    throw (e);
-                    //}
                 }
+                    catch (Exception e)
+                    {
+                    dbContextTransaction.Rollback();
+                    throw (e);
+                }
+            }
             }
             return Deleted;
         }
@@ -1085,6 +1085,36 @@ namespace fa.api.OrderManagement
                 saleTaxDetails = Context.Set<ItemLevelSaleTaxDetail>().Include("CatalogItemSalesTaxMap").Include("ItemSalesTaxMap").Where(x => x.SaleDetailsId == saledetailId).ToList();
             }
             return saleTaxDetails;
+        }
+        public List<SaleEntry> GetLastPricesByProductAndCustomerxxx(long companyId, long productId, long customerId, int recordCount = 5)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                return context.SaleEntry
+                    .Include(se => se.SaleDetails) // Include SaleDetails for access
+                    .ThenInclude(sd => sd.Price) // Include Product in SaleDetails
+                    .Where(se => se.CompanyId == companyId
+                              && se.AccountsId == customerId
+                              && se.SaleDetails.Any(sd => sd.ProductId == productId))
+                    .OrderByDescending(se => se.SaleDate)
+                    .Take(recordCount)
+                    .ToList();
+            }
+        }
+        public List<SaleDetail> GetLastPricesByProductAndCustomer(long companyId, long productId, long customerId, int recordCount = 5)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                return context.SaleDetail
+                    .Include(sd => sd.Sale) // Include SaleEntry for date info
+                    .ThenInclude(sd => sd.SaleDate) // Include Product for price info
+                    .Where(sd => sd.ProductId == productId
+                              && sd.Sale.CompanyId == companyId
+                              && sd.Sale.AccountsId == customerId)
+                    .OrderByDescending(sd => sd.Sale.SaleDate)
+                    .Take(recordCount)
+                    .ToList();
+            }
         }
     }
 }

@@ -35,10 +35,6 @@
             DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSalsePriceSeeking));
             GridViewItems = new fa.views.controls.DataViewVerticalScroll();
-            sno = new DataGridViewTextBoxColumn();
-            SalesDate = new DataGridViewTextBoxColumn();
-            price = new DataGridViewTextBoxColumn();
-            Column1 = new DataGridViewTextBoxColumn();
             groupBox1 = new GroupBox();
             TextBoxSupplier = new TextBox();
             TextBoxProductFamily = new TextBox();
@@ -52,10 +48,30 @@
             toolStrip = new ToolStrip();
             toolStripLabel1 = new ToolStripLabel();
             TextBoxSearchProduct = new fa.views.controls.ToolstripDelayedTextBox();
+            sno = new DataGridViewTextBoxColumn();
+            SalesDate = new DataGridViewTextBoxColumn();
+            price = new DataGridViewTextBoxColumn();
+            Column1 = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)GridViewItems).BeginInit();
             groupBox1.SuspendLayout();
             toolStrip.SuspendLayout();
             SuspendLayout();
+            // 
+            // ProductIdTransport
+            // 
+            ProductIdTransport.Size = new Size(116, 21);
+            // 
+            // ProductBatchIdTransport
+            // 
+            ProductBatchIdTransport.Size = new Size(116, 21);
+            // 
+            // AccountIdTransport
+            // 
+            AccountIdTransport.Size = new Size(116, 21);
+            // 
+            // checkBoxIsPatient
+            // 
+            checkBoxIsPatient.Size = new Size(69, 17);
             // 
             // GridViewItems
             // 
@@ -87,55 +103,8 @@
             GridViewItems.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             GridViewItems.ShowCellToolTips = false;
             GridViewItems.ShowEditingIcon = false;
-            GridViewItems.Size = new Size(220, 152);
+            GridViewItems.Size = new Size(239, 152);
             GridViewItems.TabIndex = 29;
-            // 
-            // sno
-            // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            sno.DefaultCellStyle = dataGridViewCellStyle2;
-            sno.HeaderText = "Sl. No";
-            sno.Name = "sno";
-            sno.ReadOnly = true;
-            sno.Resizable = DataGridViewTriState.False;
-            sno.SortMode = DataGridViewColumnSortMode.NotSortable;
-            sno.Width = 40;
-            // 
-            // SalesDate
-            // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            SalesDate.DefaultCellStyle = dataGridViewCellStyle3;
-            SalesDate.HeaderText = "Saled Date";
-            SalesDate.Name = "SalesDate";
-            SalesDate.ReadOnly = true;
-            SalesDate.Resizable = DataGridViewTriState.False;
-            SalesDate.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // price
-            // 
-            price.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            price.DefaultCellStyle = dataGridViewCellStyle4;
-            price.HeaderText = "Rate";
-            price.Name = "price";
-            price.ReadOnly = true;
-            price.Resizable = DataGridViewTriState.False;
-            price.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Column1
-            // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            Column1.DefaultCellStyle = dataGridViewCellStyle5;
-            Column1.HeaderText = "Id";
-            Column1.Name = "Column1";
-            Column1.ReadOnly = true;
-            Column1.Resizable = DataGridViewTriState.False;
-            Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Column1.Visible = false;
             // 
             // groupBox1
             // 
@@ -252,7 +221,7 @@
             toolStrip.Items.AddRange(new ToolStripItem[] { toolStripLabel1, TextBoxSearchProduct });
             toolStrip.Location = new Point(0, 0);
             toolStrip.Name = "toolStrip";
-            toolStrip.Padding = new Padding(4, 4, 4, 4);
+            toolStrip.Padding = new Padding(4);
             toolStrip.Size = new Size(447, 32);
             toolStrip.TabIndex = 36;
             toolStrip.Text = "toolStrip1";
@@ -272,6 +241,53 @@
             TextBoxSearchProduct.Name = "TextBoxSearchProduct";
             TextBoxSearchProduct.Size = new Size(172, 21);
             // 
+            // sno
+            // 
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            sno.DefaultCellStyle = dataGridViewCellStyle2;
+            sno.HeaderText = "Sl. No";
+            sno.Name = "sno";
+            sno.ReadOnly = true;
+            sno.Resizable = DataGridViewTriState.False;
+            sno.SortMode = DataGridViewColumnSortMode.NotSortable;
+            sno.Width = 30;
+            // 
+            // SalesDate
+            // 
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            SalesDate.DefaultCellStyle = dataGridViewCellStyle3;
+            SalesDate.HeaderText = "Saled Date";
+            SalesDate.Name = "SalesDate";
+            SalesDate.ReadOnly = true;
+            SalesDate.Resizable = DataGridViewTriState.False;
+            SalesDate.SortMode = DataGridViewColumnSortMode.NotSortable;
+            SalesDate.Width = 110;
+            // 
+            // price
+            // 
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            price.DefaultCellStyle = dataGridViewCellStyle4;
+            price.HeaderText = "Rate";
+            price.Name = "price";
+            price.ReadOnly = true;
+            price.SortMode = DataGridViewColumnSortMode.NotSortable;
+            price.Width = 80;
+            // 
+            // Column1
+            // 
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            Column1.DefaultCellStyle = dataGridViewCellStyle5;
+            Column1.HeaderText = "Id";
+            Column1.Name = "Column1";
+            Column1.ReadOnly = true;
+            Column1.Resizable = DataGridViewTriState.False;
+            Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Column1.Visible = false;
+            // 
             // FormSalsePriceSeeking
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
@@ -283,13 +299,20 @@
             Controls.Add(BtnSearchSelect);
             Controls.Add(GridViewItems);
             Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormSalsePriceSeeking";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Previous Price Search";
+            Controls.SetChildIndex(GridViewItems, 0);
+            Controls.SetChildIndex(BtnSearchSelect, 0);
+            Controls.SetChildIndex(groupBox1, 0);
+            Controls.SetChildIndex(toolStrip, 0);
+            Controls.SetChildIndex(ProductIdTransport, 0);
+            Controls.SetChildIndex(ProductBatchIdTransport, 0);
+            Controls.SetChildIndex(AccountIdTransport, 0);
+            Controls.SetChildIndex(checkBoxIsPatient, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewItems).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -302,10 +325,6 @@
         #endregion
 
         private fa.views.controls.DataViewVerticalScroll GridViewItems;
-        private DataGridViewTextBoxColumn sno;
-        private DataGridViewTextBoxColumn SalesDate;
-        private DataGridViewTextBoxColumn price;
-        private DataGridViewTextBoxColumn Column1;
         private GroupBox groupBox1;
         private TextBox TextBoxSupplier;
         private TextBox TextBoxProductFamily;
@@ -319,5 +338,9 @@
         private ToolStrip toolStrip;
         private ToolStripLabel toolStripLabel1;
         private fa.views.controls.ToolstripDelayedTextBox TextBoxSearchProduct;
+        private DataGridViewTextBoxColumn sno;
+        private DataGridViewTextBoxColumn SalesDate;
+        private DataGridViewTextBoxColumn price;
+        private DataGridViewTextBoxColumn Column1;
     }
 }

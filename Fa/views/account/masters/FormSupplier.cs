@@ -295,6 +295,74 @@ namespace fa.views.account.masters
             }
             return null!;
         }
+        private void LoadSupplierAllInfo(Supplier SupplierFromDB)
+        {
+            if (SupplierFromDB != null)
+            {
+                TextBoxSupplierAccountId.Text = SupplierFromDB.Id.ToString();
+                TextBoxSupplierName.Text = SupplierFromDB.Name;
+                TextBoxSupplierDisplayAs.Text = SupplierFromDB.DisplayAs;
+                TextBoxSupplierDescription.Text = SupplierFromDB.Discription;
+                CheckBoxSupplierIsbranch.Checked = SupplierFromDB.IsSubAccount;
+                DateTimePickerSupplier.Date = (DateTime)DateUtils.ToDate(SupplierFromDB.BalanceAsOf.Date.ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
+                TextBoxSupplierBalance.Text = Math.Abs(SupplierFromDB.Balance).ToString(TextUtils.DecimalPlace(TextBoxSupplierBalance.Decimals));
+                ComboBoxBalanceType.SelectedIndex = SupplierFromDB.Balance < 0 ? 1 : 0;
+
+                if (SupplierFromDB.AddressId != null)
+                {
+                    Address BillingAddress = AddressManager.GetAddressById((long)SupplierFromDB.AddressId);
+                    if (BillingAddress != null)
+                    {
+                        AddressGroupBoxSupplier.AddressLine1 = BillingAddress.AddressLine1;
+                        AddressGroupBoxSupplier.AddressLine2 = BillingAddress.AddressLine2;
+                        AddressGroupBoxSupplier.CityName = BillingAddress.CityOrTown;
+                        AddressGroupBoxSupplier.DistrictName = BillingAddress.District;
+                        AddressGroupBoxSupplier.PinCode = BillingAddress.PinCode;
+                        AddressGroupBoxSupplier.StateId = BillingAddress.StatesId ?? 0L;
+                    }
+                }
+
+                if (SupplierFromDB.ContactInfo != null)
+                {
+                    ContactInfo lContactInfo = SupplierFromDB.ContactInfo;
+                    TextBoxSupplierPhone.Text = lContactInfo.Phone;
+                    TextBoxSupplierMobile.Text = lContactInfo.Mobile;
+                    TextBoxSupplierFax.Text = lContactInfo.Fax;
+                    TextBoxSupplierEmail.Text = lContactInfo.Email;
+                    TextBoxSupplierWebsite.Text = lContactInfo.WebSite;
+                }
+
+                if (SupplierFromDB.SupplierLicenceDetail.Count > 0)
+                {
+                    foreach (DataGridViewRow Row in SupplierLicenceInfoGrid.Rows)
+                    {
+                        SupplierLicenceDetail SupplierLicenceDetail = SupplierFromDB.SupplierLicenceDetail
+                            .FirstOrDefault(x => x.CompanySupplierLicenseMasterId == (long)Row.Cells[(int)SupplierFormTaxInfoTableColumn.MASTERID].Value)!;
+                        if (SupplierLicenceDetail != null)
+                        {
+                            Row.Cells[(int)SupplierFormTaxInfoTableColumn.DNAME].Value = SupplierLicenceDetail.DisplayName;
+                            Row.Cells[(int)SupplierFormTaxInfoTableColumn.VALUE].Value = SupplierLicenceDetail.Value;
+                            Row.Cells[(int)SupplierFormTaxInfoTableColumn.ID].Value = SupplierLicenceDetail.SupplierLicenceId;
+                        }
+                    }
+                }
+
+                if (SupplierFromDB.IsSubAccount)
+                {
+                    Supplier Supplier = SupplierManager.GetSupplierById((long)SupplierFromDB.ParentAccountId!);
+                    if (Supplier != null)
+                    {
+                        ComboUtils.InitializeSupplierCombo(ComboBoxSupplierParentAccount, Global.Company.CompanyId);
+                        ComboBoxSupplierParentAccount.SelectedIndex = ComboBoxSupplierParentAccount.FindStringExact(Supplier.Name);
+                    }
+                }
+                else
+                {
+                    ComboBoxSupplierParentAccount.SelectedIndex = -1;
+                }
+            }
+        }
+
         private void LoadSupplierInfo()
         {
             Supplier SupplierFromDB = GetSupplierInfo();
@@ -453,6 +521,51 @@ namespace fa.views.account.masters
         }
         private void TreeViewSupplier_AfterSelect(object sender, TreeViewEventArgs e)
         {
+            // ✅ Force same-node selection to still trigger logic
+            if (TreeViewSupplier.SelectedNode == e.Node)
+            {
+                HandleSupplierSelection(e.Node);
+                return;
+            }
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                TreeNode node = e.Node!;
+                node.SelectedImageIndex = node.ImageIndex;
+
+                ResetForm();
+                LoadComboBox();
+
+                // 🧠 Load supplier and get the object
+                Supplier selectedSupplier = GetSupplierInfo();
+
+                if (selectedSupplier != null)
+                {
+                    // 🟡 Fill UI details
+                    LoadSupplierAllInfo(selectedSupplier); // Modified below
+                }
+                else
+                {
+                    DisplaySystemError("Something went wrong, the selected supplier is not valid.");
+                    return;
+                }
+
+                EnableForm(false);
+                this.formIsDirty = false;
+
+                // 🔄 Reset product trees
+                LoadAllProductsToTreeView();
+
+                // ✅ Load linked products
+                LoadLinkedProductsForSupplier(selectedSupplier);
+                HandleSupplierSelection(e.Node);
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+
+            /*
             Cursor.Current = Cursors.WaitCursor;
             try
             {
@@ -479,7 +592,42 @@ namespace fa.views.account.masters
             {
                 Cursor.Current = Cursors.Default;
             }
+            */
         }
+        private void HandleSupplierSelection(TreeNode node)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            try
+            {
+                node.SelectedImageIndex = node.ImageIndex;
+
+                ResetForm();
+                LoadComboBox();
+
+                Supplier selectedSupplier = GetSupplierInfo();
+
+                if (selectedSupplier != null)
+                {
+                    LoadSupplierAllInfo(selectedSupplier); // Your existing method
+                }
+                else
+                {
+                    DisplaySystemError("Something went wrong, the selected supplier is not valid.");
+                    return;
+                }
+
+                EnableForm(false);
+                this.formIsDirty = false;
+
+                LoadAllProductsToTreeView();
+                LoadLinkedProductsForSupplier(selectedSupplier);
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
         private void TextBoxSupplierSearch_TextChanged(object sender, EventArgs e)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -1262,35 +1410,40 @@ namespace fa.views.account.masters
         }
         private void LoadLinkedProductsForSupplier(Supplier supplier)
         {
-            if (supplier == null || supplier.SupplierProducts == null)
+            if (supplier == null)
                 return;
+
+            // Ensure supplier products are loaded
+            if (supplier.SupplierProducts == null || !supplier.SupplierProducts.Any())
+            {
+                supplier = SupplierManager.GetSupplierWithProductsById(supplier.Id);
+                if (supplier == null || supplier.SupplierProducts == null)
+                    return;
+            }
 
             string filterSelected = TextBoxSelectedProductSearch.Text.Trim();
 
-            // Track product IDs already added
-            HashSet<long> linkedProductIds = supplier.SupplierProducts.Select(sp => sp.ProductId).ToHashSet();
+            // Track product IDs to move
+            HashSet<long> linkedProductIds = supplier.SupplierProducts
+                .Where(sp => sp.Product != null)
+                .Select(sp => sp.ProductId)
+                .ToHashSet();
 
-            // Remove linked products from TreeViewProduct
-            foreach (TreeNode node in TreeViewProduct.Nodes.Cast<TreeNode>().ToList())
+            TextBoxSelectedProductSearch.ResetText();
+
+            // Loop over TreeViewProduct and move matching ones
+            for (int i = TreeViewProduct.Nodes.Count - 1; i >= 0; i--)
             {
+                TreeNode node = TreeViewProduct.Nodes[i];
                 if (node.Tag is Product product && linkedProductIds.Contains(product.Id))
                 {
-                    TreeViewProduct.Nodes.Remove(node);
-
-                    if (string.IsNullOrEmpty(filterSelected) || product.Name.IndexOf(filterSelected, StringComparison.OrdinalIgnoreCase) >= 0)
-                    {
-                        TreeViewSelectedProduct.Nodes.Add(new TreeNode
-                        {
-                            Text = node.Text,
-                            Name = node.Name,
-                            Tag = product
-                        });
-                    }
+                    MoveProductToSelected(node);
                 }
             }
 
             TreeViewSelectedProduct.ExpandAll();
         }
+
 
         private void LoadTreeViewProductsForSupplier()
         {
@@ -1477,5 +1630,10 @@ namespace fa.views.account.masters
             return selected;
         }
 
+        private void TreeViewSupplier_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            TreeViewSupplier.SelectedNode = e.Node; // Ensure selection
+            HandleSupplierSelection(e.Node);        // Force the reload logic
+        }
     }
 }
