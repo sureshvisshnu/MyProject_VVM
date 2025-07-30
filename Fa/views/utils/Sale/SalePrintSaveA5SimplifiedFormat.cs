@@ -288,7 +288,7 @@ namespace Fa.views.utils.Sale
 
                 // Add header
                 //PdfPTable DocHeader = InvoiceHeader("SALES INVOICE", saleEntry.RefNumber, saleEntry.SaleDate);
-                string title = entrytype == Entrytype.QUOTE ? "QUOTATION" : "SALES INVOICE"; PdfPTable DocHeader = InvoiceHeader(title, saleEntry.RefNumber, saleEntry.SaleDate, entrytype);
+                string title = entrytype == Entrytype.QUOTE ? "ESTIMATE" : "SALES INVOICE"; PdfPTable DocHeader = InvoiceHeader(title, saleEntry.RefNumber, saleEntry.SaleDate, entrytype);
                 pdfDoc.Add(DocHeader);
 
                 // Add customer info

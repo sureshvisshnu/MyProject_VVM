@@ -67,6 +67,8 @@ namespace fa.views.sales
             InitializeComponent();
             SalesManager = SalesManager.Instance;
             excludedObjects = new string[] { "toolStrip1", "groupBox2", "DiscountAdditinalChargeGrid" };
+            ComboBoxInvoicePriceBy.SelectedIndexChanged += ComboBoxInvoicePriceBy_SelectedIndexChanged!;
+            //YesNoRadioPriceTo.CheckedChanged += YesNoRadioPriceTo_CheckedChanged!;
         }
         private void FormQuote_Load(object sender, EventArgs e)
         {
@@ -659,6 +661,8 @@ namespace fa.views.sales
             TextBoxSalesQuotesCustomerAddress.ResetText();
             TextBoxQuoteMemo.ResetText();
             DatetimePickerSalesQuotesExp.MinDate = Global.getTransactionDate();
+            YesNoRadioPriceTo.Checked = true;
+            ComboBoxInvoicePriceBy.SelectedIndex = (int)Global.Company.CompanySalesSetup.PriceType;
             DataGridViewCurrencyColumn currencyColumn = (DataGridViewCurrencyColumn)GridViewSalesQuotesItem.Columns["QuotePrice"];
             if (int.TryParse(Global.Company.PrimaryCurrency.RoundingPrecision.ToString(), out int decimalPlaces)) currencyColumn.DecimalPlaces = decimalPlaces;
             DataGridViewCurrencyColumn currencyColumn1 = (DataGridViewCurrencyColumn)GridViewSalesQuotesItem.Columns["OverridePrice"];
@@ -1203,11 +1207,71 @@ namespace fa.views.sales
         }
         private void LoadPrice(int Index, string Uom)
         {
+            if (GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.ID].Value == null)
+                return;
+
+            Product product = CatalogProductManager.Instance.GetProductInfoById(
+                (long)GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.ID].Value);
+
+            if (product == null) return;
+
+            // Get price type from ComboBox
+            PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
+
+            // Get tax (if any)
+            double tax = product.UseHsnTax
+                ? ProductTaxPercentage(product)
+                : ProductTaxPercentage(product.SalesTax.ToList());
+
+            bool isBatch = GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.ISBAT].Value != null &&
+                           (bool)GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.ISBAT].Value;
+
+            double price = 0;
+
+            if (isBatch)
+            {
+                if (GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.BATCHID].Value != null)
+                {
+                    InventoryBatch inventoryBatch = InventoryLocationManager.Instance.GetInventoryByBatchId(
+                        (long)GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.BATCHID].Value);
+
+                    if (inventoryBatch != null)
+                    {
+                        price = GetPriceByType(selectedPriceType, inventoryBatch);
+                        GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.PRICE].Value = inventoryBatch.MaxRetailPrice;
+                    }
+                }
+                else
+                {
+                    price = GetPriceByType(selectedPriceType, product);
+                }
+            }
+            else
+            {
+                price = GetPriceByType(selectedPriceType, product);
+            }
+
+            // Apply tax if needed
+            if (Global.Company.CompanySalesSetup.IncludingTax)
+            {
+                price = price - ((price * (price * (tax / 100))) / (price + (price * (tax / 100))));
+            }
+
+            GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.PRICE].Value = price;
+
+            // Optional: store product date/details if needed for quote
+            // SaleProductDetails.CurrentDate = DateTimePickerSaleQuoteDate.Date;
+            // SaleProductDetails.ProductId = product.Id;
+        }
+
+        private void LoadPricexxx(int Index, string Uom)
+        {
             if (GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.ID].Value != null)
             {
                 Product Product = CatalogProductManager.Instance.GetProductInfoById((long)GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.ID].Value);
                 if (Product != null)
                 {
+                    PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
                     if (GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.ISBAT].Value != null && (bool)GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.ISBAT].Value)
                     {
                         if (GridViewSalesQuotesItem.Rows[Index].Cells[(int)SaleQuoteEntryTableColumn.BATCHID].Value != null)
@@ -1559,7 +1623,7 @@ namespace fa.views.sales
             }
             else if (keyData == (Keys.F10))
             {
-                if(BtnSalesQuotesExit.Enabled)
+                if (BtnSalesQuotesExit.Enabled)
                 {
                     BtnSalesQuotesExit_Click(this, null!);
                     return true;
@@ -1897,5 +1961,96 @@ namespace fa.views.sales
                 DatetimePickerSalesQuotesExp.Focus();
             }
         }
+
+        private void ComboBoxInvoicePriceBy_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (YesNoRadioPriceTo.Checked) // "All" is selected
+            {
+                UpdateAllRowsPrices();
+            }
+            else // "Single" is selected
+            {
+                UpdateCurrentRowPrice();
+            }
+        }
+        private void UpdateCurrentRowPrice()
+        {
+            if (GridViewSalesQuotesItem.CurrentRow != null &&
+                GridViewSalesQuotesItem.CurrentRow.Cells[(int)SaleQuoteEntryTableColumn.ID].Value != null)
+            {
+                long productId = (long)GridViewSalesQuotesItem.CurrentRow.Cells[(int)SaleQuoteEntryTableColumn.ID].Value;
+                string uom = GridViewSalesQuotesItem.CurrentRow.Cells[(int)SaleQuoteEntryTableColumn.UOM].Value?.ToString()!;
+
+                if (!string.IsNullOrEmpty(uom))
+                {
+                    LoadPrice(GridViewSalesQuotesItem.CurrentRow.Index, uom);
+                    ComputeFormTotal();
+                }
+            }
+        }
+
+        private void UpdateAllRowsPrices()
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            foreach (DataGridViewRow row in GridViewSalesQuotesItem.Rows)
+            {
+                // Skip the empty row at the end if present
+                if (row.IsNewRow || row.Cells[(int)SaleQuoteEntryTableColumn.ID].Value == null)
+                    continue;
+
+                long productId = (long)row.Cells[(int)SaleQuoteEntryTableColumn.ID].Value;
+                string uom = row.Cells[(int)SaleQuoteEntryTableColumn.UOM].Value?.ToString()!;
+
+                if (!string.IsNullOrEmpty(uom))
+                {
+                    // Temporarily set current row to update prices correctly
+                    GridViewSalesQuotesItem.CurrentCell = row.Cells[0];
+
+                    // Load price for this row with the new price type
+                    LoadPrice(row.Index, uom);
+                }
+            }
+
+            ComputeFormTotal();
+            Cursor.Current = Cursors.Default;
+        }
+        private void YesNoRadioPriceTo_CheckedChanged(object sender, EventArgs e)
+        {
+            // Toggle between Retail/Wholesale pricing logic
+            if (YesNoRadioPriceTo.Checked)
+            {
+                ToolStripStatusLabelErrorPurchase.Text = "Price To: Retail";
+            }
+            else
+            {
+                ToolStripStatusLabelErrorPurchase.Text = "Price To: Wholesale";
+            }
+        }
+        private double GetPriceByType(PriceType priceType, InventoryBatch batch)
+        {
+            return priceType switch
+            {
+                PriceType.Retail => batch.RetailSalePrice,
+                PriceType.Wholesale => batch.WholeSalePrice,
+                PriceType.MaxRetailPrice => batch.MaxRetailPrice,
+                _ => batch.RetailSalePrice
+            };
+        }
+
+        private double GetPriceByType(PriceType priceType, Product product)
+        {
+            return priceType switch
+            {
+                PriceType.Retail => product.RetailPrice,
+                PriceType.Wholesale => product.WholdSalePrice,
+                PriceType.MaxRetailPrice => product.Msrp,
+                _ => product.RetailPrice
+            };
+        }
+        private double ProductTaxPercentage(List<CatalogItemSalesTaxMap> salesTaxList)
+        {
+            return salesTaxList.Sum(t => t.TaxPercentage) / salesTaxList.Count;
+        }
+
     }
 }

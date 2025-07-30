@@ -4671,6 +4671,7 @@ namespace fa.views.sales
 
         private void UpdateAllRowsPrices()
         {
+            Cursor.Current = Cursors.WaitCursor;
             foreach (DataGridViewRow row in GridViewSalesItem.Rows)
             {
                 // Skip the empty row at the end if present
@@ -4691,6 +4692,7 @@ namespace fa.views.sales
             }
 
             ComputeFormTotal();
+            Cursor.Current = Cursors.Default;
         }
     }
     public class PrintPaperFormat
