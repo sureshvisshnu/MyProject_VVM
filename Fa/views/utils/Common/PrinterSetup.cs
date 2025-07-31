@@ -130,35 +130,32 @@ namespace fa.views.utils
             else if (isGSTInvoice || PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE")
             {
                 // GST invoice or A4 paper - use existing GST logic
+                // if ((PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE") && PrintFormat == "Laser")
                 if (PrintPaper == "A4 PORTRAIT" && PrintFormat == "Laser")
                 {
-                    // Modified condition to use the new A4 format for specific cases
-                    if (ShouldUseSpecialA4Format(SaleId)) // Add your condition here
+                    if (ShouldUseSpecialA4Format(SaleId))
                     {
                         bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");
-                        new SalePrintSaveA4Format().ExportToFileOrPrint(
+
+                        // ✅ Correct instantiation and method call
+                        new SalePrintSaveA4EinvoiceFormat().ExportToFileOrPrint(
                             SaleId,
                             PrintPaper,
                             PrintFormat,
-                            !IsExport,
-                            isLandscape);
+                            !IsExport
+                        );
                     }
                     else
                     {
-                        new SalePrintSaveA4EinvoiceFormat().ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, !IsExport);
+                        new SalePrintSaveA4EinvoiceFormat().ExportToFileOrPrint(
+                            SaleId,
+                            PrintPaper,
+                            PrintFormat,
+                            !IsExport
+                        );
                     }
                 }
-                else
-                {
-                    bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");
-                    new SalePrintSaveA4SimplifiedFormat().ExportToFileOrPrint(
-                    SaleId,
-                    PrintPaper,
-                    PrintFormat,
-                    !IsExport,
-                    isLandscape);
-                    //new SalePrintSaveA5A4().ExportToFileOrPrint(SaleId, PrintPaper!, PrintFormat, !IsExport);
-                }
+
             }
         }
 
