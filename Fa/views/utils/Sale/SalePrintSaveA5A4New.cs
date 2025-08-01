@@ -232,7 +232,7 @@ namespace fa.views.utils.Sale
                 PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
                 pdfDoc.Open();
                 double lineHeight = 24;
-                PdfPTable PatientHeader =!string.IsNullOrEmpty(SaleEntry.Memo)?PdfDataAlignment.PatientDetailHeader(SaleEntry.Memo):null;
+                PdfPTable PatientHeader =!string.IsNullOrEmpty(SaleEntry.Memo)?PdfDataAlignment.PatientDetailHeader(SaleEntry.Memo):null!;
                 PdfPTable SaleHeader = CusSaleHeader(SaleEntry);
                 PdfPTable SaleMiniHeader = CusSaleMiniHeader(SaleEntry);
                 PdfPTable SaleMainTable = PdfDataAlignment.SaleMainTable(SaleEntry);

@@ -1352,9 +1352,21 @@ namespace fa.views.utils
             var (retailPercent, wholesalePercent) = GetProductPercentages(ProductId);
 
             // Format NGL value (use retail percentage)
-            string nglValue = "NGL" +
-                (retailPercent % 10 == 0 ? (retailPercent / 10).ToString("0") :
-                                          (retailPercent / 10).ToString("0.#"));
+            // Divide and round to 1 decimal place
+            int retailNGL = (int)Math.Floor(retailPercent); // Remove decimal part only
+            int wholeNGL = (int)Math.Floor(wholesalePercent); // Remove decimal part only
+            string nglValue = "NGL:" + wholeNGL.ToString() + "--";
+
+            //decimal roundedNGL = Math.Round(retailPercent, 1);
+
+            // Convert to string, remove trailing ".0" if it's whole number
+            // string nglFormatted = roundedNGL % 1 == 0
+            //    ? roundedNGL.ToString("0")   // e.g. 12
+            //    : roundedNGL.ToString("0.0"); // e.g. 12.5
+
+            //// Add "NGL " prefix and two trailing spaces
+            //string nglValue = "NGL:" + nglFormatted + "-";
+
 
             // Get UOM from catalog
             string uom = ProductFromDB.UOM ?? ""; // Replace with actual UOM field
@@ -1387,7 +1399,7 @@ namespace fa.views.utils
                     $"A785,150,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B774,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A774,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                    $"A800,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                    $"A825,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
                     $"A740,35,2,2,1,1,N,{quote}{lMrp}{quote}",
                     $"A650,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
@@ -1396,7 +1408,7 @@ namespace fa.views.utils
                     $"A506,150,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B487,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A492,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                    $"A530,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                    $"A538,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
                     $"A460,35,2,2,1,1,N,{quote}{lMrp}{quote}",
                     $"A370,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
@@ -1405,7 +1417,7 @@ namespace fa.views.utils
                     $"A228,150,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B209,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A214,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                    $"A250,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                    $"A260,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
                     $"A180,35,2,2,1,1,N,{quote}{lMrp}{quote}",
                     $"A90,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
