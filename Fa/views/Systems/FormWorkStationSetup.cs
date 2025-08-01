@@ -82,7 +82,7 @@ namespace fa.views.Systems
                 {
                     ComboBoxDefaultPrinter.SelectedIndex = ComboBoxDefaultPrinter.FindStringExact("None");
                 }
-                if (key.GetValue("TokenPrinter") != null && !string.IsNullOrEmpty(key.GetValue("TokenPrinter").ToString()))
+                if (key.GetValue("TokenPrinter") != null && !string.IsNullOrEmpty(key.GetValue("TokenPrinter")?.ToString()))
                 {
                     ComboBoxTockenPrinter.SelectedIndex = ComboBoxTockenPrinter.FindStringExact(key.GetValue("TokenPrinter").ToString());
                 }
@@ -90,7 +90,7 @@ namespace fa.views.Systems
                 {
                     ComboBoxTockenPrinter.SelectedIndex = ComboBoxTockenPrinter.FindStringExact("None");
                 }
-                if (key.GetValue("StockLocation") != null && !string.IsNullOrEmpty(key.GetValue("StockLocation").ToString()))
+                if (key.GetValue("StockLocation") != null && !string.IsNullOrEmpty(key.GetValue("StockLocation")?.ToString()))
                 {
                     ComboBoxDefaultStockLocation.SelectedIndex = ComboBoxDefaultStockLocation.FindStringExact(key.GetValue("StockLocation").ToString());
                 }
@@ -159,6 +159,7 @@ namespace fa.views.Systems
             key.SetValue("WorkStationName", TextBoxWorkStationName.Text.Trim());
             key.SetValue("DefaultPrinter", (ComboBoxDefaultPrinter.SelectedIndex < 1 ? "" : ComboBoxDefaultPrinter.Text));
             key.SetValue("TokenPrinter", (ComboBoxTockenPrinter.SelectedIndex < 1 ? "" : ComboBoxTockenPrinter.Text));
+            key.SetValue("BarCodePrinter", (ComboBoxDefaultBarCodePrinter.SelectedIndex < 1 ? "" : ComboBoxDefaultBarCodePrinter.Text));
             key.SetValue("StockLocation", (ComboBoxDefaultStockLocation.SelectedIndex < 0 ? "" : ((InventoryLocation)ComboBoxDefaultStockLocation.Items[ComboBoxDefaultStockLocation.SelectedIndex]).Name));
             //key.SetValue("DefaultIpAddress", string.IsNullOrEmpty(TextBoxIpAddress.Text) ? "localhost" : TextBoxIpAddress.Text);
             key.SetValue("DefaultHostName", string.IsNullOrEmpty(TextBoxIpAddress.Text) ? "localhost" : TextBoxIpAddress.Text);
@@ -220,6 +221,8 @@ namespace fa.views.Systems
             ComboBoxDefaultPrinter.SelectedIndex = 0;
             ComboBoxTockenPrinter.Items.Clear();
             ComboBoxTockenPrinter.Items.Add("None");
+            ComboBoxDefaultBarCodePrinter.Items.Add("None");
+            ComboBoxDefaultBarCodePrinter.Items.AddRange(ComboUtils.GetAvailablePrinter().ToArray<string>());
             ComboBoxTockenPrinter.Items.AddRange(ComboUtils.GetAvailablePrinter().ToArray<string>());
             ComboBoxTockenPrinter.SelectedIndex = 0;
             if (Global.isLocalDB == true || Global.isRemoteDB == true)

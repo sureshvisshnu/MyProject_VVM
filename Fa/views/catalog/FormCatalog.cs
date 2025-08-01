@@ -18,6 +18,7 @@ using Fa.api.OrderManagement;
 using Fa.views.catalog;
 using FADataAccessLibrary.Api.catalog;
 using FADataAccessLibrary.Model.Common;
+using Org.BouncyCastle.Pqc.Crypto.Lms;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -1405,8 +1406,8 @@ namespace fa.views.catalog
         }
         private async void BtnCatalogSave_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 Cursor.Current = Cursors.WaitCursor;
                 if (TabControlCategory.Visible && validateFormCategory())
                 {
@@ -1463,7 +1464,7 @@ namespace fa.views.catalog
                     ProductFamily lProductFamily = GetProductFamilyFromForm();
                     if (CatalogProductFamilyManager.ProductFamilyNameUniqueById(lProductFamily))
                     {
-                        ProductFamily lProductFamilyFromDB = null;
+                        ProductFamily lProductFamilyFromDB = null!;
                         if (lProductFamily.Id == 0)
                         {
                             lProductFamilyFromDB = CatalogProductFamilyManager.AddProductFamily(lProductFamily);
@@ -1512,15 +1513,23 @@ namespace fa.views.catalog
                         if (CatalogProductManager.FindMaterialIdUnique(lProduct))
                         {
                             Product lProductFromDB = null!;
-                            if (lProduct.Id == 0)
-                            {
-                                lProductFromDB = CatalogProductManager.AddProduct(lProduct);
-                                // Save percentages if they exist (async operation)
-                                await SaveOrCalculateProductPercentage(lProductFromDB);
+                        if (lProduct.Id == 0)
+                        {
+                            lProductFromDB = CatalogProductManager.AddProduct(lProduct);
 
-                            }
-                            else
+                            // ✅ Assign newly generated ProductId to PendingPercentages before saving
+                            if (this.PendingPercentages != null)
                             {
+                                this.PendingPercentages.ProductId = lProductFromDB.Id;
+                                this.PendingPercentages.ProductCode = lProductFromDB.MaterialId;
+                            }
+
+                            // Save percentages (now with valid ProductId)
+                            await SaveOrCalculateProductPercentage(lProductFromDB);
+                        }
+
+                        else
+                        {
                                 Product lProductById = CatalogProductManager.GetProductInfoById(lProduct.Id);
                                 if (lProductById != null)
                                 {
@@ -1577,16 +1586,16 @@ namespace fa.views.catalog
                         return;
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            finally
-            {
-                Cursor.Current = Cursors.Default;
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //    return;
+            //}
+            //finally
+            //{
+            //    Cursor.Current = Cursors.Default;
+            //}
         }
 
         private void BtnCatalogExit_Click(object sender, EventArgs e)

@@ -67,8 +67,8 @@ namespace fa.views.catalog
                 {
                     if (ProductId != 0L)
                     {
-                        //try
-                        //{
+                        try
+                        {
                             if (!int.TryParse(TextBoxPrintQuantity.Text, out int quantity) || quantity <= 0)
                             {
                                 MessageBox.Show("Please enter a valid quantity (1 or more)");
@@ -104,13 +104,13 @@ namespace fa.views.catalog
                         {
                             MessageBox.Show("Please select a valid label size");
                         }
-                        //}
-                        //catch (Exception ex)
-                        //{
-                        //    MessageBox.Show($"Error generating barcode: {ex.Message}");
-                        //    Console.WriteLine(ex.ToString());
-                        //}
                     }
+                        catch (Exception ex)
+                        {
+                        MessageBox.Show($"Error generating barcode: {ex.Message}");
+                        Console.WriteLine(ex.ToString());
+                    }
+                }
                     else if (IsIP || IsOP)
                     {
                         try
@@ -221,21 +221,41 @@ namespace fa.views.catalog
                 ComboBoxLabelSize.Items.Add("100 mm* 50 mm");
                 ComboBoxLabelSize.SelectedIndex = 0;
             }
+
             TextBoxPrintQuantity.Text = "1";
             YesNoRadioPaperSize.Checked = false;
+
             ComboBoxDefaultPrinter.Items.Clear();
-            ComboBoxDefaultPrinter.Items.AddRange(ComboUtils.GetAvailablePrinter().ToArray<string>());
-            if (ComboBoxDefaultPrinter.Items != null && ComboBoxDefaultPrinter.Items.Count > 0)
+            ComboBoxDefaultPrinter.Items.AddRange(ComboUtils.GetAvailablePrinter().ToArray());
+
+            if (ComboBoxDefaultPrinter.Items.Count > 0)
             {
-                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
-                if (key != null && key.GetValue("DefaultPrinter") != null && !string.IsNullOrEmpty(key.GetValue("DefaultPrinter").ToString()))
+                RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
+                if (key != null)
                 {
-                    ComboBoxDefaultPrinter.SelectedIndex = ComboBoxDefaultPrinter.FindStringExact(key.GetValue("DefaultPrinter").ToString());
+                    // Try to get the BarCodePrinter first
+                    string barcodePrinter = key.GetValue("BarCodePrinter")?.ToString()!;
+                    string defaultPrinter = key.GetValue("DefaultPrinter")?.ToString()!;
+
+                    string printerToUse = !string.IsNullOrEmpty(barcodePrinter)
+                        ? barcodePrinter
+                        : defaultPrinter;
+
+                    if (!string.IsNullOrEmpty(printerToUse) &&
+                        ComboBoxDefaultPrinter.Items.Contains(printerToUse))
+                    {
+                        ComboBoxDefaultPrinter.SelectedIndex =
+                            ComboBoxDefaultPrinter.FindStringExact(printerToUse);
+                    }
+
+                    key.Close();
                 }
             }
-            YesNoRadioPaperSize.Checked = IsOP || IsIP ? true : false;
-            YesNoRadioPaperSize.Enabled = IsOP || IsIP ? false : true;
+
+            YesNoRadioPaperSize.Checked = IsOP || IsIP;
+            YesNoRadioPaperSize.Enabled = !(IsOP || IsIP);
         }
+
         private void FormCatalogBarCodePrint_Load(object sender, EventArgs e)
         {
             ResetForm();

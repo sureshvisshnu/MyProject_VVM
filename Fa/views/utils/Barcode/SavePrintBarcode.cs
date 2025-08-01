@@ -1374,7 +1374,8 @@ namespace fa.views.utils
             // Format secret code (convert retail price digits to letters)
             decimal retailPrice = Global.Company.BusinessType == BuisnessType.Wholesale ?
                                 (decimal)ProductFromDB.WholdSalePrice : (decimal)ProductFromDB.RetailPrice;
-            string secretCode = ConvertToSecretCode(retailPrice.ToString(""));
+            decimal purchasePrice = (decimal)ProductFromDB.PurchasePrice;
+            string secretCode = ConvertToSecretCode(purchasePrice.ToString(""));
 
             string lMrp = ProductFromDB.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
             string lRate = retailPrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
@@ -1438,9 +1439,9 @@ namespace fa.views.utils
                         $"A785,150,2,2,1,1,N,{quote}{Product}{quote}",
                         $"B774,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                         $"A774,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                        $"A800,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                        $"A825,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
                         $"A740,35,2,2,1,1,N,{quote}{lMrp}{quote}",
-                        $"A650,35,2,2,1,1,N,{quote}{UomLabel}{quote}"
+                        $"A650,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
                     });
                 }
 
@@ -1448,13 +1449,13 @@ namespace fa.views.utils
                 {
                     partial.AddRange(new string[]
                     {
-                        $"A506,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
-                        $"A506,150,2,2,1,1,N,{quote}{Product}{quote}",
-                        $"B487,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                        $"A492,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                        $"A530,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
-                        $"A460,35,2,2,1,1,N,{quote}{lMrp}{quote}",
-                        $"A370,35,2,2,1,1,N,{quote}{UomLabel}{quote}"
+                        $"A228,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                        $"A228,150,2,2,1,1,N,{quote}{Product}{quote}",
+                        $"B209,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                        $"A214,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                        $"A260,35,2,2,1,1,N,{quote}{NglLabel}{quote}",
+                        $"A180,35,2,2,1,1,N,{quote}{lMrp}{quote}",
+                        $"A90,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
                     });
                 }
 
