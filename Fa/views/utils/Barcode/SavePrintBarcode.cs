@@ -1373,9 +1373,23 @@ namespace fa.views.utils
 
             // Format secret code (convert retail price digits to letters)
             decimal retailPrice = Global.Company.BusinessType == BuisnessType.Wholesale ?
-                                (decimal)ProductFromDB.WholdSalePrice : (decimal)ProductFromDB.RetailPrice;
+                    (decimal)ProductFromDB.WholdSalePrice : (decimal)ProductFromDB.RetailPrice;
+
             decimal purchasePrice = (decimal)ProductFromDB.PurchasePrice;
+            decimal costPrice = (decimal)ProductFromDB.CostPrice;
+            decimal mrp = (decimal)ProductFromDB.Msrp;
+
+
+            int costPercent = 0;
+            if (mrp > 0)
+            {
+                costPercent = (100 - (int)Math.Floor((costPrice * 100) / mrp));
+            }
+
+
             string secretCode = ConvertToSecretCode(purchasePrice.ToString(""));
+            string companyAndCode = CompanyName + "       " + secretCode + "-" + costPercent;
+
 
             string lMrp = ProductFromDB.Msrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
             string lRate = retailPrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
@@ -1396,7 +1410,8 @@ namespace fa.views.utils
                     "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N",
 
                     // 1st Label
-                    $"A785,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    //$"A785,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    $"A785,180,2,3,1,1,N,{quote}{companyAndCode}{quote}",
                     $"A785,150,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B774,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A774,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
@@ -1405,7 +1420,8 @@ namespace fa.views.utils
                     $"A650,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
                     // 2nd Label
-                    $"A506,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    //$"A506,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    $"A506,180,2,3,1,1,N,{quote}{companyAndCode}{quote}",
                     $"A506,150,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B487,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A492,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
@@ -1414,7 +1430,8 @@ namespace fa.views.utils
                     $"A370,35,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
                     // 3rd Label
-                    $"A228,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    //$"A228,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                    $"A228,180,2,3,1,1,N,{quote}{companyAndCode}{quote}",
                     $"A228,150,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B209,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A214,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
@@ -1435,7 +1452,8 @@ namespace fa.views.utils
                 {
                     partial.AddRange(new string[]
                     {
-                        $"A785,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                        //$"A785,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                        $"A785,180,2,3,1,1,N,{quote}{companyAndCode}{quote}",
                         $"A785,150,2,2,1,1,N,{quote}{Product}{quote}",
                         $"B774,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                         $"A774,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
@@ -1449,7 +1467,8 @@ namespace fa.views.utils
                 {
                     partial.AddRange(new string[]
                     {
-                        $"A228,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                        //$"A228,180,2,3,1,1,N,{quote}{CompanyName}       {secretCode}{quote}",
+                        $"A228,180,2,3,1,1,N,{quote}{companyAndCode}{quote}",
                         $"A228,150,2,2,1,1,N,{quote}{Product}{quote}",
                         $"B209,126,2,1,1,4,41,N,{quote}{ProductFromDB.MaterialId}{quote}",
                         $"A214,69,2,2,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
