@@ -180,22 +180,22 @@
             TextBoxWholesalePrice.BackColor = SystemColors.Window;
             TextBoxWholesalePrice.Location = new Point(228, 257);
             TextBoxWholesalePrice.Name = "TextBoxWholesalePrice";
-            TextBoxWholesalePrice.ReadOnly = true;
             TextBoxWholesalePrice.Size = new Size(120, 23);
             TextBoxWholesalePrice.TabIndex = 465;
             TextBoxWholesalePrice.TabStop = false;
             TextBoxWholesalePrice.TextAlign = HorizontalAlignment.Right;
+            TextBoxWholesalePrice.TextChanged += TextBoxWholesalePrice_TextChanged;
             // 
             // TextBoxRetailPrice
             // 
             TextBoxRetailPrice.BackColor = SystemColors.Window;
             TextBoxRetailPrice.Location = new Point(228, 217);
             TextBoxRetailPrice.Name = "TextBoxRetailPrice";
-            TextBoxRetailPrice.ReadOnly = true;
             TextBoxRetailPrice.Size = new Size(120, 23);
             TextBoxRetailPrice.TabIndex = 464;
             TextBoxRetailPrice.TabStop = false;
             TextBoxRetailPrice.TextAlign = HorizontalAlignment.Right;
+            TextBoxRetailPrice.TextChanged += TextBoxRetailPrice_TextChanged;
             // 
             // BtnPriceCalculatorSave
             // 

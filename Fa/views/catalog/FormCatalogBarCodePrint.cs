@@ -79,18 +79,11 @@ namespace fa.views.catalog
 
                             if (ComboBoxLabelSize.Text == "35 mm * 25 mm")
                             {
-                                //savePrint.GenerateCompactBarcodeLabel(123, "test.pdf", ".pdf", false, "", 5, "PrinterName");
-                                //savePrint.GenerateBarcodeA4(ProductId, "A4SheetBarCode", "pdf", true, TextBoxStartLocation.Text, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
-                                //savePrint.GenerateCompactBarcodeLabel(
-                                //        ProductId,
-                                //        "A4SheetBarCode",
-                                //        "pdf",
-                                //        true,
-                                //        TextBoxStartLocation.Text,
-                                //        quantity,
-                                //        ComboBoxDefaultPrinter.Text
-                                //    );
                                 savePrint.GenerateSpecialBarcodeLabel(ProductId, long.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                            }
+                            else if (ComboBoxLabelSize.Text == "25 mm * 20 mm")
+                            {
+                                savePrint.GenerateCompactBarcodeLabel25x20_4UP(ProductId, quantity, ComboBoxDefaultPrinter.Text);
                             }
                             else if (ComboBoxLabelSize.Text == "50 mm * 25 mm")
                             {
@@ -258,7 +251,10 @@ namespace fa.views.catalog
                 key.Close();
             }
 
-            YesNoRadioPaperSize.Checked = IsOP || IsIP;
+            //YesNoRadioPaperSize.Checked = IsOP || IsIP;
+            //YesNoRadioPaperSize.Enabled = !(IsOP || IsIP);
+
+            YesNoRadioPaperSize.Checked = true;
             YesNoRadioPaperSize.Enabled = !(IsOP || IsIP);
         }
 

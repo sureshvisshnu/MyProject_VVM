@@ -430,5 +430,37 @@ namespace Fa.views.catalog
                 UpdateAllCalculations(); // trigger recalculation
             }
         }
+        private void UpdateWholesaleMarginFromPrice()
+        {
+            if (decimal.TryParse(TextBoxMrpPrice.Text, out decimal mrpPrice) &&
+                decimal.TryParse(TextBoxWholesalePrice.Text, out decimal wholesalePrice) &&
+                mrpPrice > 0)
+            {
+                decimal margin = ((mrpPrice - wholesalePrice) / mrpPrice) * 100;
+                TextBoxWholesaleMargin.Text = Math.Round(margin, 0).ToString(); // 👈 Rounded to whole number
+            }
+        }
+
+        private void UpdateRetailMarginFromPrice()
+        {
+            if (decimal.TryParse(TextBoxMrpPrice.Text, out decimal mrpPrice) &&
+                decimal.TryParse(TextBoxRetailPrice.Text, out decimal retailPrice) &&
+                mrpPrice > 0)
+            {
+                decimal margin = ((mrpPrice - retailPrice) / mrpPrice) * 100;
+                TextBoxRetailMargin.Text = Math.Round(margin, 0).ToString(); // 👈 Rounded to whole number
+            }
+        }
+
+
+        private void TextBoxRetailPrice_TextChanged(object sender, EventArgs e)
+        {
+            UpdateRetailMarginFromPrice();
+        }
+
+        private void TextBoxWholesalePrice_TextChanged(object sender, EventArgs e)
+        {
+            UpdateWholesaleMarginFromPrice();
+        }
     }
 }
