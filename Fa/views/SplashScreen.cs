@@ -140,7 +140,7 @@ namespace fa.views
         {
             try
             {
-                using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App"))
+                using (RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp"))
                 {
                     if (key != null)
                     {

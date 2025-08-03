@@ -77,40 +77,40 @@ namespace fa.views.catalog
 
                             var savePrint = new SavePrintBarcode();
 
-                        if (ComboBoxLabelSize.Text == "35 mm * 25 mm")
-                        {
-                            //savePrint.GenerateCompactBarcodeLabel(123, "test.pdf", ".pdf", false, "", 5, "PrinterName");
-                            //savePrint.GenerateBarcodeA4(ProductId, "A4SheetBarCode", "pdf", true, TextBoxStartLocation.Text, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
-                            //savePrint.GenerateCompactBarcodeLabel(
-                            //        ProductId,
-                            //        "A4SheetBarCode",
-                            //        "pdf",
-                            //        true,
-                            //        TextBoxStartLocation.Text,
-                            //        quantity,
-                            //        ComboBoxDefaultPrinter.Text
-                            //    );
-                            savePrint.GenerateSpecialBarcodeLabel(ProductId, long.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                            if (ComboBoxLabelSize.Text == "35 mm * 25 mm")
+                            {
+                                //savePrint.GenerateCompactBarcodeLabel(123, "test.pdf", ".pdf", false, "", 5, "PrinterName");
+                                //savePrint.GenerateBarcodeA4(ProductId, "A4SheetBarCode", "pdf", true, TextBoxStartLocation.Text, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                                //savePrint.GenerateCompactBarcodeLabel(
+                                //        ProductId,
+                                //        "A4SheetBarCode",
+                                //        "pdf",
+                                //        true,
+                                //        TextBoxStartLocation.Text,
+                                //        quantity,
+                                //        ComboBoxDefaultPrinter.Text
+                                //    );
+                                savePrint.GenerateSpecialBarcodeLabel(ProductId, long.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                            }
+                            else if (ComboBoxLabelSize.Text == "50 mm * 25 mm")
+                            {
+                                savePrint.GenerateBarcodeLabel(ProductId, LabelSize.TWO, quantity, ComboBoxDefaultPrinter.Text);
+                            }
+                            else if (ComboBoxLabelSize.Text == "100 mm * 23 mm")
+                            {
+                                savePrint.GenerateBarcodeLabel(ProductId, LabelSize.ONE, quantity, ComboBoxDefaultPrinter.Text);
+                            }
+                            else
+                            {
+                                MessageBox.Show("Please select a valid label size");
+                            }
                         }
-                        else if (ComboBoxLabelSize.Text == "50 mm * 25 mm")
-                        {
-                            savePrint.GenerateBarcodeLabel(ProductId, LabelSize.TWO, quantity, ComboBoxDefaultPrinter.Text);
-                        }
-                        else if (ComboBoxLabelSize.Text == "100 mm * 23 mm")
-                        {
-                            savePrint.GenerateBarcodeLabel(ProductId, LabelSize.ONE, quantity, ComboBoxDefaultPrinter.Text);
-                        }
-                        else
-                        {
-                            MessageBox.Show("Please select a valid label size");
-                        }
-                    }
                         catch (Exception ex)
                         {
-                        MessageBox.Show($"Error generating barcode: {ex.Message}");
-                        Console.WriteLine(ex.ToString());
+                            MessageBox.Show($"Error generating barcode: {ex.Message}");
+                            Console.WriteLine(ex.ToString());
+                        }
                     }
-                }
                     else if (IsIP || IsOP)
                     {
                         try
@@ -228,28 +228,34 @@ namespace fa.views.catalog
             ComboBoxDefaultPrinter.Items.Clear();
             ComboBoxDefaultPrinter.Items.AddRange(ComboUtils.GetAvailablePrinter().ToArray());
 
-            if (ComboBoxDefaultPrinter.Items.Count > 0)
+            RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp");
+            if (key != null)
             {
-                RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
-                if (key != null)
+                // ✅ Load default printer
+                string barcodePrinter = key.GetValue("BarCodePrinter")?.ToString() ?? "";
+                string defaultPrinter = key.GetValue("DefaultPrinter")?.ToString() ?? "";
+
+                string printerToUse = !string.IsNullOrEmpty(barcodePrinter)
+                    ? barcodePrinter
+                    : defaultPrinter;
+
+                if (!string.IsNullOrEmpty(printerToUse) &&
+                    ComboBoxDefaultPrinter.Items.Contains(printerToUse))
                 {
-                    // Try to get the BarCodePrinter first
-                    string barcodePrinter = key.GetValue("BarCodePrinter")?.ToString()!;
-                    string defaultPrinter = key.GetValue("DefaultPrinter")?.ToString()!;
-
-                    string printerToUse = !string.IsNullOrEmpty(barcodePrinter)
-                        ? barcodePrinter
-                        : defaultPrinter;
-
-                    if (!string.IsNullOrEmpty(printerToUse) &&
-                        ComboBoxDefaultPrinter.Items.Contains(printerToUse))
-                    {
-                        ComboBoxDefaultPrinter.SelectedIndex =
-                            ComboBoxDefaultPrinter.FindStringExact(printerToUse);
-                    }
-
-                    key.Close();
+                    ComboBoxDefaultPrinter.SelectedIndex =
+                        ComboBoxDefaultPrinter.FindStringExact(printerToUse);
                 }
+
+                // ✅ Load saved barcode label size
+                string savedLabelSize = key.GetValue("BarcodeLabelSize")?.ToString() ?? "";
+                if (!string.IsNullOrEmpty(savedLabelSize) &&
+                    ComboBoxLabelSize.Items.Contains(savedLabelSize))
+                {
+                    ComboBoxLabelSize.SelectedIndex =
+                        ComboBoxLabelSize.FindStringExact(savedLabelSize);
+                }
+
+                key.Close();
             }
 
             YesNoRadioPaperSize.Checked = IsOP || IsIP;
@@ -276,7 +282,7 @@ namespace fa.views.catalog
                 LabelLabelSize.Visible = true;
                 ComboBoxLabelSize.Visible = true;
                 ComboBoxLabelSize.BringToFront();
-                ComboBoxLabelSize.SelectedIndex = -1;
+                // ❌ Removed: ComboBoxLabelSize.SelectedIndex = -1;
                 LabelStartLocation.Visible = false;
                 TextBoxStartLocation.Visible = false;
             }
@@ -288,5 +294,6 @@ namespace fa.views.catalog
                 TextBoxStartLocation.Visible = true;
             }
         }
+
     }
 }

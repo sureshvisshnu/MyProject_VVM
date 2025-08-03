@@ -143,7 +143,7 @@ namespace fa.views.sales
             this.Visible = true;
             ResetForm();
             ComboUtils.InitializeStockLocationCombo(ComboBoxSaleInventoryLocation, Global.Company.CompanyId);
-            RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
+            RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp");
             ComboBoxSaleInventoryLocation.SelectedIndex = key != null ? (key.GetValue("StockLocation") != null && !string.IsNullOrEmpty(key.GetValue("StockLocation")?.ToString())) ? ComboBoxSaleInventoryLocation.FindStringExact(key.GetValue("StockLocation")?.ToString()) : -1 : -1;
             if (ComboBoxSaleInventoryLocation.SelectedIndex > -1)
             {

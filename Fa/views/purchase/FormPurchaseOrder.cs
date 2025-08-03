@@ -164,7 +164,7 @@ namespace Fa.views.purchase
             YesNoRbtPurchaseOrderMethod.Checked = true;
             PrevPurchaseOrderReferenceNumber.Text = CompanyManager.Instance.GetPurchasePrevRef(Global.Company, PurchaseEntrytype.ORDER, (DateTime)DatetimePickerPurchaseOrderDate.Date);
             ComboUtils.InitializeStockLocationCombo(ComboBoxPurchaseOrderInventoryLocation, Global.Company.CompanyId);
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App")!;
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp")!;
             ComboBoxPurchaseOrderInventoryLocation.SelectedIndex = key != null ? (key.GetValue("StockLocation") != null && !string.IsNullOrEmpty(key.GetValue("StockLocation")!.ToString())) ? ComboBoxPurchaseOrderInventoryLocation.FindStringExact(key.GetValue("StockLocation")!.ToString()) : -1 : -1;
             TextBoxPurchaseOrderSupplier.ResetText();
             GridViewPurchaseOrderItem.Rows.Clear();

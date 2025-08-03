@@ -121,7 +121,7 @@ namespace FADataAccessLibrary.Api.catalog
             using (var context = new AccountMasterContext())
             {
                 var existing = await context.ProductPercentages
-                    .FirstOrDefaultAsync(p => p.ProductCode == percentages.ProductCode && p.CompanyId == percentages.CompanyId);
+                    .FirstOrDefaultAsync(p => p.ProductCode == percentages.ProductCode && p.ProductId == percentages.ProductId && p.CompanyId == percentages.CompanyId);
 
                 if (existing != null)
                 {

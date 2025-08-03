@@ -964,7 +964,7 @@ namespace fa.views.purchase
             DatetimePickerPurchaseDate.Format = Global.Company.DateFormat;
             DatetimePickerPurchaseDate.Date = (DateTime)DateUtils.ToDate(Global.getTransactionDate().ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
             ComboUtils.InitializeStockLocationCombo(ComboBoxPurchaseEntryInventoryLocation, Global.Company.CompanyId);
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App")!;
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp")!;
             ComboBoxPurchaseEntryInventoryLocation.SelectedIndex = key != null ? (key.GetValue("StockLocation") != null && !string.IsNullOrEmpty(key.GetValue("StockLocation")?.ToString())) ? ComboBoxPurchaseEntryInventoryLocation.FindStringExact(key.GetValue("StockLocation")!.ToString()) : -1 : -1;
             DatetimePickerPurchaseInvoiceDate.Format = Global.Company.DateFormat;
             DatetimePickerPurchaseInvoiceDate.Date = (DateTime)DateUtils.ToDate(Global.getTransactionDate().ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;

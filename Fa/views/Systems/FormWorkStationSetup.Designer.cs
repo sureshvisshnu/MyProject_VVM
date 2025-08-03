@@ -38,20 +38,22 @@
             statusStrip1 = new StatusStrip();
             WorkStationErrorMsg = new ToolStripStatusLabel();
             groupBox1 = new GroupBox();
+            ComboBoxDefaultStockLocation = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxDefaultBarCodePrinter = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxTockenPrinter = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxDefaultPrinter = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxDefaultStockLocation = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxBarcodeLabel = new ComboBox();
+            label9 = new Label();
+            label8 = new Label();
             label7 = new Label();
+            label5 = new Label();
             TextBoxIpAddress = new fa.views.controls.text.NameTextBoxAllowSpace(components);
             label6 = new Label();
-            label5 = new Label();
             label4 = new Label();
             TextBoxWorkStationName = new fa.views.controls.text.NameTextBoxAllowSpace(components);
             TextBoxWorkStationID = new fa.views.controls.text.NameTextBox(components);
             label3 = new Label();
             buttonBackup = new Button();
-            ComboBoxDefaultBarCodePrinter = new fa.views.controls.ComboBoxSwapTextBox();
-            label8 = new Label();
             statusStrip1.SuspendLayout();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -127,14 +129,16 @@
             // groupBox1
             // 
             groupBox1.BackColor = SystemColors.Control;
-            groupBox1.Controls.Add(ComboBoxDefaultBarCodePrinter);
             groupBox1.Controls.Add(ComboBoxDefaultStockLocation);
-            groupBox1.Controls.Add(label8);
+            groupBox1.Controls.Add(ComboBoxDefaultBarCodePrinter);
             groupBox1.Controls.Add(ComboBoxTockenPrinter);
             groupBox1.Controls.Add(ComboBoxDefaultPrinter);
+            groupBox1.Controls.Add(ComboBoxBarcodeLabel);
+            groupBox1.Controls.Add(label9);
+            groupBox1.Controls.Add(label8);
             groupBox1.Controls.Add(label7);
-            groupBox1.Controls.Add(TextBoxIpAddress);
             groupBox1.Controls.Add(label5);
+            groupBox1.Controls.Add(TextBoxIpAddress);
             groupBox1.Controls.Add(label6);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(TextBoxWorkStationName);
@@ -148,6 +152,30 @@
             groupBox1.Size = new Size(384, 330);
             groupBox1.TabIndex = 19;
             groupBox1.TabStop = false;
+            // 
+            // ComboBoxDefaultStockLocation
+            // 
+            ComboBoxDefaultStockLocation.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxDefaultStockLocation.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxDefaultStockLocation.FormattingEnabled = true;
+            ComboBoxDefaultStockLocation.Location = new Point(13, 249);
+            ComboBoxDefaultStockLocation.MaxLength = 30;
+            ComboBoxDefaultStockLocation.Name = "ComboBoxDefaultStockLocation";
+            ComboBoxDefaultStockLocation.Size = new Size(200, 21);
+            ComboBoxDefaultStockLocation.TabIndex = 5;
+            ComboBoxDefaultStockLocation.TxtVisible = true;
+            // 
+            // ComboBoxDefaultBarCodePrinter
+            // 
+            ComboBoxDefaultBarCodePrinter.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxDefaultBarCodePrinter.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxDefaultBarCodePrinter.FormattingEnabled = true;
+            ComboBoxDefaultBarCodePrinter.Location = new Point(13, 208);
+            ComboBoxDefaultBarCodePrinter.MaxLength = 30;
+            ComboBoxDefaultBarCodePrinter.Name = "ComboBoxDefaultBarCodePrinter";
+            ComboBoxDefaultBarCodePrinter.Size = new Size(302, 21);
+            ComboBoxDefaultBarCodePrinter.TabIndex = 10;
+            ComboBoxDefaultBarCodePrinter.TxtVisible = true;
             // 
             // ComboBoxTockenPrinter
             // 
@@ -173,17 +201,32 @@
             ComboBoxDefaultPrinter.TabIndex = 3;
             ComboBoxDefaultPrinter.TxtVisible = true;
             // 
-            // ComboBoxDefaultStockLocation
+            // ComboBoxBarcodeLabel
             // 
-            ComboBoxDefaultStockLocation.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxDefaultStockLocation.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxDefaultStockLocation.FormattingEnabled = true;
-            ComboBoxDefaultStockLocation.Location = new Point(13, 251);
-            ComboBoxDefaultStockLocation.MaxLength = 30;
-            ComboBoxDefaultStockLocation.Name = "ComboBoxDefaultStockLocation";
-            ComboBoxDefaultStockLocation.Size = new Size(200, 21);
-            ComboBoxDefaultStockLocation.TabIndex = 5;
-            ComboBoxDefaultStockLocation.TxtVisible = true;
+            ComboBoxBarcodeLabel.FormattingEnabled = true;
+            ComboBoxBarcodeLabel.Items.AddRange(new object[] { "25mm * 20 mm", "35 mm * 25 mm", "50 mm * 25 mm", "100 mm* 23 mm" });
+            ComboBoxBarcodeLabel.Location = new Point(228, 249);
+            ComboBoxBarcodeLabel.Name = "ComboBoxBarcodeLabel";
+            ComboBoxBarcodeLabel.Size = new Size(145, 21);
+            ComboBoxBarcodeLabel.TabIndex = 16;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(228, 233);
+            label9.Name = "label9";
+            label9.Size = new Size(117, 13);
+            label9.TabIndex = 14;
+            label9.Text = "Default Bar Code Label";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(13, 191);
+            label8.Name = "label8";
+            label8.Size = new Size(121, 13);
+            label8.TabIndex = 9;
+            label8.Text = "Default BarCode Printer";
             // 
             // label7
             // 
@@ -195,6 +238,15 @@
             label7.Size = new Size(155, 15);
             label7.TabIndex = 8;
             label7.Text = "Example DESKTOP-XXXXX";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(13, 232);
+            label5.Name = "label5";
+            label5.Size = new Size(114, 13);
+            label5.TabIndex = 4;
+            label5.Text = "Default Stock Location";
             // 
             // TextBoxIpAddress
             // 
@@ -212,15 +264,6 @@
             label6.Size = new Size(108, 13);
             label6.TabIndex = 5;
             label6.Text = "System/Server Name";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(13, 234);
-            label5.Name = "label5";
-            label5.Size = new Size(114, 13);
-            label5.TabIndex = 4;
-            label5.Text = "Default Stock Location";
             // 
             // label4
             // 
@@ -267,27 +310,6 @@
             buttonBackup.Text = " Backup [F6]";
             buttonBackup.UseVisualStyleBackColor = true;
             buttonBackup.Click += buttonBackup_Click;
-            // 
-            // ComboBoxDefaultBarCodePrinter
-            // 
-            ComboBoxDefaultBarCodePrinter.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxDefaultBarCodePrinter.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxDefaultBarCodePrinter.FormattingEnabled = true;
-            ComboBoxDefaultBarCodePrinter.Location = new Point(13, 208);
-            ComboBoxDefaultBarCodePrinter.MaxLength = 30;
-            ComboBoxDefaultBarCodePrinter.Name = "ComboBoxDefaultBarCodePrinter";
-            ComboBoxDefaultBarCodePrinter.Size = new Size(302, 21);
-            ComboBoxDefaultBarCodePrinter.TabIndex = 10;
-            ComboBoxDefaultBarCodePrinter.TxtVisible = true;
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(13, 191);
-            label8.Name = "label8";
-            label8.Size = new Size(121, 13);
-            label8.TabIndex = 9;
-            label8.Text = "Default BarCode Printer";
             // 
             // FormWorkStationSetup
             // 
@@ -341,5 +363,7 @@
         private Button buttonBackup;
         private controls.ComboBoxSwapTextBox ComboBoxDefaultBarCodePrinter;
         private Label label8;
+        private Label label9;
+        private ComboBox ComboBoxBarcodeLabel;
     }
 }

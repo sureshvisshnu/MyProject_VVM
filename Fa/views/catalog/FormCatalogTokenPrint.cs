@@ -67,7 +67,7 @@ namespace fa.views.catalog
             ComboBoxDefaultPrinter.Items.AddRange(ComboUtils.GetAvailablePrinter().ToArray<string>());
             if (ComboBoxDefaultPrinter.Items != null && ComboBoxDefaultPrinter.Items.Count > 0)
             {
-                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
+                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp");
                 if (key!=null && key.GetValue("DefaultPrinter") != null && !string.IsNullOrEmpty(key.GetValue("DefaultPrinter").ToString()))
                 {
                     ComboBoxDefaultPrinter.SelectedIndex = ComboBoxDefaultPrinter.FindStringExact(key.GetValue("DefaultPrinter").ToString());

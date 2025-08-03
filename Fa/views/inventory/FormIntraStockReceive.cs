@@ -47,7 +47,7 @@ namespace fa.views.inventory
         {
             ResetForm();
             GetLocation();
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp");
             ComboLocationSelection.SelectedIndex = key != null ? (key.GetValue("StockLocation") != null && !string.IsNullOrEmpty(key.GetValue("StockLocation").ToString())) ? ComboLocationSelection.FindStringExact(key.GetValue("StockLocation").ToString()) : -1 : -1;
             this.ComboLocationSelection.ComboBox.Select();
             ResetDirtyFlag();

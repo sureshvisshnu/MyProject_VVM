@@ -38,13 +38,13 @@ namespace Fa.views.Systems
             //Cursor.Current = Cursors.WaitCursor;
             //if (ValidateForm())
             //{
-            //    RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
+            //    RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp");
             //    if (key != null)
             //    {
             //        key.Close();
-            //        Registry.CurrentUser.DeleteSubKey(@"SOFTWARE\Ab2App");
+            //        Registry.CurrentUser.DeleteSubKey(@"SOFTWARE\VVMApp");
             //    }
-            //    key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Ab2App");
+            //    key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\VVMApp");
             //    key.SetValue("DefaultIpAddress", string.IsNullOrEmpty(TextBoxIpAddress.Text) ? "localhost" : TextBoxIpAddress.Text);
 
             //    DBIPSetupErrorMsg.Text = SaveSuccessText;
@@ -54,13 +54,13 @@ namespace Fa.views.Systems
             Cursor.Current = Cursors.WaitCursor;
             if (ValidateForm())
             {
-                RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
+                RegistryKey? key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp");
                 if (key != null)
                 {
                     key.Close();
-                    Registry.CurrentUser.DeleteSubKey(@"SOFTWARE\Ab2App");
+                    Registry.CurrentUser.DeleteSubKey(@"SOFTWARE\VVMApp");
                 }
-                key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Ab2App");
+                key = Registry.CurrentUser.CreateSubKey(@"SOFTWARE\VVMApp");
                 key.SetValue("DefaultHostName", string.IsNullOrEmpty(TextBoxIpAddress.Text) ? "localhost" : TextBoxIpAddress.Text);
 
                 DBIPSetupErrorMsg.Text = SaveSuccessText;

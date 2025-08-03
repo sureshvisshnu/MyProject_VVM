@@ -14,7 +14,7 @@ namespace fa
 {
     public static class Global
     {
-        public static RegistryKey WorkStation = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App")!;
+        public static RegistryKey WorkStation = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp")!;
         public static bool isAuthenticated = false;
         public static bool isDateModification = false;
         public static User User = null!;

@@ -38,13 +38,13 @@
             BtnPrint = new Button();
             Print = new StatusStrip();
             PrintErrorMsg = new ToolStripStatusLabel();
-            TextBoxStartLocation = new controls.text.UserControlPoint();
+            TextBoxStartLocation = new fa.views.controls.text.UserControlPoint();
             groupBox2 = new GroupBox();
-            ComboBoxDefaultPrinter = new controls.ComboBoxSwapTextBox();
+            ComboBoxDefaultPrinter = new fa.views.controls.ComboBoxSwapTextBox();
             label3 = new Label();
             ComboBoxLabelSize = new ComboBox();
             LabelLabelSize = new Label();
-            YesNoRadioPaperSize = new controls.YesNoRadio();
+            YesNoRadioPaperSize = new fa.views.controls.YesNoRadio();
             Print.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -200,7 +200,7 @@
             // ComboBoxLabelSize
             // 
             ComboBoxLabelSize.FormattingEnabled = true;
-            ComboBoxLabelSize.Items.AddRange(new object[] { "35 mm * 25 mm", "50 mm * 25 mm", "100 mm* 23 mm" });
+            ComboBoxLabelSize.Items.AddRange(new object[] { "25mm * 20 mm", "35 mm * 25 mm", "50 mm * 25 mm", "100 mm* 23 mm" });
             ComboBoxLabelSize.Location = new Point(186, 109);
             ComboBoxLabelSize.Name = "ComboBoxLabelSize";
             ComboBoxLabelSize.Size = new Size(110, 21);

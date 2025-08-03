@@ -45,7 +45,7 @@ namespace fa.views.purchase
             ComboBoxDefaultPrinter.SelectedIndex = 5;
             if (ComboBoxDefaultPrinter.SelectedIndex > 0 && ComboBoxDefaultPrinter.Items.Count > 0)
             {
-                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Ab2App");
+                RegistryKey key = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\VVMApp");
                 if (key.GetValue("DefaultPrinter") != null && !string.IsNullOrEmpty(key.GetValue("DefaultPrinter").ToString()))
                 {
                     ComboBoxDefaultPrinter.SelectedIndex = ComboBoxDefaultPrinter.FindStringExact(key.GetValue("DefaultPrinter").ToString());
