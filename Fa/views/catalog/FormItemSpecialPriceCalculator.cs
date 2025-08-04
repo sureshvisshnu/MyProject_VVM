@@ -31,6 +31,7 @@ namespace Fa.views.catalog
 
         FormBase parent = null!;
         public static decimal MrpPercentage = 100; // NOT nullable
+        private bool isUpdating = false;
 
         public FormItemSpecialPriceCalculator(object sender)
         {
@@ -290,19 +291,28 @@ namespace Fa.views.catalog
         }
         private void UpdateMarginPrices()
         {
+            if (isUpdating) return;
+
             if (decimal.TryParse(TextBoxMrpPrice.Text, out decimal mrpPrice) &&
                 decimal.TryParse(TextBoxRetailMargin.Text, out decimal retailMargin) &&
                 decimal.TryParse(TextBoxWholesaleMargin.Text, out decimal wholesaleMargin))
             {
-                // Calculate retail price (MRP - Retail Margin % of MRP) and round to whole number
-                decimal retailPrice = mrpPrice - (mrpPrice * retailMargin / 100);
-                TextBoxRetailPrice.Text = Math.Round(retailPrice, 0).ToString(); // Rounds to nearest whole number
+                isUpdating = true;
+                try
+                {
+                    decimal retailPrice = mrpPrice - (mrpPrice * retailMargin / 100);
+                    TextBoxRetailPrice.Text = Math.Round(retailPrice, 0).ToString();
 
-                // Calculate wholesale price (MRP - Wholesale Margin % of MRP) and round to whole number
-                decimal wholesalePrice = mrpPrice - (mrpPrice * wholesaleMargin / 100);
-                TextBoxWholesalePrice.Text = Math.Round(wholesalePrice, 0).ToString(); // Rounds to nearest whole number
+                    decimal wholesalePrice = mrpPrice - (mrpPrice * wholesaleMargin / 100);
+                    TextBoxWholesalePrice.Text = Math.Round(wholesalePrice, 0).ToString();
+                }
+                finally
+                {
+                    isUpdating = false;
+                }
             }
         }
+
 
         private void UpdateAllCalculations()
         {
@@ -430,27 +440,48 @@ namespace Fa.views.catalog
                 UpdateAllCalculations(); // trigger recalculation
             }
         }
-        private void UpdateWholesaleMarginFromPrice()
-        {
-            if (decimal.TryParse(TextBoxMrpPrice.Text, out decimal mrpPrice) &&
-                decimal.TryParse(TextBoxWholesalePrice.Text, out decimal wholesalePrice) &&
-                mrpPrice > 0)
-            {
-                decimal margin = ((mrpPrice - wholesalePrice) / mrpPrice) * 100;
-                TextBoxWholesaleMargin.Text = Math.Round(margin, 0).ToString(); // 👈 Rounded to whole number
-            }
-        }
-
         private void UpdateRetailMarginFromPrice()
         {
+            if (isUpdating) return;
+
             if (decimal.TryParse(TextBoxMrpPrice.Text, out decimal mrpPrice) &&
                 decimal.TryParse(TextBoxRetailPrice.Text, out decimal retailPrice) &&
                 mrpPrice > 0)
             {
-                decimal margin = ((mrpPrice - retailPrice) / mrpPrice) * 100;
-                TextBoxRetailMargin.Text = Math.Round(margin, 0).ToString(); // 👈 Rounded to whole number
+                isUpdating = true;
+                try
+                {
+                    decimal margin = ((mrpPrice - retailPrice) / mrpPrice) * 100;
+                    TextBoxRetailMargin.Text = Math.Round(margin, 0).ToString();
+                }
+                finally
+                {
+                    isUpdating = false;
+                }
             }
         }
+
+        private void UpdateWholesaleMarginFromPrice()
+        {
+            if (isUpdating) return;
+
+            if (decimal.TryParse(TextBoxMrpPrice.Text, out decimal mrpPrice) &&
+                decimal.TryParse(TextBoxWholesalePrice.Text, out decimal wholesalePrice) &&
+                mrpPrice > 0)
+            {
+                isUpdating = true;
+                try
+                {
+                    decimal margin = ((mrpPrice - wholesalePrice) / mrpPrice) * 100;
+                    TextBoxWholesaleMargin.Text = Math.Round(margin, 0).ToString();
+                }
+                finally
+                {
+                    isUpdating = false;
+                }
+            }
+        }
+
 
 
         private void TextBoxRetailPrice_TextChanged(object sender, EventArgs e)
