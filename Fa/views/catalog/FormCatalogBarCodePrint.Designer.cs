@@ -200,7 +200,7 @@
             // ComboBoxLabelSize
             // 
             ComboBoxLabelSize.FormattingEnabled = true;
-            ComboBoxLabelSize.Items.AddRange(new object[] { "25mm * 20 mm", "35 mm * 25 mm", "50 mm * 25 mm", "100 mm* 23 mm" });
+            ComboBoxLabelSize.Items.AddRange(new object[] { "25 mm * 20 mm", "35 mm * 25 mm", "50 mm * 25 mm", "100 mm* 23 mm" });
             ComboBoxLabelSize.Location = new Point(186, 109);
             ComboBoxLabelSize.Name = "ComboBoxLabelSize";
             ComboBoxLabelSize.Size = new Size(110, 21);
