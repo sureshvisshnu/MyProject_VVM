@@ -1518,7 +1518,7 @@ namespace fa.views.utils
 
                 // Convert to string and replace decimal separator with '#'
                 costPercentStr = rawPercent.ToString("0.00", CultureInfo.InvariantCulture)
-                                          .Replace('.', ':');
+                                          .Replace('.', '|');
             }
             string secretCode = ConvertToSecretCode(purchasePrice.ToString(""));
             // Then modify the companyAndCode line:
@@ -1556,7 +1556,7 @@ namespace fa.views.utils
 
             // Label 1
             $"A785,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-            $"A785,135,2,2,1,1,N,{quote}{Product}{quote}",
+            $"A785,125,2,2,1,1,N,{quote}{Product}{quote}",
             $"B774,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A774,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A800,30,2,2,1,1,N,{quote}{nglValue}{quote}",
@@ -1565,7 +1565,7 @@ namespace fa.views.utils
 
             // Label 2
             $"A580,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-            $"A580,135,2,2,1,1,N,{quote}{Product}{quote}",
+            $"A580,125,2,2,1,1,N,{quote}{Product}{quote}",
             $"B570,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A570,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A595,30,2,2,1,1,N,{quote}{nglValue}{quote}",
@@ -1575,7 +1575,7 @@ namespace fa.views.utils
 
             // Label 3
             $"A375,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-            $"A375,135,2,1,1,1,N,{quote}{Product}{quote}",
+            $"A375,125,2,2,1,1,N,{quote}{Product}{quote}",
             $"B364,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A364,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A390,30,2,2,1,1,N,{quote}{nglValue}{quote}",
@@ -1584,7 +1584,7 @@ namespace fa.views.utils
 
             // Label 4
             $"A170,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-            $"A170,135,2,1,1,1,N,{quote}{Product}{quote}",
+            $"A170,125,2,2,1,1,N,{quote}{Product}{quote}",
             $"B160,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A160,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A185,30,2,2,1,1,N,{quote}{nglValue} {quote}",
@@ -1606,7 +1606,7 @@ namespace fa.views.utils
                     partial.AddRange(new string[]
                     {
                     $"A785,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-                    $"A785,135,2,2,1,1,N,{quote}{Product}{quote}",
+                    $"A785,125,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B774,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A774,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A800,30,2,2,1,1,N,{quote}{nglValue}{quote}",
@@ -1620,7 +1620,7 @@ namespace fa.views.utils
                     partial.AddRange(new string[]
                     {
                     $"A580,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-                    $"A580,135,2,2,1,1,N,{quote}{Product}{quote}",
+                    $"A580,125,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B570,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A570,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A595,30,2,2,1,1,N,{quote}{nglValue}{quote}",
@@ -1634,7 +1634,7 @@ namespace fa.views.utils
                     partial.AddRange(new string[]
                     {
                     $"A375,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-                    $"A375,135,2,2,1,1,N,{quote}{Product}{quote}",
+                    $"A375,125,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B364,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A364,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A390,30,2,2,1,1,N,{quote}{nglValue}{quote}",
