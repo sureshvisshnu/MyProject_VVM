@@ -1,39 +1,40 @@
-﻿using fa.model.Common;
-using fa.model.Accounting.Masters;
-using fa.model.UserProfile;
-using fa.model.Accounting.Transaction;
-using fa.model.System;
+﻿using fa;
+using fa.Data;
 using fa.model;
-using fa.model.Employee;
+using fa.model.Accounting.Masters;
+using fa.model.Accounting.Transaction;
 using fa.model.Accounting.Transactions;
-using fa.model.Hms.Master;
-using fa.model.Hms.Op;
-using fa.model.Hms.Ip;
-using fa.model.Catalog;
-using fa.model.OrderManagement;
-using fa.model.Hms.common;
 using fa.model.catalog;
+using fa.model.Catalog;
+using fa.model.Common;
+using fa.model.Employee;
 using fa.model.hms.common;
 using fa.model.hms.config;
-using Microsoft.EntityFrameworkCore;
-using FADataAccessLibrary.Configuration;
-using FADataAccessLibrary.Model.Common;
-using System.Reflection.Metadata;
+using fa.model.Hms.common;
+using fa.model.Hms.Ip;
+using fa.model.Hms.Master;
+using fa.model.Hms.Op;
+using fa.model.OrderManagement;
+using fa.model.System;
+using fa.model.UserProfile;
 using Fa.api.Accounting;
-using System.Globalization;
-using System.Security.Principal;
+using FADataAccessLibrary.Configuration;
+using FADataAccessLibrary.Model.Catalog;
+using FADataAccessLibrary.Model.Common;
+using FADataAccessLibrary.Model.Hms.common;
+using FADataAccessLibrary.Model.Hms.Master;
+using FADataAccessLibrary.Model.Purchase;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
-using System.Net;
-using System.Net.Sockets;
-using System.Net.NetworkInformation;
+using MySqlConnector;
 using System;
 using System.Diagnostics;
-using FADataAccessLibrary.Model.Hms.Master;
-using MySqlConnector;
-using fa;
-using fa.Data;
-using FADataAccessLibrary.Model.Hms.common;
-using FADataAccessLibrary.Model.Purchase;
+using System.Globalization;
+using System.Net;
+using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Reflection.Metadata;
+using System.Security.Principal;
 
 namespace fa.context
 {
@@ -305,6 +306,12 @@ namespace fa.context
         public DbSet<ProductPercentage> ProductPercentages { get; set; }
         public DbSet<PercentageStorage> PercentageStorages { get; set; }
         public DbSet<SupplierProduct> SupplierProducts { get; set; }
+
+        // BarCode Label Counter
+        public DbSet<LabelStockMaster> LabelStockMasters { get; set; }
+        public DbSet<LabelStockUsage> LabelStockUsages { get; set; }
+        public DbSet<RibbonUsage> RibbonUsages { get; set; }
+
         //Purcahse
         public DbSet<PurchaseEntry> PurchaseEntry { get; set; }
         public DbSet<PurchaseAttachment> PurchaseAttachments { get; set; }

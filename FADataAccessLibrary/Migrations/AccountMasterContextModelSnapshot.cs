@@ -69,6 +69,152 @@ namespace FADataAccessLibrary.Migrations
                     b.ToTable("countrytax", (string)null);
                 });
 
+            modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.LabelStockMaster", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("longtext");
+
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("DateEnded")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("DateLoaded")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LabelSizeCode")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.Property<string>("LabelType")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<int>("LabelsPerRow")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LabelsUsed")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("RemainingCount")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("RibbonId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("RollName")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("ThresholdWarning")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalLabelCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WastedLabelCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("RibbonId");
+
+                    b.ToTable("LabelStockMasters");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.LabelStockUsage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DatePrinted")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long>("LabelStockId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PrintedBy")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<int>("PrintedCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReferenceId")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<decimal?>("RibbonUsedLengthM")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<int>("WastedCount")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LabelStockId");
+
+                    b.ToTable("LabelStockUsages");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.RibbonUsage", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("EndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Remarks")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RibbonName")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.Property<string>("RibbonType")
+                        .HasMaxLength(50)
+                        .HasColumnType("varchar(50)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<decimal?>("TotalPrintLengthM")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<decimal>("UsedLengthM")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RibbonUsages");
+                });
+
             modelBuilder.Entity("FADataAccessLibrary.Model.Common.CountrySaleTax", b =>
                 {
                     b.Property<long>("Id")
@@ -118,7 +264,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Integrated Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 26, 12, 59, 7, 356, DateTimeKind.Local).AddTicks(4751),
+                            EffectiveTo = new DateTime(2400, 8, 6, 21, 52, 26, 526, DateTimeKind.Local).AddTicks(7013),
                             Name = "IGST",
                             Rule = "RunIGST()"
                         },
@@ -128,7 +274,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Central Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 26, 12, 59, 7, 356, DateTimeKind.Local).AddTicks(4776),
+                            EffectiveTo = new DateTime(2400, 8, 6, 21, 52, 26, 526, DateTimeKind.Local).AddTicks(7037),
                             Name = "CGST",
                             Rule = "RunCGST()"
                         },
@@ -138,7 +284,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "State Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 26, 12, 59, 7, 356, DateTimeKind.Local).AddTicks(4782),
+                            EffectiveTo = new DateTime(2400, 8, 6, 21, 52, 26, 526, DateTimeKind.Local).AddTicks(7043),
                             Name = "SGST",
                             Rule = "RunSGST()"
                         },
@@ -148,7 +294,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Tax at Source Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 7, 26, 12, 59, 7, 356, DateTimeKind.Local).AddTicks(4787),
+                            EffectiveTo = new DateTime(2400, 8, 6, 21, 52, 26, 526, DateTimeKind.Local).AddTicks(7048),
                             Name = "TCS",
                             Rule = "RunTCS()"
                         });
@@ -13919,6 +14065,34 @@ namespace FADataAccessLibrary.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.LabelStockMaster", b =>
+                {
+                    b.HasOne("fa.model.Accounting.Masters.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FADataAccessLibrary.Model.Catalog.RibbonUsage", "Ribbon")
+                        .WithMany("LabelStocks")
+                        .HasForeignKey("RibbonId");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Ribbon");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.LabelStockUsage", b =>
+                {
+                    b.HasOne("FADataAccessLibrary.Model.Catalog.LabelStockMaster", "LabelStock")
+                        .WithMany("Usages")
+                        .HasForeignKey("LabelStockId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("LabelStock");
+                });
+
             modelBuilder.Entity("FADataAccessLibrary.Model.Common.CountrySaleTax", b =>
                 {
                     b.HasOne("fa.model.Common.Country", "Country")
@@ -17147,6 +17321,16 @@ namespace FADataAccessLibrary.Migrations
                         .HasForeignKey("SaleId");
 
                     b.Navigation("SaleEntry");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.LabelStockMaster", b =>
+                {
+                    b.Navigation("Usages");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.RibbonUsage", b =>
+                {
+                    b.Navigation("LabelStocks");
                 });
 
             modelBuilder.Entity("FADataAccessLibrary.Model.Hms.Master.Allergie", b =>
