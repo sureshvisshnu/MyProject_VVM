@@ -1531,7 +1531,10 @@ namespace fa.views.utils
             {
                 string[] Print = new string[]
                 {
-            "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N",
+            //"I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N",
+
+            "I8,A", "q812", "O", "JF", "ZT", "Q160,24", "N",
+
 
             // Label 1
             $"A785,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
@@ -1573,28 +1576,53 @@ namespace fa.views.utils
 
             if (Cols > 0)
             {
-                List<string> partial = new() { "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N" };
+                List<string> partial = new() { "I8,A", "q812", "O", "JF", "ZT", "Q160,24", "N" };
 
-                int topY = 785;
-                for (int j = 0; j < Cols; j++)
+                if (Cols >= 1)
                 {
-                    int yOffset = topY - (j * 205); // Adjust spacing for 4ups
                     partial.AddRange(new string[]
                     {
-                $"A{yOffset},150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-                $"A{yOffset},130,2,1,1,1,N,{quote}{Product}{quote}",
-                $"B{yOffset - 11},110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                $"A{yOffset - 11},70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                $"A{yOffset + 15},50,2,1,1,1,N,{quote}{nglValue}{quote}",
-                $"A{yOffset - 45},50,2,1,1,1,N,{quote}{lMrp}{quote}"
+                    $"A785,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+                    $"A785,130,2,1,1,1,N,{quote}{Product}{quote}",
+                    $"B774,110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A774,70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A800,50,2,1,1,1,N,{quote}{nglValue}{quote}",
+                    $"A740,50,2,1,1,1,N,{quote}{lMrp}{quote}",
+                    });
+                }
+
+                if (Cols >= 2)
+                {
+                    partial.AddRange(new string[]
+                    {
+                    $"A580,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+                    $"A580,130,2,1,1,1,N,{quote}{Product}{quote}",
+                    $"B570,110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A570,70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A595,50,2,1,1,1,N,{quote}{nglValue}{quote}",
+                    $"A530,50,2,1,1,1,N,{quote}{lMrp}{quote}",
+                    });
+                }
+
+                if (Cols == 3)
+                {
+                    partial.AddRange(new string[]
+                    {
+                    $"A375,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+                    $"A375,130,2,1,1,1,N,{quote}{Product}{quote}",
+                    $"B364,110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A364,70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A390,50,2,1,1,1,N,{quote}{nglValue}{quote}",
+                    $"A320,50,2,1,1,1,N,{quote}{lMrp}{quote}",
                     });
                 }
 
                 partial.Add("P1");
-                PrintLabel(PrinterName, partial.ToArray(), "");
+                PrintLabel(PrinterName, partial.ToArray(), "Partial");
             }
+
         }
-         // ------------------ *** ---------------------------------
+        // ------------------ *** ---------------------------------
 
         public void GenerateSpecialBarcodeLabel4Ups(long ProductId, long Qty, string PrinterName)
         {
@@ -2188,6 +2216,179 @@ namespace fa.views.utils
                 // MRP and Rate (bottom line)
                 $"A{xOffset},15,2,1,1,1,N,{quote}MRP:{mrp} RATE:{rate}{quote}"
                     };
+        }
+        public void GenerateCompactBarcodeLabel25x20_4UPOld(long ProductId, long Qty, string PrinterName)
+        {
+            Product ProductFromDB = CatalogProductManager.Instance.GetProductInfoById(ProductId);
+            var length = ProductFromDB.Name.Length;
+            //var Product = ProductFromDB.Name.Substring(0, (length <= 12) ? length : 12) + ((length > 12) ? ".." : "");
+            length = Global.Company.Name.Length;
+            //var CompanyName = Global.Company.Name.Substring(0, (length <= 12) ? length : 12) + ((length > 12) ? ".." : "");
+
+            var Product = ProductFromDB.Name.Length > 12
+                ? ProductFromDB.Name.Substring(0, 12) + ".."
+                : ProductFromDB.Name;
+
+            var CompanyName = Global.Company.Name.Length > 12
+                ? Global.Company.Name.Substring(0, 12) + ".."
+                : Global.Company.Name;
+
+            // Get percentage values
+            var (retailPercent, wholesalePercent) = GetProductPercentages(ProductId);
+            int wholeNGL = (int)Math.Floor(wholesalePercent);
+            string nglValue = "NGL:" + wholeNGL.ToString() + "--";
+
+            // Cost percentage from MRP
+            decimal purchasePrice = (decimal)ProductFromDB.PurchasePrice;
+            decimal costPrice = (decimal)ProductFromDB.CostPrice;
+            decimal mrp = (decimal)ProductFromDB.Msrp;
+
+            int costPercent = 0;
+            if (mrp > 0)
+            {
+                costPercent = (100 - (int)Math.Floor((costPrice * 100) / mrp));
+            }
+
+            string secretCode = ConvertToSecretCode(purchasePrice.ToString(""));
+            //string companyAndCode = CompanyName + " " + secretCode + "-" + costPercent;
+
+            string companyAndCodeRaw = CompanyName + " " + secretCode + "-" + costPercent;
+            string companyAndCode = companyAndCodeRaw.Length > 18
+                ? companyAndCodeRaw.Substring(0, 18)
+                : companyAndCodeRaw;
+
+            decimal retailPrice = Global.Company.BusinessType == BuisnessType.Wholesale ?
+                (decimal)ProductFromDB.WholdSalePrice : (decimal)ProductFromDB.RetailPrice;
+
+            string lMrp = mrp.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
+            string lRate = retailPrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat).Replace(",", "");
+            string uom = ProductFromDB.UOM ?? "";
+
+            char quote = '"';
+
+            long Rows = Qty / 4;
+            long Cols = Qty % 4;
+
+            //for (long i = 0; i < Rows; i++)
+            //{
+            //    string[] Print = new string[]
+            //    {
+            //"I8,A", "q804", "O", "JF", "ZT", "Q200,25", "N",
+
+            //// Label 1
+            //$"A785,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+            //$"A785,130,2,1,1,1,N,{quote}{Product}{quote}",
+            //$"B774,110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            //$"A774,70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            //$"A800,50,2,1,1,1,N,{quote}{nglValue}{quote}",
+            //$"A740,50,2,1,1,1,N,{quote}{lMrp}{quote}",
+
+            //// Label 2
+            //$"A580,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+            //$"A580,130,2,1,1,1,N,{quote}{Product}{quote}",
+            //$"B570,110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            //$"A570,70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            //$"A595,50,2,1,1,1,N,{quote}{nglValue}{quote}",
+            //$"A530,50,2,1,1,1,N,{quote}{lMrp}{quote}",
+
+            //// Label 3
+            //$"A375,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+            //$"A375,130,2,1,1,1,N,{quote}{Product}{quote}",
+            //$"B364,110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            //$"A364,70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            //$"A390,50,2,1,1,1,N,{quote}{nglValue}{quote}",
+            //$"A320,50,2,1,1,1,N,{quote}{lMrp}{quote}",
+
+            //// Label 4
+            //$"A170,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+            //$"A170,130,2,1,1,1,N,{quote}{Product}{quote}",
+            //$"B160,110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            //$"A160,70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            //$"A185,50,2,1,1,1,N,{quote}{nglValue}{quote}",
+            //$"A110,50,2,1,1,1,N,{quote}{lMrp}{quote}",
+
+            //"P1"
+            //    };
+
+            //    PrintLabel(PrinterName, Print, i.ToString());
+            //}
+            // Define constants for clarity
+            for (long i = 0; i < Rows; i++)
+            {
+                string[] Print = new string[]
+                {
+             "I8,A", "q804", "O", "JF", "ZT", "Q160,25", "N",
+
+             // Label 1 (X = 5)
+             $"A5,140,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+             $"A5,120,2,1,1,1,N,{quote}{Product}{quote}",
+             $"B5,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+             $"A5,65,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+             $"A5,45,2,1,1,1,N,{quote}{nglValue}{quote}",
+             $"A5,25,2,1,1,1,N,{quote}{lMrp}{quote}",
+
+             // Label 2 (X = 205)
+             $"A205,140,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+             $"A205,120,2,1,1,1,N,{quote}{Product}{quote}",
+             $"B205,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+             $"A205,65,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+             $"A205,45,2,1,1,1,N,{quote}{nglValue}{quote}",
+             $"A205,25,2,1,1,1,N,{quote}{lMrp}{quote}",
+
+             // Label 3 (X = 405)
+             $"A405,140,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+             $"A405,120,2,1,1,1,N,{quote}{Product}{quote}",
+             $"B405,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+             $"A405,65,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+             $"A405,45,2,1,1,1,N,{quote}{nglValue}{quote}",
+             $"A405,25,2,1,1,1,N,{quote}{lMrp}{quote}",
+
+             // Label 4 (X = 600, safe margin)
+             $"A600,140,2,2,1,1,N,\"{companyAndCode}\"",
+             $"A600,120,2,1,1,1,N,\"{Product}\"",
+             $"B600,100,2,1,1,2,30,N,\"{ProductFromDB.MaterialId}\"",
+             $"A600,65,2,1,1,1,N,\"{ProductFromDB.MaterialId}\"",
+             $"A600,45,2,1,1,1,N,\"{nglValue}\"",
+             $"A600,25,2,1,1,1,N,\"{lMrp}\"",
+
+
+             // Label 4 (X = 595 — reduced from 605 to fit width)
+             //$"A595,140,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+             //$"A595,120,2,1,1,1,N,{quote}{Product}{quote}",
+             //$"B595,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+             //$"A595,65,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+             //$"A595,45,2,1,1,1,N,{quote}{nglValue}{quote}",
+             //$"A595,25,2,1,1,1,N,{quote}{lMrp}{quote}",
+
+             "P1"
+                };
+
+                PrintLabel(PrinterName, Print, i.ToString());
+            }
+
+
+            if (Cols > 0)
+            {
+                List<string> partial = new() { "I8,A", "q812", "O", "JF", "ZT", "Q200,25", "N" };
+
+                int topY = 785;
+                for (int j = 0; j < Cols; j++)
+                {
+                    int yOffset = topY - (j * 205); // Adjust spacing for 4ups
+                    partial.AddRange(new string[]
+                    {
+         $"A{yOffset},150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+         $"A{yOffset},130,2,1,1,1,N,{quote}{Product}{quote}",
+         $"B{yOffset - 11},110,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+         $"A{yOffset - 11},70,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+         $"A{yOffset + 15},50,2,1,1,1,N,{quote}{nglValue}{quote}",
+         $"A{yOffset - 45},50,2,1,1,1,N,{quote}{lMrp}{quote}"
+                    });
+                }
+
+                partial.Add("P1");
+                PrintLabel(PrinterName, partial.ToArray(), "");
+            }
         }
     }
 }
