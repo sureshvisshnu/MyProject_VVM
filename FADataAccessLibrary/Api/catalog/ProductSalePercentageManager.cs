@@ -121,11 +121,12 @@ namespace FADataAccessLibrary.Api.catalog
             using (var context = new AccountMasterContext())
             {
                 var existing = await context.ProductPercentages
-                    .FirstOrDefaultAsync(p => p.ProductCode == percentages.ProductCode && p.ProductId == percentages.ProductId && p.CompanyId == percentages.CompanyId);
+                    .FirstOrDefaultAsync(p => p.ProductId == percentages.ProductId && p.CompanyId == percentages.CompanyId);
 
                 if (existing != null)
                 {
-                    // Update existing record
+                    // Update all relevant fields, including ProductCode
+                    existing.ProductCode = percentages.ProductCode;
                     existing.AddedCostPercentage = percentages.AddedCostPercentage;
                     existing.RetailMarginPercentage = percentages.RetailMarginPercentage;
                     existing.WholesaleMarginPercentage = percentages.WholesaleMarginPercentage;
@@ -135,13 +136,14 @@ namespace FADataAccessLibrary.Api.catalog
                 }
                 else
                 {
-                    // Add new record
+                    // New record
                     context.ProductPercentages.Add(percentages);
                 }
 
                 await context.SaveChangesAsync();
             }
         }
+
 
         public async Task AddMissingProductPercentagesAsync()
         {
