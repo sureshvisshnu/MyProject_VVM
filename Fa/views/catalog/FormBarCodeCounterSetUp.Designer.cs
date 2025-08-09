@@ -106,7 +106,6 @@
             ComboBoxLabelSize.Name = "ComboBoxLabelSize";
             ComboBoxLabelSize.Size = new Size(110, 23);
             ComboBoxLabelSize.TabIndex = 479;
-            ComboBoxLabelSize.Visible = false;
             // 
             // LabelLabelSize
             // 
@@ -117,7 +116,6 @@
             LabelLabelSize.Size = new Size(113, 13);
             LabelLabelSize.TabIndex = 480;
             LabelLabelSize.Text = "BarCode Label Size";
-            LabelLabelSize.Visible = false;
             // 
             // BtnPriceCalculatorSave
             // 
@@ -154,11 +152,24 @@
             Controls.Add(TextBoxXFactorRetail);
             Controls.Add(label9);
             Controls.Add(BarCodeSetUpToolStrip);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormBarCodeCounterSetUp";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Bar Code Counting SetUp";
+            Controls.SetChildIndex(BarCodeSetUpToolStrip, 0);
+            Controls.SetChildIndex(label9, 0);
+            Controls.SetChildIndex(TextBoxXFactorRetail, 0);
+            Controls.SetChildIndex(TextBoxXFactorWholeSale, 0);
+            Controls.SetChildIndex(label4, 0);
+            Controls.SetChildIndex(LabelLabelSize, 0);
+            Controls.SetChildIndex(ComboBoxLabelSize, 0);
+            Controls.SetChildIndex(BtnPriceCalculatorCancel, 0);
+            Controls.SetChildIndex(BtnPriceCalculatorSave, 0);
+            Controls.SetChildIndex(ProductIdTransport, 0);
+            Controls.SetChildIndex(ProductBatchIdTransport, 0);
+            Controls.SetChildIndex(AccountIdTransport, 0);
+            Controls.SetChildIndex(checkBoxIsPatient, 0);
             BarCodeSetUpToolStrip.ResumeLayout(false);
             BarCodeSetUpToolStrip.PerformLayout();
             ResumeLayout(false);

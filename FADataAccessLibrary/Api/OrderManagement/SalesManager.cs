@@ -39,7 +39,7 @@ namespace fa.api.OrderManagement
         public void ApplyPayment(ReceiptDetail ReceiptDetail, AccountMasterContext Context, List<SaleEntry> SaleEntry)
         {
             if (!string.IsNullOrEmpty(ReceiptDetail.ReferenceTrasnactionId))
-            {               
+            {
                 SaleEntry lSalesEntry = GetSaleEntry(long.Parse(ReceiptDetail.ReferenceTrasnactionId));
                 if (SaleEntry != null)
                 {
@@ -48,7 +48,7 @@ namespace fa.api.OrderManagement
                         if (saleEntry.Id == lSalesEntry.Id)
                         {
                             lSalesEntry.Balance = saleEntry.Balance;
-                            lSalesEntry.Paid = saleEntry.Paid;  
+                            lSalesEntry.Paid = saleEntry.Paid;
                             break;
                         }
                     }
@@ -57,8 +57,8 @@ namespace fa.api.OrderManagement
                 {
                     lSalesEntry.Paid += (double)ReceiptDetail.Amount;
                     lSalesEntry.Balance -= (double)ReceiptDetail.Amount;
-                    UpdateSaleEntryForApplayAndReversePayment(lSalesEntry, Context);                 
-                }               
+                    UpdateSaleEntryForApplayAndReversePayment(lSalesEntry, Context);
+                }
             }
             else
             {
@@ -70,7 +70,7 @@ namespace fa.api.OrderManagement
             if (!string.IsNullOrEmpty(ReceiptDetail.ReferenceTrasnactionId))
             {
                 SaleEntry lSalesEntry = GetSaleEntry(long.Parse(ReceiptDetail.ReferenceTrasnactionId));
-                if (lSalesEntry!=null && ReceiptDetail.Amount > 0)
+                if (lSalesEntry != null && ReceiptDetail.Amount > 0)
                 {
                     lSalesEntry.Paid -= (double)ReceiptDetail.Amount;
                     lSalesEntry.Balance += (double)ReceiptDetail.Amount;
@@ -130,7 +130,7 @@ namespace fa.api.OrderManagement
                         {
                             Context.SaleDetail.Remove(Context.SaleDetail.FirstOrDefault(x => x.Id == OldDetail.Id));
                             OldDetail.FreeQuantity = 0;
-                            OldDetail.Quantity = 0;                               
+                            OldDetail.Quantity = 0;
                         }
                         else
                         {
@@ -155,7 +155,7 @@ namespace fa.api.OrderManagement
                                 Context.SaveChanges();
                             }
                         }
-                    }                      
+                    }
                     foreach (SaleDetail Detail in SaleEntry.SaleDetails)
                     {
                         Detail.SaleId = SaleEntry.Id;
@@ -183,7 +183,7 @@ namespace fa.api.OrderManagement
                         Context.OrderLevelSaleTaxDetails.Add(Detail);
                         Context.SaveChanges();
                     }
-                    Context.SaveChanges();                        
+                    Context.SaveChanges();
                 }
             }
             catch (Exception e)
@@ -193,7 +193,7 @@ namespace fa.api.OrderManagement
                 throw (e);
             }
         }
-        public void RecordStockMovementSaleInSaleEntry(SaleEntry SaleEntry,AccountMasterContext Context)
+        public void RecordStockMovementSaleInSaleEntry(SaleEntry SaleEntry, AccountMasterContext Context)
         {
             Company Company = CompanyManager.Instance.GetCompany(SaleEntry.CompanyId);
             if (Company != null)
@@ -302,7 +302,7 @@ namespace fa.api.OrderManagement
                         {
                             RecordStockMovementSaleInSaleEntry(saleEntry, Context);
                         }
-                        if (saleEntry.NoteId != 0L && saleEntry.NoteId!=null)
+                        if (saleEntry.NoteId != 0L && saleEntry.NoteId != null)
                         {
                             ConsultationNoteManager.Instance.UpdateNoteForPrescriptionSaleUpdate((long)saleEntry.NoteId, saleEntry.Id, Context);
                         }
@@ -333,7 +333,7 @@ namespace fa.api.OrderManagement
         public SaleEntry UpdateSaleEntry(SaleEntry SaleEntry, AccountMasterContext Context)
         {
             SaleEntry SaleEntryInfo = null;
-                
+
             try
             {
                 SaleEntryInfo = Context.SaleEntry.Find(SaleEntry.Id);
@@ -372,7 +372,7 @@ namespace fa.api.OrderManagement
                     // Changes made here CustomerId to AccountId and Customer to Account due to sales model change
                     SaleEntry.Account = null;
                     Context.Entry(SaleEntryInfo).CurrentValues.SetValues(SaleEntry);
-                            
+
                     ConsultationNote Note = ConsultationNoteManager.Instance.GetConsultationNoteBySaleId(SaleEntry.Id);
                     if (Note != null)
                     {
@@ -490,7 +490,7 @@ namespace fa.api.OrderManagement
                     {
                         SaleEntryInfo = Context.SaleEntry.Find(SaleEntry.Id);
                         if (SaleEntryInfo != null)
-                        {                           
+                        {
                             SaleEntry.SaleEntryId = SaleEntryInfo.SaleEntryId;
                             SaleEntry SaleEntryInfoFromDB = GetSaleEntry(SaleEntry.Id);
                             if (SaleEntryInfoFromDB.SaleDetails.Count > 0)
@@ -503,9 +503,9 @@ namespace fa.api.OrderManagement
                                     Context.ItemLevelSaleDiscounts.Where(p => p.SaleDetailsId == Detail.Id).ToList().ForEach(p => Context.ItemLevelSaleDiscounts.Remove(p));
                                     Context.SaveChanges();
                                 }
-                              
+
                             }
-                            
+
                             if (SaleEntryInfoFromDB.SaleAdditionalTransactions.Count > 0)
                             {
                                 Context.SaleAdditionalTransactions.Where(p => p.SaleEntryId == SaleEntryInfoFromDB.Id).ToList().ForEach(p => Context.SaleAdditionalTransactions.Remove(p));
@@ -520,7 +520,7 @@ namespace fa.api.OrderManagement
                             {
                                 Context.OrderLevelSaleTaxDetails.Where(p => p.SaleId == SaleEntryInfoFromDB.Id).ToList().ForEach(p => Context.OrderLevelSaleTaxDetails.Remove(p));
                                 Context.SaveChanges();
-                            } 
+                            }
                             // Changes made here CustomerId to AccountId and Customer to Account due to sales model change
 
                             SaleEntry.Account = null;
@@ -560,7 +560,7 @@ namespace fa.api.OrderManagement
                                 else
                                 {
                                     SaleEntry.SaleDetails.Remove(NewDetail);
-                                    NewDetail.SaleId = SaleEntry.Id;                                 
+                                    NewDetail.SaleId = SaleEntry.Id;
                                     SaleDetail SaleDetail = Context.SaleDetail.Find(NewDetail.Id);
                                     SaleDetail.Sale = null;
                                     Context.Entry(SaleDetail).CurrentValues.SetValues(NewDetail/*.TaxDetails*/);
@@ -624,8 +624,8 @@ namespace fa.api.OrderManagement
                                 Context.SaveChanges();
                             }
                             Context.SaveChanges();
-                            
-                        }                        
+
+                        }
                         dbContextTransaction.Commit();
                     }
                     catch (Exception e)
@@ -653,15 +653,15 @@ namespace fa.api.OrderManagement
                         SaleEntry SaleEntryInfo = GetSaleEntry(SaleEntryId);
                         if (SaleEntryInfo.EntryType == Entrytype.SALE)
                         {
-                           StockMovementManager.Instance.DeleteStockMovementSale(SaleEntryInfo.Id, Context);
+                            StockMovementManager.Instance.DeleteStockMovementSale(SaleEntryInfo.Id, Context);
                         }
                         if (SaleEntryInfo.EntryType == Entrytype.RETURN)
                         {
                             StockMovementManager.Instance.DeleteStockMovementSaleReturn(SaleEntryInfo.Id, Context);
                         }
                         //add to inventory to list while remove
-                        if (SaleEntryInfo.EntryType == Entrytype.SALE|| SaleEntryInfo.EntryType == Entrytype.RETURN)
-                        {                 
+                        if (SaleEntryInfo.EntryType == Entrytype.SALE || SaleEntryInfo.EntryType == Entrytype.RETURN)
+                        {
                             InventoryLocationManager.Instance.RecordSalesInDelete(SaleEntryInfo, Context);
                             //daybook delete
                             if (SaleEntryInfo.EntryType == Entrytype.SALE)
@@ -684,7 +684,7 @@ namespace fa.api.OrderManagement
 
                         if (SaleEntryInfo.SaleDetails.Count > 0)
                         {
-                            foreach(SaleDetail detail in SaleEntryInfo.SaleDetails)
+                            foreach (SaleDetail detail in SaleEntryInfo.SaleDetails)
                             {
                                 Context.ItemLevelSaleTaxDetails.Where(p => p.SaleDetailsId == detail.Id).ToList().ForEach(p => Context.ItemLevelSaleTaxDetails.Remove(p));
                                 Context.ItemLevelSaleDiscounts.Where(p => p.SaleDetailsId == detail.Id).ToList().ForEach(p => Context.ItemLevelSaleDiscounts.Remove(p));
@@ -717,7 +717,7 @@ namespace fa.api.OrderManagement
                             if (SaleEntryInfo.SaleEntryId != null)
                             {
                                 IList<SaleEntry> SaleEntrys = Context.SaleEntry.Include("SaleDetails").Where(x => x.SaleEntryId == SaleEntryInfo.SaleEntryId).ToList<SaleEntry>();
-                                if (SaleEntrys==null || SaleEntrys.Count == 0)
+                                if (SaleEntrys == null || SaleEntrys.Count == 0)
                                 {
                                     SaleEntry lSalesEntry = GetSaleEntry((long)SaleEntryInfo.SaleEntryId);
                                     lSalesEntry.isSaleLocked = false;
@@ -732,13 +732,13 @@ namespace fa.api.OrderManagement
 
                         dbContextTransaction.Commit();
                         Deleted = true;
-                }
+                    }
                     catch (Exception e)
                     {
-                    dbContextTransaction.Rollback();
-                    throw (e);
+                        dbContextTransaction.Rollback();
+                        throw (e);
+                    }
                 }
-            }
             }
             return Deleted;
         }
@@ -750,7 +750,7 @@ namespace fa.api.OrderManagement
             {
                 using (var dbContextTransaction = Context.Database.BeginTransaction())
                 {
-                    SaleEntrys = (from SaleEntry in Context.SaleEntry where SaleEntry.CompanyId == CompanyId && SaleEntry.EntryType==Entrytype.QUOTE select SaleEntry).ToList();
+                    SaleEntrys = (from SaleEntry in Context.SaleEntry where SaleEntry.CompanyId == CompanyId && SaleEntry.EntryType == Entrytype.QUOTE select SaleEntry).ToList();
                 }
             }
             return SaleEntrys;
@@ -780,12 +780,12 @@ namespace fa.api.OrderManagement
             {
                 using (var dbContextTransaction = Context.Database.BeginTransaction())
                 {
-                    SaleEntrys = (from SaleEntry in Context.SaleEntry where SaleEntry.CompanyId == CompanyId && SaleEntry.EntryType==Entrytype.SALE && SaleEntry.hasDelivered == false && SaleEntry.isPaymentReceived == true select SaleEntry).ToList();
+                    SaleEntrys = (from SaleEntry in Context.SaleEntry where SaleEntry.CompanyId == CompanyId && SaleEntry.EntryType == Entrytype.SALE && SaleEntry.hasDelivered == false && SaleEntry.isPaymentReceived == true select SaleEntry).ToList();
                 }
             }
             return SaleEntrys;
         }
-        
+
         public List<SaleEntry> GetSaleRecentPaymentByCompanyId(long CompanyId)
         {
             List<SaleEntry> SaleEntrys = null;
@@ -793,7 +793,7 @@ namespace fa.api.OrderManagement
             {
                 using (var dbContextTransaction = Context.Database.BeginTransaction())
                 {
-                    SaleEntrys = (from SaleEntry in Context.SaleEntry.Include("SalePayment") where SaleEntry.CompanyId == CompanyId && SaleEntry.EntryType==Entrytype.SALE && SaleEntry.SaleMethod==SaleMethod.Cash && SaleEntry.hasDelivered == false select SaleEntry).ToList();
+                    SaleEntrys = (from SaleEntry in Context.SaleEntry.Include("SalePayment") where SaleEntry.CompanyId == CompanyId && SaleEntry.EntryType == Entrytype.SALE && SaleEntry.SaleMethod == SaleMethod.Cash && SaleEntry.hasDelivered == false select SaleEntry).ToList();
                 }
             }
             return SaleEntrys;
@@ -805,7 +805,7 @@ namespace fa.api.OrderManagement
             {
                 using (var dbContextTransaction = Context.Database.BeginTransaction())
                 {
-                    SaleEntrys = (from SaleEntry in Context.SaleEntry where SaleEntry.CompanyId == CompanyId  select SaleEntry).ToList();
+                    SaleEntrys = (from SaleEntry in Context.SaleEntry where SaleEntry.CompanyId == CompanyId select SaleEntry).ToList();
                 }
             }
             return SaleEntrys;
@@ -815,7 +815,7 @@ namespace fa.api.OrderManagement
             IList<SaleEntry> SaleEntryInfo = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").Where(x => x.SaleDate.Day == Date.Day && x.SaleDate.Month == Date.Month && x.SaleDate.Year == Date.Year && x.EntryType == Entrytype.SALE && x.CompanyId == CompanyId ).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
+                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").Where(x => x.SaleDate.Day == Date.Day && x.SaleDate.Month == Date.Month && x.SaleDate.Year == Date.Year && x.EntryType == Entrytype.SALE && x.CompanyId == CompanyId).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
                 return SaleEntryInfo;
             }
         }
@@ -825,25 +825,25 @@ namespace fa.api.OrderManagement
             IList<SaleEntry> SaleEntryInfo = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").Where(x => x.RefNumber == RefNo && x.EntryType == Entrytype.SALE && x.CompanyId == CompanyId ).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
+                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").Where(x => x.RefNumber == RefNo && x.EntryType == Entrytype.SALE && x.CompanyId == CompanyId).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
                 return SaleEntryInfo;
             }
         }
-        public SaleEntry CheckDublicateReferenceNo(string RefNo,long Id, long CompanyId)
+        public SaleEntry CheckDublicateReferenceNo(string RefNo, long Id, long CompanyId)
         {
-           SaleEntry SaleEntryInfo = null;
+            SaleEntry SaleEntryInfo = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").FirstOrDefault(x => x.RefNumber == RefNo && x.EntryType == Entrytype.SALE && x.Id!=Id && x.CompanyId == CompanyId);
+                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").FirstOrDefault(x => x.RefNumber == RefNo && x.EntryType == Entrytype.SALE && x.Id != Id && x.CompanyId == CompanyId);
                 return SaleEntryInfo;
             }
         }
-        public IList<SaleEntry> GetSaleRecentPaymentByAmount(double Amount,string search, long CompanyId)
+        public IList<SaleEntry> GetSaleRecentPaymentByAmount(double Amount, string search, long CompanyId)
         {
             IList<SaleEntry> SaleEntryInfo = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").Where(x => (x.NetAmount == Amount || x.RefNumber == search) && x.EntryType==Entrytype.SALE && x.CompanyId == CompanyId ).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
+                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").Where(x => (x.NetAmount == Amount || x.RefNumber == search) && x.EntryType == Entrytype.SALE && x.CompanyId == CompanyId).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
                 return SaleEntryInfo;
             }
         }
@@ -852,7 +852,7 @@ namespace fa.api.OrderManagement
             IList<SaleEntry> SaleEntryInfo = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").Where(x =>( x.Account.Name.Contains(CustomerName) || x.CustomerName.Contains(CustomerName)) && x.EntryType == Entrytype.SALE && x.CompanyId == CompanyId ).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
+                SaleEntryInfo = Context.SaleEntry.Include("SalePayment").Include("Account").Where(x => (x.Account.Name.Contains(CustomerName) || x.CustomerName.Contains(CustomerName)) && x.EntryType == Entrytype.SALE && x.CompanyId == CompanyId).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
                 return SaleEntryInfo;
             }
         }
@@ -896,10 +896,10 @@ namespace fa.api.OrderManagement
                     {
                         SaleEntryInfo.SaleDetails = Context.SaleDetail.Include("Discounts").Include("TaxDetails").Include("Product").Where(x => x.SaleId == SaleEntryInfo.Id).ToList();
                     }
-                    if (SaleEntryInfo.AccountsId > 0 )
+                    if (SaleEntryInfo.AccountsId > 0)
                     {
                         Customer Customer = CustomerManager.Instance.GetCustomerById((long)SaleEntryInfo.AccountsId);
-                        if(Customer != null)
+                        if (Customer != null)
                         {
                             SaleEntryInfo.Account = Context.Customers.Include("ContactInfo").Include("PaymentTerm").Include("BillingAddress").Where(x => x.Id == SaleEntryInfo.AccountsId).First();
                         }
@@ -968,12 +968,12 @@ namespace fa.api.OrderManagement
             }
             return SaleDetails;
         }
-        public SaleDetail GetSaleDetailByProductIdBatch(long ProductId,string BatchNo)
+        public SaleDetail GetSaleDetailByProductIdBatch(long ProductId, string BatchNo)
         {
             SaleDetail SaleDetails = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                SaleDetails = Context.SaleDetail.FirstOrDefault(x => x.ProductId == ProductId && x.BatchNo==BatchNo);
+                SaleDetails = Context.SaleDetail.FirstOrDefault(x => x.ProductId == ProductId && x.BatchNo == BatchNo);
             }
             return SaleDetails;
         }
@@ -982,7 +982,7 @@ namespace fa.api.OrderManagement
             IList<SaleEntry> SaleEntryInfo = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                var RecentSaleEntryInfo = Context.SaleEntry.Include("SaleDetails").Include("Account").Where(p => p.CompanyId == CompanyId && p.EntryType==Type).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>().Take(50);
+                var RecentSaleEntryInfo = Context.SaleEntry.Include("SaleDetails").Include("Account").Where(p => p.CompanyId == CompanyId && p.EntryType == Type).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>().Take(50);
                 if (RecentSaleEntryInfo != null)
                 {
                     SaleEntryInfo = RecentSaleEntryInfo.ToList();
@@ -1009,12 +1009,12 @@ namespace fa.api.OrderManagement
                 return SaleEntryInfo;
             }
         }
-        public IList<SaleEntry> GetSaleEntryByAmount(double Amount,string Refno, long CompanyId, Entrytype Type)
+        public IList<SaleEntry> GetSaleEntryByAmount(double Amount, string Refno, long CompanyId, Entrytype Type)
         {
             IList<SaleEntry> SaleEntryInfo = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                SaleEntryInfo = Context.SaleEntry.Include("Account").Where(x =>(x.NetAmount == Amount || x.RefNumber.Contains(Refno)) && x.CompanyId == CompanyId && x.EntryType == Type).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
+                SaleEntryInfo = Context.SaleEntry.Include("Account").Where(x => (x.NetAmount == Amount || x.RefNumber.Contains(Refno)) && x.CompanyId == CompanyId && x.EntryType == Type).OrderByDescending(x => x.SaleDate).ToList<SaleEntry>();
                 return SaleEntryInfo;
             }
         }
@@ -1054,12 +1054,12 @@ namespace fa.api.OrderManagement
                 SaleEntryInfoFrom = Context.SaleEntry.Include("SaleDetails")
                     .Where(x => x.CreatedDate <= StartFromDate && x.CompanyId == CompanyId)
                     .ToList();
-                
+
                 SaleEntryInfoTo = Context.SaleEntry.Include("SaleDetails")
                     .Where(x => x.CreatedDate >= EndToDate && x.CompanyId == CompanyId)
                     .ToList();
             }
-            
+
             IList<SaleEntry> combinedSaleEntryInfo = new List<SaleEntry>();
             combinedSaleEntryInfo = SaleEntryInfoFrom.Concat(SaleEntryInfoTo).ToList();
 
@@ -1101,15 +1101,20 @@ namespace fa.api.OrderManagement
                     .ToList();
             }
         }
-        public List<SaleDetail> GetLastPricesByProductAndCustomer(long companyId, long productId, long customerId, int recordCount = 5)
+        public List<SaleDetail> GetLastPricesByProductAndCustomer(
+            long companyId,
+            long productId,
+            long customerId,
+            int recordCount = 5)
         {
             using (var context = new AccountMasterContext())
             {
                 return context.SaleDetail
-                    .Include(sd => sd.Sale)
-                    .Where(sd => sd.ProductId == productId
-                              && sd.Sale.CompanyId == companyId
-                              && sd.Sale.AccountsId == customerId)
+                    .Include(sd => sd.Sale) // so you can still access SaleDate, etc.
+                    .Where(sd =>
+                        sd.ProductId == productId &&
+                        sd.Sale.CompanyId == companyId &&
+                        sd.Sale.AccountsId == customerId)
                     .OrderByDescending(sd => sd.Sale.SaleDate)
                     .Take(recordCount)
                     .ToList();

@@ -1,68 +1,69 @@
-﻿using fa.views.account.masters;
-using fa.views.users;
+﻿using DocumentFormat.OpenXml.Drawing;
 using fa.api.Accounting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using fa.model.UserProfile;
+using fa.api.catalog;
+using fa.api.Hms;
 using fa.api.UserProfile;
-using fa.model.Accounting.Masters;
-using fa.views.account.transactions;
-using fa.views.catalog;
-using fa.views.employee;
-using fa.views.utils;
 using fa.api.utils;
-using fa.views.controls;
-using fa.reports.master;
-using fa.views.hms;
-using fa.views.hms.op;
-using fa.views.hms.Masters;
-using fa.views.hms.ward;
-using fa.views.purchase;
-using fa.views.sales;
-using fa.views.inventory;
-using fa.reports.sales;
-using fa.reports.catalog;
-using fa.reports.Purchase;
-using fa.views.Systems;
-using System.Threading;
+using fa.common;
+using fa.model.Accounting.Masters;
+using fa.model.Employee;
+using fa.model.Hms.Master;
+using fa.model.Hms.Op;
+using fa.model.UserProfile;
 using fa.reports.account.transaction;
 using fa.reports.account.transaction.trialbalance;
-using fa.views.hms.ip;
-using fa.views.hms.patient;
+using fa.reports.catalog;
 using fa.reports.Hms;
-using fa.views.hms.inventory;
 using fa.reports.Inventory;
-using fa.views.hms.config;
-using System.Drawing;
-using fa.views.hms.masters;
-using fa.api.catalog;
-using Fa.api.Hms;
-using fa.api.Hms;
-using fa.model.Hms.Master;
-using System.Collections.Concurrent;
-using Fa.reports.Inventory;
-using Fa.reports.Hms;
-using Fa.views.purchase;
-using Fa.views.inventory;
-using Fa.reports.sales;
-using iTextSharp.text.pdf.parser.clipper;
-using Fa.views.hms.Masters;
-using Fa.views.utils.Common;
-using Fa.views.hms.patient;
-using Fa.reports.Purchase;
-using Fa.reports.account.transaction;
-using DocumentFormat.OpenXml.Drawing;
-using VisioForge.Libs.MediaFoundation.OPM;
-using fa.model.Employee;
-using Fa.views.hms.op;
-using FADataAccessLibrary.Api.Hms;
-using fa.model.Hms.Op;
-using System.Text;
-using System.Globalization;
+using fa.reports.master;
+using fa.reports.Purchase;
+using fa.reports.sales;
+using fa.views.account.masters;
+using fa.views.account.transactions;
+using fa.views.catalog;
+using fa.views.controls;
 using fa.views.controls.hms;
-using fa.common;
+using fa.views.employee;
+using fa.views.hms;
+using fa.views.hms.config;
+using fa.views.hms.inventory;
+using fa.views.hms.ip;
+using fa.views.hms.masters;
+using fa.views.hms.Masters;
+using fa.views.hms.op;
+using fa.views.hms.patient;
+using fa.views.hms.ward;
+using fa.views.inventory;
+using fa.views.purchase;
+using fa.views.sales;
+using fa.views.Systems;
+using fa.views.users;
+using fa.views.utils;
+using Fa.api.Hms;
+using Fa.reports.account.transaction;
+using Fa.reports.Hms;
+using Fa.reports.Inventory;
+using Fa.reports.Purchase;
+using Fa.reports.sales;
+using Fa.views.catalog;
+using Fa.views.hms.Masters;
+using Fa.views.hms.op;
+using Fa.views.hms.patient;
+using Fa.views.inventory;
+using Fa.views.purchase;
+using Fa.views.utils.Common;
+using FADataAccessLibrary.Api.Hms;
+using iTextSharp.text.pdf.parser.clipper;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Windows.Forms;
+using VisioForge.Libs.MediaFoundation.OPM;
 using Rectangle = System.Drawing.Rectangle;
 
 namespace fa.views
@@ -328,7 +329,7 @@ namespace fa.views
                     appointment!.IsConsulted = isConsulted;
                     PatientAppointmentManager.Instance.UpdatePatientAppointment(appointment);
                     GridviewWeekAppointment.Invalidate();
-                    
+
                 }
             }
             finally
@@ -368,7 +369,7 @@ namespace fa.views
                             weekAppt.IsConsulted = true;
                             appointment.IsConsulted = true;
                         }
-                        
+
                         PatientAppointmentManager.Instance.UpdatePatientAppointment(appointment);
 
                         GridviewWeekAppointment.Invalidate();
@@ -2324,7 +2325,7 @@ namespace fa.views
                     formAppointment.AppointmentDateFrom = (existingAppointment?.FromDateOfAppointment != null && existingAppointment.FromDateOfAppointment != DateTime.MinValue) ? existingAppointment.FromDateOfAppointment : currentDay;
                     formAppointment.AppointmentDateTo = (existingAppointment?.ToDateOfAppointment != null && existingAppointment.ToDateOfAppointment != DateTime.MinValue) ? existingAppointment.ToDateOfAppointment : currentDay;
                     formAppointment.StartingTime = existingAppointment?.StartingTime ?? timeSlot;
-                    formAppointment.EndTime = existingAppointment?.EndTime?? "0";
+                    formAppointment.EndTime = existingAppointment?.EndTime ?? "0";
                     formAppointment.ConsultantID = existingAppointment?.ConsultantId ?? consultantId;
                     formAppointment.AppointmentID = existingAppointment?.Id ?? 0;
                     formAppointment.PatientID = existingAppointment?.PatientId ?? 0;
@@ -2416,6 +2417,11 @@ namespace fa.views
             }
         }
 
+        private void barCodeLabelReplaceToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormBarCodeCounterSetUp formBarCodeCounterSetUp = new FormBarCodeCounterSetUp();
+            formBarCodeCounterSetUp.ShowDialog();
+        }
     }
     public class DayAppointment
     {

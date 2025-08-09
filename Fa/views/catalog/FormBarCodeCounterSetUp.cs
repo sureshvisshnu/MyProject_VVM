@@ -1,4 +1,5 @@
-﻿using FADataAccessLibrary.Model.Catalog;
+﻿using fa.views;
+using FADataAccessLibrary.Model.Catalog;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +12,7 @@ using System.Windows.Forms;
 
 namespace Fa.views.catalog
 {
-    public partial class FormBarCodeCounterSetUp : Form
+    public partial class FormBarCodeCounterSetUp : FormBase
     {
         public FormBarCodeCounterSetUp()
         {

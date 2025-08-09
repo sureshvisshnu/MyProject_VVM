@@ -30,18 +30,18 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Container));
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
             menuStripMain = new MenuStrip();
             LoginMenu = new ToolStripMenuItem();
             toolStripSeparator5 = new ToolStripSeparator();
@@ -165,6 +165,7 @@
             catalogReportToolStripMenuItem = new ToolStripMenuItem();
             importDataToolStripMenuItem = new ToolStripMenuItem();
             manageItemTaxToolStripMenuItem = new ToolStripMenuItem();
+            barCodeLabelReplaceToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator7 = new ToolStripSeparator();
             employeeToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator6 = new ToolStripSeparator();
@@ -1329,7 +1330,7 @@
             // 
             // catalogToolStripMenuItem
             // 
-            catalogToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manageCatalogToolStripMenuItem, catalogReportToolStripMenuItem, importDataToolStripMenuItem, manageItemTaxToolStripMenuItem });
+            catalogToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manageCatalogToolStripMenuItem, catalogReportToolStripMenuItem, importDataToolStripMenuItem, manageItemTaxToolStripMenuItem, barCodeLabelReplaceToolStripMenuItem });
             catalogToolStripMenuItem.Image = (Image)resources.GetObject("catalogToolStripMenuItem.Image");
             catalogToolStripMenuItem.Name = "catalogToolStripMenuItem";
             catalogToolStripMenuItem.Size = new Size(223, 26);
@@ -1369,6 +1370,13 @@
             manageItemTaxToolStripMenuItem.Size = new Size(221, 26);
             manageItemTaxToolStripMenuItem.Text = "Manage TaxCode";
             manageItemTaxToolStripMenuItem.Click += manageItemTaxToolStripMenuItem_Click;
+            // 
+            // barCodeLabelReplaceToolStripMenuItem
+            // 
+            barCodeLabelReplaceToolStripMenuItem.Name = "barCodeLabelReplaceToolStripMenuItem";
+            barCodeLabelReplaceToolStripMenuItem.Size = new Size(221, 26);
+            barCodeLabelReplaceToolStripMenuItem.Text = "BarCode Label Replace";
+            barCodeLabelReplaceToolStripMenuItem.Click += barCodeLabelReplaceToolStripMenuItem_Click;
             // 
             // toolStripSeparator7
             // 
@@ -1560,9 +1568,9 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 21.52917F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 760F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 247F));
-            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 2, 0);
-            tableLayoutPanel1.Controls.Add(pictureBox2, 0, 0);
-            tableLayoutPanel1.Controls.Add(pictureBox1, 0, 0);
+            tableLayoutPanel1.Controls.Add(pictureBox2, 2, 0);
+            tableLayoutPanel1.Controls.Add(pictureBox1, 1, 0);
+            tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Bottom;
             tableLayoutPanel1.Location = new Point(0, 641);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -1577,33 +1585,34 @@
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel2.Controls.Add(label1, 0, 1);
             tableLayoutPanel2.Controls.Add(label2, 0, 0);
-            tableLayoutPanel2.Location = new Point(1127, 10);
+            tableLayoutPanel2.Location = new Point(10, 10);
             tableLayoutPanel2.Margin = new Padding(10);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 2;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 44.11765F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 55.88235F));
-            tableLayoutPanel2.Size = new Size(227, 88);
+            tableLayoutPanel2.Size = new Size(210, 88);
             tableLayoutPanel2.TabIndex = 3;
             // 
             // label1
             // 
+            label1.Dock = DockStyle.Fill;
             label1.Location = new Point(5, 43);
             label1.Margin = new Padding(5, 5, 5, 0);
             label1.Name = "label1";
-            label1.Size = new Size(217, 45);
+            label1.Size = new Size(200, 45);
             label1.TabIndex = 1;
             label1.Text = "Vadasery Nagercoil, \r\nKanyaKumari District, TamilNadu";
             label1.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
-            label2.Dock = DockStyle.Right;
+            label2.Dock = DockStyle.Fill;
             label2.Font = new Font("Tahoma", 12F, FontStyle.Bold, GraphicsUnit.Point);
             label2.Location = new Point(5, 5);
             label2.Margin = new Padding(5, 5, 0, 0);
             label2.Name = "label2";
-            label2.Size = new Size(222, 33);
+            label2.Size = new Size(205, 33);
             label2.TabIndex = 2;
             label2.Text = "VVM SOFTWARE India.";
             label2.TextAlign = ContentAlignment.MiddleCenter;
@@ -1613,11 +1622,11 @@
             pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
             pictureBox2.BackgroundImageLayout = ImageLayout.None;
             pictureBox2.Dock = DockStyle.Left;
-            pictureBox2.Location = new Point(366, 10);
+            pictureBox2.Location = new Point(1126, 10);
             pictureBox2.Margin = new Padding(9, 10, 9, 10);
             pictureBox2.Name = "pictureBox2";
             pictureBox2.Padding = new Padding(9, 10, 9, 10);
-            pictureBox2.Size = new Size(337, 88);
+            pictureBox2.Size = new Size(229, 88);
             pictureBox2.TabIndex = 1;
             pictureBox2.TabStop = false;
             // 
@@ -1627,7 +1636,7 @@
             pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
             pictureBox1.Dock = DockStyle.Left;
             pictureBox1.InitialImage = null;
-            pictureBox1.Location = new Point(9, 10);
+            pictureBox1.Location = new Point(366, 10);
             pictureBox1.Margin = new Padding(9, 10, 9, 10);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Padding = new Padding(9, 10, 9, 10);
@@ -1815,25 +1824,25 @@
             GridviewDayAppointment.AllowUserToResizeColumns = false;
             GridviewDayAppointment.AllowUserToResizeRows = false;
             GridviewDayAppointment.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.ControlLight;
-            dataGridViewCellStyle1.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.ControlLight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            GridviewDayAppointment.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle13.BackColor = SystemColors.ControlLight;
+            dataGridViewCellStyle13.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle13.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle13.SelectionBackColor = SystemColors.ControlLight;
+            dataGridViewCellStyle13.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle13.WrapMode = DataGridViewTriState.True;
+            GridviewDayAppointment.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
             GridviewDayAppointment.ColumnHeadersHeight = 30;
             GridviewDayAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridviewDayAppointment.Columns.AddRange(new DataGridViewColumn[] { Consultant, Column1, Column57, Column2, Column58, Column3, Column59, Column4, Column60, Column5, Column61, Column6, Column62, Column7, Column63, Column8, Column64, Column9, Column65, Column10, Column66, Column11, Column67, Column12, Column68, Column13, Column69, Column14, Column70, Column15, Column71, Column16, Column72, Column17, Column73, Column18, Column74, Column19, Column75, Column20, Column76, Column21, Column77, Column22, Column78, Column23, Column79, Column24, Column80, Column25, Column81, Column26, Column82, Column27, Column83, Column28, Column84, Column29, Column85, Column30, Column86, Column31, Column87, Column32, Column88, Column33, Column89, Column34, Column90, Column35, Column91, Column36, Column92, Column37, Column93, Column38, Column94, Column39, Column95, Column40, Column96, Column41, Column97, Column42, Column98, Column43, Column99, Column44, Column100, Column45, Column101, Column46, Column102, Column47, Column103, Column48, Column104, Column56 });
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.ControlLight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            GridviewDayAppointment.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle14.BackColor = SystemColors.Window;
+            dataGridViewCellStyle14.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle14.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle14.SelectionBackColor = SystemColors.ControlLight;
+            dataGridViewCellStyle14.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle14.WrapMode = DataGridViewTriState.True;
+            GridviewDayAppointment.DefaultCellStyle = dataGridViewCellStyle14;
             GridviewDayAppointment.EnableHeadersVisualStyles = false;
             GridviewDayAppointment.Location = new Point(3, 111);
             GridviewDayAppointment.Name = "GridviewDayAppointment";
@@ -2837,24 +2846,24 @@
             GridviewWeekAppointment.AllowUserToResizeColumns = false;
             GridviewWeekAppointment.AllowUserToResizeRows = false;
             GridviewWeekAppointment.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            dataGridViewCellStyle3.BackColor = SystemColors.ControlLight;
-            dataGridViewCellStyle3.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.ControlLight;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            GridviewWeekAppointment.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle15.BackColor = SystemColors.ControlLight;
+            dataGridViewCellStyle15.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle15.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle15.SelectionBackColor = SystemColors.ControlLight;
+            dataGridViewCellStyle15.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle15.WrapMode = DataGridViewTriState.True;
+            GridviewWeekAppointment.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle15;
             GridviewWeekAppointment.ColumnHeadersHeight = 50;
             GridviewWeekAppointment.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridviewWeekAppointment.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, Column49, Column50, Column51, Column52, Column53, Column54, Column55 });
-            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle12.BackColor = SystemColors.Window;
-            dataGridViewCellStyle12.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle12.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle12.SelectionBackColor = SystemColors.ControlLight;
-            dataGridViewCellStyle12.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle12.WrapMode = DataGridViewTriState.True;
-            GridviewWeekAppointment.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle24.BackColor = SystemColors.Window;
+            dataGridViewCellStyle24.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle24.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle24.SelectionBackColor = SystemColors.ControlLight;
+            dataGridViewCellStyle24.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle24.WrapMode = DataGridViewTriState.True;
+            GridviewWeekAppointment.DefaultCellStyle = dataGridViewCellStyle24;
             GridviewWeekAppointment.EnableHeadersVisualStyles = false;
             GridviewWeekAppointment.Location = new Point(0, 111);
             GridviewWeekAppointment.MultiSelect = false;
@@ -2872,8 +2881,8 @@
             // 
             // dataGridViewTextBoxColumn1
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle16;
             dataGridViewTextBoxColumn1.Frozen = true;
             dataGridViewTextBoxColumn1.HeaderText = "Consultant";
             dataGridViewTextBoxColumn1.MinimumWidth = 6;
@@ -2886,8 +2895,8 @@
             // Column49
             // 
             Column49.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Column49.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column49.DefaultCellStyle = dataGridViewCellStyle17;
             Column49.HeaderText = "Sunday";
             Column49.MinimumWidth = 6;
             Column49.Name = "Column49";
@@ -2898,8 +2907,8 @@
             // Column50
             // 
             Column50.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Column50.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column50.DefaultCellStyle = dataGridViewCellStyle18;
             Column50.HeaderText = "Monday";
             Column50.MinimumWidth = 6;
             Column50.Name = "Column50";
@@ -2910,8 +2919,8 @@
             // Column51
             // 
             Column51.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Column51.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column51.DefaultCellStyle = dataGridViewCellStyle19;
             Column51.HeaderText = "Tuesday";
             Column51.MinimumWidth = 6;
             Column51.Name = "Column51";
@@ -2922,8 +2931,8 @@
             // Column52
             // 
             Column52.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Column52.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column52.DefaultCellStyle = dataGridViewCellStyle20;
             Column52.HeaderText = "Wednesday";
             Column52.MinimumWidth = 6;
             Column52.Name = "Column52";
@@ -2934,8 +2943,8 @@
             // Column53
             // 
             Column53.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Column53.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column53.DefaultCellStyle = dataGridViewCellStyle21;
             Column53.HeaderText = "Thursday";
             Column53.MinimumWidth = 6;
             Column53.Name = "Column53";
@@ -2946,8 +2955,8 @@
             // Column54
             // 
             Column54.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Column54.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column54.DefaultCellStyle = dataGridViewCellStyle22;
             Column54.HeaderText = "Friday";
             Column54.MinimumWidth = 6;
             Column54.Name = "Column54";
@@ -2958,8 +2967,8 @@
             // Column55
             // 
             Column55.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            Column55.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            Column55.DefaultCellStyle = dataGridViewCellStyle23;
             Column55.HeaderText = "Saturday";
             Column55.MinimumWidth = 6;
             Column55.Name = "Column55";
@@ -3300,6 +3309,7 @@
         private DataGridViewTextBoxColumn Column48;
         private DataGridViewTextBoxColumn Column104;
         private DataGridViewTextBoxColumn Column56;
+        private ToolStripMenuItem barCodeLabelReplaceToolStripMenuItem;
     }
 }
 
