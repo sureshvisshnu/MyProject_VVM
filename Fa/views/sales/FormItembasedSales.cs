@@ -663,6 +663,7 @@ namespace fa.views.sales
             PatientId = 0L;
             OPId = 0L;
             SearchSalesId = 0L;
+            CustomerId = 0L;
             EnableForm(true);
             GridViewSalesItem.CurrentCell = GridViewSalesItem.Rows[GridViewSalesItem.RowCount - 1].Cells[(int)SaleEntryTableColumn.PRODUCT];
             GridViewSalesItem.CurrentCell.Selected = true;

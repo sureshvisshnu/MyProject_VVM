@@ -1,4 +1,8 @@
-﻿using fa.views;
+﻿using DocumentFormat.OpenXml.Office2010.Excel;
+using fa;
+using fa.model.OrderManagement;
+using fa.views;
+using FADataAccessLibrary.Api.BarCodeLabel;
 using FADataAccessLibrary.Model.Catalog;
 using System;
 using System.Collections.Generic;
@@ -21,14 +25,58 @@ namespace Fa.views.catalog
 
         private void BtnPriceCalculatorSave_Click(object sender, EventArgs e)
         {
+            try
+            {
+                LabelStockMaster labelStockMasterInfo = GetBarCodeLabelInfoFromForm();
 
+                if (labelStockMasterInfo != null)
+                {
+                    // Save to database
+                    LabelStockMaster savedLabel = BarCodeLabelManager.Instance.AddBarCodeLabel(labelStockMasterInfo);
+
+                    MessageBox.Show("Label stock information saved successfully.",
+                                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No label stock information to save.",
+                                    "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving label stock information:\n{ex.Message}",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void GetBarCodeLabelInfoFromForm()
+        private LabelStockMaster GetBarCodeLabelInfoFromForm()
         {
-            LabelStockMaster labelStockMaster = new LabelStockMaster();
-            labelStockMaster.LabelSizeCode = ComboBoxLabelSize.Text.ToString();
-            labelStockMaster.LabelsPerRow = 1;
+            //LabelStockMaster labelStockMaster = new LabelStockMaster();
+            //labelStockMaster.LabelSizeCode = ComboBoxLabelSize.Text.ToString();
+            //labelStockMaster.LabelsPerRow = 1;
+            long BarCodeId = 0; // default value
+
+            if (!string.IsNullOrWhiteSpace(TextBoxBarCodeId.Text) && long.TryParse(TextBoxBarCodeId.Text, out long parsedId))
+            {
+                BarCodeId = parsedId;
+            }
+
+            LabelStockMaster labelStockMaster = new LabelStockMaster
+            {
+                Id = BarCodeId,
+                CompanyId = Global.Company.CompanyId,
+                LabelType = ComboBoxLabelType.Text?.Trim(),
+                LabelSizeCode = ComboBoxLabelSize.Text?.Trim(),
+                LabelsPerRow = (int)NumericUpDownLabelsPerRow.Value, // assuming NumericUpDown control
+                TotalLabelCount = (int)NumericUpDownTotalLabelCount.Value,
+                RemainingCount = (int)NumericUpDownRunningCount.Value,
+                WastedLabelCount = (int)NumericUpDownWastedLabels.Value,
+                DateLoaded = DateTimePickerDateLoaded!.Date.Value,
+                DateEnded = DateTimePickerDateEnded.Checked ? DateTimePickerDateLoaded.Date.Value : (DateTime?)null,
+                ThresholdWarning = (int)NumericUpDownFlagCount.Value
+            };
+            return labelStockMaster;
             //labelStockMaster.TotalLabelCount = (int)TextBoxXFactorRetail.Text.ToString();
         }
     }
