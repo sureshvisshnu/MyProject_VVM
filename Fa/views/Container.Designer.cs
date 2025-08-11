@@ -191,11 +191,11 @@
             toolStripCostCenterButton = new ToolStripButton();
             toolStripChangeDateButton = new ToolStripButton();
             tableLayoutPanel1 = new TableLayoutPanel();
+            pictureBox2 = new PictureBox();
+            pictureBox1 = new PictureBox();
             tableLayoutPanel2 = new TableLayoutPanel();
             label1 = new Label();
             label2 = new Label();
-            pictureBox2 = new PictureBox();
-            pictureBox1 = new PictureBox();
             wardToolStripMenuItem12 = new ToolStripMenuItem();
             bedTypeToolStripMenuItem11 = new ToolStripMenuItem();
             symptomToolStripMenuItem11 = new ToolStripMenuItem();
@@ -326,9 +326,9 @@
             menuStripMain.SuspendLayout();
             toolStripLoginInfo.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
-            tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            tableLayoutPanel2.SuspendLayout();
             tableLayoutPanelAppointment.SuspendLayout();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
@@ -1373,6 +1373,7 @@
             // 
             // barCodeLabelReplaceToolStripMenuItem
             // 
+            barCodeLabelReplaceToolStripMenuItem.Image = (Image)resources.GetObject("barCodeLabelReplaceToolStripMenuItem.Image");
             barCodeLabelReplaceToolStripMenuItem.Name = "barCodeLabelReplaceToolStripMenuItem";
             barCodeLabelReplaceToolStripMenuItem.Size = new Size(221, 26);
             barCodeLabelReplaceToolStripMenuItem.Text = "BarCode Label Replace";
@@ -1579,6 +1580,33 @@
             tableLayoutPanel1.Size = new Size(1364, 108);
             tableLayoutPanel1.TabIndex = 12;
             // 
+            // pictureBox2
+            // 
+            pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
+            pictureBox2.BackgroundImageLayout = ImageLayout.None;
+            pictureBox2.Dock = DockStyle.Left;
+            pictureBox2.Location = new Point(1126, 10);
+            pictureBox2.Margin = new Padding(9, 10, 9, 10);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Padding = new Padding(9, 10, 9, 10);
+            pictureBox2.Size = new Size(229, 88);
+            pictureBox2.TabIndex = 1;
+            pictureBox2.TabStop = false;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
+            pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
+            pictureBox1.Dock = DockStyle.Left;
+            pictureBox1.InitialImage = null;
+            pictureBox1.Location = new Point(366, 10);
+            pictureBox1.Margin = new Padding(9, 10, 9, 10);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Padding = new Padding(9, 10, 9, 10);
+            pictureBox1.Size = new Size(92, 88);
+            pictureBox1.TabIndex = 4;
+            pictureBox1.TabStop = false;
+            // 
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 1;
@@ -1616,33 +1644,6 @@
             label2.TabIndex = 2;
             label2.Text = "VVM SOFTWARE India.";
             label2.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // pictureBox2
-            // 
-            pictureBox2.BackgroundImage = (Image)resources.GetObject("pictureBox2.BackgroundImage");
-            pictureBox2.BackgroundImageLayout = ImageLayout.None;
-            pictureBox2.Dock = DockStyle.Left;
-            pictureBox2.Location = new Point(1126, 10);
-            pictureBox2.Margin = new Padding(9, 10, 9, 10);
-            pictureBox2.Name = "pictureBox2";
-            pictureBox2.Padding = new Padding(9, 10, 9, 10);
-            pictureBox2.Size = new Size(229, 88);
-            pictureBox2.TabIndex = 1;
-            pictureBox2.TabStop = false;
-            // 
-            // pictureBox1
-            // 
-            pictureBox1.BackgroundImage = (Image)resources.GetObject("pictureBox1.BackgroundImage");
-            pictureBox1.BackgroundImageLayout = ImageLayout.Zoom;
-            pictureBox1.Dock = DockStyle.Left;
-            pictureBox1.InitialImage = null;
-            pictureBox1.Location = new Point(366, 10);
-            pictureBox1.Margin = new Padding(9, 10, 9, 10);
-            pictureBox1.Name = "pictureBox1";
-            pictureBox1.Padding = new Padding(9, 10, 9, 10);
-            pictureBox1.Size = new Size(92, 88);
-            pictureBox1.TabIndex = 4;
-            pictureBox1.TabStop = false;
             // 
             // wardToolStripMenuItem12
             // 
@@ -3013,9 +3014,9 @@
             toolStripLoginInfo.ResumeLayout(false);
             toolStripLoginInfo.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);
-            tableLayoutPanel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            tableLayoutPanel2.ResumeLayout(false);
             tableLayoutPanelAppointment.ResumeLayout(false);
             panel1.ResumeLayout(false);
             panel3.ResumeLayout(false);

@@ -1,14 +1,17 @@
-﻿using fa.libraries.utils;
+﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using fa.api.catalog;
+using fa.context;
+using fa.libraries.utils;
 using fa.libraries.Validation;
+using fa.views.hms;
+using fa.views.sales;
 using fa.views.utils;
+using FADataAccessLibrary.Api.BarCodeLabel;
+using FADataAccessLibrary.Model.Catalog;
 using Microsoft.Win32;
 using System;
-using System.Windows.Forms;
 using System.Linq;
-using fa.api.catalog;
-using fa.views.sales;
-using fa.views.hms;
-using DocumentFormat.OpenXml.Drawing.Diagrams;
+using System.Windows.Forms;
 
 namespace fa.views.catalog
 {
@@ -57,6 +60,7 @@ namespace fa.views.catalog
                         //    int.Parse(TextBoxPrintQuantity.Text),
                         //    ComboBoxDefaultPrinter.Text
                         //);
+
                     }
                     else
                     {
@@ -77,21 +81,71 @@ namespace fa.views.catalog
 
                             var savePrint = new SavePrintBarcode();
 
+                            // Common action after printing
+                            //Action<int> handlePrintComplete = (qtyPrinted) =>
+                            //{
+                            //    int wastedLabels = CalculateWastedLabels(qtyPrinted);
+                            //    int totalLabelsUsed = qtyPrinted + wastedLabels;
+
+                            //    // Update DB stock
+                            //    UpdateLabelUsage(qtyPrinted, wastedLabels);
+
+                            //    // Refresh label stock info
+                            //    var stockInfo = BarCodeLabelManager.Instance
+                            //        .GetLabelStockInfo(ComboBoxLabelSize.Text);
+
+                            //    if (stockInfo != null)
+                            //    {
+                            //        TextBoxlblTodayPrinted.Text = (stockInfo.LabelsPrintedToday).ToString();
+                            //        TextBoxlblTotalBalance.Text = (stockInfo.TotalLabelCount - stockInfo.RunningCount).ToString();
+                            //    }
+                            //    LoadLabelStockInfo();
+                            //    // Optional: message to confirm
+                            //    //MessageBox.Show($"Printed: {qtyPrinted}, Wasted: {wastedLabels}, Remaining: {TextBoxlblTotalBalance.Text}");
+                            //};
+                            Action<int> handlePrintComplete = (qtyPrinted) =>
+                            {
+                                int wastedLabels = CalculateWastedLabels(qtyPrinted);
+
+                                // Update DB stock
+                                BarCodeLabelManager.Instance.UpdateLabelUsage(
+                                    ComboBoxLabelSize.Text,
+                                    qtyPrinted,
+                                    wastedLabels,
+                                    ProductId.ToString()
+                                );
+
+                                // Now reload fresh info from DB
+                                var stockInfo = BarCodeLabelManager.Instance.GetLabelStockInfo(ComboBoxLabelSize.Text);
+
+                                if (stockInfo != null)
+                                {
+                                    TextBoxlblTodayPrinted.Text = (stockInfo.LabelsPrintedToday).ToString();
+                                    TextBoxlblTotalBalance.Text = (stockInfo.TotalLabelCount - stockInfo.RunningCount).ToString();
+                                }
+                                LoadLabelStockInfo();
+                            };
+                            
+                            // Print based on size
                             if (ComboBoxLabelSize.Text == "35 mm * 25 mm")
                             {
-                                savePrint.GenerateSpecialBarcodeLabel(ProductId, long.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
+                                savePrint.GenerateSpecialBarcodeLabel(ProductId, quantity, ComboBoxDefaultPrinter.Text);
+                                handlePrintComplete(quantity);
                             }
                             else if (ComboBoxLabelSize.Text == "25 mm * 20 mm")
                             {
                                 savePrint.GenerateCompactBarcodeLabel25x20_4UP(ProductId, quantity, ComboBoxDefaultPrinter.Text);
+                                handlePrintComplete(quantity);
                             }
                             else if (ComboBoxLabelSize.Text == "50 mm * 25 mm")
                             {
                                 savePrint.GenerateBarcodeLabel(ProductId, LabelSize.TWO, quantity, ComboBoxDefaultPrinter.Text);
+                                handlePrintComplete(quantity);
                             }
                             else if (ComboBoxLabelSize.Text == "100 mm * 23 mm")
                             {
                                 savePrint.GenerateBarcodeLabel(ProductId, LabelSize.ONE, quantity, ComboBoxDefaultPrinter.Text);
+                                handlePrintComplete(quantity);
                             }
                             else
                             {
@@ -101,7 +155,7 @@ namespace fa.views.catalog
                         catch (Exception ex)
                         {
                             MessageBox.Show($"Error generating barcode: {ex.Message}");
-                            Console.WriteLine(ex.ToString());
+                            Console.WriteLine(ex);
                         }
                     }
                     else if (IsIP || IsOP)
@@ -261,6 +315,7 @@ namespace fa.views.catalog
         private void FormCatalogBarCodePrint_Load(object sender, EventArgs e)
         {
             ResetForm();
+            LoadLabelStockInfo();
             TextBoxPrintQuantity.Select();
         }
 
@@ -291,5 +346,97 @@ namespace fa.views.catalog
             }
         }
 
+        private void LoadLabelStockInfo()
+        {
+            if (string.IsNullOrEmpty(ComboBoxLabelSize.Text))
+                return;
+
+            using (var context = new AccountMasterContext())
+            {
+                var stock = context.LabelStockMasters
+                    .Where(ls => ls.LabelType == ComboBoxLabelSize.Text && ls.IsActive)
+                    .OrderByDescending(ls => ls.DateLoaded)
+                    .FirstOrDefault();
+
+                if (stock != null)
+                {
+                    TextBoxlblTotalBalance.Text = $"Balance: {stock.RemainingCount} labels";
+
+                    var todayPrinted = context.LabelStockUsages
+                        .Where(u => u.LabelStockId == stock.Id && u.DatePrinted.Date == DateTime.Today)
+                        .Sum(u => (int?)u.PrintedCount) ?? 0;
+
+                    TextBoxlblTodayPrinted.Text = $"Today printed: {todayPrinted}";
+
+                    if (stock.RemainingCount <= stock.ThresholdWarning)
+                    {
+                        lblWarning.Text = "⚠ Low stock!";
+                        lblWarning.Visible = true;
+                    }
+                    else
+                    {
+                        lblWarning.Visible = false;
+                    }
+                }
+            }
+        }
+        private void UpdateLabelUsage(int qtyPrinted, int wastedLabels = 0)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                var stock = context.LabelStockMasters
+                    .Where(ls => ls.LabelType == ComboBoxLabelSize.Text && ls.IsActive)
+                    .OrderByDescending(ls => ls.DateLoaded)
+                    .FirstOrDefault();
+
+                if (stock != null)
+                {
+                    stock.LabelsUsed += qtyPrinted;
+                    stock.WastedLabelCount += wastedLabels;
+                    stock.RemainingCount = stock.TotalLabelCount - stock.LabelsUsed - stock.WastedLabelCount;
+
+                    context.LabelStockUsages.Add(new LabelStockUsage
+                    {
+                        LabelStockId = stock.Id,
+                        DatePrinted = DateTime.Now,
+                        PrintedCount = qtyPrinted,
+                        WastedCount = wastedLabels,
+                        ReferenceId = ProductId.ToString(),
+                        PrintedBy = Environment.UserName
+                    });
+
+                    context.SaveChanges();
+                }
+            }
+
+            LoadLabelStockInfo();
+        }
+        private int CalculateWastedLabels(int qtyPrinted)
+        {
+            int labelsPerRow = 4; // or get from LabelStockMaster.LabelsPerRow
+            int remainder = qtyPrinted % labelsPerRow;
+            return remainder == 0 ? 0 : labelsPerRow - remainder;
+        }
+        private void OnPrintSuccess(int qtyPrinted)
+        {
+            int wastedLabels = CalculateWastedLabels(qtyPrinted);
+
+            var updatedStock = BarCodeLabelManager.Instance.UpdateLabelUsage(
+                labelType: ComboBoxLabelSize.Text,
+                qtyPrinted: qtyPrinted,
+                wastedLabels: wastedLabels,
+                referenceId: ProductId.ToString()
+            );
+
+            // Update UI
+            TextBoxlblTotalBalance.Text = $"Balance: {updatedStock.RemainingCount}";
+            string labelType = ComboBoxLabelSize.Text; // or wherever you store it
+            var stockInfo = BarCodeLabelManager.Instance.GetLabelStockInfo(labelType);
+
+            TextBoxlblTodayPrinted.Text = $"Today printed: {BarCodeLabelManager.Instance.GetLabelStockInfo(labelType)}";
+        }
+
     }
+
+
 }

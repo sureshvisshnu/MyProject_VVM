@@ -1499,15 +1499,22 @@ namespace fa.views.utils
 
             // Get percentage values
             var (retailPercent, wholesalePercent) = GetProductPercentages(ProductId);
-            int wholeNGL = (int)Math.Floor(wholesalePercent);
-            string nglValue = "NGL:" + wholeNGL.ToString() + "--";
+            //int wholeNGL = (int)Math.Floor(wholesalePercent);
+            //string nglValue = "NGL:" + wholeNGL.ToString() + "--";
+
+
+            // Keep wholesalePercent as-is (no rounding)
+            string nglValue = "NG:" + wholesalePercent
+                .ToString("0.00", CultureInfo.InvariantCulture) // keep 2 decimal places
+                .Replace('.', '|')
+                + "--";
+
 
             // Cost percentage from MRP
             decimal purchasePrice = (decimal)ProductFromDB.PurchasePrice;
             decimal costPrice = (decimal)ProductFromDB.CostPrice;
             decimal mrp = (decimal)ProductFromDB.Msrp;
 
-            int costPercent = 0;
 
             // Replace the existing costPercent calculation with this:
             string costPercentStr = "0"; // Default value
@@ -1555,41 +1562,41 @@ namespace fa.views.utils
 
 
             // Label 1
-            $"A785,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-            $"A785,125,2,2,1,1,N,{quote}{Product}{quote}",
-            $"B774,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
-            $"A774,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A780,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+            $"A780,125,2,2,1,1,N,{quote}{Product}{quote}",
+            $"B770,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A770,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A800,30,2,2,1,1,N,{quote}{nglValue}{quote}",
-            $"A720,30,2,2,1,1,N,{quote}{lMrp}{quote}",
-            $"A660,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
+            $"A695,30,2,2,1,1,N,{quote}{lMrp}{quote}",
+            $"A650,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
             // Label 2
             $"A580,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
             $"A580,125,2,2,1,1,N,{quote}{Product}{quote}",
             $"B570,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A570,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-            $"A595,30,2,2,1,1,N,{quote}{nglValue}{quote}",
-            $"A515,30,2,2,1,1,N,{quote}{lMrp}{quote}",
-            $"A460,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
+            $"A600,30,2,2,1,1,N,{quote}{nglValue}{quote}",
+            $"A495,30,2,2,1,1,N,{quote}{lMrp}{quote}",
+            $"A450,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
 
             // Label 3
-            $"A375,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-            $"A375,125,2,2,1,1,N,{quote}{Product}{quote}",
-            $"B364,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
-            $"A364,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-            $"A390,30,2,2,1,1,N,{quote}{nglValue}{quote}",
-            $"A310,30,2,2,1,1,N,{quote}{lMrp}{quote}",
-            $"A260,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
+            $"A380,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+            $"A380,125,2,2,1,1,N,{quote}{Product}{quote}",
+            $"B370,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A370,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+            $"A400,30,2,2,1,1,N,{quote}{nglValue}{quote}",
+            $"A295,30,2,2,1,1,N,{quote}{lMrp}{quote}",
+            $"A250,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
             // Label 4
             $"A170,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
             $"A170,125,2,2,1,1,N,{quote}{Product}{quote}",
             $"B160,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
             $"A160,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-            $"A185,30,2,2,1,1,N,{quote}{nglValue} {quote}",
-            $"A105,30,2,2,1,1,N,{quote}{lMrp}{quote}",
-            $"A60,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
+            $"A200,30,2,2,1,1,N,{quote}{nglValue} {quote}",
+            $"A95,30,2,2,1,1,N,{quote}{lMrp}{quote}",
+            $"A50,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
 
             "P1"
                 };
@@ -1605,13 +1612,13 @@ namespace fa.views.utils
                 {
                     partial.AddRange(new string[]
                     {
-                    $"A785,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-                    $"A785,125,2,2,1,1,N,{quote}{Product}{quote}",
-                    $"B774,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                    $"A774,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A780,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+                    $"A780,125,2,2,1,1,N,{quote}{Product}{quote}",
+                    $"B770,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A770,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A800,30,2,2,1,1,N,{quote}{nglValue}{quote}",
-                    $"A720,30,2,2,1,1,N,{quote}{lMrp}{quote}",
-                    $"A660,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
+                    $"A695,30,2,2,1,1,N,{quote}{lMrp}{quote}",
+                    $"A650,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
                     });
                 }
 
@@ -1623,9 +1630,9 @@ namespace fa.views.utils
                     $"A580,125,2,2,1,1,N,{quote}{Product}{quote}",
                     $"B570,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
                     $"A570,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                    $"A595,30,2,2,1,1,N,{quote}{nglValue}{quote}",
-                    $"A515,30,2,2,1,1,N,{quote}{lMrp}{quote}",
-                    $"A460,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
+                    $"A600,30,2,2,1,1,N,{quote}{nglValue}{quote}",
+                    $"A495,30,2,2,1,1,N,{quote}{lMrp}{quote}",
+                    $"A450,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
                     });
                 }
 
@@ -1633,13 +1640,13 @@ namespace fa.views.utils
                 {
                     partial.AddRange(new string[]
                     {
-                    $"A375,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
-                    $"A375,125,2,2,1,1,N,{quote}{Product}{quote}",
-                    $"B364,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                    $"A364,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
-                    $"A390,30,2,2,1,1,N,{quote}{nglValue}{quote}",
-                    $"A310,30,2,2,1,1,N,{quote}{lMrp}{quote}",
-                    $"A260,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
+                    $"A380,150,2,2,1,1,N,{quote}{companyAndCode}{quote}",
+                    $"A380,125,2,2,1,1,N,{quote}{Product}{quote}",
+                    $"B370,100,2,1,1,2,30,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A370,55,2,1,1,1,N,{quote}{ProductFromDB.MaterialId}{quote}",
+                    $"A400,30,2,2,1,1,N,{quote}{nglValue}{quote}",
+                    $"A295,30,2,2,1,1,N,{quote}{lMrp}{quote}",
+                    $"A250,30,2,2,1,1,N,{quote}{UomLabel}{quote}",
                     });
                 }
 

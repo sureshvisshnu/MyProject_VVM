@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBarCodeCounterSetUp));
             BarCodeSetUpToolStrip = new StatusStrip();
             PrintErrorMsg = new ToolStripStatusLabel();
             label4 = new Label();
@@ -298,6 +299,7 @@
             Controls.Add(label4);
             Controls.Add(label9);
             Controls.Add(BarCodeSetUpToolStrip);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormBarCodeCounterSetUp";

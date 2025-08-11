@@ -42,13 +42,14 @@
             groupBox2 = new GroupBox();
             ComboBoxDefaultPrinter = new fa.views.controls.ComboBoxSwapTextBox();
             label4 = new Label();
-            TextBoxXFactorWholeSale = new TextBox();
-            TextBoxXFactorRetail = new TextBox();
+            TextBoxlblTodayPrinted = new TextBox();
+            TextBoxlblTotalBalance = new TextBox();
             label9 = new Label();
             label3 = new Label();
             ComboBoxLabelSize = new ComboBox();
             LabelLabelSize = new Label();
             YesNoRadioPaperSize = new fa.views.controls.YesNoRadio();
+            lblWarning = new Label();
             Print.SuspendLayout();
             groupBox2.SuspendLayout();
             SuspendLayout();
@@ -60,7 +61,7 @@
             // 
             // ProductBatchIdTransport
             // 
-            ProductBatchIdTransport.Location = new Point(20, 192);
+            ProductBatchIdTransport.Location = new Point(25, 236);
             ProductBatchIdTransport.Size = new Size(116, 21);
             // 
             // AccountIdTransport
@@ -116,7 +117,7 @@
             // 
             BtnCancel.DialogResult = DialogResult.Cancel;
             BtnCancel.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnCancel.Location = new Point(113, 207);
+            BtnCancel.Location = new Point(132, 220);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new Size(83, 23);
             BtnCancel.TabIndex = 6;
@@ -127,7 +128,7 @@
             // BtnPrint
             // 
             BtnPrint.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnPrint.Location = new Point(202, 207);
+            BtnPrint.Location = new Point(221, 220);
             BtnPrint.Name = "BtnPrint";
             BtnPrint.Size = new Size(83, 23);
             BtnPrint.TabIndex = 5;
@@ -139,7 +140,7 @@
             // 
             Print.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             Print.Items.AddRange(new ToolStripItem[] { PrintErrorMsg });
-            Print.Location = new Point(0, 239);
+            Print.Location = new Point(0, 249);
             Print.Name = "Print";
             Print.Size = new Size(316, 22);
             Print.TabIndex = 10;
@@ -168,8 +169,8 @@
             groupBox2.BackColor = SystemColors.Window;
             groupBox2.Controls.Add(ComboBoxDefaultPrinter);
             groupBox2.Controls.Add(label4);
-            groupBox2.Controls.Add(TextBoxXFactorWholeSale);
-            groupBox2.Controls.Add(TextBoxXFactorRetail);
+            groupBox2.Controls.Add(TextBoxlblTodayPrinted);
+            groupBox2.Controls.Add(TextBoxlblTotalBalance);
             groupBox2.Controls.Add(label9);
             groupBox2.Controls.Add(label3);
             groupBox2.Controls.Add(ComboBoxLabelSize);
@@ -182,7 +183,7 @@
             groupBox2.Controls.Add(label1);
             groupBox2.Location = new Point(8, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(302, 200);
+            groupBox2.Size = new Size(302, 215);
             groupBox2.TabIndex = 12;
             groupBox2.TabStop = false;
             // 
@@ -202,39 +203,39 @@
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.Location = new Point(186, 61);
+            label4.Location = new Point(165, 61);
             label4.Name = "label4";
             label4.Size = new Size(81, 13);
             label4.TabIndex = 474;
             label4.Text = "Todays Label";
             // 
-            // TextBoxXFactorWholeSale
+            // TextBoxlblTodayPrinted
             // 
-            TextBoxXFactorWholeSale.BackColor = SystemColors.Window;
-            TextBoxXFactorWholeSale.Location = new Point(186, 82);
-            TextBoxXFactorWholeSale.MaxLength = 5;
-            TextBoxXFactorWholeSale.Name = "TextBoxXFactorWholeSale";
-            TextBoxXFactorWholeSale.ReadOnly = true;
-            TextBoxXFactorWholeSale.Size = new Size(110, 21);
-            TextBoxXFactorWholeSale.TabIndex = 473;
-            TextBoxXFactorWholeSale.TextAlign = HorizontalAlignment.Right;
+            TextBoxlblTodayPrinted.BackColor = SystemColors.Window;
+            TextBoxlblTodayPrinted.ForeColor = Color.FromArgb(0, 0, 192);
+            TextBoxlblTodayPrinted.Location = new Point(165, 82);
+            TextBoxlblTodayPrinted.MaxLength = 5;
+            TextBoxlblTodayPrinted.Name = "TextBoxlblTodayPrinted";
+            TextBoxlblTodayPrinted.ReadOnly = true;
+            TextBoxlblTodayPrinted.Size = new Size(125, 21);
+            TextBoxlblTodayPrinted.TabIndex = 473;
             // 
-            // TextBoxXFactorRetail
+            // TextBoxlblTotalBalance
             // 
-            TextBoxXFactorRetail.BackColor = SystemColors.Window;
-            TextBoxXFactorRetail.Location = new Point(186, 32);
-            TextBoxXFactorRetail.MaxLength = 5;
-            TextBoxXFactorRetail.Name = "TextBoxXFactorRetail";
-            TextBoxXFactorRetail.ReadOnly = true;
-            TextBoxXFactorRetail.Size = new Size(110, 21);
-            TextBoxXFactorRetail.TabIndex = 472;
-            TextBoxXFactorRetail.TextAlign = HorizontalAlignment.Right;
+            TextBoxlblTotalBalance.BackColor = SystemColors.Window;
+            TextBoxlblTotalBalance.ForeColor = Color.FromArgb(0, 0, 192);
+            TextBoxlblTotalBalance.Location = new Point(165, 32);
+            TextBoxlblTotalBalance.MaxLength = 5;
+            TextBoxlblTotalBalance.Name = "TextBoxlblTotalBalance";
+            TextBoxlblTotalBalance.ReadOnly = true;
+            TextBoxlblTotalBalance.Size = new Size(125, 21);
+            TextBoxlblTotalBalance.TabIndex = 472;
             // 
             // label9
             // 
             label9.AutoSize = true;
             label9.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label9.Location = new Point(186, 15);
+            label9.Location = new Point(165, 15);
             label9.Name = "label9";
             label9.Size = new Size(84, 13);
             label9.TabIndex = 471;
@@ -254,9 +255,9 @@
             // 
             ComboBoxLabelSize.FormattingEnabled = true;
             ComboBoxLabelSize.Items.AddRange(new object[] { "25 mm * 20 mm", "35 mm * 25 mm", "50 mm * 25 mm", "100 mm* 23 mm" });
-            ComboBoxLabelSize.Location = new Point(186, 124);
+            ComboBoxLabelSize.Location = new Point(165, 124);
             ComboBoxLabelSize.Name = "ComboBoxLabelSize";
-            ComboBoxLabelSize.Size = new Size(110, 21);
+            ComboBoxLabelSize.Size = new Size(125, 21);
             ComboBoxLabelSize.TabIndex = 3;
             ComboBoxLabelSize.Visible = false;
             // 
@@ -264,7 +265,7 @@
             // 
             LabelLabelSize.AutoSize = true;
             LabelLabelSize.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            LabelLabelSize.Location = new Point(186, 107);
+            LabelLabelSize.Location = new Point(165, 107);
             LabelLabelSize.Name = "LabelLabelSize";
             LabelLabelSize.Size = new Size(63, 13);
             LabelLabelSize.TabIndex = 13;
@@ -284,6 +285,17 @@
             YesNoRadioPaperSize.TabIndex = 1;
             YesNoRadioPaperSize.Load += YesNoRadioPaperSize_Load;
             // 
+            // lblWarning
+            // 
+            lblWarning.AutoSize = true;
+            lblWarning.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            lblWarning.ForeColor = Color.Red;
+            lblWarning.Location = new Point(20, 200);
+            lblWarning.Name = "lblWarning";
+            lblWarning.Size = new Size(134, 13);
+            lblWarning.TabIndex = 472;
+            lblWarning.Text = "Balance Label Warning";
+            // 
             // FormCatalogBarCodePrint
             // 
             AcceptButton = BtnPrint;
@@ -291,7 +303,8 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             CancelButton = BtnCancel;
-            ClientSize = new Size(316, 261);
+            ClientSize = new Size(316, 271);
+            Controls.Add(lblWarning);
             Controls.Add(BtnCancel);
             Controls.Add(groupBox2);
             Controls.Add(Print);
@@ -312,6 +325,7 @@
             Controls.SetChildIndex(groupBox2, 0);
             Controls.SetChildIndex(ProductBatchIdTransport, 0);
             Controls.SetChildIndex(BtnCancel, 0);
+            Controls.SetChildIndex(lblWarning, 0);
             Print.ResumeLayout(false);
             Print.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -338,8 +352,9 @@
         private controls.ComboBoxSwapTextBox ComboBoxDefaultPrinter;
         private Label label3;
         private Label label4;
-        private TextBox TextBoxXFactorWholeSale;
-        private TextBox TextBoxXFactorRetail;
+        private TextBox TextBoxlblTodayPrinted;
+        private TextBox TextBoxlblTotalBalance;
         private Label label9;
+        private Label lblWarning;
     }
 }
