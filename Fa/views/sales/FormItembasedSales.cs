@@ -775,6 +775,7 @@ namespace fa.views.sales
                         BtnSalesPrint.Select();
                     }
                     ToolStripStatusLabelErrorPurchase.Text = SaveSuccessText;
+                    DisplaySystemErrorPerformCancel("Sales Bill No : " + SalesReferenceNumber.Text + "Saved ");
                     DirtyFlag(false);
                 }
                 finally
@@ -3098,7 +3099,7 @@ namespace fa.views.sales
                     GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
                     GridViewSalesItem.BeginInvoke(new MethodInvoker(delegate ()
                     {
-                        GridViewSalesItem.CurrentCell = GridViewSalesItem[2, GridViewSalesItem.CurrentRow.Index];
+                        GridViewSalesItem.CurrentCell = GridViewSalesItem[3, GridViewSalesItem.CurrentRow.Index];
                         GridViewSalesItem.CurrentCell.Selected = true;
                         GridViewSalesItem.BeginEdit(true);
                     }));
@@ -3451,7 +3452,7 @@ namespace fa.views.sales
             {
                 if (BtnSalesNew.Enabled)
                 {
-                    BtnSalesNew_Click(this, null);
+                    BtnSalesNew_Click(this, null!);
                 }
                 else
                 {
@@ -3460,19 +3461,19 @@ namespace fa.views.sales
             }
             else if (keyData == (Keys.F4) && BtnSalesDelete.Enabled)
             {
-                BtnSalesDelete_Click(this, null);
+                BtnSalesDelete_Click(this, null!);
             }
             else if (keyData == (Keys.F6) && BtnReceivePayment.Enabled)
             {
-                BtnReceivePayment_Click(this, null);
+                BtnReceivePayment_Click(this, null!);
             }
             else if (keyData == (Keys.F9) && BtnSalesPrint.Enabled)
             {
-                BtnSalesPrint_Click(this, null);
+                BtnSalesPrint_Click(this, null!);
             }
             else if (keyData == (Keys.F8) && BtnSalesSave.Enabled)
             {
-                BtnSalesSave_Click(this, null);
+                BtnSalesSave_Click(this, null!);
             }
             else if (keyData == (Keys.F11))
             {
@@ -3480,12 +3481,12 @@ namespace fa.views.sales
             }
             else if (keyData == (Keys.Escape) && BtnSalesCancel.Enabled)
             {
-                BtnSalesCancel_Click(this, null);
+                BtnSalesCancel_Click(this, null!);
                 return false;
             }
             else if (keyData == (Keys.F10) && BtnSalesExit.Enabled)
             {
-                BtnSalesExit_Click(this, null);
+                BtnSalesExit_Click(this, null!);
                 return true;
             }
             try
@@ -4328,13 +4329,15 @@ namespace fa.views.sales
                         {
                             // Product exists - increment quantity
                             double prevQty = row.Cells[(int)SaleEntryTableColumn.QTY].Value != null ?
-                                double.Parse(row.Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()) : 0;
+                                double.Parse(row.Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()!) : 0;
 
                             row.Cells[(int)SaleEntryTableColumn.QTY].Value = (prevQty + 1).ToString();
                             ComputeFormTotal();
 
                             // Focus and select quantity
                             GridViewSalesItem.CurrentCell = row.Cells[(int)SaleEntryTableColumn.QTY];
+                            GridViewSalesItem.CurrentCell = GridViewSalesItem[3, GridViewSalesItem.CurrentRow.Index];
+                            GridViewSalesItem.CurrentCell.Selected = true;
                             GridViewSalesItem.BeginEdit(true);
 
                             var quantityTextBox = GridViewSalesItem.EditingControl as TextBox;
