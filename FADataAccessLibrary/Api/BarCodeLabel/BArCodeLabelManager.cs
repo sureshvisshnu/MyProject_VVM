@@ -54,6 +54,76 @@ namespace FADataAccessLibrary.Api.BarCodeLabel
                 }
             }
         }
+        public LabelStockMaster LoadNewLabelRoll(LabelStockMaster newRoll)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                using (var transaction = context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        // 1. End any currently active roll of the same type
+                        var activeRoll = context.LabelStockMasters
+                            .FirstOrDefault(r => r.LabelType == newRoll.LabelType && r.IsActive);
+
+                        if (activeRoll != null)
+                        {
+                            activeRoll.IsActive = false;
+                            activeRoll.DateEnded = DateTime.Now;
+                            context.LabelStockMasters.Update(activeRoll);
+                        }
+
+                        // 2. Prepare the new roll
+                        newRoll.LabelsUsed = 0;
+                        newRoll.WastedLabelCount = 0;
+                        newRoll.RemainingCount = newRoll.TotalLabelCount;
+                        newRoll.IsActive = true;
+                        newRoll.DateLoaded = DateTime.Now;
+
+                        // 3. Save it
+                        context.LabelStockMasters.Add(newRoll);
+                        context.SaveChanges();
+
+                        transaction.Commit();
+                        return newRoll;
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw;
+                    }
+                }
+            }
+        }
+
+        public void LoadNewLabelRollOld(LabelStockMaster newRoll)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                // Mark the old active roll as ended
+                var oldRoll = context.LabelStockMasters
+                    .Where(ls => ls.LabelType == newRoll.LabelType && ls.IsActive)
+                    .OrderByDescending(ls => ls.DateLoaded)
+                    .FirstOrDefault();
+
+                if (oldRoll != null)
+                {
+                    oldRoll.IsActive = false;
+                    oldRoll.DateEnded = DateTime.Now;
+                }
+
+                // Set initial values for the new roll
+                newRoll.LabelsUsed = 0;
+                newRoll.WastedLabelCount = 0;
+                newRoll.RemainingCount = newRoll.TotalLabelCount;
+                newRoll.DateLoaded = DateTime.Now;
+                newRoll.IsActive = true;
+
+                context.LabelStockMasters.Add(newRoll);
+                context.SaveChanges();
+            }
+        }
+
         public LabelStockInfoDto GetLabelStockInfo(string labelType)
         {
             using (var context = new AccountMasterContext())
@@ -81,6 +151,36 @@ namespace FADataAccessLibrary.Api.BarCodeLabel
                 };
             }
         }
+
+        public void UpdateLabelUsage(string labelType, int qtyPrinted, int wastedLabels = 0)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                var stock = context.LabelStockMasters
+                    .Where(ls => ls.LabelType == labelType && ls.IsActive)
+                    .OrderByDescending(ls => ls.DateLoaded)
+                    .FirstOrDefault();
+
+                if (stock != null)
+                {
+                    stock.LabelsUsed += qtyPrinted;
+                    stock.WastedLabelCount += wastedLabels;
+                    stock.RemainingCount = stock.TotalLabelCount - stock.LabelsUsed - stock.WastedLabelCount;
+
+                    context.LabelStockUsages.Add(new LabelStockUsage
+                    {
+                        LabelStockId = stock.Id,
+                        DatePrinted = DateTime.Now,
+                        PrintedCount = qtyPrinted,
+                        WastedCount = wastedLabels,
+                        PrintedBy = Environment.UserName
+                    });
+
+                    context.SaveChanges();
+                }
+            }
+        }
+
         public LabelStockMaster UpdateLabelUsage(string labelType, int qtyPrinted, int wastedLabels = 0, string referenceId = null)
         {
             using (var context = new AccountMasterContext())
