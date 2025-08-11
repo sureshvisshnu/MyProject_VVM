@@ -31,11 +31,16 @@ namespace Fa.views.catalog
 
                 if (labelStockMasterInfo != null)
                 {
-                    // Save to database
-                    LabelStockMaster savedLabel = BarCodeLabelManager.Instance.AddBarCodeLabel(labelStockMasterInfo);
+                    LabelStockMaster savedLabel = BarCodeLabelManager.Instance
+                        .LoadNewLabelRoll(labelStockMasterInfo);
 
-                    MessageBox.Show("Label stock information saved successfully.",
-                                    "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show(
+                        $"New label roll for {savedLabel.LabelType} loaded successfully.\n" +
+                        $"Total Labels: {savedLabel.TotalLabelCount}, Remaining: {savedLabel.RemainingCount}",
+                        "Success",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                    );
                 }
                 else
                 {
@@ -45,7 +50,7 @@ namespace Fa.views.catalog
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving label stock information:\n{ex.Message}",
+                MessageBox.Show($"Error loading label roll:\n{ex.Message}",
                                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

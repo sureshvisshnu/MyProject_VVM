@@ -6,6 +6,7 @@ using fa.libraries.Validation;
 using fa.views.hms;
 using fa.views.sales;
 using fa.views.utils;
+using Fa.views.catalog;
 using FADataAccessLibrary.Api.BarCodeLabel;
 using FADataAccessLibrary.Model.Catalog;
 using Microsoft.Win32;
@@ -122,6 +123,22 @@ namespace fa.views.catalog
                                 {
                                     TextBoxlblTodayPrinted.Text = (stockInfo.LabelsPrintedToday).ToString();
                                     TextBoxlblTotalBalance.Text = (stockInfo.TotalLabelCount - stockInfo.RunningCount).ToString();
+
+                                    // Check if roll finished
+                                    if ((stockInfo.TotalLabelCount - stockInfo.RunningCount) <= 0)
+                                    {
+                                        DialogResult result = MessageBox.Show(
+                                            $"The {ComboBoxLabelSize.Text} roll is finished.\nDo you want to load a new roll now?",
+                                            "Label Roll Finished",
+                                            MessageBoxButtons.YesNo,
+                                            MessageBoxIcon.Question);
+
+                                        if (result == DialogResult.Yes)
+                                        {
+                                            FormBarCodeCounterSetUp newRollForm = new FormBarCodeCounterSetUp();
+                                            newRollForm.ShowDialog();
+                                        }
+                                    }
                                 }
                                 LoadLabelStockInfo();
                             };
