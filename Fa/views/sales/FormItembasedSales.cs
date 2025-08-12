@@ -1758,7 +1758,7 @@ namespace fa.views.sales
                 if (!string.IsNullOrEmpty(barcode))
                 {
                     _isBarcodeProcessing = true;
-                    SearchProductByBarCode(barcode);
+                    //SearchProductByBarCode(barcode);
                     _isBarcodeProcessing = false;
                 }
                 dont_jump = true;
@@ -3516,18 +3516,33 @@ namespace fa.views.sales
                     _lastBarcodeTime = DateTime.Now;
                     _isBarcodeProcessing = true;
 
-                    var barcode = GridViewSalesItem.CurrentCell.Value?.ToString();
+                    string barcode;
+
+                    // Ensure last character is committed
+                    GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                    GridViewSalesItem.EndEdit();
+
+                    // Read from editing control if still active
+                    if (GridViewSalesItem.EditingControl is TextBox tb)
+                        barcode = tb.Text;
+                    else
+                        barcode = GridViewSalesItem.CurrentCell.Value?.ToString()!;
+
                     if (!string.IsNullOrEmpty(barcode))
                     {
-                        // DIRECTLY call barcode search - no form opening
-                        ScannedBarcode = string.Empty; // Reset scanned barcode
                         ScannedBarcode = barcode.StartsWith(BarcodePrefix) ? barcode.Substring(BarcodePrefix.Length) : barcode;
-                        SearchProductByBarCode(barcode);
+                        var product = GetProductByBarcodeFromCache(ScannedBarcode);
+
+                        if (product != null)
+                        {
+                            LoadProductIntoGrid(product);
+                        }
                     }
 
                     _isBarcodeProcessing = false;
                     return true;
                 }
+
 
                 /*
                 if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
@@ -4560,7 +4575,7 @@ namespace fa.views.sales
                     _lastBarcodeTime = DateTime.Now;
 
                     // Direct barcode processing
-                    SearchProductByBarCode(textBox.Text);
+                    //SearchProductByBarCode(textBox.Text);
                 }
             }
         }
@@ -4697,6 +4712,93 @@ namespace fa.views.sales
 
             ComputeFormTotal();
             Cursor.Current = Cursors.Default;
+        }
+        //bool IsOverrideTabCtr = true;
+        private StringBuilder barcodeBuffer = new StringBuilder();
+        private DateTime lastKeystrokeTime = DateTime.Now;
+        private const int barcodeTimeoutMs = 50; // ms between scanner keystrokes
+
+        private Product GetProductByBarcodeFromCacheOld(string barcode)
+        {
+            if (string.IsNullOrWhiteSpace(barcode))
+                return null!;
+
+            // Ensure list is loaded
+            if (Global.ProductDetailList == null || Global.ProductDetailList.Count == 0)
+            {
+                Global.ProductDetailList = CatalogProductManager.Instance
+                    .ListProductByCompanyId(Global.Company.CompanyId);
+            }
+
+            // Match exactly like FormSearchItems does
+            var product = Global.ProductDetailList
+                .FirstOrDefault(x => x.MaterialId.Equals(barcode.Trim(), StringComparison.OrdinalIgnoreCase));
+
+            return product!;
+        }
+        private char ConvertKeyCodeToChar(Keys key)
+        {
+            if (key >= Keys.D0 && key <= Keys.D9)
+                return (char)('0' + (key - Keys.D0));
+            if (key >= Keys.NumPad0 && key <= Keys.NumPad9)
+                return (char)('0' + (key - Keys.NumPad0));
+            if (key >= Keys.A && key <= Keys.Z)
+                return (char)('A' + (key - Keys.A));
+            return '\0';
+        }
+
+        private Product GetProductByBarcodeFromCache(string barcode)
+        {
+            if (Global.ProductDetailList == null || Global.ProductDetailList.Count == 0)
+            {
+                Global.ProductDetailList = CatalogProductManager.Instance
+                    .ListProductByCompanyId(Global.Company.CompanyId);
+            }
+
+            return Global.ProductDetailList
+                .FirstOrDefault(x => x.MaterialId.Equals(barcode, StringComparison.OrdinalIgnoreCase))!;
+        }
+
+        private void LoadProductIntoGrid(Product product)
+        {
+            long productId = product.Id;
+            long currentId = (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null)
+                ? (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value
+                : 0L;
+
+            // Combine product if needed
+            if (Global.Company.CompanySalesSetup.CombineItem)
+            {
+                foreach (DataGridViewRow row in GridViewSalesItem.Rows)
+                {
+                    if (row.Cells[(int)SaleEntryTableColumn.ID].Value != null &&
+                        (long)row.Cells[(int)SaleEntryTableColumn.ID].Value == productId)
+                    {
+                        int finalQty = int.Parse(row.Cells[(int)SaleEntryTableColumn.QTY].Value.ToString()!) + 1;
+                        row.Cells[(int)SaleEntryTableColumn.QTY].Value = finalQty.ToString();
+                        ComputeFormTotal();
+                        return;
+                    }
+                }
+            }
+
+            LoadUomTax(productId);
+            LoadProductAdditinalDetails(product);
+
+            if (currentId == 0 && GridViewSalesItem.CurrentRow.Index == GridViewSalesItem.Rows.Count - 1)
+            {
+                GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
+                GridViewSalesItem.Rows.Add();
+            }
+
+            GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
+
+            GridViewSalesItem.BeginInvoke(new MethodInvoker(delegate ()
+            {
+                GridViewSalesItem.CurrentCell = GridViewSalesItem[3, GridViewSalesItem.CurrentRow.Index];
+                GridViewSalesItem.CurrentCell.Selected = true;
+                GridViewSalesItem.BeginEdit(true);
+            }));
         }
     }
     public class PrintPaperFormat
