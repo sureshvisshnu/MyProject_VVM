@@ -154,7 +154,6 @@
             label23 = new Label();
             YesNoRadioPriceTo = new fa.views.controls.YesNoRadio();
             label29 = new Label();
-            BtnUpdatePrice = new Button();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).BeginInit();
             toolStrip1.SuspendLayout();
             StatusStripSales.SuspendLayout();
@@ -1255,24 +1254,13 @@
             label29.TabIndex = 226;
             label29.Text = "Update Sale Price By";
             // 
-            // BtnUpdatePrice
-            // 
-            BtnUpdatePrice.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnUpdatePrice.Location = new Point(303, 592);
-            BtnUpdatePrice.Name = "BtnUpdatePrice";
-            BtnUpdatePrice.Size = new Size(100, 24);
-            BtnUpdatePrice.TabIndex = 228;
-            BtnUpdatePrice.Text = "Update Price  [F7]";
-            BtnUpdatePrice.UseVisualStyleBackColor = true;
-            // 
             // FormItembasedSales
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1353, 649);
-            Controls.Add(BtnUpdatePrice);
-            Controls.Add(ComboBoxInvoicePriceBy);
             Controls.Add(ComboBoxSaleInventoryLocation);
+            Controls.Add(ComboBoxInvoicePriceBy);
             Controls.Add(YesNoRadioPriceTo);
             Controls.Add(label29);
             Controls.Add(label23);
@@ -1382,9 +1370,8 @@
             Controls.SetChildIndex(label23, 0);
             Controls.SetChildIndex(label29, 0);
             Controls.SetChildIndex(YesNoRadioPriceTo, 0);
-            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
             Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
-            Controls.SetChildIndex(BtnUpdatePrice, 0);
+            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
@@ -1512,6 +1499,5 @@
         private Label label23;
         private controls.YesNoRadio YesNoRadioPriceTo;
         private Label label29;
-        private Button BtnUpdatePrice;
     }
 }
