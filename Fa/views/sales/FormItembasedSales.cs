@@ -295,7 +295,7 @@ namespace fa.views.sales
                         Amount = Amount - DiscountAmount;
                     }
                     SaleDetail.TaxDetails = new List<ItemLevelSaleTaxDetail>();
-                    float TaxPercentage = float.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAXP].Value.ToString());
+                    float TaxPercentage = float.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAXP].Value.ToString()!);
                     if (TaxPercentage > 0)
                     {
                         int j = 0;
@@ -775,7 +775,7 @@ namespace fa.views.sales
                         BtnSalesPrint.Select();
                     }
                     ToolStripStatusLabelErrorPurchase.Text = SaveSuccessText;
-                    DisplaySystemErrorPerformCancel("Sales Bill No : " + SalesReferenceNumber.Text + "Saved ");
+                    DisplaySystemErrorPerformCancel("Sales Bill No : " + SalesReferenceNumber.Text + " = Saved!");
                     DirtyFlag(false);
                 }
                 finally

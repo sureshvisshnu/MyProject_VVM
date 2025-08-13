@@ -569,6 +569,8 @@ namespace fa.model.Catalog
         public float CostPrice { get; set; }
         public float RetailPrice { get; set; }
         public float WholdSalePrice { get; set; }
+        public float LinePrice { get; set; } 
+        public float SpecialPrice { get; set; } 
         public float Msrp { get; set; }
         public double QuantityOnHand { get; set; }
         public bool UseHsnTax { get; set; }
@@ -576,6 +578,19 @@ namespace fa.model.Catalog
         public string Schedule { get; set; }
         public virtual ICollection<Inventory> Inventorys { get;} = new List<Inventory>();
         public virtual ICollection<SupplierProduct> SupplierProducts { get; set; } = new List<SupplierProduct>();
+    }
+
+    public class ProductLinePrice : CatalogItem
+    {
+        [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public long Id { get; set; }
+
+        public long ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        public Product Product { get; set; }
+
+        public decimal LinePrice { get; set; }
+        public decimal SpecialPrice { get; set; }
     }
 
     public class CatalogItemSalesTaxMap 

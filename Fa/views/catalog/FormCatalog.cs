@@ -1406,201 +1406,201 @@ namespace fa.views.catalog
         }
         private async void BtnCatalogSave_Click(object sender, EventArgs e)
         {
-            //try
-            //{
-            Cursor.Current = Cursors.WaitCursor;
-            if (TabControlCategory.Visible && validateFormCategory())
+            try
             {
-                IsPerformSearch = false;
-                TextBoxCatalogSearch.ResetText();
-                Category lCategory = GetCategoryFromForm();
-                if (CategoryManager.CategoryNameUniqueById(lCategory))
+                Cursor.Current = Cursors.WaitCursor;
+                if (TabControlCategory.Visible && validateFormCategory())
                 {
-                    Category lCategoryFromDB = null;
-                    if (lCategory.Id == 0)
+                    IsPerformSearch = false;
+                    TextBoxCatalogSearch.ResetText();
+                    Category lCategory = GetCategoryFromForm();
+                    if (CategoryManager.CategoryNameUniqueById(lCategory))
                     {
-                        lCategoryFromDB = CategoryManager.AddCategory(lCategory);
-
-                    }
-                    else
-                    {
-                        Category lCategoryById = CategoryManager.GetCategoryInfoById(lCategory.Id);
-                        if (lCategoryById != null)
+                        Category lCategoryFromDB = null!;
+                        if (lCategory.Id == 0)
                         {
-                            lCategoryFromDB = CategoryManager.UpdateCategory(lCategory);
+                            lCategoryFromDB = CategoryManager.AddCategory(lCategory);
 
                         }
                         else
                         {
-                            DisplaySystemError("Somting went wrong, please check this category is still valid.");
-                            return;
-                        }
-                    }
-                    if (CreateCatalogOnLoad)
-                    {
-                        FormCatalog_Load(sender, e);
-                        return;
-                    }
-                    ResetCategoryTab();
-                    LoadCategoryCombo();
-                    LoadCatalogWithFilter();
-                    if (lCategoryFromDB != null)
-                        PointSaveorUpdatedNode(TreeViewCatalog.Nodes, lCategoryFromDB.Id.ToString());
-                    EnableForm(false);
-                    CatalogErrorMsg.Text = SaveCatalogSuccessText;
-                    this.formIsDirty = false;
-                }
-                else
-                {
-                    CatalogErrorMsg.Text = string.Format(UniqueNameErrorMsg, "Catageory", lCategory.Name);
-                    TextBoxCategoryName.Select();
-                    return;
-                }
-            }
-            else if (TabControlProductFamily.Visible && validateFormProductFamily())
-            {
-                IsPerformSearch = false;
-                TextBoxCatalogSearch.ResetText();
-                ProductFamily lProductFamily = GetProductFamilyFromForm();
-                if (CatalogProductFamilyManager.ProductFamilyNameUniqueById(lProductFamily))
-                {
-                    ProductFamily lProductFamilyFromDB = null!;
-                    if (lProductFamily.Id == 0)
-                    {
-                        lProductFamilyFromDB = CatalogProductFamilyManager.AddProductFamily(lProductFamily);
-                    }
-                    else
-                    {
-                        ProductFamily lProductFamilyById = CatalogProductFamilyManager.GetProductFamilyInfoById(lProductFamily.Id);
-                        if (lProductFamilyById != null)
-                        {
-                            lProductFamilyFromDB = CatalogProductFamilyManager.UpdateProductFamily(lProductFamily);
-                        }
-                        else
-                        {
-                            DisplaySystemError("Somting went wrong, please check this productfamily is still valid.");
-                            return;
-                        }
-                    }
-                    if (CreateCatalogOnLoad)
-                    {
-                        FormCatalog_Load(sender, e);
-                        return;
-                    }
-                    ResetProductFamilyTab();
-                    LoadProductFamilyCombo();
-                    LoadCatalogWithFilter();
-                    PointSaveorUpdatedNode(TreeViewCatalog.Nodes, lProductFamilyFromDB.Id.ToString() + "#");
-                    EnableForm(false);
-                    CatalogErrorMsg.Text = SaveProductFamilySuccessText;
-                    this.formIsDirty = false;
-                }
-                else
-                {
-                    CatalogErrorMsg.Text = string.Format(UniqueNameErrorMsg, "Product Family", lProductFamily.Name);
-                    TextBoxProductFamilyName.Select();
-                    return;
-                }
-            }
-            else if (TabControlProduct.Visible && validateFormProduct())
-            {
-                IsPerformSearch = false;
-                TextBoxCatalogSearch.ResetText();
-                Product lProduct = GetProductFromForm();
-
-                if (CatalogProductManager.ProductNameUniqueById(lProduct))
-                {
-                    if (CatalogProductManager.FindMaterialIdUnique(lProduct))
-                    {
-                        Product lProductFromDB = null!;
-                        if (lProduct.Id == 0)
-                        {
-                            lProductFromDB = CatalogProductManager.AddProduct(lProduct);
-
-                            // ✅ Assign newly generated ProductId to PendingPercentages before saving
-                            if (this.PendingPercentages != null)
+                            Category lCategoryById = CategoryManager.GetCategoryInfoById(lCategory.Id);
+                            if (lCategoryById != null)
                             {
-                                this.PendingPercentages.ProductId = lProductFromDB.Id;
-                                this.PendingPercentages.ProductCode = lProductFromDB.MaterialId;
+                                lCategoryFromDB = CategoryManager.UpdateCategory(lCategory);
+
                             }
-
-                            // Save percentages (now with valid ProductId)
-                            await SaveOrCalculateProductPercentage(lProductFromDB);
+                            else
+                            {
+                                DisplaySystemError("Somting went wrong, please check this category is still valid.");
+                                return;
+                            }
                         }
-
+                        if (CreateCatalogOnLoad)
+                        {
+                            FormCatalog_Load(sender, e);
+                            return;
+                        }
+                        ResetCategoryTab();
+                        LoadCategoryCombo();
+                        LoadCatalogWithFilter();
+                        if (lCategoryFromDB != null)
+                            PointSaveorUpdatedNode(TreeViewCatalog.Nodes, lCategoryFromDB.Id.ToString());
+                        EnableForm(false);
+                        CatalogErrorMsg.Text = SaveCatalogSuccessText;
+                        this.formIsDirty = false;
+                    }
+                    else
+                    {
+                        CatalogErrorMsg.Text = string.Format(UniqueNameErrorMsg, "Catageory", lCategory.Name);
+                        TextBoxCategoryName.Select();
+                        return;
+                    }
+                }
+                else if (TabControlProductFamily.Visible && validateFormProductFamily())
+                {
+                    IsPerformSearch = false;
+                    TextBoxCatalogSearch.ResetText();
+                    ProductFamily lProductFamily = GetProductFamilyFromForm();
+                    if (CatalogProductFamilyManager.ProductFamilyNameUniqueById(lProductFamily))
+                    {
+                        ProductFamily lProductFamilyFromDB = null!;
+                        if (lProductFamily.Id == 0)
+                        {
+                            lProductFamilyFromDB = CatalogProductFamilyManager.AddProductFamily(lProductFamily);
+                        }
                         else
                         {
-                            Product lProductById = CatalogProductManager.GetProductInfoById(lProduct.Id);
-                            if (lProductById != null)
+                            ProductFamily lProductFamilyById = CatalogProductFamilyManager.GetProductFamilyInfoById(lProductFamily.Id);
+                            if (lProductFamilyById != null)
                             {
-                                lProductFromDB = CatalogProductManager.UpdateProduct(lProduct);
+                                lProductFamilyFromDB = CatalogProductFamilyManager.UpdateProductFamily(lProductFamily);
+                            }
+                            else
+                            {
+                                DisplaySystemError("Somting went wrong, please check this productfamily is still valid.");
+                                return;
+                            }
+                        }
+                        if (CreateCatalogOnLoad)
+                        {
+                            FormCatalog_Load(sender, e);
+                            return;
+                        }
+                        ResetProductFamilyTab();
+                        LoadProductFamilyCombo();
+                        LoadCatalogWithFilter();
+                        PointSaveorUpdatedNode(TreeViewCatalog.Nodes, lProductFamilyFromDB.Id.ToString() + "#");
+                        EnableForm(false);
+                        CatalogErrorMsg.Text = SaveProductFamilySuccessText;
+                        this.formIsDirty = false;
+                    }
+                    else
+                    {
+                        CatalogErrorMsg.Text = string.Format(UniqueNameErrorMsg, "Product Family", lProductFamily.Name);
+                        TextBoxProductFamilyName.Select();
+                        return;
+                    }
+                }
+                else if (TabControlProduct.Visible && validateFormProduct())
+                {
+                    IsPerformSearch = false;
+                    TextBoxCatalogSearch.ResetText();
+                    Product lProduct = GetProductFromForm();
 
+                    if (CatalogProductManager.ProductNameUniqueById(lProduct))
+                    {
+                        if (CatalogProductManager.FindMaterialIdUnique(lProduct))
+                        {
+                            Product lProductFromDB = null!;
+                            if (lProduct.Id == 0)
+                            {
+                                lProductFromDB = CatalogProductManager.AddProduct(lProduct);
+
+                                // ✅ Assign newly generated ProductId to PendingPercentages before saving
                                 if (this.PendingPercentages != null)
                                 {
                                     this.PendingPercentages.ProductId = lProductFromDB.Id;
                                     this.PendingPercentages.ProductCode = lProductFromDB.MaterialId;
                                 }
-                                // Update percentages if they exist (async operation)
-                                await SaveOrCalculateProductPercentage(lProductFromDB);
 
+                                // Save percentages (now with valid ProductId)
+                                await SaveOrCalculateProductPercentage(lProductFromDB);
                             }
+
                             else
                             {
-                                DisplaySystemError("Something went wrong, please check this product is still valid.");
-                                return;
+                                Product lProductById = CatalogProductManager.GetProductInfoById(lProduct.Id);
+                                if (lProductById != null)
+                                {
+                                    lProductFromDB = CatalogProductManager.UpdateProduct(lProduct);
+
+                                    if (this.PendingPercentages != null)
+                                    {
+                                        this.PendingPercentages.ProductId = lProductFromDB.Id;
+                                        this.PendingPercentages.ProductCode = lProductFromDB.MaterialId;
+                                    }
+                                    // Update percentages if they exist (async operation)
+                                    await SaveOrCalculateProductPercentage(lProductFromDB);
+
+                                }
+                                else
+                                {
+                                    DisplaySystemError("Something went wrong, please check this product is still valid.");
+                                    return;
+                                }
                             }
-                        }
 
-                        // Rest of existing product save logic...
-                        if (CreateCatalogOnLoad)
-                        {
+                            // Rest of existing product save logic...
+                            if (CreateCatalogOnLoad)
+                            {
+                                this.formIsDirty = false;
+                                if (parent is FormSearchItems) { ((FormSearchItems)parent).IsReload = true; }
+                                this.Close();
+                            }
+
+                            // Update form fields with saved prices
+                            if (lProductFromDB != null)
+                            {
+                                TextBoxProductPurchasePrice.Text = lProductFromDB.PurchasePrice.ToString();
+                                TextBoxProductCost.Text = lProductFromDB.CostPrice.ToString();
+                                TextBoxProductRetailPrice.Text = lProductFromDB.RetailPrice.ToString();
+                                TextBoxProductWholeSalePrice.Text = lProductFromDB.WholdSalePrice.ToString();
+                                TextBoxProductMSRP.Text = lProductFromDB.Msrp.ToString();
+                            }
+
+                            ResetProductTab();
+                            LoadProductCombo();
+                            LoadCatalogWithFilter();
+                            PointSaveorUpdatedNode(TreeViewCatalog.Nodes, lProductFromDB.Id.ToString() + "@");
+                            EnableForm(false);
+                            CatalogErrorMsg.Text = SaveProductSuccessText;
                             this.formIsDirty = false;
-                            if (parent is FormSearchItems) { ((FormSearchItems)parent).IsReload = true; }
-                            this.Close();
                         }
-
-                        // Update form fields with saved prices
-                        if (lProductFromDB != null)
+                        else
                         {
-                            TextBoxProductPurchasePrice.Text = lProductFromDB.PurchasePrice.ToString();
-                            TextBoxProductCost.Text = lProductFromDB.CostPrice.ToString();
-                            TextBoxProductRetailPrice.Text = lProductFromDB.RetailPrice.ToString();
-                            TextBoxProductWholeSalePrice.Text = lProductFromDB.WholdSalePrice.ToString();
-                            TextBoxProductMSRP.Text = lProductFromDB.Msrp.ToString();
+                            CatalogErrorMsg.Text = string.Format(UniqueProductCodeErrorMsg, TextBoxProductCode.Text);
+                            TextBoxProductCode.Select();
+                            return;
                         }
-
-                        ResetProductTab();
-                        LoadProductCombo();
-                        LoadCatalogWithFilter();
-                        PointSaveorUpdatedNode(TreeViewCatalog.Nodes, lProductFromDB.Id.ToString() + "@");
-                        EnableForm(false);
-                        CatalogErrorMsg.Text = SaveProductSuccessText;
-                        this.formIsDirty = false;
                     }
                     else
                     {
-                        CatalogErrorMsg.Text = string.Format(UniqueProductCodeErrorMsg, TextBoxProductCode.Text);
-                        TextBoxProductCode.Select();
+                        CatalogErrorMsg.Text = string.Format(UniqueNameErrorMsg, "Product", lProduct.Name);
+                        TextBoxProductName.Select();
                         return;
                     }
                 }
-                else
-                {
-                    CatalogErrorMsg.Text = string.Format(UniqueNameErrorMsg, "Product", lProduct.Name);
-                    TextBoxProductName.Select();
-                    return;
-                }
             }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message);
-            //    return;
-            //}
-            //finally
-            //{
-            //    Cursor.Current = Cursors.Default;
-            //}
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
         }
 
         private void BtnCatalogExit_Click(object sender, EventArgs e)
