@@ -1774,6 +1774,21 @@ namespace fa.views.sales
             {
                 Row_Added();
             }
+            if (e.ColumnIndex == (int)SaleEntryTableColumn.QTY)
+            {
+                int nextRow = e.RowIndex + 1;
+
+                // Ensure it's not the last row
+                if (nextRow < GridViewSalesItem.Rows.Count)
+                {
+                    // Move cursor to next row, Product column (index 1)
+                    GridViewSalesItem.CurrentCell =
+                        GridViewSalesItem.Rows[nextRow].Cells[(int)SaleEntryTableColumn.PRODUCT];
+
+                    GridViewSalesItem.BeginEdit(true); // enter edit mode immediately
+                }
+            }
+
             if (e.ColumnIndex == (int)SaleEntryTableColumn.OPRICE && GridViewSalesItem.Rows[e.RowIndex].Cells[(int)SaleEntryTableColumn.ID].Value != null)
             {
                 Product lProduct = CatalogProductManager.Instance.GetProductInfoById((long)GridViewSalesItem.Rows[e.RowIndex].Cells[(int)SaleEntryTableColumn.ID].Value);
@@ -2876,6 +2891,26 @@ namespace fa.views.sales
         }
         private void GridViewSalesItem_KeyDown(object sender, KeyEventArgs e)
         {
+            if (e.KeyCode == Keys.Enter)
+            {
+                int numCols = GridViewSalesItem.ColumnCount;
+                int numRows = GridViewSalesItem.RowCount;
+                DataGridViewCell currCell = GridViewSalesItem.CurrentCell;
+
+                if (currCell.ColumnIndex == (int)SaleEntryTableColumn.QTY)
+                {
+                    if (currCell.RowIndex < numRows - 1)
+                    {
+                        GridViewSalesItem.CurrentCell = GridViewSalesItem[numCols - numCols, currCell.RowIndex + 1]; // move to first column next row
+                    }
+                }
+                else
+                {
+                    GridViewSalesItem.CurrentCell = GridViewSalesItem[currCell.ColumnIndex + 1, currCell.RowIndex]; // move right
+                }
+
+                e.Handled = true;
+            }
             if ((e.KeyCode == Keys.V && e.Control) && Clipboard.ContainsText())
             {
                 if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO)
@@ -4799,6 +4834,30 @@ namespace fa.views.sales
                 GridViewSalesItem.CurrentCell.Selected = true;
                 GridViewSalesItem.BeginEdit(true);
             }));
+        }
+
+        private void GridViewSalesItem_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.QTY)
+                {
+                    SendKeys.Send("+{tab}+{tab}");
+                }
+            }
+        }
+
+        private void GridViewSalesItem_KeyDown_1(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter &&
+        GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.QTY)
+            {
+                e.Handled = true; // Stop default Enter
+                e.SuppressKeyPress = true;
+
+                // Move focus two columns back
+                SendKeys.Send("+{TAB}+{TAB}");
+            }
         }
     }
     public class PrintPaperFormat
