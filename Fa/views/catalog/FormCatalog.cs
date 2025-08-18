@@ -3250,5 +3250,11 @@ namespace fa.views.catalog
             }
         }
 
+        private void BtnSpecialPrice_Click(object sender, EventArgs e)
+        {
+            FormSpecialPrice formSpecialPrice = new FormSpecialPrice();
+            //formSpecialPrice.ProductId = long.Parse(TextBoxCatalogId.Text);
+            formSpecialPrice.ShowDialog(this);
+        }
     }
 }

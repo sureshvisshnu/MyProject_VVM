@@ -58,10 +58,10 @@
             ImageListCatalog = new ImageList(components);
             TabControlCategory = new TabControl();
             CategoryBasicInfo = new TabPage();
-            ComboBoxCategoryPurchaseAc = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxCategoryDiscountAC = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxCategorySalesAc = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxCategoryInventoryAc = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCategorySalesAc = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCategoryDiscountAC = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxCategoryPurchaseAc = new fa.views.controls.ComboBoxSwapTextBox();
             EditCategoryTaxLink = new LinkLabel();
             label47 = new Label();
             TextBoxCategoryDefaultDiscount = new fa.views.controls.text.CurrencyTextBox();
@@ -94,12 +94,12 @@
             CatalogErrorMsg = new ToolStripStatusLabel();
             TabControlProductFamily = new TabControl();
             ProductFamilyBasicInformation = new TabPage();
-            ComboBoxProductFamilySupplier = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductFamilySalesAc = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductFamilyManufacturer = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductFamilyInventoryAc = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductFamilyPurchaseAc = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductFamilyDiscountAC = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductFamilyPurchaseAc = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductFamilyInventoryAc = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductFamilyManufacturer = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductFamilySalesAc = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductFamilySupplier = new fa.views.controls.ComboBoxSwapTextBox();
             EditProductFamilyTaxLink = new LinkLabel();
             TextBoxProductfamilysupplier = new TextBox();
             label45 = new Label();
@@ -133,7 +133,6 @@
             label38 = new Label();
             TabControlProduct = new TabControl();
             ProductBasicInformation = new TabPage();
-            BtnPercentage = new Button();
             ComboBoxProductDiscountAc = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductSalesAc = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductWholeSaleUOM = new fa.views.controls.ComboBoxSwapTextBox();
@@ -145,6 +144,7 @@
             ComboBoxProductSupplier = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductSchedule = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductRackNumber = new fa.views.controls.ComboBoxSwapTextBox();
+            BtnPercentage = new Button();
             EditProductTaxLink = new LinkLabel();
             label50 = new Label();
             LabelRackNumber = new Label();
@@ -215,6 +215,7 @@
             BtnCatalogReport = new Button();
             TextBoxCatalogSearch = new fa.views.controls.text.DelayedTextChangeTextBox();
             BtnCatalogNew = new Dropdown_Button.UserControlButtonWithMenu();
+            BtnSpecialPrice = new Button();
             contextNewProductFamily.SuspendLayout();
             contextSubCategeory.SuspendLayout();
             contextMenuCatalog.SuspendLayout();
@@ -419,18 +420,31 @@
             CategoryBasicInfo.TabIndex = 0;
             CategoryBasicInfo.Text = "Category - Basic Information";
             // 
-            // ComboBoxCategoryPurchaseAc
+            // ComboBoxCategoryInventoryAc
             // 
-            ComboBoxCategoryPurchaseAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxCategoryPurchaseAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxCategoryPurchaseAc.FormattingEnabled = true;
-            ComboBoxCategoryPurchaseAc.Location = new Point(532, 122);
-            ComboBoxCategoryPurchaseAc.Name = "ComboBoxCategoryPurchaseAc";
-            ComboBoxCategoryPurchaseAc.Size = new Size(291, 21);
-            ComboBoxCategoryPurchaseAc.TabIndex = 12;
-            ComboBoxCategoryPurchaseAc.TxtVisible = true;
-            ComboBoxCategoryPurchaseAc.Visible = false;
-            ComboBoxCategoryPurchaseAc.KeyPress += ComboBoxCategoryPurchaseAc_KeyPress;
+            ComboBoxCategoryInventoryAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxCategoryInventoryAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxCategoryInventoryAc.FormattingEnabled = true;
+            ComboBoxCategoryInventoryAc.Location = new Point(532, 164);
+            ComboBoxCategoryInventoryAc.Name = "ComboBoxCategoryInventoryAc";
+            ComboBoxCategoryInventoryAc.Size = new Size(291, 21);
+            ComboBoxCategoryInventoryAc.TabIndex = 13;
+            ComboBoxCategoryInventoryAc.TxtVisible = true;
+            ComboBoxCategoryInventoryAc.Visible = false;
+            ComboBoxCategoryInventoryAc.KeyPress += ComboBoxCategoryInventoryAc_KeyPress;
+            // 
+            // ComboBoxCategorySalesAc
+            // 
+            ComboBoxCategorySalesAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxCategorySalesAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxCategorySalesAc.FormattingEnabled = true;
+            ComboBoxCategorySalesAc.Location = new Point(532, 80);
+            ComboBoxCategorySalesAc.Name = "ComboBoxCategorySalesAc";
+            ComboBoxCategorySalesAc.Size = new Size(291, 21);
+            ComboBoxCategorySalesAc.TabIndex = 11;
+            ComboBoxCategorySalesAc.TxtVisible = true;
+            ComboBoxCategorySalesAc.Visible = false;
+            ComboBoxCategorySalesAc.KeyPress += ComboBoxCategorySalesAc_KeyPress;
             // 
             // ComboBoxCategoryDiscountAC
             // 
@@ -446,31 +460,18 @@
             ComboBoxCategoryDiscountAC.KeyPress += ComboBoxCategoryDiscountAC_KeyPress;
             ComboBoxCategoryDiscountAC.PreviewKeyDown += ComboBoxCategoryDiscountAC_PreviewKeyDown;
             // 
-            // ComboBoxCategorySalesAc
+            // ComboBoxCategoryPurchaseAc
             // 
-            ComboBoxCategorySalesAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxCategorySalesAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxCategorySalesAc.FormattingEnabled = true;
-            ComboBoxCategorySalesAc.Location = new Point(532, 80);
-            ComboBoxCategorySalesAc.Name = "ComboBoxCategorySalesAc";
-            ComboBoxCategorySalesAc.Size = new Size(291, 21);
-            ComboBoxCategorySalesAc.TabIndex = 11;
-            ComboBoxCategorySalesAc.TxtVisible = true;
-            ComboBoxCategorySalesAc.Visible = false;
-            ComboBoxCategorySalesAc.KeyPress += ComboBoxCategorySalesAc_KeyPress;
-            // 
-            // ComboBoxCategoryInventoryAc
-            // 
-            ComboBoxCategoryInventoryAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxCategoryInventoryAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxCategoryInventoryAc.FormattingEnabled = true;
-            ComboBoxCategoryInventoryAc.Location = new Point(532, 164);
-            ComboBoxCategoryInventoryAc.Name = "ComboBoxCategoryInventoryAc";
-            ComboBoxCategoryInventoryAc.Size = new Size(291, 21);
-            ComboBoxCategoryInventoryAc.TabIndex = 13;
-            ComboBoxCategoryInventoryAc.TxtVisible = true;
-            ComboBoxCategoryInventoryAc.Visible = false;
-            ComboBoxCategoryInventoryAc.KeyPress += ComboBoxCategoryInventoryAc_KeyPress;
+            ComboBoxCategoryPurchaseAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxCategoryPurchaseAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxCategoryPurchaseAc.FormattingEnabled = true;
+            ComboBoxCategoryPurchaseAc.Location = new Point(532, 122);
+            ComboBoxCategoryPurchaseAc.Name = "ComboBoxCategoryPurchaseAc";
+            ComboBoxCategoryPurchaseAc.Size = new Size(291, 21);
+            ComboBoxCategoryPurchaseAc.TabIndex = 12;
+            ComboBoxCategoryPurchaseAc.TxtVisible = true;
+            ComboBoxCategoryPurchaseAc.Visible = false;
+            ComboBoxCategoryPurchaseAc.KeyPress += ComboBoxCategoryPurchaseAc_KeyPress;
             // 
             // EditCategoryTaxLink
             // 
@@ -868,32 +869,45 @@
             ProductFamilyBasicInformation.Text = "Product Family - Basic Information";
             ProductFamilyBasicInformation.UseVisualStyleBackColor = true;
             // 
-            // ComboBoxProductFamilySupplier
+            // ComboBoxProductFamilyDiscountAC
             // 
-            ComboBoxProductFamilySupplier.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductFamilySupplier.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductFamilySupplier.FormattingEnabled = true;
-            ComboBoxProductFamilySupplier.Location = new Point(532, 249);
-            ComboBoxProductFamilySupplier.MaxLength = 30;
-            ComboBoxProductFamilySupplier.Name = "ComboBoxProductFamilySupplier";
-            ComboBoxProductFamilySupplier.Size = new Size(228, 21);
-            ComboBoxProductFamilySupplier.TabIndex = 27;
-            ComboBoxProductFamilySupplier.TxtVisible = true;
-            ComboBoxProductFamilySupplier.Visible = false;
-            ComboBoxProductFamilySupplier.KeyPress += ComboBoxProductFamilySupplier_KeyPress;
+            ComboBoxProductFamilyDiscountAC.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductFamilyDiscountAC.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductFamilyDiscountAC.FormattingEnabled = true;
+            ComboBoxProductFamilyDiscountAC.Location = new Point(626, 291);
+            ComboBoxProductFamilyDiscountAC.Name = "ComboBoxProductFamilyDiscountAC";
+            ComboBoxProductFamilyDiscountAC.Size = new Size(197, 21);
+            ComboBoxProductFamilyDiscountAC.TabIndex = 29;
+            ComboBoxProductFamilyDiscountAC.TxtVisible = true;
+            ComboBoxProductFamilyDiscountAC.Visible = false;
+            ComboBoxProductFamilyDiscountAC.KeyPress += ComboBoxProductFamilyDiscountAC_KeyPress;
+            ComboBoxProductFamilyDiscountAC.PreviewKeyDown += ComboBoxProductFamilyDiscountAC_PreviewKeyDown;
             // 
-            // ComboBoxProductFamilySalesAc
+            // ComboBoxProductFamilyPurchaseAc
             // 
-            ComboBoxProductFamilySalesAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductFamilySalesAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductFamilySalesAc.FormattingEnabled = true;
-            ComboBoxProductFamilySalesAc.Location = new Point(533, 78);
-            ComboBoxProductFamilySalesAc.Name = "ComboBoxProductFamilySalesAc";
-            ComboBoxProductFamilySalesAc.Size = new Size(291, 21);
-            ComboBoxProductFamilySalesAc.TabIndex = 23;
-            ComboBoxProductFamilySalesAc.TxtVisible = true;
-            ComboBoxProductFamilySalesAc.Visible = false;
-            ComboBoxProductFamilySalesAc.KeyPress += ComboBoxProductFamilySalesAc_KeyPress;
+            ComboBoxProductFamilyPurchaseAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductFamilyPurchaseAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductFamilyPurchaseAc.FormattingEnabled = true;
+            ComboBoxProductFamilyPurchaseAc.Location = new Point(533, 123);
+            ComboBoxProductFamilyPurchaseAc.Name = "ComboBoxProductFamilyPurchaseAc";
+            ComboBoxProductFamilyPurchaseAc.Size = new Size(291, 21);
+            ComboBoxProductFamilyPurchaseAc.TabIndex = 24;
+            ComboBoxProductFamilyPurchaseAc.TxtVisible = true;
+            ComboBoxProductFamilyPurchaseAc.Visible = false;
+            ComboBoxProductFamilyPurchaseAc.KeyPress += ComboBoxProductFamilyPurchaseAc_KeyPress;
+            // 
+            // ComboBoxProductFamilyInventoryAc
+            // 
+            ComboBoxProductFamilyInventoryAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductFamilyInventoryAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductFamilyInventoryAc.FormattingEnabled = true;
+            ComboBoxProductFamilyInventoryAc.Location = new Point(533, 165);
+            ComboBoxProductFamilyInventoryAc.Name = "ComboBoxProductFamilyInventoryAc";
+            ComboBoxProductFamilyInventoryAc.Size = new Size(291, 21);
+            ComboBoxProductFamilyInventoryAc.TabIndex = 25;
+            ComboBoxProductFamilyInventoryAc.TxtVisible = true;
+            ComboBoxProductFamilyInventoryAc.Visible = false;
+            ComboBoxProductFamilyInventoryAc.KeyPress += ComboBoxProductFamilyInventoryAc_KeyPress;
             // 
             // ComboBoxProductFamilyManufacturer
             // 
@@ -909,45 +923,32 @@
             ComboBoxProductFamilyManufacturer.Visible = false;
             ComboBoxProductFamilyManufacturer.KeyPress += ComboBoxProductFamilyManufacturer_KeyPress;
             // 
-            // ComboBoxProductFamilyInventoryAc
+            // ComboBoxProductFamilySalesAc
             // 
-            ComboBoxProductFamilyInventoryAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductFamilyInventoryAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductFamilyInventoryAc.FormattingEnabled = true;
-            ComboBoxProductFamilyInventoryAc.Location = new Point(533, 165);
-            ComboBoxProductFamilyInventoryAc.Name = "ComboBoxProductFamilyInventoryAc";
-            ComboBoxProductFamilyInventoryAc.Size = new Size(291, 21);
-            ComboBoxProductFamilyInventoryAc.TabIndex = 25;
-            ComboBoxProductFamilyInventoryAc.TxtVisible = true;
-            ComboBoxProductFamilyInventoryAc.Visible = false;
-            ComboBoxProductFamilyInventoryAc.KeyPress += ComboBoxProductFamilyInventoryAc_KeyPress;
+            ComboBoxProductFamilySalesAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductFamilySalesAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductFamilySalesAc.FormattingEnabled = true;
+            ComboBoxProductFamilySalesAc.Location = new Point(533, 78);
+            ComboBoxProductFamilySalesAc.Name = "ComboBoxProductFamilySalesAc";
+            ComboBoxProductFamilySalesAc.Size = new Size(291, 21);
+            ComboBoxProductFamilySalesAc.TabIndex = 23;
+            ComboBoxProductFamilySalesAc.TxtVisible = true;
+            ComboBoxProductFamilySalesAc.Visible = false;
+            ComboBoxProductFamilySalesAc.KeyPress += ComboBoxProductFamilySalesAc_KeyPress;
             // 
-            // ComboBoxProductFamilyPurchaseAc
+            // ComboBoxProductFamilySupplier
             // 
-            ComboBoxProductFamilyPurchaseAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductFamilyPurchaseAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductFamilyPurchaseAc.FormattingEnabled = true;
-            ComboBoxProductFamilyPurchaseAc.Location = new Point(533, 123);
-            ComboBoxProductFamilyPurchaseAc.Name = "ComboBoxProductFamilyPurchaseAc";
-            ComboBoxProductFamilyPurchaseAc.Size = new Size(291, 21);
-            ComboBoxProductFamilyPurchaseAc.TabIndex = 24;
-            ComboBoxProductFamilyPurchaseAc.TxtVisible = true;
-            ComboBoxProductFamilyPurchaseAc.Visible = false;
-            ComboBoxProductFamilyPurchaseAc.KeyPress += ComboBoxProductFamilyPurchaseAc_KeyPress;
-            // 
-            // ComboBoxProductFamilyDiscountAC
-            // 
-            ComboBoxProductFamilyDiscountAC.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductFamilyDiscountAC.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductFamilyDiscountAC.FormattingEnabled = true;
-            ComboBoxProductFamilyDiscountAC.Location = new Point(626, 291);
-            ComboBoxProductFamilyDiscountAC.Name = "ComboBoxProductFamilyDiscountAC";
-            ComboBoxProductFamilyDiscountAC.Size = new Size(197, 21);
-            ComboBoxProductFamilyDiscountAC.TabIndex = 29;
-            ComboBoxProductFamilyDiscountAC.TxtVisible = true;
-            ComboBoxProductFamilyDiscountAC.Visible = false;
-            ComboBoxProductFamilyDiscountAC.KeyPress += ComboBoxProductFamilyDiscountAC_KeyPress;
-            ComboBoxProductFamilyDiscountAC.PreviewKeyDown += ComboBoxProductFamilyDiscountAC_PreviewKeyDown;
+            ComboBoxProductFamilySupplier.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductFamilySupplier.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductFamilySupplier.FormattingEnabled = true;
+            ComboBoxProductFamilySupplier.Location = new Point(532, 249);
+            ComboBoxProductFamilySupplier.MaxLength = 30;
+            ComboBoxProductFamilySupplier.Name = "ComboBoxProductFamilySupplier";
+            ComboBoxProductFamilySupplier.Size = new Size(228, 21);
+            ComboBoxProductFamilySupplier.TabIndex = 27;
+            ComboBoxProductFamilySupplier.TxtVisible = true;
+            ComboBoxProductFamilySupplier.Visible = false;
+            ComboBoxProductFamilySupplier.KeyPress += ComboBoxProductFamilySupplier_KeyPress;
             // 
             // EditProductFamilyTaxLink
             // 
@@ -1322,17 +1323,18 @@
             // 
             // ProductBasicInformation
             // 
-            ProductBasicInformation.Controls.Add(ComboBoxProductDiscountAc);
-            ProductBasicInformation.Controls.Add(ComboBoxProductSalesAc);
-            ProductBasicInformation.Controls.Add(ComboBoxProductWholeSaleUOM);
-            ProductBasicInformation.Controls.Add(ComboBoxProductManufacturer);
-            ProductBasicInformation.Controls.Add(ComboBoxProductPurchaseAc);
-            ProductBasicInformation.Controls.Add(ComboBoxProductRetailUOM);
-            ProductBasicInformation.Controls.Add(ComboBoxProductInventoryAc);
-            ProductBasicInformation.Controls.Add(ComboBoxProductPurchesUOM);
-            ProductBasicInformation.Controls.Add(ComboBoxProductSupplier);
-            ProductBasicInformation.Controls.Add(ComboBoxProductSchedule);
+            ProductBasicInformation.Controls.Add(BtnSpecialPrice);
             ProductBasicInformation.Controls.Add(ComboBoxProductRackNumber);
+            ProductBasicInformation.Controls.Add(ComboBoxProductSchedule);
+            ProductBasicInformation.Controls.Add(ComboBoxProductSupplier);
+            ProductBasicInformation.Controls.Add(ComboBoxProductPurchesUOM);
+            ProductBasicInformation.Controls.Add(ComboBoxProductInventoryAc);
+            ProductBasicInformation.Controls.Add(ComboBoxProductRetailUOM);
+            ProductBasicInformation.Controls.Add(ComboBoxProductPurchaseAc);
+            ProductBasicInformation.Controls.Add(ComboBoxProductManufacturer);
+            ProductBasicInformation.Controls.Add(ComboBoxProductWholeSaleUOM);
+            ProductBasicInformation.Controls.Add(ComboBoxProductSalesAc);
+            ProductBasicInformation.Controls.Add(ComboBoxProductDiscountAc);
             ProductBasicInformation.Controls.Add(BtnPercentage);
             ProductBasicInformation.Controls.Add(EditProductTaxLink);
             ProductBasicInformation.Controls.Add(label50);
@@ -1395,17 +1397,6 @@
             ProductBasicInformation.TabIndex = 0;
             ProductBasicInformation.Text = "Product - Basic Information";
             ProductBasicInformation.UseVisualStyleBackColor = true;
-            // 
-            // BtnPercentage
-            // 
-            BtnPercentage.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            BtnPercentage.Location = new Point(212, 440);
-            BtnPercentage.Name = "BtnPercentage";
-            BtnPercentage.Size = new Size(150, 23);
-            BtnPercentage.TabIndex = 90;
-            BtnPercentage.Text = "Update Missing Percentage";
-            BtnPercentage.UseVisualStyleBackColor = true;
-            BtnPercentage.Click += BtnPercentage_Click;
             // 
             // ComboBoxProductDiscountAc
             // 
@@ -1557,6 +1548,17 @@
             ComboBoxProductRackNumber.TxtVisible = true;
             ComboBoxProductRackNumber.Visible = false;
             ComboBoxProductRackNumber.KeyPress += ComboBoxProductRackNumber_KeyPress;
+            // 
+            // BtnPercentage
+            // 
+            BtnPercentage.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            BtnPercentage.Location = new Point(212, 440);
+            BtnPercentage.Name = "BtnPercentage";
+            BtnPercentage.Size = new Size(150, 23);
+            BtnPercentage.TabIndex = 90;
+            BtnPercentage.Text = "Update Missing Percentage";
+            BtnPercentage.UseVisualStyleBackColor = true;
+            BtnPercentage.Click += BtnPercentage_Click;
             // 
             // EditProductTaxLink
             // 
@@ -2326,6 +2328,17 @@
             BtnCatalogNew.TabIndex = 2;
             BtnCatalogNew.ItemClickedEvent += BtnCatalogNew_ItemClickedEvent;
             // 
+            // BtnSpecialPrice
+            // 
+            BtnSpecialPrice.Location = new Point(298, 396);
+            BtnSpecialPrice.Name = "BtnSpecialPrice";
+            BtnSpecialPrice.Size = new Size(90, 23);
+            BtnSpecialPrice.TabIndex = 91;
+            BtnSpecialPrice.TabStop = false;
+            BtnSpecialPrice.Text = "Add Special Price";
+            BtnSpecialPrice.UseVisualStyleBackColor = true;
+            BtnSpecialPrice.Click += BtnSpecialPrice_Click;
+            // 
             // FormCatalog
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
@@ -2570,5 +2583,6 @@
         private LinkLabel EditCategoryTaxLink;
         public controls.text.CurrencyTextBox TextBoxProductMSRP;
         private Button BtnPercentage;
+        private Button BtnSpecialPrice;
     }
 }

@@ -580,6 +580,11 @@ namespace fa.views.sales
             BtnSalesCancel.PerformClick();
             return;
         }
+        private void DisplaySystemSavePerform(string Message)
+        {
+            MessageBox.Show(Message);
+            return;
+        }
         private void BtnExportPdf_Click(object sender, EventArgs e)
         {
             if (SalesManager.GetSaleEntry(long.Parse(TextBoxSalesId.Text)) != null)
@@ -775,7 +780,8 @@ namespace fa.views.sales
                         BtnSalesPrint.Select();
                     }
                     ToolStripStatusLabelErrorPurchase.Text = SaveSuccessText;
-                    DisplaySystemErrorPerformCancel("Sales Bill No : " + SalesReferenceNumber.Text + " = Saved!");
+
+                    DisplaySystemSavePerform("Sales Bill No : " + SalesReferenceNumber.Text + " = Saved!");
                     DirtyFlag(false);
                 }
                 finally
