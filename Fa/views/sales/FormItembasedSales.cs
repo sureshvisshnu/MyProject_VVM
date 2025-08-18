@@ -112,6 +112,7 @@ namespace fa.views.sales
         private bool _isProcessingBarcode = false;
         private bool _isManualSearchRequested = false;
         private bool _isBarcodeProcessing = false;
+        private bool _isEnterKeyInQty = false;
         private DateTime _lastBarcodeTime = DateTime.MinValue;
         private DateTime _lastScannerInput = DateTime.MinValue;
         private StringBuilder _scannerBuffer = new StringBuilder();
@@ -1780,18 +1781,25 @@ namespace fa.views.sales
             {
                 Row_Added();
             }
-            if (e.ColumnIndex == (int)SaleEntryTableColumn.QTY)
+            if (e.ColumnIndex == (int)SaleEntryTableColumn.QTY && _isEnterKeyInQty)
             {
-                int nextRow = e.RowIndex + 1;
+                _isEnterKeyInQty = false;
 
-                // Ensure it's not the last row
+                int nextRow = e.RowIndex + 1;
                 if (nextRow < GridViewSalesItem.Rows.Count)
                 {
-                    // Move cursor to next row, Product column (index 1)
-                    GridViewSalesItem.CurrentCell =
-                        GridViewSalesItem.Rows[nextRow].Cells[(int)SaleEntryTableColumn.PRODUCT];
-
-                    GridViewSalesItem.BeginEdit(true); // enter edit mode immediately
+                    // Schedule navigation after current events
+                    BeginInvoke(new Action(() => {
+                        try
+                        {
+                            GridViewSalesItem.CurrentCell = GridViewSalesItem.Rows[nextRow].Cells[(int)SaleEntryTableColumn.PRODUCT];
+                            GridViewSalesItem.BeginEdit(true);
+                        }
+                        catch (Exception ex)
+                        {
+                            Logger.LogError(ex);
+                        }
+                    }));
                 }
             }
 
@@ -2035,6 +2043,15 @@ namespace fa.views.sales
             ToolStripStatusLabelErrorPurchase.Text = "";
             if (e.RowIndex > -1)
             {
+                if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+                {
+                    // Reset the Enter key flag on any cell click
+                    _isEnterKeyInQty = false;
+
+                    // Ensure proper focus for clicked cell
+                    GridViewSalesItem.CurrentCell = GridViewSalesItem[e.ColumnIndex, e.RowIndex];
+                    GridViewSalesItem.BeginEdit(true);
+                }
                 if (!GridViewSalesItem.Rows[e.RowIndex].Cells[(int)SaleEntryTableColumn.PRODUCT].ReadOnly)
                 {
                     if (e.ColumnIndex == (int)SaleEntryTableColumn.REMOVE && (GridViewSalesItem.Rows.Count - 1) != e.RowIndex)
@@ -2337,10 +2354,18 @@ namespace fa.views.sales
             }
 
             // Normal product name search flow
-            ProcessProductSearch(inputText);
+            if (_barcodeBuffer == null)
+            {
+                ProcessProductSearch(inputText);
+            }
+            else
+            {
+
+            }
         }
 
         private void ProcessProductSearch(string searchText)
+        
         {
             Cursor.Current = Cursors.WaitCursor;
             try
@@ -2899,24 +2924,22 @@ namespace fa.views.sales
         {
             if (e.KeyCode == Keys.Enter)
             {
-                int numCols = GridViewSalesItem.ColumnCount;
-                int numRows = GridViewSalesItem.RowCount;
-                DataGridViewCell currCell = GridViewSalesItem.CurrentCell;
-
-                if (currCell.ColumnIndex == (int)SaleEntryTableColumn.QTY)
+                // Only handle for QTY column
+                if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.QTY)
                 {
-                    if (currCell.RowIndex < numRows - 1)
-                    {
-                        GridViewSalesItem.CurrentCell = GridViewSalesItem[numCols - numCols, currCell.RowIndex + 1]; // move to first column next row
-                    }
-                }
-                else
-                {
-                    GridViewSalesItem.CurrentCell = GridViewSalesItem[currCell.ColumnIndex + 1, currCell.RowIndex]; // move right
-                }
+                    // Set flag to indicate Enter key was pressed
+                    _isEnterKeyInQty = true;
 
-                e.Handled = true;
+                    // Commit edit immediately
+                    GridViewSalesItem.EndEdit();
+
+                    // Suppress default behavior
+                    e.Handled = true;
+                    e.SuppressKeyPress = true;
+                }
             }
+
+            // Existing paste handling remains unchanged
             if ((e.KeyCode == Keys.V && e.Control) && Clipboard.ContainsText())
             {
                 if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO)
@@ -2926,7 +2949,6 @@ namespace fa.views.sales
                 if (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
                 {
                     KeypressValidation.Instance.Keypress_PasteCheckingProduct(sender, e, "NameChecking");
-
                 }
             }
         }
@@ -4658,11 +4680,13 @@ namespace fa.views.sales
         {
             if (e.ColumnIndex == (int)SaleEntryTableColumn.QTY)
             {
-                var editingControl = GridViewSalesItem.EditingControl as TextBox;
-                if (editingControl != null)
-                {
-                    editingControl.SelectAll();
-                }
+                // Select all text when entering QTY cell
+                BeginInvoke(new Action(() => {
+                    if (GridViewSalesItem.EditingControl is TextBox textBox)
+                    {
+                        textBox.SelectAll();
+                    }
+                }));
             }
         }
 
