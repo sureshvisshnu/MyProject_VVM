@@ -30,13 +30,13 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSpecialPrice));
-            textBox2 = new TextBox();
+            TextBoxXFactorWholeSale = new TextBox();
             label18 = new Label();
-            currencyTextBox2 = new fa.views.controls.text.CurrencyTextBox();
+            TextBoxSpecialMargin = new fa.views.controls.text.CurrencyTextBox();
             label19 = new Label();
-            textBox1 = new TextBox();
+            TextBoxXFactorRetail = new TextBox();
             label16 = new Label();
-            currencyTextBox1 = new fa.views.controls.text.CurrencyTextBox();
+            TextBoxLineMargin = new fa.views.controls.text.CurrencyTextBox();
             label17 = new Label();
             TextBoxSpecialPrice = new fa.views.controls.text.NumberTextBox(components);
             label15 = new Label();
@@ -69,16 +69,16 @@
             // 
             checkBoxIsPatient.Location = new Point(177, 15);
             // 
-            // textBox2
+            // TextBoxXFactorWholeSale
             // 
-            textBox2.BackColor = SystemColors.Window;
-            textBox2.Location = new Point(149, 170);
-            textBox2.MaxLength = 5;
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
-            textBox2.Size = new Size(54, 23);
-            textBox2.TabIndex = 507;
-            textBox2.TextAlign = HorizontalAlignment.Right;
+            TextBoxXFactorWholeSale.BackColor = SystemColors.Window;
+            TextBoxXFactorWholeSale.Location = new Point(149, 170);
+            TextBoxXFactorWholeSale.MaxLength = 5;
+            TextBoxXFactorWholeSale.Name = "TextBoxXFactorWholeSale";
+            TextBoxXFactorWholeSale.ReadOnly = true;
+            TextBoxXFactorWholeSale.Size = new Size(54, 23);
+            TextBoxXFactorWholeSale.TabIndex = 507;
+            TextBoxXFactorWholeSale.TextAlign = HorizontalAlignment.Right;
             // 
             // label18
             // 
@@ -90,16 +90,16 @@
             label18.TabIndex = 506;
             label18.Text = "X-Factor";
             // 
-            // currencyTextBox2
+            // TextBoxSpecialMargin
             // 
-            currencyTextBox2.Decimals = 2;
-            currencyTextBox2.Length = 6;
-            currencyTextBox2.Location = new Point(11, 170);
-            currencyTextBox2.Name = "currencyTextBox2";
-            currencyTextBox2.Size = new Size(120, 23);
-            currencyTextBox2.TabIndex = 504;
-            currencyTextBox2.Text = "0.00";
-            currencyTextBox2.TextAlign = HorizontalAlignment.Right;
+            TextBoxSpecialMargin.Decimals = 2;
+            TextBoxSpecialMargin.Length = 6;
+            TextBoxSpecialMargin.Location = new Point(11, 170);
+            TextBoxSpecialMargin.Name = "TextBoxSpecialMargin";
+            TextBoxSpecialMargin.Size = new Size(120, 23);
+            TextBoxSpecialMargin.TabIndex = 504;
+            TextBoxSpecialMargin.Text = "0.00";
+            TextBoxSpecialMargin.TextAlign = HorizontalAlignment.Right;
             // 
             // label19
             // 
@@ -107,20 +107,20 @@
             label19.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             label19.Location = new Point(11, 154);
             label19.Name = "label19";
-            label19.Size = new Size(133, 13);
+            label19.Size = new Size(136, 13);
             label19.TabIndex = 505;
-            label19.Text = "SpecialPrice Margin %";
+            label19.Text = "Special Price Margin %";
             // 
-            // textBox1
+            // TextBoxXFactorRetail
             // 
-            textBox1.BackColor = SystemColors.Window;
-            textBox1.Location = new Point(149, 131);
-            textBox1.MaxLength = 5;
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.Size = new Size(54, 23);
-            textBox1.TabIndex = 503;
-            textBox1.TextAlign = HorizontalAlignment.Right;
+            TextBoxXFactorRetail.BackColor = SystemColors.Window;
+            TextBoxXFactorRetail.Location = new Point(149, 131);
+            TextBoxXFactorRetail.MaxLength = 5;
+            TextBoxXFactorRetail.Name = "TextBoxXFactorRetail";
+            TextBoxXFactorRetail.ReadOnly = true;
+            TextBoxXFactorRetail.Size = new Size(54, 23);
+            TextBoxXFactorRetail.TabIndex = 503;
+            TextBoxXFactorRetail.TextAlign = HorizontalAlignment.Right;
             // 
             // label16
             // 
@@ -132,16 +132,16 @@
             label16.TabIndex = 502;
             label16.Text = "X-Factor";
             // 
-            // currencyTextBox1
+            // TextBoxLineMargin
             // 
-            currencyTextBox1.Decimals = 2;
-            currencyTextBox1.Length = 6;
-            currencyTextBox1.Location = new Point(15, 131);
-            currencyTextBox1.Name = "currencyTextBox1";
-            currencyTextBox1.Size = new Size(120, 23);
-            currencyTextBox1.TabIndex = 500;
-            currencyTextBox1.Text = "0.00";
-            currencyTextBox1.TextAlign = HorizontalAlignment.Right;
+            TextBoxLineMargin.Decimals = 2;
+            TextBoxLineMargin.Length = 6;
+            TextBoxLineMargin.Location = new Point(15, 131);
+            TextBoxLineMargin.Name = "TextBoxLineMargin";
+            TextBoxLineMargin.Size = new Size(120, 23);
+            TextBoxLineMargin.TabIndex = 500;
+            TextBoxLineMargin.Text = "0.00";
+            TextBoxLineMargin.TextAlign = HorizontalAlignment.Right;
             // 
             // label17
             // 
@@ -149,9 +149,9 @@
             label17.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
             label17.Location = new Point(12, 115);
             label17.Name = "label17";
-            label17.Size = new Size(116, 13);
+            label17.Size = new Size(119, 13);
             label17.TabIndex = 501;
-            label17.Text = "LinePrice Margin %";
+            label17.Text = "Line Price Margin %";
             // 
             // TextBoxSpecialPrice
             // 
@@ -242,6 +242,7 @@
             BtnPriceCalculatorSave.TabIndex = 508;
             BtnPriceCalculatorSave.Text = "Save [F8]";
             BtnPriceCalculatorSave.UseVisualStyleBackColor = true;
+            BtnPriceCalculatorSave.Click += BtnPriceCalculatorSave_Click;
             // 
             // BtnPriceCalculatorCancel
             // 
@@ -276,13 +277,13 @@
             Controls.Add(statusStrip1);
             Controls.Add(BtnPriceCalculatorSave);
             Controls.Add(BtnPriceCalculatorCancel);
-            Controls.Add(textBox2);
+            Controls.Add(TextBoxXFactorWholeSale);
             Controls.Add(label18);
-            Controls.Add(currencyTextBox2);
+            Controls.Add(TextBoxSpecialMargin);
             Controls.Add(label19);
-            Controls.Add(textBox1);
+            Controls.Add(TextBoxXFactorRetail);
             Controls.Add(label16);
-            Controls.Add(currencyTextBox1);
+            Controls.Add(TextBoxLineMargin);
             Controls.Add(label17);
             Controls.Add(TextBoxSpecialPrice);
             Controls.Add(label15);
@@ -296,7 +297,9 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "FormSpecialPrice";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Special lPrice";
+            Load += FormSpecialPrice_Load;
             Controls.SetChildIndex(ProductIdTransport, 0);
             Controls.SetChildIndex(ProductBatchIdTransport, 0);
             Controls.SetChildIndex(AccountIdTransport, 0);
@@ -310,13 +313,13 @@
             Controls.SetChildIndex(label15, 0);
             Controls.SetChildIndex(TextBoxSpecialPrice, 0);
             Controls.SetChildIndex(label17, 0);
-            Controls.SetChildIndex(currencyTextBox1, 0);
+            Controls.SetChildIndex(TextBoxLineMargin, 0);
             Controls.SetChildIndex(label16, 0);
-            Controls.SetChildIndex(textBox1, 0);
+            Controls.SetChildIndex(TextBoxXFactorRetail, 0);
             Controls.SetChildIndex(label19, 0);
-            Controls.SetChildIndex(currencyTextBox2, 0);
+            Controls.SetChildIndex(TextBoxSpecialMargin, 0);
             Controls.SetChildIndex(label18, 0);
-            Controls.SetChildIndex(textBox2, 0);
+            Controls.SetChildIndex(TextBoxXFactorWholeSale, 0);
             Controls.SetChildIndex(BtnPriceCalculatorCancel, 0);
             Controls.SetChildIndex(BtnPriceCalculatorSave, 0);
             Controls.SetChildIndex(statusStrip1, 0);
@@ -328,13 +331,13 @@
 
         #endregion
 
-        private TextBox textBox2;
+        private TextBox TextBoxXFactorWholeSale;
         private Label label18;
-        private fa.views.controls.text.CurrencyTextBox currencyTextBox2;
+        private fa.views.controls.text.CurrencyTextBox TextBoxSpecialMargin;
         private Label label19;
-        private TextBox textBox1;
+        private TextBox TextBoxXFactorRetail;
         private Label label16;
-        private fa.views.controls.text.CurrencyTextBox currencyTextBox1;
+        private fa.views.controls.text.CurrencyTextBox TextBoxLineMargin;
         private Label label17;
         private fa.views.controls.text.NumberTextBox TextBoxSpecialPrice;
         private Label label15;

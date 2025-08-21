@@ -30,18 +30,18 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCatalog));
-            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle25 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle28 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle26 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle27 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle29 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle30 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle32 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle31 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle33 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle35 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle34 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle36 = new DataGridViewCellStyle();
             contextNewProductFamily = new ContextMenuStrip(components);
             newProductToolStripMenuItem = new ToolStripMenuItem();
             deleteToolStripMenuItem = new ToolStripMenuItem();
@@ -144,6 +144,7 @@
             ComboBoxProductSupplier = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductSchedule = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductRackNumber = new fa.views.controls.ComboBoxSwapTextBox();
+            BtnSpecialPrice = new Button();
             BtnPercentage = new Button();
             EditProductTaxLink = new LinkLabel();
             label50 = new Label();
@@ -215,7 +216,6 @@
             BtnCatalogReport = new Button();
             TextBoxCatalogSearch = new fa.views.controls.text.DelayedTextChangeTextBox();
             BtnCatalogNew = new Dropdown_Button.UserControlButtonWithMenu();
-            BtnSpecialPrice = new Button();
             contextNewProductFamily.SuspendLayout();
             contextSubCategeory.SuspendLayout();
             contextMenuCatalog.SuspendLayout();
@@ -373,6 +373,7 @@
             ImageListCatalog.Images.SetKeyName(0, "Category.ico");
             ImageListCatalog.Images.SetKeyName(1, "product.ico");
             ImageListCatalog.Images.SetKeyName(2, "sku.ico");
+            ImageListCatalog.Images.SetKeyName(3, "recycling.ico");
             // 
             // TabControlCategory
             // 
@@ -566,25 +567,25 @@
             GridViewCategoryTaxDetails.AllowUserToResizeColumns = false;
             GridViewCategoryTaxDetails.AllowUserToResizeRows = false;
             GridViewCategoryTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle13.BackColor = SystemColors.Control;
-            dataGridViewCellStyle13.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle13.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle13.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle13.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle13.WrapMode = DataGridViewTriState.True;
-            GridViewCategoryTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle25.BackColor = SystemColors.Control;
+            dataGridViewCellStyle25.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle25.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle25.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle25.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle25.WrapMode = DataGridViewTriState.True;
+            GridViewCategoryTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle25;
             GridViewCategoryTaxDetails.ColumnHeadersHeight = 20;
             GridViewCategoryTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewCategoryTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn7 });
-            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.BackColor = SystemColors.Window;
-            dataGridViewCellStyle16.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle16.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle16.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle16.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle16.WrapMode = DataGridViewTriState.False;
-            GridViewCategoryTaxDetails.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle28.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle28.BackColor = SystemColors.Window;
+            dataGridViewCellStyle28.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle28.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle28.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle28.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle28.WrapMode = DataGridViewTriState.False;
+            GridViewCategoryTaxDetails.DefaultCellStyle = dataGridViewCellStyle28;
             GridViewCategoryTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewCategoryTaxDetails.EnableHeadersVisualStyles = false;
             GridViewCategoryTaxDetails.Location = new Point(532, 248);
@@ -612,9 +613,9 @@
             // 
             dataGridViewTextBoxColumn3.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn3.Currencylength = 6;
-            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle14.Format = "##.##";
-            dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle26.Format = "##.##";
+            dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle26;
             dataGridViewTextBoxColumn3.HeaderText = "Percentage";
             dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             dataGridViewTextBoxColumn3.ReadOnly = true;
@@ -622,8 +623,8 @@
             // 
             // dataGridViewTextBoxColumn7
             // 
-            dataGridViewCellStyle15.NullValue = "X";
-            dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle27.NullValue = "X";
+            dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle27;
             dataGridViewTextBoxColumn7.HeaderText = "";
             dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
             dataGridViewTextBoxColumn7.ReadOnly = true;
@@ -1064,14 +1065,14 @@
             GridViewProductFamilyChildProduct.AllowUserToResizeColumns = false;
             GridViewProductFamilyChildProduct.AllowUserToResizeRows = false;
             GridViewProductFamilyChildProduct.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle17.BackColor = SystemColors.Control;
-            dataGridViewCellStyle17.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle17.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle17.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle17.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle17.WrapMode = DataGridViewTriState.True;
-            GridViewProductFamilyChildProduct.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle29.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle29.BackColor = SystemColors.Control;
+            dataGridViewCellStyle29.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle29.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle29.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle29.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle29.WrapMode = DataGridViewTriState.True;
+            GridViewProductFamilyChildProduct.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle29;
             GridViewProductFamilyChildProduct.ColumnHeadersHeight = 20;
             GridViewProductFamilyChildProduct.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductFamilyChildProduct.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10 });
@@ -1166,25 +1167,25 @@
             GridViewProductFamilyTaxDetails.AllowUserToResizeColumns = false;
             GridViewProductFamilyTaxDetails.AllowUserToResizeRows = false;
             GridViewProductFamilyTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle18.BackColor = SystemColors.Control;
-            dataGridViewCellStyle18.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle18.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle18.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle18.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle18.WrapMode = DataGridViewTriState.True;
-            GridViewProductFamilyTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle30.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle30.BackColor = SystemColors.Control;
+            dataGridViewCellStyle30.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle30.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle30.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle30.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle30.WrapMode = DataGridViewTriState.True;
+            GridViewProductFamilyTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle30;
             GridViewProductFamilyTaxDetails.ColumnHeadersHeight = 20;
             GridViewProductFamilyTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductFamilyTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn11, dataGridViewTextBoxColumn1, Column1 });
-            dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle20.BackColor = SystemColors.Window;
-            dataGridViewCellStyle20.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle20.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle20.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle20.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle20.WrapMode = DataGridViewTriState.False;
-            GridViewProductFamilyTaxDetails.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle32.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle32.BackColor = SystemColors.Window;
+            dataGridViewCellStyle32.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle32.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle32.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle32.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle32.WrapMode = DataGridViewTriState.False;
+            GridViewProductFamilyTaxDetails.DefaultCellStyle = dataGridViewCellStyle32;
             GridViewProductFamilyTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewProductFamilyTaxDetails.EnableHeadersVisualStyles = false;
             GridViewProductFamilyTaxDetails.Location = new Point(532, 334);
@@ -1211,8 +1212,8 @@
             // 
             dataGridViewTextBoxColumn1.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn1.Currencylength = 6;
-            dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle31.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle31;
             dataGridViewTextBoxColumn1.HeaderText = "Percentage";
             dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -1323,7 +1324,6 @@
             // 
             // ProductBasicInformation
             // 
-            ProductBasicInformation.Controls.Add(BtnSpecialPrice);
             ProductBasicInformation.Controls.Add(ComboBoxProductRackNumber);
             ProductBasicInformation.Controls.Add(ComboBoxProductSchedule);
             ProductBasicInformation.Controls.Add(ComboBoxProductSupplier);
@@ -1335,6 +1335,7 @@
             ProductBasicInformation.Controls.Add(ComboBoxProductWholeSaleUOM);
             ProductBasicInformation.Controls.Add(ComboBoxProductSalesAc);
             ProductBasicInformation.Controls.Add(ComboBoxProductDiscountAc);
+            ProductBasicInformation.Controls.Add(BtnSpecialPrice);
             ProductBasicInformation.Controls.Add(BtnPercentage);
             ProductBasicInformation.Controls.Add(EditProductTaxLink);
             ProductBasicInformation.Controls.Add(label50);
@@ -1549,6 +1550,18 @@
             ComboBoxProductRackNumber.Visible = false;
             ComboBoxProductRackNumber.KeyPress += ComboBoxProductRackNumber_KeyPress;
             // 
+            // BtnSpecialPrice
+            // 
+            BtnSpecialPrice.BackgroundImage = (Image)resources.GetObject("BtnSpecialPrice.BackgroundImage");
+            BtnSpecialPrice.BackgroundImageLayout = ImageLayout.Stretch;
+            BtnSpecialPrice.Location = new Point(489, 255);
+            BtnSpecialPrice.Name = "BtnSpecialPrice";
+            BtnSpecialPrice.Size = new Size(35, 23);
+            BtnSpecialPrice.TabIndex = 91;
+            BtnSpecialPrice.TabStop = false;
+            BtnSpecialPrice.UseVisualStyleBackColor = true;
+            BtnSpecialPrice.Click += BtnSpecialPrice_Click;
+            // 
             // BtnPercentage
             // 
             BtnPercentage.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
@@ -1700,7 +1713,7 @@
             // 
             // BtnPriceCalculator
             // 
-            BtnPriceCalculator.Location = new Point(396, 255);
+            BtnPriceCalculator.Location = new Point(393, 255);
             BtnPriceCalculator.Name = "BtnPriceCalculator";
             BtnPriceCalculator.Size = new Size(90, 23);
             BtnPriceCalculator.TabIndex = 75;
@@ -1733,7 +1746,7 @@
             TextBoxProductMSRP.BackColor = SystemColors.Window;
             TextBoxProductMSRP.Decimals = 2;
             TextBoxProductMSRP.Length = 10;
-            TextBoxProductMSRP.Location = new Point(320, 257);
+            TextBoxProductMSRP.Location = new Point(316, 257);
             TextBoxProductMSRP.Name = "TextBoxProductMSRP";
             TextBoxProductMSRP.ReadOnly = true;
             TextBoxProductMSRP.Size = new Size(70, 21);
@@ -1744,7 +1757,7 @@
             // label40
             // 
             label40.AutoSize = true;
-            label40.Location = new Point(320, 240);
+            label40.Location = new Point(316, 240);
             label40.Name = "label40";
             label40.Size = new Size(34, 13);
             label40.TabIndex = 68;
@@ -1789,7 +1802,7 @@
             TextBoxProductWholeSalePrice.BackColor = SystemColors.Window;
             TextBoxProductWholeSalePrice.Decimals = 2;
             TextBoxProductWholeSalePrice.Length = 10;
-            TextBoxProductWholeSalePrice.Location = new Point(232, 257);
+            TextBoxProductWholeSalePrice.Location = new Point(228, 257);
             TextBoxProductWholeSalePrice.Name = "TextBoxProductWholeSalePrice";
             TextBoxProductWholeSalePrice.ReadOnly = true;
             TextBoxProductWholeSalePrice.Size = new Size(82, 21);
@@ -1802,7 +1815,7 @@
             TextBoxProductRetailPrice.BackColor = SystemColors.Window;
             TextBoxProductRetailPrice.Decimals = 2;
             TextBoxProductRetailPrice.Length = 10;
-            TextBoxProductRetailPrice.Location = new Point(156, 257);
+            TextBoxProductRetailPrice.Location = new Point(153, 257);
             TextBoxProductRetailPrice.Name = "TextBoxProductRetailPrice";
             TextBoxProductRetailPrice.ReadOnly = true;
             TextBoxProductRetailPrice.Size = new Size(70, 21);
@@ -1815,7 +1828,7 @@
             TextBoxProductCost.BackColor = SystemColors.Window;
             TextBoxProductCost.Decimals = 2;
             TextBoxProductCost.Length = 10;
-            TextBoxProductCost.Location = new Point(80, 258);
+            TextBoxProductCost.Location = new Point(78, 258);
             TextBoxProductCost.Name = "TextBoxProductCost";
             TextBoxProductCost.ReadOnly = true;
             TextBoxProductCost.Size = new Size(70, 21);
@@ -1898,7 +1911,7 @@
             // TextBoxProductXFactorRetail
             // 
             TextBoxProductXFactorRetail.BackColor = SystemColors.Window;
-            TextBoxProductXFactorRetail.Location = new Point(215, 214);
+            TextBoxProductXFactorRetail.Location = new Point(215, 215);
             TextBoxProductXFactorRetail.MaxLength = 5;
             TextBoxProductXFactorRetail.Name = "TextBoxProductXFactorRetail";
             TextBoxProductXFactorRetail.ReadOnly = true;
@@ -1945,25 +1958,25 @@
             GridViewProductTaxDetails.AllowUserToResizeColumns = false;
             GridViewProductTaxDetails.AllowUserToResizeRows = false;
             GridViewProductTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle21.BackColor = SystemColors.Control;
-            dataGridViewCellStyle21.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle21.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle21.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle21.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle21.WrapMode = DataGridViewTriState.True;
-            GridViewProductTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle33.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle33.BackColor = SystemColors.Control;
+            dataGridViewCellStyle33.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle33.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle33.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle33.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle33.WrapMode = DataGridViewTriState.True;
+            GridViewProductTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle33;
             GridViewProductTaxDetails.ColumnHeadersHeight = 20;
             GridViewProductTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn4 });
-            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle23.BackColor = SystemColors.Window;
-            dataGridViewCellStyle23.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle23.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle23.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle23.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle23.WrapMode = DataGridViewTriState.False;
-            GridViewProductTaxDetails.DefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle35.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle35.BackColor = SystemColors.Window;
+            dataGridViewCellStyle35.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle35.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle35.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle35.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle35.WrapMode = DataGridViewTriState.False;
+            GridViewProductTaxDetails.DefaultCellStyle = dataGridViewCellStyle35;
             GridViewProductTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewProductTaxDetails.EnableHeadersVisualStyles = false;
             GridViewProductTaxDetails.Location = new Point(535, 331);
@@ -1991,8 +2004,8 @@
             // 
             dataGridViewTextBoxColumn6.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn6.Currencylength = 6;
-            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle34.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle34;
             dataGridViewTextBoxColumn6.HeaderText = "Percentage";
             dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             dataGridViewTextBoxColumn6.ReadOnly = true;
@@ -2084,7 +2097,7 @@
             // label35
             // 
             label35.AutoSize = true;
-            label35.Location = new Point(232, 240);
+            label35.Location = new Point(228, 240);
             label35.Name = "label35";
             label35.Size = new Size(82, 13);
             label35.TabIndex = 0;
@@ -2093,7 +2106,7 @@
             // label34
             // 
             label34.AutoSize = true;
-            label34.Location = new Point(154, 240);
+            label34.Location = new Point(151, 240);
             label34.Name = "label34";
             label34.Size = new Size(60, 13);
             label34.TabIndex = 0;
@@ -2102,7 +2115,7 @@
             // label33
             // 
             label33.AutoSize = true;
-            label33.Location = new Point(77, 241);
+            label33.Location = new Point(75, 241);
             label33.Name = "label33";
             label33.Size = new Size(29, 13);
             label33.TabIndex = 0;
@@ -2222,8 +2235,8 @@
             // 
             // Column2
             // 
-            dataGridViewCellStyle24.NullValue = "X";
-            Column2.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle36.NullValue = "X";
+            Column2.DefaultCellStyle = dataGridViewCellStyle36;
             Column2.HeaderText = "";
             Column2.Name = "Column2";
             Column2.ReadOnly = true;
@@ -2327,17 +2340,6 @@
             BtnCatalogNew.Size = new Size(91, 27);
             BtnCatalogNew.TabIndex = 2;
             BtnCatalogNew.ItemClickedEvent += BtnCatalogNew_ItemClickedEvent;
-            // 
-            // BtnSpecialPrice
-            // 
-            BtnSpecialPrice.Location = new Point(298, 396);
-            BtnSpecialPrice.Name = "BtnSpecialPrice";
-            BtnSpecialPrice.Size = new Size(90, 23);
-            BtnSpecialPrice.TabIndex = 91;
-            BtnSpecialPrice.TabStop = false;
-            BtnSpecialPrice.Text = "Add Special Price";
-            BtnSpecialPrice.UseVisualStyleBackColor = true;
-            BtnSpecialPrice.Click += BtnSpecialPrice_Click;
             // 
             // FormCatalog
             // 

@@ -1222,6 +1222,7 @@
             ComboBoxInvoicePriceBy.Size = new Size(93, 21);
             ComboBoxInvoicePriceBy.TabIndex = 223;
             ComboBoxInvoicePriceBy.TxtVisible = true;
+            ComboBoxInvoicePriceBy.Visible = false;
             ComboBoxInvoicePriceBy.SelectedIndexChanged += ComboBoxInvoicePriceBy_SelectedIndexChanged;
             // 
             // label23
@@ -1233,6 +1234,7 @@
             label23.Size = new Size(85, 13);
             label23.TabIndex = 225;
             label23.Text = "Sales Price By";
+            label23.Visible = false;
             // 
             // YesNoRadioPriceTo
             // 
@@ -1245,6 +1247,7 @@
             YesNoRadioPriceTo.SecondButtonName = "Single";
             YesNoRadioPriceTo.Size = new Size(134, 20);
             YesNoRadioPriceTo.TabIndex = 227;
+            YesNoRadioPriceTo.Visible = false;
             // 
             // label29
             // 
@@ -1255,14 +1258,15 @@
             label29.Size = new Size(106, 13);
             label29.TabIndex = 226;
             label29.Text = "Update Sale Price By";
+            label29.Visible = false;
             // 
             // FormItembasedSales
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1353, 649);
-            Controls.Add(ComboBoxSaleInventoryLocation);
             Controls.Add(ComboBoxInvoicePriceBy);
+            Controls.Add(ComboBoxSaleInventoryLocation);
             Controls.Add(YesNoRadioPriceTo);
             Controls.Add(label29);
             Controls.Add(label23);
@@ -1372,8 +1376,8 @@
             Controls.SetChildIndex(label23, 0);
             Controls.SetChildIndex(label29, 0);
             Controls.SetChildIndex(YesNoRadioPriceTo, 0);
-            Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
             Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
+            Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();

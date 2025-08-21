@@ -83,6 +83,9 @@ namespace fa.views.catalog
         DateTime EffectiveEndDate = new DateTime(2400, 12, 31);
         public long TaxCodeId = 0L;
 
+        public float LinePriceItem = 0;
+        public float SpecialPriceItem = 0;
+
         FormBase parent = null!;
         public FormCatalog(object sender)
         {
@@ -129,6 +132,7 @@ namespace fa.views.catalog
                     BtnCatalogCancel.Visible = false;
                     BtnCatalogImport.Visible = false;
                     BtnCatalogReport.Visible = false;
+                    BtnSpecialPrice.Visible = false;
                     TreeViewCatalog.Visible = false;
                     TabControlCategory.Location = new Point(12, 12);
                     TabControlProductFamily.Location = new Point(12, 12);
@@ -1523,6 +1527,14 @@ namespace fa.views.catalog
                                     this.PendingPercentages.ProductId = lProductFromDB.Id;
                                     this.PendingPercentages.ProductCode = lProductFromDB.MaterialId;
                                 }
+                                var (linePrice, specialPrice) = CalculateLineAndSpecialPrice(
+                                        (float)lProduct.Msrp,
+                                        LinePriceItem,
+                                        SpecialPriceItem
+                                    );
+
+                                lProductFromDB.LinePrice = linePrice;
+                                lProductFromDB.SpecialPrice = specialPrice;
 
                                 // Save percentages (now with valid ProductId)
                                 await SaveOrCalculateProductPercentage(lProductFromDB);
@@ -1540,6 +1552,15 @@ namespace fa.views.catalog
                                         this.PendingPercentages.ProductId = lProductFromDB.Id;
                                         this.PendingPercentages.ProductCode = lProductFromDB.MaterialId;
                                     }
+                                    var (linePrice, specialPrice) = CalculateLineAndSpecialPrice(
+                                        (float)lProduct.Msrp,
+                                        LinePriceItem,
+                                        SpecialPriceItem
+                                    );
+
+                                    lProductFromDB.LinePrice = linePrice;
+                                    lProductFromDB.SpecialPrice = specialPrice;
+
                                     // Update percentages if they exist (async operation)
                                     await SaveOrCalculateProductPercentage(lProductFromDB);
 
@@ -2002,6 +2023,7 @@ namespace fa.views.catalog
                 ComboBoxProductInventoryAc.Visible = enable;
                 BtnProductParent.Enabled = enable;
                 BtnPriceCalculator.Enabled = enable;
+                BtnSpecialPrice.Enabled = enable;
                 ComboBoxProductPurchaseAc.Visible = enable;
                 ComboBoxProductDiscountAc.Visible = enable;
                 ComboBoxProductSalesAc.Visible = enable;
@@ -3236,6 +3258,31 @@ namespace fa.views.catalog
             };
         }
 
+        private (float linePrice, float specialPrice) CalculateLineAndSpecialPrice(
+                float mrp,
+                float linePriceInput,
+                float specialPriceInput,
+                float defaultLineMargin = 40f,
+                float defaultSpecialMargin = 50f)
+        {
+            float linePrice = linePriceInput;
+            float specialPrice = specialPriceInput;
+
+            if (mrp > 0)
+            {
+                if (linePrice == 0)
+                {
+                    linePrice = mrp - (mrp * defaultLineMargin / 100f);
+                }
+
+                if (specialPrice == 0)
+                {
+                    specialPrice = mrp - (mrp * defaultSpecialMargin / 100f);
+                }
+            }
+
+            return (linePrice, specialPrice);
+        }
 
         private async void BtnPercentage_Click(object sender, EventArgs e)
         {
@@ -3252,9 +3299,9 @@ namespace fa.views.catalog
 
         private void BtnSpecialPrice_Click(object sender, EventArgs e)
         {
-            FormSpecialPrice formSpecialPrice = new FormSpecialPrice();
+            FormSpecialPrice SpecialPrice = new FormSpecialPrice(this);
             //formSpecialPrice.ProductId = long.Parse(TextBoxCatalogId.Text);
-            formSpecialPrice.ShowDialog(this);
+            SpecialPrice.ShowDialog(this);
         }
     }
 }
