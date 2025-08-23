@@ -1,4 +1,5 @@
-﻿using fa.views;
+﻿using fa.model.Catalog;
+using fa.views;
 using fa.views.catalog;
 using fa.views.purchase;
 using System;
@@ -44,35 +45,66 @@ namespace Fa.views.catalog
 
         private void FormSpecialPrice_Load(object sender, EventArgs e)
         {
+            // defaults if textboxes don’t exist or are empty
+            float lineMargin = 40f;
+            float specMargin = 50f;
+
+            // If you DO have margin textboxes, try parse; else keep defaults
+            if (float.TryParse(TextBoxLineMargin?.Text, out var lm)) lineMargin = lm;
+            if (float.TryParse(TextBoxSpecialMargin?.Text, out var sm)) specMargin = sm;
+
+            // Pull basic product info from parent
+            Product productFromParent = null!;
+            if (parent is FormCatalog cat)            {
+
+                TextBoxProductCode.Text = cat.TextBoxProductCode.Text;
+                TextBoxProductName.Text = cat.TextBoxProductName.Text;
+            }
+           
+
+            // Prefill identity fields (as you already do)
+            // ...
+
+            // Prefill Line/Special:
+            float? mrp = (float?)productFromParent?.Msrp;
+            float? existingLine = (float?)(productFromParent?.LinePrice ?? 0f);
+            float? existingSpec = (float?)(productFromParent?.SpecialPrice ?? 0f);
+
+            var (resolvedLine, resolvedSpec) =
+                PriceHelper.ResolveLineAndSpecialPrice(mrp, existingLine, existingSpec, lineMargin, specMargin);
+
+            // If both are still 0 (e.g., MRP is 0 and no saved prices), leave blank for user to type
+            TextBoxLinePrice.Text = resolvedLine > 0 ? resolvedLine.ToString("0.##") : "";
+            TextBoxSpecialPrice.Text = resolvedSpec > 0 ? resolvedSpec.ToString("0.##") : "";
             // Default margins
-            TextBoxLineMargin.Text = "25";
-            TextBoxSpecialMargin.Text = "30";
+            //TextBoxLineMargin.Text = "25";
+            //TextBoxSpecialMargin.Text = "30";
 
-            // ✅ Fetch parent values
-            if (parent is FormCatalog catalog)
-            {
-                TextBoxProductCode.Text = catalog.TextBoxProductCode.Text;
-                TextBoxProductName.Text = catalog.TextBoxProductName.Text;
-                TextBoxXFactorRetail.Text = catalog.TextBoxProductXFactorRetail.Text;
-                TextBoxXFactorWholeSale.Text = catalog.TextBoxProductXFactorWholeSale.Text;
+            //// ✅ Fetch parent values
+            //if (parent is FormCatalog catalog)
+            //{
+            //    TextBoxProductCode.Text = catalog.TextBoxProductCode.Text;
+            //    TextBoxProductName.Text = catalog.TextBoxProductName.Text;
+            //    TextBoxXFactorRetail.Text = catalog.TextBoxProductXFactorRetail.Text;
+            //    TextBoxXFactorWholeSale.Text = catalog.TextBoxProductXFactorWholeSale.Text;
 
-                float.TryParse(catalog.TextBoxProductMSRP.Text, out _mrp);
-            }
+            //    float.TryParse(catalog.TextBoxProductMSRP.Text, out _mrp);
+            //}
 
-            if (_mrp > 0)
-            {
-                RecalculatePrices();
-            }
-            else
-            {
-                // Allow manual entry when no MRP
-                TextBoxLinePrice.Text = "0.00";
-                TextBoxSpecialPrice.Text = "0.00";
-            }
+            //if (_mrp > 0)
+            //{
+            //    RecalculatePrices();
+            //}
+            //else
+            //{
+            //    // Allow manual entry when no MRP
+            //    TextBoxLinePrice.Text = "0.00";
+            //    TextBoxSpecialPrice.Text = "0.00";
+            //}
 
-            // Hook events for live calculation
-            TextBoxLineMargin.TextChanged += MarginTextChanged;
-            TextBoxSpecialMargin.TextChanged += MarginTextChanged;
+            //// Hook events for live calculation
+            //TextBoxLineMargin.TextChanged += MarginTextChanged;
+            //TextBoxSpecialMargin.TextChanged += MarginTextChanged;
         }
 
 

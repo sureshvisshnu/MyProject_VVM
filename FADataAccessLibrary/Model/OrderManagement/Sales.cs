@@ -115,7 +115,6 @@ namespace fa.model.OrderManagement
         [ForeignKey("SaleDetailId")]
         public SaleDetail SaleDetailRefReturn { get; set; }
         public string Uom { get; set; }
+        public int OrderNo { get; set; }
     }
-
-    
 }

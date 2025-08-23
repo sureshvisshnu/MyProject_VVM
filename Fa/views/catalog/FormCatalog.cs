@@ -3303,5 +3303,35 @@ namespace fa.views.catalog
             //formSpecialPrice.ProductId = long.Parse(TextBoxCatalogId.Text);
             SpecialPrice.ShowDialog(this);
         }
+
     }
+    public static class PriceHelper
+    {
+        public static (float line, float special) ResolveLineAndSpecialPrice(
+            float? mrp,
+            float? existingLinePrice,
+            float? existingSpecialPrice,
+            float lineMarginPercent,      // e.g. 40
+            float specialMarginPercent)   // e.g. 50
+        {
+            float line = Normalize(existingLinePrice);
+            float special = Normalize(existingSpecialPrice);
+
+            // If missing or zero, compute from MRP + margin.
+            if (line <= 0) line = ComputeFromMargin(mrp, lineMarginPercent);
+            if (special <= 0) special = ComputeFromMargin(mrp, specialMarginPercent);
+
+            return (line, special);
+        }
+
+        private static float ComputeFromMargin(float? mrp, float marginPercent)
+        {
+            if (mrp.HasValue && mrp.Value > 0f)
+                return mrp.Value - (mrp.Value * marginPercent / 100f);
+            return 0f; // no MRP → leave zero; UI can let user type a value
+        }
+
+        private static float Normalize(float? v) => (v.HasValue ? v.Value : 0f);
+    }
+
 }

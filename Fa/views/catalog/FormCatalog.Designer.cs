@@ -30,18 +30,18 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCatalog));
-            DataGridViewCellStyle dataGridViewCellStyle25 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle28 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle26 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle27 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle29 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle30 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle32 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle31 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle33 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle35 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle34 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle36 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
             contextNewProductFamily = new ContextMenuStrip(components);
             newProductToolStripMenuItem = new ToolStripMenuItem();
             deleteToolStripMenuItem = new ToolStripMenuItem();
@@ -133,17 +133,17 @@
             label38 = new Label();
             TabControlProduct = new TabControl();
             ProductBasicInformation = new TabPage();
-            ComboBoxProductDiscountAc = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductSalesAc = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductWholeSaleUOM = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductManufacturer = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductPurchaseAc = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductRetailUOM = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductInventoryAc = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductPurchesUOM = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductSupplier = new fa.views.controls.ComboBoxSwapTextBox();
-            ComboBoxProductSchedule = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxProductRackNumber = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductSchedule = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductSupplier = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductPurchesUOM = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductInventoryAc = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductRetailUOM = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductPurchaseAc = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductManufacturer = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductWholeSaleUOM = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductSalesAc = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductDiscountAc = new fa.views.controls.ComboBoxSwapTextBox();
             BtnSpecialPrice = new Button();
             BtnPercentage = new Button();
             EditProductTaxLink = new LinkLabel();
@@ -567,25 +567,25 @@
             GridViewCategoryTaxDetails.AllowUserToResizeColumns = false;
             GridViewCategoryTaxDetails.AllowUserToResizeRows = false;
             GridViewCategoryTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle25.BackColor = SystemColors.Control;
-            dataGridViewCellStyle25.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle25.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle25.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle25.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle25.WrapMode = DataGridViewTriState.True;
-            GridViewCategoryTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle25;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            GridViewCategoryTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             GridViewCategoryTaxDetails.ColumnHeadersHeight = 20;
             GridViewCategoryTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewCategoryTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn5, dataGridViewTextBoxColumn3, dataGridViewTextBoxColumn7 });
-            dataGridViewCellStyle28.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle28.BackColor = SystemColors.Window;
-            dataGridViewCellStyle28.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle28.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle28.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle28.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle28.WrapMode = DataGridViewTriState.False;
-            GridViewCategoryTaxDetails.DefaultCellStyle = dataGridViewCellStyle28;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Window;
+            dataGridViewCellStyle4.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            GridViewCategoryTaxDetails.DefaultCellStyle = dataGridViewCellStyle4;
             GridViewCategoryTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewCategoryTaxDetails.EnableHeadersVisualStyles = false;
             GridViewCategoryTaxDetails.Location = new Point(532, 248);
@@ -613,9 +613,9 @@
             // 
             dataGridViewTextBoxColumn3.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn3.Currencylength = 6;
-            dataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle26.Format = "##.##";
-            dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle26;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle2.Format = "##.##";
+            dataGridViewTextBoxColumn3.DefaultCellStyle = dataGridViewCellStyle2;
             dataGridViewTextBoxColumn3.HeaderText = "Percentage";
             dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             dataGridViewTextBoxColumn3.ReadOnly = true;
@@ -623,8 +623,8 @@
             // 
             // dataGridViewTextBoxColumn7
             // 
-            dataGridViewCellStyle27.NullValue = "X";
-            dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle27;
+            dataGridViewCellStyle3.NullValue = "X";
+            dataGridViewTextBoxColumn7.DefaultCellStyle = dataGridViewCellStyle3;
             dataGridViewTextBoxColumn7.HeaderText = "";
             dataGridViewTextBoxColumn7.Name = "dataGridViewTextBoxColumn7";
             dataGridViewTextBoxColumn7.ReadOnly = true;
@@ -1065,14 +1065,14 @@
             GridViewProductFamilyChildProduct.AllowUserToResizeColumns = false;
             GridViewProductFamilyChildProduct.AllowUserToResizeRows = false;
             GridViewProductFamilyChildProduct.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle29.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle29.BackColor = SystemColors.Control;
-            dataGridViewCellStyle29.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle29.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle29.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle29.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle29.WrapMode = DataGridViewTriState.True;
-            GridViewProductFamilyChildProduct.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle29;
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle5.BackColor = SystemColors.Control;
+            dataGridViewCellStyle5.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle5.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            GridViewProductFamilyChildProduct.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             GridViewProductFamilyChildProduct.ColumnHeadersHeight = 20;
             GridViewProductFamilyChildProduct.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductFamilyChildProduct.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn8, dataGridViewTextBoxColumn9, dataGridViewTextBoxColumn10 });
@@ -1167,25 +1167,25 @@
             GridViewProductFamilyTaxDetails.AllowUserToResizeColumns = false;
             GridViewProductFamilyTaxDetails.AllowUserToResizeRows = false;
             GridViewProductFamilyTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle30.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle30.BackColor = SystemColors.Control;
-            dataGridViewCellStyle30.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle30.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle30.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle30.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle30.WrapMode = DataGridViewTriState.True;
-            GridViewProductFamilyTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle30;
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle6.BackColor = SystemColors.Control;
+            dataGridViewCellStyle6.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
+            GridViewProductFamilyTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             GridViewProductFamilyTaxDetails.ColumnHeadersHeight = 20;
             GridViewProductFamilyTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductFamilyTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn11, dataGridViewTextBoxColumn1, Column1 });
-            dataGridViewCellStyle32.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle32.BackColor = SystemColors.Window;
-            dataGridViewCellStyle32.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle32.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle32.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle32.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle32.WrapMode = DataGridViewTriState.False;
-            GridViewProductFamilyTaxDetails.DefaultCellStyle = dataGridViewCellStyle32;
+            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.BackColor = SystemColors.Window;
+            dataGridViewCellStyle8.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle8.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle8.WrapMode = DataGridViewTriState.False;
+            GridViewProductFamilyTaxDetails.DefaultCellStyle = dataGridViewCellStyle8;
             GridViewProductFamilyTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewProductFamilyTaxDetails.EnableHeadersVisualStyles = false;
             GridViewProductFamilyTaxDetails.Location = new Point(532, 334);
@@ -1212,8 +1212,8 @@
             // 
             dataGridViewTextBoxColumn1.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn1.Currencylength = 6;
-            dataGridViewCellStyle31.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle31;
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle7;
             dataGridViewTextBoxColumn1.HeaderText = "Percentage";
             dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -1324,17 +1324,17 @@
             // 
             // ProductBasicInformation
             // 
-            ProductBasicInformation.Controls.Add(ComboBoxProductRackNumber);
-            ProductBasicInformation.Controls.Add(ComboBoxProductSchedule);
-            ProductBasicInformation.Controls.Add(ComboBoxProductSupplier);
-            ProductBasicInformation.Controls.Add(ComboBoxProductPurchesUOM);
-            ProductBasicInformation.Controls.Add(ComboBoxProductInventoryAc);
-            ProductBasicInformation.Controls.Add(ComboBoxProductRetailUOM);
-            ProductBasicInformation.Controls.Add(ComboBoxProductPurchaseAc);
-            ProductBasicInformation.Controls.Add(ComboBoxProductManufacturer);
-            ProductBasicInformation.Controls.Add(ComboBoxProductWholeSaleUOM);
-            ProductBasicInformation.Controls.Add(ComboBoxProductSalesAc);
             ProductBasicInformation.Controls.Add(ComboBoxProductDiscountAc);
+            ProductBasicInformation.Controls.Add(ComboBoxProductSalesAc);
+            ProductBasicInformation.Controls.Add(ComboBoxProductWholeSaleUOM);
+            ProductBasicInformation.Controls.Add(ComboBoxProductManufacturer);
+            ProductBasicInformation.Controls.Add(ComboBoxProductPurchaseAc);
+            ProductBasicInformation.Controls.Add(ComboBoxProductRetailUOM);
+            ProductBasicInformation.Controls.Add(ComboBoxProductInventoryAc);
+            ProductBasicInformation.Controls.Add(ComboBoxProductPurchesUOM);
+            ProductBasicInformation.Controls.Add(ComboBoxProductSupplier);
+            ProductBasicInformation.Controls.Add(ComboBoxProductSchedule);
+            ProductBasicInformation.Controls.Add(ComboBoxProductRackNumber);
             ProductBasicInformation.Controls.Add(BtnSpecialPrice);
             ProductBasicInformation.Controls.Add(BtnPercentage);
             ProductBasicInformation.Controls.Add(EditProductTaxLink);
@@ -1399,128 +1399,19 @@
             ProductBasicInformation.Text = "Product - Basic Information";
             ProductBasicInformation.UseVisualStyleBackColor = true;
             // 
-            // ComboBoxProductDiscountAc
+            // ComboBoxProductRackNumber
             // 
-            ComboBoxProductDiscountAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductDiscountAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductDiscountAc.FormattingEnabled = true;
-            ComboBoxProductDiscountAc.Location = new Point(635, 290);
-            ComboBoxProductDiscountAc.Name = "ComboBoxProductDiscountAc";
-            ComboBoxProductDiscountAc.Size = new Size(190, 21);
-            ComboBoxProductDiscountAc.TabIndex = 61;
-            ComboBoxProductDiscountAc.TxtVisible = true;
-            ComboBoxProductDiscountAc.Visible = false;
-            ComboBoxProductDiscountAc.KeyPress += CombBoxProductDiscountAC_KeyPress;
-            ComboBoxProductDiscountAc.PreviewKeyDown += ComboBoxProductDiscountAc_PreviewKeyDown;
-            // 
-            // ComboBoxProductSalesAc
-            // 
-            ComboBoxProductSalesAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductSalesAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductSalesAc.FormattingEnabled = true;
-            ComboBoxProductSalesAc.Location = new Point(533, 80);
-            ComboBoxProductSalesAc.Name = "ComboBoxProductSalesAc";
-            ComboBoxProductSalesAc.Size = new Size(291, 21);
-            ComboBoxProductSalesAc.TabIndex = 55;
-            ComboBoxProductSalesAc.TxtVisible = true;
-            ComboBoxProductSalesAc.Visible = false;
-            ComboBoxProductSalesAc.KeyPress += ComboBoxProductSalesAc_KeyPress;
-            // 
-            // ComboBoxProductWholeSaleUOM
-            // 
-            ComboBoxProductWholeSaleUOM.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductWholeSaleUOM.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductWholeSaleUOM.FormattingEnabled = true;
-            ComboBoxProductWholeSaleUOM.Location = new Point(275, 215);
-            ComboBoxProductWholeSaleUOM.MaxLength = 30;
-            ComboBoxProductWholeSaleUOM.Name = "ComboBoxProductWholeSaleUOM";
-            ComboBoxProductWholeSaleUOM.Size = new Size(113, 21);
-            ComboBoxProductWholeSaleUOM.TabIndex = 38;
-            ComboBoxProductWholeSaleUOM.TxtVisible = true;
-            ComboBoxProductWholeSaleUOM.Visible = false;
-            ComboBoxProductWholeSaleUOM.KeyPress += ComboBoxProductWholeSaleUOM_KeyPress;
-            // 
-            // ComboBoxProductManufacturer
-            // 
-            ComboBoxProductManufacturer.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductManufacturer.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductManufacturer.FormattingEnabled = true;
-            ComboBoxProductManufacturer.Location = new Point(533, 206);
-            ComboBoxProductManufacturer.MaxLength = 30;
-            ComboBoxProductManufacturer.Name = "ComboBoxProductManufacturer";
-            ComboBoxProductManufacturer.Size = new Size(227, 21);
-            ComboBoxProductManufacturer.TabIndex = 58;
-            ComboBoxProductManufacturer.TxtVisible = true;
-            ComboBoxProductManufacturer.Visible = false;
-            ComboBoxProductManufacturer.KeyPress += ComboBoxProductManufacturer_KeyPress;
-            // 
-            // ComboBoxProductPurchaseAc
-            // 
-            ComboBoxProductPurchaseAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductPurchaseAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductPurchaseAc.FormattingEnabled = true;
-            ComboBoxProductPurchaseAc.Location = new Point(533, 122);
-            ComboBoxProductPurchaseAc.Name = "ComboBoxProductPurchaseAc";
-            ComboBoxProductPurchaseAc.Size = new Size(291, 21);
-            ComboBoxProductPurchaseAc.TabIndex = 56;
-            ComboBoxProductPurchaseAc.TxtVisible = true;
-            ComboBoxProductPurchaseAc.Visible = false;
-            ComboBoxProductPurchaseAc.KeyPress += ComboBoxProductPurchaseAc_KeyPress;
-            // 
-            // ComboBoxProductRetailUOM
-            // 
-            ComboBoxProductRetailUOM.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductRetailUOM.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductRetailUOM.FormattingEnabled = true;
-            ComboBoxProductRetailUOM.Location = new Point(116, 215);
-            ComboBoxProductRetailUOM.MaxLength = 30;
-            ComboBoxProductRetailUOM.Name = "ComboBoxProductRetailUOM";
-            ComboBoxProductRetailUOM.Size = new Size(93, 21);
-            ComboBoxProductRetailUOM.TabIndex = 36;
-            ComboBoxProductRetailUOM.TxtVisible = true;
-            ComboBoxProductRetailUOM.Visible = false;
-            ComboBoxProductRetailUOM.KeyPress += ComboBoxProductRetailUOM_KeyPress;
-            // 
-            // ComboBoxProductInventoryAc
-            // 
-            ComboBoxProductInventoryAc.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductInventoryAc.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductInventoryAc.FormattingEnabled = true;
-            ComboBoxProductInventoryAc.Location = new Point(533, 164);
-            ComboBoxProductInventoryAc.Name = "ComboBoxProductInventoryAc";
-            ComboBoxProductInventoryAc.Size = new Size(291, 21);
-            ComboBoxProductInventoryAc.TabIndex = 57;
-            ComboBoxProductInventoryAc.TxtVisible = true;
-            ComboBoxProductInventoryAc.Visible = false;
-            ComboBoxProductInventoryAc.KeyPress += ComboBoxProductInventoryAc_KeyPress;
-            // 
-            // ComboBoxProductPurchesUOM
-            // 
-            ComboBoxProductPurchesUOM.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductPurchesUOM.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductPurchesUOM.FormattingEnabled = true;
-            ComboBoxProductPurchesUOM.Location = new Point(3, 215);
-            ComboBoxProductPurchesUOM.MaxLength = 30;
-            ComboBoxProductPurchesUOM.Name = "ComboBoxProductPurchesUOM";
-            ComboBoxProductPurchesUOM.Size = new Size(107, 21);
-            ComboBoxProductPurchesUOM.TabIndex = 35;
-            ComboBoxProductPurchesUOM.TxtVisible = true;
-            ComboBoxProductPurchesUOM.Visible = false;
-            ComboBoxProductPurchesUOM.KeyPress += ComboBoxProductPurchesUOM_KeyPress;
-            // 
-            // ComboBoxProductSupplier
-            // 
-            ComboBoxProductSupplier.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductSupplier.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductSupplier.FormattingEnabled = true;
-            ComboBoxProductSupplier.Location = new Point(533, 247);
-            ComboBoxProductSupplier.MaxLength = 30;
-            ComboBoxProductSupplier.Name = "ComboBoxProductSupplier";
-            ComboBoxProductSupplier.Size = new Size(225, 21);
-            ComboBoxProductSupplier.TabIndex = 59;
-            ComboBoxProductSupplier.TxtVisible = true;
-            ComboBoxProductSupplier.Visible = false;
-            ComboBoxProductSupplier.KeyPress += ComboBoxProductSupplier_KeyPress;
+            ComboBoxProductRackNumber.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductRackNumber.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductRackNumber.FormattingEnabled = true;
+            ComboBoxProductRackNumber.Location = new Point(189, 340);
+            ComboBoxProductRackNumber.MaxLength = 30;
+            ComboBoxProductRackNumber.Name = "ComboBoxProductRackNumber";
+            ComboBoxProductRackNumber.Size = new Size(175, 21);
+            ComboBoxProductRackNumber.TabIndex = 49;
+            ComboBoxProductRackNumber.TxtVisible = true;
+            ComboBoxProductRackNumber.Visible = false;
+            ComboBoxProductRackNumber.KeyPress += ComboBoxProductRackNumber_KeyPress;
             // 
             // ComboBoxProductSchedule
             // 
@@ -1536,19 +1427,128 @@
             ComboBoxProductSchedule.Visible = false;
             ComboBoxProductSchedule.KeyPress += ComboBoxProductSchedule_KeyPress;
             // 
-            // ComboBoxProductRackNumber
+            // ComboBoxProductSupplier
             // 
-            ComboBoxProductRackNumber.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxProductRackNumber.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxProductRackNumber.FormattingEnabled = true;
-            ComboBoxProductRackNumber.Location = new Point(189, 340);
-            ComboBoxProductRackNumber.MaxLength = 30;
-            ComboBoxProductRackNumber.Name = "ComboBoxProductRackNumber";
-            ComboBoxProductRackNumber.Size = new Size(175, 21);
-            ComboBoxProductRackNumber.TabIndex = 49;
-            ComboBoxProductRackNumber.TxtVisible = true;
-            ComboBoxProductRackNumber.Visible = false;
-            ComboBoxProductRackNumber.KeyPress += ComboBoxProductRackNumber_KeyPress;
+            ComboBoxProductSupplier.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductSupplier.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductSupplier.FormattingEnabled = true;
+            ComboBoxProductSupplier.Location = new Point(533, 247);
+            ComboBoxProductSupplier.MaxLength = 30;
+            ComboBoxProductSupplier.Name = "ComboBoxProductSupplier";
+            ComboBoxProductSupplier.Size = new Size(225, 21);
+            ComboBoxProductSupplier.TabIndex = 59;
+            ComboBoxProductSupplier.TxtVisible = true;
+            ComboBoxProductSupplier.Visible = false;
+            ComboBoxProductSupplier.KeyPress += ComboBoxProductSupplier_KeyPress;
+            // 
+            // ComboBoxProductPurchesUOM
+            // 
+            ComboBoxProductPurchesUOM.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductPurchesUOM.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductPurchesUOM.FormattingEnabled = true;
+            ComboBoxProductPurchesUOM.Location = new Point(3, 215);
+            ComboBoxProductPurchesUOM.MaxLength = 30;
+            ComboBoxProductPurchesUOM.Name = "ComboBoxProductPurchesUOM";
+            ComboBoxProductPurchesUOM.Size = new Size(107, 21);
+            ComboBoxProductPurchesUOM.TabIndex = 35;
+            ComboBoxProductPurchesUOM.TxtVisible = true;
+            ComboBoxProductPurchesUOM.Visible = false;
+            ComboBoxProductPurchesUOM.KeyPress += ComboBoxProductPurchesUOM_KeyPress;
+            // 
+            // ComboBoxProductInventoryAc
+            // 
+            ComboBoxProductInventoryAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductInventoryAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductInventoryAc.FormattingEnabled = true;
+            ComboBoxProductInventoryAc.Location = new Point(533, 164);
+            ComboBoxProductInventoryAc.Name = "ComboBoxProductInventoryAc";
+            ComboBoxProductInventoryAc.Size = new Size(291, 21);
+            ComboBoxProductInventoryAc.TabIndex = 57;
+            ComboBoxProductInventoryAc.TxtVisible = true;
+            ComboBoxProductInventoryAc.Visible = false;
+            ComboBoxProductInventoryAc.KeyPress += ComboBoxProductInventoryAc_KeyPress;
+            // 
+            // ComboBoxProductRetailUOM
+            // 
+            ComboBoxProductRetailUOM.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductRetailUOM.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductRetailUOM.FormattingEnabled = true;
+            ComboBoxProductRetailUOM.Location = new Point(116, 215);
+            ComboBoxProductRetailUOM.MaxLength = 30;
+            ComboBoxProductRetailUOM.Name = "ComboBoxProductRetailUOM";
+            ComboBoxProductRetailUOM.Size = new Size(93, 21);
+            ComboBoxProductRetailUOM.TabIndex = 36;
+            ComboBoxProductRetailUOM.TxtVisible = true;
+            ComboBoxProductRetailUOM.Visible = false;
+            ComboBoxProductRetailUOM.KeyPress += ComboBoxProductRetailUOM_KeyPress;
+            // 
+            // ComboBoxProductPurchaseAc
+            // 
+            ComboBoxProductPurchaseAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductPurchaseAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductPurchaseAc.FormattingEnabled = true;
+            ComboBoxProductPurchaseAc.Location = new Point(533, 122);
+            ComboBoxProductPurchaseAc.Name = "ComboBoxProductPurchaseAc";
+            ComboBoxProductPurchaseAc.Size = new Size(291, 21);
+            ComboBoxProductPurchaseAc.TabIndex = 56;
+            ComboBoxProductPurchaseAc.TxtVisible = true;
+            ComboBoxProductPurchaseAc.Visible = false;
+            ComboBoxProductPurchaseAc.KeyPress += ComboBoxProductPurchaseAc_KeyPress;
+            // 
+            // ComboBoxProductManufacturer
+            // 
+            ComboBoxProductManufacturer.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductManufacturer.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductManufacturer.FormattingEnabled = true;
+            ComboBoxProductManufacturer.Location = new Point(533, 206);
+            ComboBoxProductManufacturer.MaxLength = 30;
+            ComboBoxProductManufacturer.Name = "ComboBoxProductManufacturer";
+            ComboBoxProductManufacturer.Size = new Size(227, 21);
+            ComboBoxProductManufacturer.TabIndex = 58;
+            ComboBoxProductManufacturer.TxtVisible = true;
+            ComboBoxProductManufacturer.Visible = false;
+            ComboBoxProductManufacturer.KeyPress += ComboBoxProductManufacturer_KeyPress;
+            // 
+            // ComboBoxProductWholeSaleUOM
+            // 
+            ComboBoxProductWholeSaleUOM.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductWholeSaleUOM.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductWholeSaleUOM.FormattingEnabled = true;
+            ComboBoxProductWholeSaleUOM.Location = new Point(275, 215);
+            ComboBoxProductWholeSaleUOM.MaxLength = 30;
+            ComboBoxProductWholeSaleUOM.Name = "ComboBoxProductWholeSaleUOM";
+            ComboBoxProductWholeSaleUOM.Size = new Size(113, 21);
+            ComboBoxProductWholeSaleUOM.TabIndex = 38;
+            ComboBoxProductWholeSaleUOM.TxtVisible = true;
+            ComboBoxProductWholeSaleUOM.Visible = false;
+            ComboBoxProductWholeSaleUOM.KeyPress += ComboBoxProductWholeSaleUOM_KeyPress;
+            // 
+            // ComboBoxProductSalesAc
+            // 
+            ComboBoxProductSalesAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductSalesAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductSalesAc.FormattingEnabled = true;
+            ComboBoxProductSalesAc.Location = new Point(533, 80);
+            ComboBoxProductSalesAc.Name = "ComboBoxProductSalesAc";
+            ComboBoxProductSalesAc.Size = new Size(291, 21);
+            ComboBoxProductSalesAc.TabIndex = 55;
+            ComboBoxProductSalesAc.TxtVisible = true;
+            ComboBoxProductSalesAc.Visible = false;
+            ComboBoxProductSalesAc.KeyPress += ComboBoxProductSalesAc_KeyPress;
+            // 
+            // ComboBoxProductDiscountAc
+            // 
+            ComboBoxProductDiscountAc.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxProductDiscountAc.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxProductDiscountAc.FormattingEnabled = true;
+            ComboBoxProductDiscountAc.Location = new Point(635, 290);
+            ComboBoxProductDiscountAc.Name = "ComboBoxProductDiscountAc";
+            ComboBoxProductDiscountAc.Size = new Size(190, 21);
+            ComboBoxProductDiscountAc.TabIndex = 61;
+            ComboBoxProductDiscountAc.TxtVisible = true;
+            ComboBoxProductDiscountAc.Visible = false;
+            ComboBoxProductDiscountAc.KeyPress += CombBoxProductDiscountAC_KeyPress;
+            ComboBoxProductDiscountAc.PreviewKeyDown += ComboBoxProductDiscountAc_PreviewKeyDown;
             // 
             // BtnSpecialPrice
             // 
@@ -1958,25 +1958,25 @@
             GridViewProductTaxDetails.AllowUserToResizeColumns = false;
             GridViewProductTaxDetails.AllowUserToResizeRows = false;
             GridViewProductTaxDetails.BackgroundColor = SystemColors.Window;
-            dataGridViewCellStyle33.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle33.BackColor = SystemColors.Control;
-            dataGridViewCellStyle33.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle33.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle33.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle33.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle33.WrapMode = DataGridViewTriState.True;
-            GridViewProductTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle33;
+            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle9.BackColor = SystemColors.Control;
+            dataGridViewCellStyle9.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle9.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle9.WrapMode = DataGridViewTriState.True;
+            GridViewProductTaxDetails.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             GridViewProductTaxDetails.ColumnHeadersHeight = 20;
             GridViewProductTaxDetails.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewProductTaxDetails.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn2, dataGridViewTextBoxColumn6, dataGridViewTextBoxColumn4 });
-            dataGridViewCellStyle35.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle35.BackColor = SystemColors.Window;
-            dataGridViewCellStyle35.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle35.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle35.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle35.SelectionForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle35.WrapMode = DataGridViewTriState.False;
-            GridViewProductTaxDetails.DefaultCellStyle = dataGridViewCellStyle35;
+            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = SystemColors.Window;
+            dataGridViewCellStyle11.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle11.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle11.SelectionForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle11.WrapMode = DataGridViewTriState.False;
+            GridViewProductTaxDetails.DefaultCellStyle = dataGridViewCellStyle11;
             GridViewProductTaxDetails.EditMode = DataGridViewEditMode.EditOnEnter;
             GridViewProductTaxDetails.EnableHeadersVisualStyles = false;
             GridViewProductTaxDetails.Location = new Point(535, 331);
@@ -2004,8 +2004,8 @@
             // 
             dataGridViewTextBoxColumn6.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             dataGridViewTextBoxColumn6.Currencylength = 6;
-            dataGridViewCellStyle34.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle34;
+            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewTextBoxColumn6.DefaultCellStyle = dataGridViewCellStyle10;
             dataGridViewTextBoxColumn6.HeaderText = "Percentage";
             dataGridViewTextBoxColumn6.Name = "dataGridViewTextBoxColumn6";
             dataGridViewTextBoxColumn6.ReadOnly = true;
@@ -2235,8 +2235,8 @@
             // 
             // Column2
             // 
-            dataGridViewCellStyle36.NullValue = "X";
-            Column2.DefaultCellStyle = dataGridViewCellStyle36;
+            dataGridViewCellStyle12.NullValue = "X";
+            Column2.DefaultCellStyle = dataGridViewCellStyle12;
             Column2.HeaderText = "";
             Column2.Name = "Column2";
             Column2.ReadOnly = true;
