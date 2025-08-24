@@ -1636,6 +1636,7 @@
             BtnPrintTocken.TabStop = false;
             BtnPrintTocken.Text = "Print Tocken";
             BtnPrintTocken.UseVisualStyleBackColor = true;
+            BtnPrintTocken.Visible = false;
             BtnPrintTocken.Click += BtnPrintTocken_Click;
             BtnPrintTocken.PreviewKeyDown += BtnPrintTocken_PreviewKeyDown;
             // 
