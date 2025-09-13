@@ -1690,6 +1690,29 @@ namespace fa.libraries.utils
                 SelectBox.TreeNodes = parent;
             }
         }
+        public static void InitializeAllCustomerCombo(ToolstripCheckedTreeComboBox SelectBox, long CompanyId)
+        {
+            IList<Customer> Customers = CustomerManager.Instance.ListCustomerByCompanyId(CompanyId).ToArray<Customer>();
+
+            SelectBox.Nodes.Clear();
+            if (Customers.Count > 0)
+            {
+                if ((Customers.Count == 0) || (Customers.Count > 1))
+                {
+                    ComboTreeNode parent = new ComboTreeNode();
+                    parent.Name = "All";
+                    parent.Text = "All";
+                    SelectBox.TreeNodes = parent;
+                }
+            }
+            foreach (var Customer in Customers)
+            {
+                ComboTreeNode parent = new ComboTreeNode();
+                parent.Name = Customer.Id.ToString();
+                parent.Text = Customer.Name;
+                SelectBox.TreeNodes = parent;
+            }
+        }
         public static void InitializeAllPFamilyCombo(ToolstripCheckedTreeComboBox SelectBox, long CompanyId)
         {
             CatalogProductFamilyManager catalogProductFamilyManager = CatalogProductFamilyManager.Instance;

@@ -54,20 +54,20 @@
             toolStripLabel4 = new ToolStripLabel();
             ComboBoxReportType = new ToolStripComboBox();
             LabelCategory = new ToolStripLabel();
-            ComboBoxProductFamily = new views.controls.ToolstripCheckedTreeComboBox();
-            ComboBoxCategory = new views.controls.ToolstripCheckedTreeComboBox();
-            ComboBoxSupplier = new views.controls.ToolstripCheckedTreeComboBox();
-            ComboBoxRack = new views.controls.ToolstripCheckedTreeComboBox();
-            ComboBoxManufacturer = new views.controls.ToolstripCheckedTreeComboBox();
+            ComboBoxProductFamily = new fa.views.controls.ToolstripCheckedTreeComboBox();
+            ComboBoxCategory = new fa.views.controls.ToolstripCheckedTreeComboBox();
+            ComboBoxSupplier = new fa.views.controls.ToolstripCheckedTreeComboBox();
+            ComboBoxRack = new fa.views.controls.ToolstripCheckedTreeComboBox();
+            ComboBoxManufacturer = new fa.views.controls.ToolstripCheckedTreeComboBox();
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripLabel1 = new ToolStripLabel();
-            ComboStockReportLocation = new views.controls.ToolstripCheckedTreeComboBox();
+            ComboStockReportLocation = new fa.views.controls.ToolstripCheckedTreeComboBox();
             toolStripLabel3 = new ToolStripLabel();
-            StockReportFromDate = new views.controls.ToolStripCalendar();
+            StockReportFromDate = new fa.views.controls.ToolStripCalendar();
             toolStripLabel2 = new ToolStripLabel();
-            StockReportToDate = new views.controls.ToolStripCalendar();
+            StockReportToDate = new fa.views.controls.ToolStripCalendar();
             toolStripSeparator5 = new ToolStripSeparator();
-            BatchwiseCheck = new views.controls.ToolStripCheckBox();
+            BatchwiseCheck = new fa.views.controls.ToolStripCheckBox();
             RunReportButton = new ToolStripButton();
             toolStripSeparator2 = new ToolStripSeparator();
             ToolStripBtnSave = new ToolStripButton();
@@ -79,7 +79,7 @@
             BtnSave = new Button();
             ErrorMsg = new ToolStripStatusLabel();
             StockReportstatusStrip1 = new StatusStrip();
-            StockReportDataGridView = new views.controls.DataViewVerticalScroll();
+            StockReportDataGridView = new fa.views.controls.DataViewVerticalScroll();
             Column1 = new DataGridViewTextBoxColumn();
             MId = new DataGridViewTextBoxColumn();
             NAM = new DataGridViewTextBoxColumn();
@@ -122,7 +122,7 @@
             // toolStripLabel4
             // 
             toolStripLabel4.Name = "toolStripLabel4";
-            toolStripLabel4.Size = new Size(31, 25);
+            toolStripLabel4.Size = new Size(32, 25);
             toolStripLabel4.Text = "Type";
             // 
             // ComboBoxReportType

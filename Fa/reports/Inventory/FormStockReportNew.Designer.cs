@@ -433,7 +433,7 @@
             // toolStripLabel4
             // 
             toolStripLabel4.Name = "toolStripLabel4";
-            toolStripLabel4.Size = new Size(31, 25);
+            toolStripLabel4.Size = new Size(32, 25);
             toolStripLabel4.Text = "Type";
             // 
             // ComboBoxReportType

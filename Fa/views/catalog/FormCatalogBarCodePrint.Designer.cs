@@ -117,7 +117,7 @@
             // 
             BtnCancel.DialogResult = DialogResult.Cancel;
             BtnCancel.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnCancel.Location = new Point(132, 220);
+            BtnCancel.Location = new Point(132, 225);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new Size(83, 23);
             BtnCancel.TabIndex = 6;
@@ -128,7 +128,7 @@
             // BtnPrint
             // 
             BtnPrint.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnPrint.Location = new Point(221, 220);
+            BtnPrint.Location = new Point(221, 225);
             BtnPrint.Name = "BtnPrint";
             BtnPrint.Size = new Size(83, 23);
             BtnPrint.TabIndex = 5;
@@ -140,7 +140,7 @@
             // 
             Print.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             Print.Items.AddRange(new ToolStripItem[] { PrintErrorMsg });
-            Print.Location = new Point(0, 249);
+            Print.Location = new Point(0, 254);
             Print.Name = "Print";
             Print.Size = new Size(316, 22);
             Print.TabIndex = 10;
@@ -183,7 +183,7 @@
             groupBox2.Controls.Add(label1);
             groupBox2.Location = new Point(8, 3);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(302, 215);
+            groupBox2.Size = new Size(302, 218);
             groupBox2.TabIndex = 12;
             groupBox2.TabStop = false;
             // 
@@ -289,7 +289,7 @@
             // 
             lblWarning.AutoSize = true;
             lblWarning.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            lblWarning.ForeColor = Color.Red;
+            lblWarning.ForeColor = Color.Fuchsia;
             lblWarning.Location = new Point(20, 200);
             lblWarning.Name = "lblWarning";
             lblWarning.Size = new Size(134, 13);
@@ -303,7 +303,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             CancelButton = BtnCancel;
-            ClientSize = new Size(316, 271);
+            ClientSize = new Size(316, 276);
             Controls.Add(lblWarning);
             Controls.Add(BtnCancel);
             Controls.Add(groupBox2);

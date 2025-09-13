@@ -41,6 +41,7 @@ using fa.views.users;
 using fa.views.utils;
 using Fa.api.Hms;
 using Fa.reports.account.transaction;
+using Fa.reports.catalog;
 using Fa.reports.Hms;
 using Fa.reports.Inventory;
 using Fa.reports.Purchase;
@@ -2421,6 +2422,18 @@ namespace fa.views
         {
             FormBarCodeCounterSetUp formBarCodeCounterSetUp = new FormBarCodeCounterSetUp();
             formBarCodeCounterSetUp.ShowDialog();
+        }
+
+        private void itemSalesReportToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormItemSalesReport formItemSalesReport = new FormItemSalesReport(0, "", DateTime.Today.AddMonths(-1), DateTime.Today);
+            formItemSalesReport.ShowDialog();
+        }
+
+        private void priceViewerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormProductPriceSeeker formProductPriceSeeker = new FormProductPriceSeeker();
+            formProductPriceSeeker.ShowDialog();
         }
     }
     public class DayAppointment

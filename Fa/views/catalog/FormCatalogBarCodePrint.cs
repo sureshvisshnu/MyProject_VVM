@@ -52,16 +52,6 @@ namespace fa.views.catalog
                     if (ProductId != 0L)
                     {
                         SavePrintBarcode.GenerateBarcodeA4(ProductId, "A4SheetBarCode", "pdf", true, TextBoxStartLocation.Text, int.Parse(TextBoxPrintQuantity.Text), ComboBoxDefaultPrinter.Text);
-                        //SavePrintBarcode.GenerateCompactBarcodeLabel(
-                        //    ProductId,  // First parameter should be the product ID
-                        //    "A4SheetBarCode",
-                        //    "pdf",
-                        //    true,
-                        //    TextBoxStartLocation.Text,
-                        //    int.Parse(TextBoxPrintQuantity.Text),
-                        //    ComboBoxDefaultPrinter.Text
-                        //);
-
                     }
                     else
                     {
@@ -82,28 +72,6 @@ namespace fa.views.catalog
 
                             var savePrint = new SavePrintBarcode();
 
-                            // Common action after printing
-                            //Action<int> handlePrintComplete = (qtyPrinted) =>
-                            //{
-                            //    int wastedLabels = CalculateWastedLabels(qtyPrinted);
-                            //    int totalLabelsUsed = qtyPrinted + wastedLabels;
-
-                            //    // Update DB stock
-                            //    UpdateLabelUsage(qtyPrinted, wastedLabels);
-
-                            //    // Refresh label stock info
-                            //    var stockInfo = BarCodeLabelManager.Instance
-                            //        .GetLabelStockInfo(ComboBoxLabelSize.Text);
-
-                            //    if (stockInfo != null)
-                            //    {
-                            //        TextBoxlblTodayPrinted.Text = (stockInfo.LabelsPrintedToday).ToString();
-                            //        TextBoxlblTotalBalance.Text = (stockInfo.TotalLabelCount - stockInfo.RunningCount).ToString();
-                            //    }
-                            //    LoadLabelStockInfo();
-                            //    // Optional: message to confirm
-                            //    //MessageBox.Show($"Printed: {qtyPrinted}, Wasted: {wastedLabels}, Remaining: {TextBoxlblTotalBalance.Text}");
-                            //};
                             Action<int> handlePrintComplete = (qtyPrinted) =>
                             {
                                 int wastedLabels = CalculateWastedLabels(qtyPrinted);
@@ -387,7 +355,8 @@ namespace fa.views.catalog
 
                     if (stock.RemainingCount <= stock.ThresholdWarning)
                     {
-                        lblWarning.Text = "⚠ Low stock!";
+                        lblWarning.Text = "⚠ Low stock! = Remaining Label : " +  stock.RemainingCount 
+                        ;
                         lblWarning.Visible = true;
                     }
                     else
