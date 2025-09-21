@@ -1077,7 +1077,7 @@ namespace Fa.reports.sales
 
         private void BtnExit_Click(object sender, EventArgs e)
         {
-
+            this.Close();
         }
         //  Update window title based on selected items 
         // ------------- ******** -------------
