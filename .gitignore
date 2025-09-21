@@ -458,3 +458,6 @@ $RECYCLE.BIN/
 /Fa/views/hms/patient/FormConsulting.cs
 /Fa/views/Container.resx
 /Fa/views/Container.Designer.cs
+/Fa/views/sales/FormItembasedSalesNoTax .cs
+/Fa/views/sales/FormItembasedSalesNoTax .Designer.cs
+/Fa/views/sales/FormItembasedSalesNoTax .resx
