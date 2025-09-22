@@ -304,7 +304,7 @@ namespace Fa.views.utils.Sale
                 // Set column widths based on orientation
                 float[] widths = isLandscape
                     ? new float[] { 20f, 90f, 20f, 20f, 25f, 30f }
-                    : new float[] { 20f, 100f, 20f, 20f, 25f, 30f };
+                    : new float[] { 18f, 100f, 20f, 25f, 25f, 30f };
                 // { 8f, 40f, 12f, 12f, 20f, 25f };
                 table.SetWidths(widths);
                 table = CreateSalesMainTableHeader(table, dataTable);
