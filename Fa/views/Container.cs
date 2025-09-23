@@ -52,6 +52,7 @@ using Fa.views.hms.op;
 using Fa.views.hms.patient;
 using Fa.views.inventory;
 using Fa.views.purchase;
+using Fa.views.sales;
 using Fa.views.utils.Common;
 using FADataAccessLibrary.Api.Hms;
 using iTextSharp.text.pdf.parser.clipper;
@@ -2434,6 +2435,12 @@ namespace fa.views
         {
             FormProductPriceSeeker formProductPriceSeeker = new FormProductPriceSeeker();
             formProductPriceSeeker.ShowDialog();
+        }
+
+        private void salesNoTaxToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormSalesEntryWithoutTax formSalesEntryWithoutTax = new FormSalesEntryWithoutTax();
+            formSalesEntryWithoutTax.ShowDialog();
         }
     }
     public class DayAppointment

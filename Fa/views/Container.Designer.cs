@@ -49,6 +49,7 @@
             logoutMenuItem = new ToolStripMenuItem();
             exitMenuItem = new ToolStripMenuItem();
             salesMenuItem = new ToolStripMenuItem();
+            salesNoTaxToolStripMenuItem = new ToolStripMenuItem();
             invoiceToolStripMenuItem = new ToolStripMenuItem();
             quoteToolStripMenuItem = new ToolStripMenuItem();
             returnToolStripMenuItem = new ToolStripMenuItem();
@@ -167,6 +168,7 @@
             importDataToolStripMenuItem = new ToolStripMenuItem();
             manageItemTaxToolStripMenuItem = new ToolStripMenuItem();
             barCodeLabelReplaceToolStripMenuItem = new ToolStripMenuItem();
+            priceViewerToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator7 = new ToolStripSeparator();
             employeeToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator6 = new ToolStripSeparator();
@@ -324,7 +326,6 @@
             Column54 = new DataGridViewTextBoxColumn();
             Column55 = new DataGridViewTextBoxColumn();
             contextMenuAppointment = new ContextMenuStrip(components);
-            priceViewerToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             toolStripLoginInfo.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -395,11 +396,19 @@
             // 
             // salesMenuItem
             // 
-            salesMenuItem.DropDownItems.AddRange(new ToolStripItem[] { invoiceToolStripMenuItem, quoteToolStripMenuItem, returnToolStripMenuItem, saleReportToolStripMenuItem, receivePaymentToolStripMenuItem, deliveryToolStripMenuItem });
+            salesMenuItem.DropDownItems.AddRange(new ToolStripItem[] { salesNoTaxToolStripMenuItem, invoiceToolStripMenuItem, quoteToolStripMenuItem, returnToolStripMenuItem, saleReportToolStripMenuItem, receivePaymentToolStripMenuItem, deliveryToolStripMenuItem });
             salesMenuItem.Name = "salesMenuItem";
             salesMenuItem.Size = new Size(44, 24);
             salesMenuItem.Text = "&Sales";
             salesMenuItem.Visible = false;
+            // 
+            // salesNoTaxToolStripMenuItem
+            // 
+            salesNoTaxToolStripMenuItem.Image = (Image)resources.GetObject("salesNoTaxToolStripMenuItem.Image");
+            salesNoTaxToolStripMenuItem.Name = "salesNoTaxToolStripMenuItem";
+            salesNoTaxToolStripMenuItem.Size = new Size(225, 26);
+            salesNoTaxToolStripMenuItem.Text = "Sales No Tax";
+            salesNoTaxToolStripMenuItem.Click += salesNoTaxToolStripMenuItem_Click;
             // 
             // invoiceToolStripMenuItem
             // 
@@ -1388,6 +1397,14 @@
             barCodeLabelReplaceToolStripMenuItem.Size = new Size(221, 26);
             barCodeLabelReplaceToolStripMenuItem.Text = "BarCode Label Replace";
             barCodeLabelReplaceToolStripMenuItem.Click += barCodeLabelReplaceToolStripMenuItem_Click;
+            // 
+            // priceViewerToolStripMenuItem
+            // 
+            priceViewerToolStripMenuItem.Image = (Image)resources.GetObject("priceViewerToolStripMenuItem.Image");
+            priceViewerToolStripMenuItem.Name = "priceViewerToolStripMenuItem";
+            priceViewerToolStripMenuItem.Size = new Size(221, 26);
+            priceViewerToolStripMenuItem.Text = "Price Viewer";
+            priceViewerToolStripMenuItem.Click += priceViewerToolStripMenuItem_Click;
             // 
             // toolStripSeparator7
             // 
@@ -2993,14 +3010,6 @@
             contextMenuAppointment.Name = "contextMenuAppointment";
             contextMenuAppointment.Size = new Size(61, 4);
             // 
-            // priceViewerToolStripMenuItem
-            // 
-            priceViewerToolStripMenuItem.Image = (Image)resources.GetObject("priceViewerToolStripMenuItem.Image");
-            priceViewerToolStripMenuItem.Name = "priceViewerToolStripMenuItem";
-            priceViewerToolStripMenuItem.Size = new Size(221, 26);
-            priceViewerToolStripMenuItem.Text = "Price Viewer";
-            priceViewerToolStripMenuItem.Click += priceViewerToolStripMenuItem_Click;
-            // 
             // Container
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
@@ -3331,6 +3340,7 @@
         private ToolStripMenuItem barCodeLabelReplaceToolStripMenuItem;
         private ToolStripMenuItem itemSalesReportToolStripMenuItem;
         private ToolStripMenuItem priceViewerToolStripMenuItem;
+        private ToolStripMenuItem salesNoTaxToolStripMenuItem;
     }
 }
 

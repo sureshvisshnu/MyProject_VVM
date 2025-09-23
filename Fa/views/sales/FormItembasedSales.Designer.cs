@@ -528,7 +528,7 @@
             // StatusStripSales
             // 
             StatusStripSales.Items.AddRange(new ToolStripItem[] { ToolStripStatusLabelErrorPurchase });
-            StatusStripSales.Location = new Point(0, 627);
+            StatusStripSales.Location = new Point(0, 639);
             StatusStripSales.Name = "StatusStripSales";
             StatusStripSales.Size = new Size(1353, 22);
             StatusStripSales.TabIndex = 189;
@@ -1071,7 +1071,7 @@
             SaleProductDetails.BatchId = 0L;
             SaleProductDetails.CurrentDate = null;
             SaleProductDetails.EditableStock = 0D;
-            SaleProductDetails.Location = new Point(1076, 43);
+            SaleProductDetails.Location = new Point(1075, 43);
             SaleProductDetails.LocationId = 0L;
             SaleProductDetails.Margin = new Padding(4, 3, 4, 3);
             SaleProductDetails.Name = "SaleProductDetails";
@@ -1264,9 +1264,9 @@
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1353, 649);
-            Controls.Add(ComboBoxInvoicePriceBy);
+            ClientSize = new Size(1353, 661);
             Controls.Add(ComboBoxSaleInventoryLocation);
+            Controls.Add(ComboBoxInvoicePriceBy);
             Controls.Add(YesNoRadioPriceTo);
             Controls.Add(label29);
             Controls.Add(label23);
@@ -1376,8 +1376,8 @@
             Controls.SetChildIndex(label23, 0);
             Controls.SetChildIndex(label29, 0);
             Controls.SetChildIndex(YesNoRadioPriceTo, 0);
-            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
             Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
+            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
