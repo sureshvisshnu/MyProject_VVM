@@ -71,6 +71,7 @@ namespace fa.model.OrderManagement
         public long? RegistrationId { get; set; }
         [ForeignKey("RegistrationId")]
         public Registration Registration { get; set; }
+        public long? PaymentType { get; set; }
     }
 
     public enum Entrytype
