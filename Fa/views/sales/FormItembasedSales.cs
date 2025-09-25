@@ -11,6 +11,7 @@ using fa.libraries.utils;
 using fa.libraries.Validation;
 using fa.model.Accounting.Masters;
 using fa.model.Accounting.Transaction;
+using fa.model.Accounting.Transactions;
 using fa.model.catalog;
 using fa.model.Catalog;
 using fa.model.Common;
@@ -29,6 +30,7 @@ using fa.views.sales;
 using fa.views.utils;
 using Fa.api.catalog;
 using Fa.report.accounting.master;
+using Fa.reports.catalog;
 using Fa.views.sales;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
@@ -3118,6 +3120,16 @@ namespace fa.views.sales
             }
             Cursor.Current = Cursors.Default;
         }
+        private void ShowPrice()
+        {
+            if (GridViewSalesItem.CurrentRow != null)
+            {
+                long productId = GridViewSalesItem.CurrentRow?.Cells[(int)SaleEntryTableColumn.ID]?.Value as long? ?? 0L;
+
+                FormProductPriceSeeker formProductPriceSeeker = new FormProductPriceSeeker(productId);
+                formProductPriceSeeker.ShowDialog();
+            }
+        }
 
         private void SearchProduct()
         {
@@ -3619,6 +3631,11 @@ namespace fa.views.sales
                         if (keyData == Keys.F5)
                         {
                             SearchPreviousPrice();
+                            return true;
+                        }
+                        if (keyData == Keys.F7)
+                        {
+                            ShowPrice();
                             return true;
                         }
                     }

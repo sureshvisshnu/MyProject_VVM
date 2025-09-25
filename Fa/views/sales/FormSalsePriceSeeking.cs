@@ -44,31 +44,25 @@ namespace Fa.views.sales
                     customerId: this.CustomerId
                 );
 
-                // Populate the grid
-                int rowNum = 1;
+                // Clear old rows
+                GridViewItems.Rows.Clear();
 
-                foreach (var sale in sales)
+                int rowNum = 1;
+                foreach (var sale in sales.Take(5)) // limit to last 5
                 {
-                    GridViewItems.Rows.Add(
-                        rowNum++,
-                        sale.Sale?.SaleDate.ToString(Global.Company.DateFormat), // formatted date
-                        sale.Price.ToString(Global.Company.PrimaryCurrency.CurrencyFormat), // correct
-                        sale.Id
-                    );
+                    DataGridViewRow row = new DataGridViewRow();
+                    row.CreateCells(GridViewItems);
+
+                    row.Cells[0].Value = rowNum++;
+                    row.Cells[1].Value = sale.Sale?.SaleDate.ToString(Global.Company.DateFormat);
+                    row.Cells[2].Value = sale.Price.ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
+                    row.Cells[3].Value = sale.Id;
+
+                    GridViewItems.Rows.Add(row);
                 }
+
                 GridViewItems.ClearSelection();
-                // Update product details
-                using (var context = new AccountMasterContext())
-                {
-                    var product = context.Products.FirstOrDefault(p => p.Id == ProductId);
-                    if (product != null)
-                    {
-                        //TextBoxCategory.Text = product.c;
-                        //TextBoxProductFamily.Text = product.ProductFamily;
-                        //TextBoxManufacturer.Text = product.Manufacturer;
-                        //TextBoxSupplier.Text = product.Supplier;
-                    }
-                }
+
             }
             catch (Exception ex)
             {

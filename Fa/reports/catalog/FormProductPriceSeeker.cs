@@ -15,12 +15,31 @@ namespace Fa.reports.catalog
 {
     public partial class FormProductPriceSeeker : Form
     {
-        public FormProductPriceSeeker()
+        public FormProductPriceSeeker(long? productId = null)
         {
             InitializeComponent();
-            TextBoxCatalogSearch.TextChanged += TextBoxCatalogSearch_TextChanged!;
             BtnExit.Click += BtnExit_Click!;
+
+            if (productId.HasValue)
+            {
+                if (Global.ProductDetailList == null || Global.ProductDetailList.Count == 0)
+                {
+                    Global.ProductDetailList = CatalogProductManager.Instance.ListProductByCompanyId(Global.Company.CompanyId);
+                }
+
+                var product = Global.ProductDetailList.FirstOrDefault(p => p.Id == productId.Value);
+                if (product != null)
+                {
+                    ShowProductPrices(product);
+                }
+                else
+                {
+                    PRODUCTNAME.Text = "Product Not Found!";
+                    ClearPrices();
+                }
+            }
         }
+
 
         private void BtnExit_Click(object sender, EventArgs e)
         {

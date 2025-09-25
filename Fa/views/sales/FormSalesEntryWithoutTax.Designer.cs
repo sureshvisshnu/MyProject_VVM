@@ -44,6 +44,17 @@
             TextBoxSearchPrescription = new ToolStripTextBox();
             BtnPrescriptionBySearch = new ToolStripButton();
             GroupBoxProductDetails = new GroupBox();
+            BtnExportPdf = new Button();
+            TextBoxSalesType = new TextBox();
+            BtnSalesReturn = new Button();
+            BtnReceivePayment = new Button();
+            TextBoxSalesId = new TextBox();
+            BtnSalesDelete = new Button();
+            BtnSalesNew = new Button();
+            BtnSalesExit = new Button();
+            BtnSalesPrint = new Button();
+            BtnSalesCancel = new Button();
+            BtnSalesSave = new Button();
             VVMStatusStripSalesEntryWithoutTax.SuspendLayout();
             VVMToolStripSalesEntryWithoutTax.SuspendLayout();
             SuspendLayout();
@@ -157,11 +168,132 @@
             GroupBoxProductDetails.TabStop = false;
             GroupBoxProductDetails.Text = "Product Details";
             // 
+            // BtnExportPdf
+            // 
+            BtnExportPdf.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnExportPdf.Location = new Point(393, 605);
+            BtnExportPdf.Name = "BtnExportPdf";
+            BtnExportPdf.Size = new Size(83, 24);
+            BtnExportPdf.TabIndex = 212;
+            BtnExportPdf.Text = "Export Pdf";
+            BtnExportPdf.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxSalesType
+            // 
+            TextBoxSalesType.Location = new Point(269, 608);
+            TextBoxSalesType.Margin = new Padding(2);
+            TextBoxSalesType.Name = "TextBoxSalesType";
+            TextBoxSalesType.Size = new Size(79, 23);
+            TextBoxSalesType.TabIndex = 214;
+            TextBoxSalesType.TabStop = false;
+            TextBoxSalesType.Visible = false;
+            // 
+            // BtnSalesReturn
+            // 
+            BtnSalesReturn.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSalesReturn.Location = new Point(482, 605);
+            BtnSalesReturn.Name = "BtnSalesReturn";
+            BtnSalesReturn.Size = new Size(75, 24);
+            BtnSalesReturn.TabIndex = 208;
+            BtnSalesReturn.Text = "Return";
+            BtnSalesReturn.UseVisualStyleBackColor = true;
+            // 
+            // BtnReceivePayment
+            // 
+            BtnReceivePayment.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnReceivePayment.Location = new Point(563, 605);
+            BtnReceivePayment.Name = "BtnReceivePayment";
+            BtnReceivePayment.Size = new Size(144, 24);
+            BtnReceivePayment.TabIndex = 207;
+            BtnReceivePayment.Text = "Receive Payment [F6]";
+            BtnReceivePayment.UseVisualStyleBackColor = true;
+            // 
+            // TextBoxSalesId
+            // 
+            TextBoxSalesId.Location = new Point(186, 608);
+            TextBoxSalesId.Margin = new Padding(2);
+            TextBoxSalesId.Name = "TextBoxSalesId";
+            TextBoxSalesId.Size = new Size(79, 23);
+            TextBoxSalesId.TabIndex = 213;
+            TextBoxSalesId.TabStop = false;
+            TextBoxSalesId.Visible = false;
+            // 
+            // BtnSalesDelete
+            // 
+            BtnSalesDelete.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSalesDelete.Location = new Point(98, 606);
+            BtnSalesDelete.Name = "BtnSalesDelete";
+            BtnSalesDelete.Size = new Size(83, 24);
+            BtnSalesDelete.TabIndex = 209;
+            BtnSalesDelete.Text = "Delete [F4]";
+            BtnSalesDelete.UseVisualStyleBackColor = true;
+            // 
+            // BtnSalesNew
+            // 
+            BtnSalesNew.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSalesNew.Location = new Point(9, 606);
+            BtnSalesNew.Name = "BtnSalesNew";
+            BtnSalesNew.Size = new Size(83, 24);
+            BtnSalesNew.TabIndex = 210;
+            BtnSalesNew.Text = "New [F3]";
+            BtnSalesNew.UseVisualStyleBackColor = true;
+            // 
+            // BtnSalesExit
+            // 
+            BtnSalesExit.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSalesExit.Location = new Point(980, 605);
+            BtnSalesExit.Name = "BtnSalesExit";
+            BtnSalesExit.Size = new Size(75, 24);
+            BtnSalesExit.TabIndex = 211;
+            BtnSalesExit.Text = "Exit [F10]";
+            BtnSalesExit.UseVisualStyleBackColor = true;
+            // 
+            // BtnSalesPrint
+            // 
+            BtnSalesPrint.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSalesPrint.Location = new Point(713, 605);
+            BtnSalesPrint.Name = "BtnSalesPrint";
+            BtnSalesPrint.Size = new Size(83, 24);
+            BtnSalesPrint.TabIndex = 206;
+            BtnSalesPrint.Text = "Print [F9]";
+            BtnSalesPrint.UseVisualStyleBackColor = true;
+            // 
+            // BtnSalesCancel
+            // 
+            BtnSalesCancel.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSalesCancel.Location = new Point(802, 605);
+            BtnSalesCancel.Name = "BtnSalesCancel";
+            BtnSalesCancel.Size = new Size(83, 24);
+            BtnSalesCancel.TabIndex = 205;
+            BtnSalesCancel.Text = "Cancel [Esc]";
+            BtnSalesCancel.UseVisualStyleBackColor = true;
+            // 
+            // BtnSalesSave
+            // 
+            BtnSalesSave.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSalesSave.Location = new Point(891, 605);
+            BtnSalesSave.Name = "BtnSalesSave";
+            BtnSalesSave.Size = new Size(83, 24);
+            BtnSalesSave.TabIndex = 204;
+            BtnSalesSave.Text = "Save [F8]";
+            BtnSalesSave.UseVisualStyleBackColor = true;
+            // 
             // FormSalesEntryWithoutTax
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1353, 661);
+            Controls.Add(BtnExportPdf);
+            Controls.Add(TextBoxSalesType);
+            Controls.Add(BtnSalesReturn);
+            Controls.Add(BtnReceivePayment);
+            Controls.Add(TextBoxSalesId);
+            Controls.Add(BtnSalesDelete);
+            Controls.Add(BtnSalesNew);
+            Controls.Add(BtnSalesExit);
+            Controls.Add(BtnSalesPrint);
+            Controls.Add(BtnSalesCancel);
+            Controls.Add(BtnSalesSave);
             Controls.Add(GroupBoxProductDetails);
             Controls.Add(VVMToolStripSalesEntryWithoutTax);
             Controls.Add(VVMStatusStripSalesEntryWithoutTax);
@@ -178,6 +310,17 @@
             Controls.SetChildIndex(AccountIdTransport, 0);
             Controls.SetChildIndex(checkBoxIsPatient, 0);
             Controls.SetChildIndex(GroupBoxProductDetails, 0);
+            Controls.SetChildIndex(BtnSalesSave, 0);
+            Controls.SetChildIndex(BtnSalesCancel, 0);
+            Controls.SetChildIndex(BtnSalesPrint, 0);
+            Controls.SetChildIndex(BtnSalesExit, 0);
+            Controls.SetChildIndex(BtnSalesNew, 0);
+            Controls.SetChildIndex(BtnSalesDelete, 0);
+            Controls.SetChildIndex(TextBoxSalesId, 0);
+            Controls.SetChildIndex(BtnReceivePayment, 0);
+            Controls.SetChildIndex(BtnSalesReturn, 0);
+            Controls.SetChildIndex(TextBoxSalesType, 0);
+            Controls.SetChildIndex(BtnExportPdf, 0);
             VVMStatusStripSalesEntryWithoutTax.ResumeLayout(false);
             VVMStatusStripSalesEntryWithoutTax.PerformLayout();
             VVMToolStripSalesEntryWithoutTax.ResumeLayout(false);
@@ -203,5 +346,16 @@
         private ToolStripTextBox TextBoxSearchPrescription;
         private ToolStripButton BtnPrescriptionBySearch;
         private GroupBox GroupBoxProductDetails;
+        private Button BtnExportPdf;
+        private TextBox TextBoxSalesType;
+        private Button BtnSalesReturn;
+        private Button BtnReceivePayment;
+        private TextBox TextBoxSalesId;
+        private Button BtnSalesDelete;
+        private Button BtnSalesNew;
+        private Button BtnSalesExit;
+        private Button BtnSalesPrint;
+        private Button BtnSalesCancel;
+        private Button BtnSalesSave;
     }
 }

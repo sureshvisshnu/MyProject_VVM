@@ -154,6 +154,9 @@
             label23 = new Label();
             YesNoRadioPriceTo = new fa.views.controls.YesNoRadio();
             label29 = new Label();
+            AmountReceivedGB = new GroupBox();
+            ComboBoxPaymentType = new fa.views.controls.ComboBoxSwapTextBox();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).BeginInit();
             toolStrip1.SuspendLayout();
             StatusStripSales.SuspendLayout();
@@ -161,6 +164,7 @@
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBoxPrintSetup.SuspendLayout();
+            AmountReceivedGB.SuspendLayout();
             SuspendLayout();
             // 
             // ProductIdTransport
@@ -1260,6 +1264,38 @@
             label29.Text = "Update Sale Price By";
             label29.Visible = false;
             // 
+            // AmountReceivedGB
+            // 
+            AmountReceivedGB.Controls.Add(ComboBoxPaymentType);
+            AmountReceivedGB.Controls.Add(label1);
+            AmountReceivedGB.Location = new Point(594, 531);
+            AmountReceivedGB.Name = "AmountReceivedGB";
+            AmountReceivedGB.Size = new Size(200, 54);
+            AmountReceivedGB.TabIndex = 228;
+            AmountReceivedGB.TabStop = false;
+            // 
+            // ComboBoxPaymentType
+            // 
+            ComboBoxPaymentType.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxPaymentType.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxPaymentType.FormattingEnabled = true;
+            ComboBoxPaymentType.Items.AddRange(new object[] { "CASH", "CHECK", "CREDITCARD", "BANKTRANSFER", "PHONE PAYMENT" });
+            ComboBoxPaymentType.Location = new Point(8, 28);
+            ComboBoxPaymentType.Name = "ComboBoxPaymentType";
+            ComboBoxPaymentType.Size = new Size(121, 21);
+            ComboBoxPaymentType.TabIndex = 39;
+            ComboBoxPaymentType.TxtVisible = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            label1.Location = new Point(6, 11);
+            label1.Name = "label1";
+            label1.Size = new Size(89, 13);
+            label1.TabIndex = 40;
+            label1.Text = "Payment Type";
+            // 
             // FormItembasedSales
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
@@ -1267,6 +1303,7 @@
             ClientSize = new Size(1353, 661);
             Controls.Add(ComboBoxSaleInventoryLocation);
             Controls.Add(ComboBoxInvoicePriceBy);
+            Controls.Add(AmountReceivedGB);
             Controls.Add(YesNoRadioPriceTo);
             Controls.Add(label29);
             Controls.Add(label23);
@@ -1376,6 +1413,7 @@
             Controls.SetChildIndex(label23, 0);
             Controls.SetChildIndex(label29, 0);
             Controls.SetChildIndex(YesNoRadioPriceTo, 0);
+            Controls.SetChildIndex(AmountReceivedGB, 0);
             Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
             Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
@@ -1390,6 +1428,8 @@
             groupBox2.PerformLayout();
             groupBoxPrintSetup.ResumeLayout(false);
             groupBoxPrintSetup.PerformLayout();
+            AmountReceivedGB.ResumeLayout(false);
+            AmountReceivedGB.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1505,5 +1545,7 @@
         private Label label23;
         private controls.YesNoRadio YesNoRadioPriceTo;
         private Label label29;
+        private GroupBox AmountReceivedGB;
+        private controls.ComboBoxSwapTextBox ComboBoxPaymentType;
     }
 }
