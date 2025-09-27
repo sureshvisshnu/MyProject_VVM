@@ -166,6 +166,7 @@ namespace fa.views.sales
             {
                 LoadSaleEntry(SearchSalesId);
             }
+            ComboBoxPaymentType.SelectedIndex = 0;
             Cursor.Current = Cursors.Default;
         }
         private void setSize()
@@ -230,6 +231,7 @@ namespace fa.views.sales
             {
                 lSaleEntry.CostCenterId = Global.CostCenter.CostCenterId;
             }
+            lSaleEntry.PaymentType = ComboBoxPaymentType.SelectedIndex > -1 ? (long?)(PaymentTransactioType)ComboBoxPaymentType.SelectedIndex : null;
             float TotalAmount = float.Parse(GridViewPurchaseItemTotal.Rows[0].Cells[(int)SaleEntryTotalTableColumn.VALUE].Value.ToString()!);
             float TotalTaxAmount = 0;
             float TotalDiscountPercentage = 0;
@@ -1387,6 +1389,15 @@ namespace fa.views.sales
                 TextBoxSalesMemo.Text = !string.IsNullOrEmpty(SaleEntry.Memo) ? SaleEntry.Memo.Replace("\n", System.Environment.NewLine) : string.Empty;
                 DatetimePickerSalesDate.Date = (DateTime)DateUtils.ToDate(SaleEntry.SaleDate.ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
                 YesNoRbtSalesMethod.Checked = (SaleEntry.SaleMethod == SaleMethod.Credit) ? true : false;
+                // ✅ Restore payment type
+                if (SaleEntry.PaymentType != null)
+                {
+                    ComboBoxPaymentType.SelectedIndex = (int)SaleEntry.PaymentType.Value;
+                }
+                else
+                {
+                    ComboBoxPaymentType.SelectedIndex = -1;
+                }
                 if (SaleEntry.SaleDetails.Count > 0)
                 {
                     GridViewSalesItem.Rows.Add(SaleEntry.SaleDetails.Count);

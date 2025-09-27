@@ -91,7 +91,7 @@ namespace fa.views.utils.Report.Sale
                         foreach (DataColumn col in dt.Columns)
                         {
                             if ((ReportGridView.Name=="GridViewForTax" && i>4) ||col.Caption == "Tax" || col.Caption == "Net Amount" || col.Caption == "Discount" || col.Caption == "Total"
-                            || col.Caption == "Cash Amount" || col.Caption == "Credit Amount" || col.Caption == "Sub Total" 
+                            || col.Caption == "Cash Amount" || col.Caption == "Credit Amount" || col.Caption == "Sub Total" || col.Caption == "Payment Type"
                             || col.Caption == "Sales Value" || col.Caption == "Actual Cost" || col.Caption == "Profit / Margin")
                             {
                                 if (row.Cells[col.ColumnName].Value == null) { continue; }
@@ -170,7 +170,7 @@ namespace fa.views.utils.Report.Sale
             if (TypeOfReport == "InvoiceWiseSalesReport" || TypeOfReport == "InvoiceWiseSalesReturnReport" || TypeOfReport == "BillWisePurchaseReport" || TypeOfReport == "BillWisePurchaseReturnReport"
                || TypeOfReport == "ReferedWiseSalesReport" || TypeOfReport == "SoldWiseSalesReport")
             {
-                widths = new float[] { 10f, 20f, 25f, 60f, 25f, 30f, 25f };
+                widths = new float[] { 10f, 20f, 25f, 50f, 20f, 25f, 25f, 25f };
             }
             else if (TypeOfReport == "CustomerWiseSalesReport" || TypeOfReport == "SupplierWisePurchaseReport" || TypeOfReport == "SupplierWisePurchaseReturnReport")
             {
@@ -201,7 +201,7 @@ namespace fa.views.utils.Report.Sale
                 HeaderCell.MinimumHeight = 14;
                 HeaderCell.Padding = 4;
                 if (column.Caption == "#" || column.Caption == "Invoice" || column.Caption == "Bill" || column.Caption == "Customer Details" || column.Caption == "Supplier Details" || column.Caption == "Cash/Credit"
-                    || column.Caption == "Item Code" || column.Caption == "Name" || column.Caption == "Batch No" || column.Caption == "Sold" || column.Caption == "Referer"
+                    || column.Caption == "Item Code" || column.Caption == "Name" || column.Caption == "Batch No" || column.Caption == "Sold" || column.Caption == "Referer" || column.Caption == "Payment Type"
                     || column.Caption == "Date" || column.Caption == "DateTime" || column.Caption == "Exp. Date" || column.Caption == "Bill Number")
                 {
                     HeaderCell.HorizontalAlignment = Element.ALIGN_LEFT;

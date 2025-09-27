@@ -1279,7 +1279,7 @@
             ComboBoxPaymentType.AutoCompleteMode = AutoCompleteMode.Suggest;
             ComboBoxPaymentType.AutoCompleteSource = AutoCompleteSource.ListItems;
             ComboBoxPaymentType.FormattingEnabled = true;
-            ComboBoxPaymentType.Items.AddRange(new object[] { "CASH", "CHECK", "CREDITCARD", "BANKTRANSFER", "PHONE PAYMENT" });
+            ComboBoxPaymentType.Items.AddRange(new object[] { "Cash", "GPay", "PhonePe", "Paytm", "UPI", "Card", "Cheque", "RTGS" });
             ComboBoxPaymentType.Location = new Point(8, 28);
             ComboBoxPaymentType.Name = "ComboBoxPaymentType";
             ComboBoxPaymentType.Size = new Size(121, 21);
@@ -1301,8 +1301,8 @@
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1353, 661);
-            Controls.Add(ComboBoxSaleInventoryLocation);
             Controls.Add(ComboBoxInvoicePriceBy);
+            Controls.Add(ComboBoxSaleInventoryLocation);
             Controls.Add(AmountReceivedGB);
             Controls.Add(YesNoRadioPriceTo);
             Controls.Add(label29);
@@ -1414,8 +1414,8 @@
             Controls.SetChildIndex(label29, 0);
             Controls.SetChildIndex(YesNoRadioPriceTo, 0);
             Controls.SetChildIndex(AmountReceivedGB, 0);
-            Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
             Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
+            Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();

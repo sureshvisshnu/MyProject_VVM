@@ -219,6 +219,7 @@ namespace fa.report.sales
         public Double InvoiceTax { get; set; }
         public Double InvoiceNetAmount { get; set; }
         public String InvoiceType { get; set; }
+        public long PaymentType { get; set; }
 
         public SalesReportByInvoiceLineItem()
         {

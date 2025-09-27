@@ -1,31 +1,32 @@
-﻿using System;
-using System.Windows.Forms;
-using fa.report.sales;
+﻿using fa.api.catalog;
 using fa.api.utils;
-using System.Collections.Generic;
-using fa.views.controls.text;
 using fa.libraries.utils;
 using fa.model.Accounting.Masters;
+using fa.model.Accounting.Transactions;
 using fa.model.Catalog;
-using fa.views.controls.ComboTreeView;
-using fa.views.controls;
-using fa.model.OrderManagement;
-using fa.views.utils.Report.Sale;
 using fa.model.Common;
+using fa.model.OrderManagement;
+using fa.report;
+using fa.report.Inventory;
+using fa.report.sales;
+using fa.reports.Inventory;
+using fa.reports.Purchase;
+using fa.views.controls;
+using fa.views.controls.ComboTreeView;
+using fa.views.controls.text;
+using fa.views.utils.Report.Sale;
+using Fa.report.Purchase;
+using Fa.reports.Hms;
+using Fa.reports.sales;
+using Microsoft.Office.Interop.Excel;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Windows.Forms;
+using static fa.report.sales.SalesReportByArea;
+using static fa.report.sales.SalesReportByProductFamily;
 using static fa.report.sales.SalesReportBySerialLineItem;
 using static fa.report.sales.SalesReportBySerialLineItem.SalesReportByDate;
-using static fa.report.sales.SalesReportByProductFamily;
-using static fa.report.sales.SalesReportByArea;
-using Fa.reports.Hms;
-using fa.report.Inventory;
-using fa.reports.Inventory;
-using Microsoft.Office.Interop.Excel;
-using fa.report;
-using Fa.report.Purchase;
-using fa.reports.Purchase;
-using fa.api.catalog;
-using System.Text;
-using Fa.reports.sales;
 
 namespace fa.reports.sales
 {
@@ -38,8 +39,8 @@ namespace fa.reports.sales
         SNO, INVOICE_DATE, INVOICE_NUMBER, CUSTOMER_INFO, GSTN, ZVALUE, FVALUE, FAMOUNT, TVALUE, TAMOUNT, EVALUE, EAMOUNT, TEVALUE, TEAMOUNT, OVALUE, OAMOUNT, CHARGES, TOTAL
     }
     enum SalesReportByInvoiceTableColumn
-    {
-        SNO, INVOICE_NUMBER, INVOICE_DATE, CUSTOMER_INFO, TYPE, TAX, NET
+    { 
+        SNO, INVOICE_NUMBER, INVOICE_DATE, CUSTOMER_INFO, PAYMENTTYPE, TYPE, TAX, NET
     }
     enum SalesReportByUserTableColumn
     {
@@ -662,6 +663,19 @@ namespace fa.reports.sales
                     GridViewForInvoice.Rows[rowCount].Cells[(int)SalesReportByInvoiceTableColumn.INVOICE_NUMBER].Value = LineItem.InvoiceNumber;
                     GridViewForInvoice.Rows[rowCount].Cells[(int)SalesReportByInvoiceTableColumn.INVOICE_DATE].Value = LineItem.InvoiceDate.ToString(SalesReportByInvoice1.Company.DateFormat);
                     GridViewForInvoice.Rows[rowCount].Cells[(int)SalesReportByInvoiceTableColumn.CUSTOMER_INFO].Value = LineItem.CustomerName + System.Environment.NewLine + LineItem.CustomerAddress.Replace("\n", "").Replace(",", "," + System.Environment.NewLine);
+                    if (LineItem.PaymentType != null)
+                    {
+                        var paymentTypeValue = (int)LineItem.PaymentType; // since it's stored as long
+                        string paymentTypeText = Enum.IsDefined(typeof(PaymentTransactioType), paymentTypeValue)
+                            ? ((PaymentTransactioType)paymentTypeValue).ToString()
+                            : "Unknown";
+                        GridViewForInvoice.Rows[rowCount].Cells[(int)SalesReportByInvoiceTableColumn.PAYMENTTYPE].Value = paymentTypeText;
+                    }
+                    else
+                    {
+                        GridViewForInvoice.Rows[rowCount].Cells[(int)SalesReportByInvoiceTableColumn.PAYMENTTYPE].Value = "Cash"; // default
+                    }
+
                     GridViewForInvoice.Rows[rowCount].Cells[(int)SalesReportByInvoiceTableColumn.TYPE].Value = LineItem.InvoiceType;
                     GridViewForInvoice.Rows[rowCount].Cells[(int)SalesReportByInvoiceTableColumn.NET].Value = Math.Round(LineItem.InvoiceAmount).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
                     GridViewForInvoice.Rows[rowCount].Cells[(int)SalesReportByInvoiceTableColumn.TAX].Value = LineItem.InvoiceTax.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));

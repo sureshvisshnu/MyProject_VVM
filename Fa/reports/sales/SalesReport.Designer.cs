@@ -197,6 +197,7 @@
             ByInvoiceInvoiceDate = new DataGridViewTextBoxColumn();
             ByInvoiceCustomerDetails = new DataGridViewTextBoxColumn();
             ByInvoiceInvoiceType = new DataGridViewTextBoxColumn();
+            PaymenType = new DataGridViewTextBoxColumn();
             ByInvoiceTaxAmount = new DataGridViewTextBoxColumn();
             ByInvoiceAmount = new DataGridViewTextBoxColumn();
             GridViewForSerial = new fa.views.controls.DataViewVerticalScroll();
@@ -864,7 +865,7 @@
             GridViewForInvoice.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
             GridViewForInvoice.ColumnHeadersHeight = 20;
             GridViewForInvoice.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            GridViewForInvoice.Columns.AddRange(new DataGridViewColumn[] { ByInvoiceSnumber, ByInvoiceInvoiceNumber, ByInvoiceInvoiceDate, ByInvoiceCustomerDetails, ByInvoiceInvoiceType, ByInvoiceTaxAmount, ByInvoiceAmount });
+            GridViewForInvoice.Columns.AddRange(new DataGridViewColumn[] { ByInvoiceSnumber, ByInvoiceInvoiceNumber, ByInvoiceInvoiceDate, ByInvoiceCustomerDetails, ByInvoiceInvoiceType, PaymenType, ByInvoiceTaxAmount, ByInvoiceAmount });
             GridViewForInvoice.EditMode = DataGridViewEditMode.EditProgrammatically;
             GridViewForInvoice.EnableHeadersVisualStyles = false;
             GridViewForInvoice.Location = new Point(4, 40);
@@ -908,7 +909,7 @@
             ByInvoiceInvoiceNumber.ReadOnly = true;
             ByInvoiceInvoiceNumber.Resizable = DataGridViewTriState.False;
             ByInvoiceInvoiceNumber.SortMode = DataGridViewColumnSortMode.NotSortable;
-            ByInvoiceInvoiceNumber.Width = 115;
+            ByInvoiceInvoiceNumber.Width = 105;
             // 
             // ByInvoiceInvoiceDate
             // 
@@ -921,7 +922,6 @@
             ByInvoiceInvoiceDate.ReadOnly = true;
             ByInvoiceInvoiceDate.Resizable = DataGridViewTriState.False;
             ByInvoiceInvoiceDate.SortMode = DataGridViewColumnSortMode.NotSortable;
-            ByInvoiceInvoiceDate.Width = 125;
             // 
             // ByInvoiceCustomerDetails
             // 
@@ -935,7 +935,7 @@
             ByInvoiceCustomerDetails.ReadOnly = true;
             ByInvoiceCustomerDetails.Resizable = DataGridViewTriState.False;
             ByInvoiceCustomerDetails.SortMode = DataGridViewColumnSortMode.NotSortable;
-            ByInvoiceCustomerDetails.Width = 350;
+            ByInvoiceCustomerDetails.Width = 300;
             // 
             // ByInvoiceInvoiceType
             // 
@@ -947,7 +947,13 @@
             ByInvoiceInvoiceType.ReadOnly = true;
             ByInvoiceInvoiceType.Resizable = DataGridViewTriState.False;
             ByInvoiceInvoiceType.SortMode = DataGridViewColumnSortMode.NotSortable;
-            ByInvoiceInvoiceType.Width = 80;
+            ByInvoiceInvoiceType.Width = 75;
+            // 
+            // PaymenType
+            // 
+            PaymenType.HeaderText = "Paymen Type";
+            PaymenType.Name = "PaymenType";
+            PaymenType.ReadOnly = true;
             // 
             // ByInvoiceTaxAmount
             // 
@@ -959,7 +965,7 @@
             ByInvoiceTaxAmount.ReadOnly = true;
             ByInvoiceTaxAmount.Resizable = DataGridViewTriState.False;
             ByInvoiceTaxAmount.SortMode = DataGridViewColumnSortMode.NotSortable;
-            ByInvoiceTaxAmount.Width = 85;
+            ByInvoiceTaxAmount.Width = 75;
             // 
             // ByInvoiceAmount
             // 
@@ -2547,13 +2553,6 @@
         private DataGridViewTextBoxColumn Column14;
         private DataGridViewTextBoxColumn Column11;
         private views.controls.ToolstripCheckedComboBox CheckedComboBoxItem;
-        private DataGridViewTextBoxColumn ByInvoiceSnumber;
-        private DataGridViewTextBoxColumn ByInvoiceInvoiceNumber;
-        private DataGridViewTextBoxColumn ByInvoiceInvoiceDate;
-        private DataGridViewTextBoxColumn ByInvoiceCustomerDetails;
-        private DataGridViewTextBoxColumn ByInvoiceInvoiceType;
-        private DataGridViewTextBoxColumn ByInvoiceTaxAmount;
-        private DataGridViewTextBoxColumn ByInvoiceAmount;
         private views.controls.ToolstripCheckedTreeComboBox CheckedComboBoxUser;
         private views.controls.DataViewVerticalScroll SalesReportUserGrid;
         private ToolStripButton ToolStripPrint;
@@ -2584,5 +2583,13 @@
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripSeparator toolStripSeparator6;
         private ToolStripLabel labelpayment;
+        private DataGridViewTextBoxColumn ByInvoiceSnumber;
+        private DataGridViewTextBoxColumn ByInvoiceInvoiceNumber;
+        private DataGridViewTextBoxColumn ByInvoiceInvoiceDate;
+        private DataGridViewTextBoxColumn ByInvoiceCustomerDetails;
+        private DataGridViewTextBoxColumn ByInvoiceInvoiceType;
+        private DataGridViewTextBoxColumn PaymenType;
+        private DataGridViewTextBoxColumn ByInvoiceTaxAmount;
+        private DataGridViewTextBoxColumn ByInvoiceAmount;
     }
 }
