@@ -235,6 +235,7 @@ namespace fa.report.sales
             this.CustomerName = Sale.CustomerName;
             this.CustomerAddress = Sale.CustomerAddress.Replace("\r", "").Replace("\n", "");
             this.InvoiceNumber = Sale.RefNumber;
+            this.PaymentType = (long)Sale.PaymentType;
             this.InvoiceDate = Sale.SaleDate;
         }
     }

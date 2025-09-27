@@ -166,7 +166,6 @@ namespace fa.views.sales
             {
                 LoadSaleEntry(SearchSalesId);
             }
-            ComboBoxPaymentType.SelectedIndex = 0;
             Cursor.Current = Cursors.Default;
         }
         private void setSize()
@@ -1189,6 +1188,7 @@ namespace fa.views.sales
             GridViewPurchaseItemTotal.Rows[0].Cells[(int)SaleEntryTotalTableColumn.VALUE].Value = TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision);
             LabelSalesFinalAmount.Text = TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision);
             TextBoxSalesCustomerAddress.ResetText();
+            ComboBoxPaymentType.SelectedIndex = 0;
             SaleProductDetails.Clear();
             labelRoundOff.Text = "Round Off (" + TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision) + ")";
             DataGridViewCurrencyColumn currencyColumn = (DataGridViewCurrencyColumn)GridViewSalesItem.Columns["SalesAmount"];

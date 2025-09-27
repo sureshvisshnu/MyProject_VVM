@@ -40,7 +40,7 @@ namespace fa.reports.sales
     }
     enum SalesReportByInvoiceTableColumn
     { 
-        SNO, INVOICE_NUMBER, INVOICE_DATE, CUSTOMER_INFO, PAYMENTTYPE, TYPE, TAX, NET
+        SNO, INVOICE_NUMBER, INVOICE_DATE, CUSTOMER_INFO, TYPE, PAYMENTTYPE,  TAX, NET
     }
     enum SalesReportByUserTableColumn
     {
