@@ -235,7 +235,7 @@ namespace Fa.views.utils.Purchase
             float[] widths = new float[] { 20f, 80f };
             table.SetWidths(widths);
 
-            PdfPCell cell = new PdfPCell(new Phrase("Customer:", PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
+            PdfPCell cell = new PdfPCell(new Phrase("Supplier :", PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
             cell.Border = Rectangle.NO_BORDER;
             cell.HorizontalAlignment = Element.ALIGN_LEFT;
             table.AddCell(cell);
