@@ -304,7 +304,7 @@ namespace fa.views.utils
                             float[] A3 = { 86f, 260f, 390f, 730f };
                             float[] A4_PORTRAID = { 35f, 0f, 0f, 540f };
                             float[] A4_LANDSCAPE = { 38f, 370f, 400f, 780f };
-                            float[] FooterX = (PaperType == PaperTypes.A2) ? A2 : (PaperType == PaperTypes.A3) ? A3 : (PaperType == PaperTypes.A4_PORTRAIT) ? A4_PORTRAID : (PaperType == PaperTypes.A4_LANDSCAPE) ? A4_LANDSCAPE : (PaperType == PaperTypes.A5_LANDSCAPE) ? A4_PORTRAID : null;
+                            float[] FooterX = (PaperType == PaperTypes.A2) ? A2 : (PaperType == PaperTypes.A3) ? A3 : (PaperType == PaperTypes.A4_PORTRAIT) ? A4_PORTRAID : (PaperType == PaperTypes.A4_LANDSCAPE) ? A4_LANDSCAPE : (PaperType == PaperTypes.A5_LANDSCAPE) ? A4_PORTRAID : null!;
                             using (PdfStamper stamper = new PdfStamper(reader, stream))
                             {
                                 if (PaperFormat != "105 MM ROLL" && PaperFormat != "80 MM ROLL")

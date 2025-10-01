@@ -10,6 +10,7 @@ using fa.views.utils.Journal;
 using fa.views.utils.Payments;
 using fa.views.utils.Receipts;
 using fa.views.utils.Sale;
+using Fa.views.utils.Purchase;
 using Fa.views.utils.Report.Purchase;
 using Fa.views.utils.Sale;
 using System;
@@ -218,6 +219,32 @@ namespace fa.views.utils
             }
         }
 
+        public static void PurchasePrintSetup(long SaleId, bool IsExport, Entrytype entrytype, bool isGSTInvoice, string selectedPrintPaper = null!) // Add optional parameter for selected paper
+        {
+            string PrintPaper = selectedPrintPaper;
+            DateTime YearStartDatex = Global.getCurrentFiscalYearStartDate();
+            DateTime YearEndDatex = Global.getCurrentFiscalYearEndDate();
+
+            bool IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x =>
+                x.YearStartDate == YearStartDatex &&
+                x.YearEndDate == YearEndDatex &&
+                x.EntryType == EntryType.SALES)?.IsDotMatrix ?? false;
+
+            string PrintFormat = IsDotMatrix && !IsExport ? "Dotmatrix" : "Laser";
+
+            if (!isGSTInvoice && (PrintPaper == "A5 PORTRAIT" || PrintPaper == "A5 LANDSCAPE"))
+            {
+                // Non-GST A5 paper - use simplified format
+                bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");
+                new PurchasePrintSaveA5SimplifiedFormat().ExportToFileOrPrint(
+                    SaleId,
+                    PrintPaper,
+                    PrintFormat,
+                    !IsExport,
+                    entrytype,
+                    isLandscape);
+            }
+        }
         // Add this helper method to determine when to use the special A4 format
         private static bool ShouldUseSpecialA4Format(long saleId)
         {

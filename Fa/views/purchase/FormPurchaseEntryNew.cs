@@ -109,6 +109,7 @@ namespace fa.views.purchase
         {
             InitializeComponent();
             this.DoubleBuffered = true;
+            checkBoxGST.CheckedChanged += checkBoxGST_CheckedChanged!;
             PurchaseEntryManager = PurchaseEntryManager.Instance;
             excludedObjects = new string[] { "toolStrip1", "groupBox2", "DiscountAdditinalChargeGrid" };
         }
@@ -117,6 +118,7 @@ namespace fa.views.purchase
             try
             {
                 Cursor.Current = Cursors.WaitCursor;
+                InitializePrintingComboBox();
                 LoadUomTax(0L);
                 this.Visible = false;
                 setSize();
@@ -3525,7 +3527,110 @@ namespace fa.views.purchase
 
         private void BtnSalesPrint_Click(object sender, EventArgs e)
         {
-            
+            Cursor.Current = Cursors.WaitCursor;
+
+            // Get the selected paper format from the combo box
+            string paperFormatName;
+            //var selectedFormat = ComboBoxPrintingPaper.SelectedItem as PrintPaperFormat;
+            if (ComboBoxPrintingPaper.SelectedItem is PrintPaperFormat selectedFormat)
+            {
+                // Use selected format's name
+                paperFormatName = selectedFormat.DisplayName!;
+            }
+            else if (ComboBoxPrintingPaper.Items.Count > 0)
+            {
+                // Fallback to first item's name if nothing selected
+                if (ComboBoxPrintingPaper.Items[0] is PrintPaperFormat firstFormat)
+                {
+                    paperFormatName = firstFormat.DisplayName!;
+                }
+                else
+                {
+                    // If casting fails, use the displayed text
+                    paperFormatName = ComboBoxPrintingPaper.Text;
+                }
+            }
+            else
+            {
+                // If combo box is empty, use the displayed text
+                paperFormatName = ComboBoxPrintingPaper.Text;
+            }
+
+            // Determine print type based on checkbox
+            bool isGSTPrint = checkBoxGST.Checked;
+
+            // Call print function with GST status and selected paper format
+            PrinterSetup.PurchasePrintSetup(
+                long.Parse(TextBoxPurchaseId.Text),
+                false,
+                Entrytype.SALE,
+                isGSTPrint,
+                paperFormatName!); // Pass the selected paper format name
+
+            Cursor.Current = Cursors.Default;
+        }
+        private void InitializePrintingComboBox()
+        {
+            try
+            {
+                DateTime YearStartDate = Global.getCurrentFiscalYearStartDate();
+                DateTime YearEndDate = Global.getCurrentFiscalYearEndDate();
+
+                // Get the saved print paper format ID
+                long? PrintPaperId = Global.Company.IdSpaces
+                    .FirstOrDefault(x => x.YearStartDate == YearStartDate &&
+                                         x.YearEndDate == YearEndDate &&
+                                         x.EntryType == EntryType.SALES)
+                    ?.PrintPaperFormat?.Id;
+
+                // Get all paper formats and sort with A4 PORTRAIT first
+                var allPaperFormats = PaperFormatManager.Instance.ListPrintPaperFormat();
+                var sortedFormats = allPaperFormats
+                    .OrderByDescending(x => x.Name == "A4 PORTRAIT")
+                    .ThenBy(x => x.Name)
+                    .ToList();
+
+                // Bind the sorted list to ComboBox
+                ComboBoxPrintingPaper.DataSource = sortedFormats;
+                ComboBoxPrintingPaper.DisplayMember = "Name";
+                ComboBoxPrintingPaper.ValueMember = "Id";
+
+                // Try to select saved PrintPaperId
+                if (PrintPaperId.HasValue &&
+                    sortedFormats.Any(x => x.Id == PrintPaperId.Value))
+                {
+                    ComboBoxPrintingPaper.SelectedValue = PrintPaperId.Value;
+                }
+                // Else fallback to A4 PORTRAIT if available
+                else if (sortedFormats.Any(x => x.Name == "A4 PORTRAIT"))
+                {
+                    ComboBoxPrintingPaper.SelectedValue =
+                        sortedFormats.First(x => x.Name == "A4 PORTRAIT").Id;
+                }
+                // Else fallback to first item
+                else if (sortedFormats.Count > 0)
+                {
+                    ComboBoxPrintingPaper.SelectedIndex = 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error initializing print format: {ex.Message}");
+                // Fallback: hardcoded list
+                ComboBoxPrintingPaper.DataSource = new List<PrintPaperFormat>
+                {
+                    new PrintPaperFormat { FormatId = 1, DisplayName = "A4 PORTRAIT" },
+                    new PrintPaperFormat { FormatId = 2, DisplayName = "A5 LANDSCAPE" }
+                };
+                ComboBoxPrintingPaper.DisplayMember = "Name";
+                ComboBoxPrintingPaper.ValueMember = "Id";
+                ComboBoxPrintingPaper.SelectedIndex = 0;
+            }
+        }
+
+        private void checkBoxGST_CheckedChanged(object sender, EventArgs e)
+        {
+            checkBoxGST.Text = checkBoxGST.Checked ? "GST Print" : "Non-GST Print";
         }
     }
     public static class Extensions

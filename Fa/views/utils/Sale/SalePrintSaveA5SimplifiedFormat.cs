@@ -272,7 +272,6 @@ namespace Fa.views.utils.Sale
 
         //public void GeneratePDF(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount)
         public void GeneratePDF(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount, Entrytype entrytype)
-
         {
             using (MemoryStream myMemoryStream = new MemoryStream())
             {
