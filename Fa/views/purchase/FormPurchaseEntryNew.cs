@@ -3522,7 +3522,11 @@ namespace fa.views.purchase
         {
             { "TotalAmount", "LabelPurchaseEntryFinalAmount" }
         };
-        
+
+        private void BtnSalesPrint_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
     public static class Extensions
     {

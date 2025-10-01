@@ -30,30 +30,30 @@
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPurchaseEntryNew));
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle40 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle25 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle26 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle27 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle28 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle29 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle30 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle31 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle32 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle33 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle34 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle35 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle36 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle37 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle38 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle39 = new DataGridViewCellStyle();
             label1 = new Label();
             PurchaseReferenceNumber = new Label();
             label2 = new Label();
-            YesNoRbtPurchaseMethod = new controls.YesNoRadio();
+            YesNoRbtPurchaseMethod = new fa.views.controls.YesNoRadio();
             TextBoxPurcahaseInvoiceNo = new TextBox();
             label3 = new Label();
             label4 = new Label();
@@ -61,45 +61,45 @@
             TextBoxPurchaseEntryAddress = new TextBox();
             label6 = new Label();
             label7 = new Label();
-            DatetimePickerPurchaseDate = new controls.text.DateWithCalendar();
-            DatetimePickerPurchaseInvoiceDate = new controls.text.DateWithCalendar();
+            DatetimePickerPurchaseDate = new fa.views.controls.text.DateWithCalendar();
+            DatetimePickerPurchaseInvoiceDate = new fa.views.controls.text.DateWithCalendar();
             BtnPurchaseNewSupplier = new Dropdown_Button.UserControlButtonWithMenu();
             LmageListPurchase = new ImageList(components);
             BtnPurchaseSearchSupplier = new Button();
-            PurchaseBillGrid = new controls.FileUploader();
+            PurchaseBillGrid = new fa.views.controls.FileUploader();
             GridViewPurchaseItemTotal = new DataGridView();
             Total = new DataGridViewTextBoxColumn();
-            Value = new controls.grid.DataGridViewCurrencyColumn();
+            Value = new fa.views.controls.grid.DataGridViewCurrencyColumn();
             dataGridViewButtonColumn1 = new DataGridViewButtonColumn();
-            DiscountAdditinalChargeGrid = new controls.accounting.DiscountAdditinalChargeGrid();
-            GridViewPurchaseItem = new controls.DataViewVerticalScroll();
+            DiscountAdditinalChargeGrid = new fa.views.controls.accounting.DiscountAdditinalChargeGrid();
+            GridViewPurchaseItem = new fa.views.controls.DataViewVerticalScroll();
             SNO = new DataGridViewTextBoxColumn();
             PRODUCT = new DataGridViewTextBoxColumn();
             UOM = new DataGridViewTextBoxColumn();
-            QTY = new controls.grid.DataGridViewQuantityColumn();
-            FREE = new controls.grid.DataGridViewQuantityColumn();
+            QTY = new fa.views.controls.grid.DataGridViewQuantityColumn();
+            FREE = new fa.views.controls.grid.DataGridViewQuantityColumn();
             BATNO = new DataGridViewTextBoxColumn();
-            EXPDATE = new controls.grid.DataGridViewCalendarColumn();
-            PRICE = new controls.grid.DataGridViewCurrencyColumn();
-            COST = new controls.grid.DataGridViewCurrencyColumn();
-            TAXP = new controls.grid.DataGridViewCurrencyColumn();
-            TAX = new controls.grid.DataGridViewCurrencyColumn();
-            DISP = new controls.grid.DataGridViewCurrencyColumn();
-            DIS = new controls.grid.DataGridViewCurrencyColumn();
-            AMOUNT = new controls.grid.DataGridViewCurrencyColumn();
+            EXPDATE = new fa.views.controls.grid.DataGridViewCalendarColumn();
+            PRICE = new fa.views.controls.grid.DataGridViewCurrencyColumn();
+            COST = new fa.views.controls.grid.DataGridViewCurrencyColumn();
+            TAXP = new fa.views.controls.grid.DataGridViewCurrencyColumn();
+            TAX = new fa.views.controls.grid.DataGridViewCurrencyColumn();
+            DISP = new fa.views.controls.grid.DataGridViewCurrencyColumn();
+            DIS = new fa.views.controls.grid.DataGridViewCurrencyColumn();
+            AMOUNT = new fa.views.controls.grid.DataGridViewCurrencyColumn();
             Delete = new DataGridViewButtonColumn();
             Column11 = new DataGridViewTextBoxColumn();
             Column12 = new DataGridViewCheckBoxColumn();
             SalesDetailID = new DataGridViewTextBoxColumn();
             Column9 = new DataGridViewTextBoxColumn();
-            Column16 = new controls.grid.DataGridViewCurrencyColumn();
-            Column17 = new controls.grid.DataGridViewCurrencyColumn();
-            Column18 = new controls.grid.DataGridViewCurrencyColumn();
+            Column16 = new fa.views.controls.grid.DataGridViewCurrencyColumn();
+            Column17 = new fa.views.controls.grid.DataGridViewCurrencyColumn();
+            Column18 = new fa.views.controls.grid.DataGridViewCurrencyColumn();
             Column19 = new DataGridViewTextBoxColumn();
             Column20 = new DataGridViewTextBoxColumn();
             Column21 = new DataGridViewTextBoxColumn();
             Column22 = new DataGridViewTextBoxColumn();
-            ComboBoxPurchaseEntryInventoryLocation = new controls.ComboBoxSwapTextBox();
+            ComboBoxPurchaseEntryInventoryLocation = new fa.views.controls.ComboBoxSwapTextBox();
             label12 = new Label();
             LabelPurchaseEntryFinalAmount = new Label();
             label8 = new Label();
@@ -112,18 +112,18 @@
             BtnPurchaseCancel = new Button();
             BtnPurchaseSave = new Button();
             groupBox1 = new GroupBox();
-            ComboBoxProductPurchesUOM = new controls.ComboBoxSwapTextBox();
-            ComboBoxProductWholeSaleUOM = new controls.ComboBoxSwapTextBox();
-            ComboBoxProductRetailUOM = new controls.ComboBoxSwapTextBox();
+            ComboBoxProductRetailUOM = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductWholeSaleUOM = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxProductPurchesUOM = new fa.views.controls.ComboBoxSwapTextBox();
             EditProductTaxLink = new LinkLabel();
-            TextBoxProductPurchasePrice = new controls.text.CurrencyTextBox();
-            TextBoxPurchaseEntryWholeSalePrice = new controls.text.CurrencyTextBox();
-            TextBoxPurchaseEntryRetailPrice = new controls.text.CurrencyTextBox();
-            TextBoxPurchaseEntryMsrp = new controls.text.CurrencyTextBox();
-            TextBoxDefaultDiscount = new controls.text.CurrencyTextBox();
+            TextBoxProductPurchasePrice = new fa.views.controls.text.CurrencyTextBox();
+            TextBoxPurchaseEntryWholeSalePrice = new fa.views.controls.text.CurrencyTextBox();
+            TextBoxPurchaseEntryRetailPrice = new fa.views.controls.text.CurrencyTextBox();
+            TextBoxPurchaseEntryMsrp = new fa.views.controls.text.CurrencyTextBox();
+            TextBoxDefaultDiscount = new fa.views.controls.text.CurrencyTextBox();
             BtnProductReset = new Button();
             BtnProductSave = new Button();
-            ItemTaxDetails = new controls.accounting.ItemTaxDetails();
+            ItemTaxDetails = new fa.views.controls.accounting.ItemTaxDetails();
             TextBoxProductXFactorWholeSale = new TextBox();
             TextBoxProductXFactorRetail = new TextBox();
             BtnPriceCalculator = new Button();
@@ -141,24 +141,30 @@
             label11 = new Label();
             label10 = new Label();
             label9 = new Label();
-            TextBoxPurchaseEntrySupplier = new controls.text.IDTextBox();
+            TextBoxPurchaseEntrySupplier = new fa.views.controls.text.IDTextBox();
             toolStrip1 = new ToolStrip();
             toolStripLabel1 = new ToolStripLabel();
             TextBoxPurchaseSearch = new ToolStripTextBox();
             BtnPurchaseSearch = new ToolStripButton();
             BtnBarCodeprint = new Button();
             TimerPurchase = new System.Windows.Forms.Timer(components);
-            TextBoxCostHidden = new controls.text.CurrencyTextBox();
+            TextBoxCostHidden = new fa.views.controls.text.CurrencyTextBox();
             PrevPurchaseReferenceNumber = new Label();
             label23 = new Label();
             labelRoundOff = new Label();
             BtnLoadInvoice = new Button();
             BtnExportInvoice = new Button();
+            BtnSalesPrint = new Button();
+            groupBoxPrintSetup = new GroupBox();
+            ComboBoxPrintingPaper = new fa.views.controls.ComboBoxSwapTextBox();
+            checkBoxGST = new CheckBox();
+            label22 = new Label();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).BeginInit();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItem).BeginInit();
             StatusStripPurchase.SuspendLayout();
             groupBox1.SuspendLayout();
             toolStrip1.SuspendLayout();
+            groupBoxPrintSetup.SuspendLayout();
             SuspendLayout();
             // 
             // ProductIdTransport
@@ -301,7 +307,7 @@
             DatetimePickerPurchaseDate.Format = "MM/dd/yyyy";
             DatetimePickerPurchaseDate.Location = new Point(147, 63);
             DatetimePickerPurchaseDate.MaxDate = new DateTime(9997, 12, 31, 3, 36, 55, 0);
-            DatetimePickerPurchaseDate.MinDate = new DateTime(1900, 1, 1, 19, 28, 17, 0);
+            DatetimePickerPurchaseDate.MinDate = new DateTime(1900, 1, 1, 21, 36, 57, 0);
             DatetimePickerPurchaseDate.Name = "DatetimePickerPurchaseDate";
             DatetimePickerPurchaseDate.ReadOnly = false;
             DatetimePickerPurchaseDate.Size = new Size(91, 19);
@@ -317,7 +323,7 @@
             DatetimePickerPurchaseInvoiceDate.Format = "MM/dd/yyyy";
             DatetimePickerPurchaseInvoiceDate.Location = new Point(147, 145);
             DatetimePickerPurchaseInvoiceDate.MaxDate = new DateTime(9997, 12, 31, 3, 36, 55, 0);
-            DatetimePickerPurchaseInvoiceDate.MinDate = new DateTime(1900, 1, 1, 19, 28, 17, 0);
+            DatetimePickerPurchaseInvoiceDate.MinDate = new DateTime(1900, 1, 1, 21, 36, 57, 0);
             DatetimePickerPurchaseInvoiceDate.Name = "DatetimePickerPurchaseInvoiceDate";
             DatetimePickerPurchaseInvoiceDate.ReadOnly = false;
             DatetimePickerPurchaseInvoiceDate.Size = new Size(91, 19);
@@ -376,14 +382,14 @@
             GridViewPurchaseItemTotal.Name = "GridViewPurchaseItemTotal";
             GridViewPurchaseItemTotal.ReadOnly = true;
             GridViewPurchaseItemTotal.RowHeadersVisible = false;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopRight;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            GridViewPurchaseItemTotal.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.TopRight;
+            dataGridViewCellStyle23.BackColor = SystemColors.Control;
+            dataGridViewCellStyle23.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle23.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle23.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle23.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle23.WrapMode = DataGridViewTriState.True;
+            GridViewPurchaseItemTotal.RowsDefaultCellStyle = dataGridViewCellStyle23;
             GridViewPurchaseItemTotal.Size = new Size(981, 24);
             GridViewPurchaseItemTotal.TabIndex = 271;
             GridViewPurchaseItemTotal.TabStop = false;
@@ -391,20 +397,20 @@
             // Total
             // 
             Total.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.NullValue = "Total :";
-            Total.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle21.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle21.NullValue = "Total :";
+            Total.DefaultCellStyle = dataGridViewCellStyle21;
             Total.HeaderText = "Total";
             Total.Name = "Total";
             Total.ReadOnly = true;
             // 
             // Value
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.NullValue = "0.00";
-            Value.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle22.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle22.NullValue = "0.00";
+            Value.DefaultCellStyle = dataGridViewCellStyle22;
             Value.HeaderText = "Value";
             Value.Name = "Value";
             Value.ReadOnly = true;
@@ -443,14 +449,14 @@
             GridViewPurchaseItem.AllowUserToDeleteRows = false;
             GridViewPurchaseItem.AllowUserToResizeRows = false;
             GridViewPurchaseItem.BackgroundColor = SystemColors.Control;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = SystemColors.Control;
-            dataGridViewCellStyle4.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            GridViewPurchaseItem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle24.BackColor = SystemColors.Control;
+            dataGridViewCellStyle24.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle24.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle24.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle24.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle24.WrapMode = DataGridViewTriState.True;
+            GridViewPurchaseItem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle24;
             GridViewPurchaseItem.ColumnHeadersHeight = 20;
             GridViewPurchaseItem.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             GridViewPurchaseItem.Columns.AddRange(new DataGridViewColumn[] { SNO, PRODUCT, UOM, QTY, FREE, BATNO, EXPDATE, PRICE, COST, TAXP, TAX, DISP, DIS, AMOUNT, Delete, Column11, Column12, SalesDetailID, Column9, Column16, Column17, Column18, Column19, Column20, Column21, Column22 });
@@ -461,9 +467,9 @@
             GridViewPurchaseItem.MultiSelect = false;
             GridViewPurchaseItem.Name = "GridViewPurchaseItem";
             GridViewPurchaseItem.RowHeadersVisible = false;
-            dataGridViewCellStyle20.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle20.SelectionForeColor = SystemColors.ActiveCaptionText;
-            GridViewPurchaseItem.RowsDefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle40.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle40.SelectionForeColor = SystemColors.ActiveCaptionText;
+            GridViewPurchaseItem.RowsDefaultCellStyle = dataGridViewCellStyle40;
             GridViewPurchaseItem.RowTemplate.Height = 20;
             GridViewPurchaseItem.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             GridViewPurchaseItem.ShowCellToolTips = false;
@@ -483,8 +489,8 @@
             // 
             // SNO
             // 
-            dataGridViewCellStyle5.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            SNO.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle25.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            SNO.DefaultCellStyle = dataGridViewCellStyle25;
             SNO.HeaderText = "#";
             SNO.Name = "SNO";
             SNO.Resizable = DataGridViewTriState.False;
@@ -494,8 +500,8 @@
             // PRODUCT
             // 
             PRODUCT.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle6.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            PRODUCT.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle26.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            PRODUCT.DefaultCellStyle = dataGridViewCellStyle26;
             PRODUCT.HeaderText = "Items [F2]";
             PRODUCT.MaxInputLength = 35;
             PRODUCT.Name = "PRODUCT";
@@ -504,8 +510,8 @@
             // 
             // UOM
             // 
-            dataGridViewCellStyle7.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            UOM.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle27.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            UOM.DefaultCellStyle = dataGridViewCellStyle27;
             UOM.HeaderText = "UOM";
             UOM.MaxInputLength = 20;
             UOM.Name = "UOM";
@@ -515,10 +521,10 @@
             // 
             // QTY
             // 
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle8.NullValue = "0";
-            QTY.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle28.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle28.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle28.NullValue = "0";
+            QTY.DefaultCellStyle = dataGridViewCellStyle28;
             QTY.HeaderText = "Quantity";
             QTY.Name = "QTY";
             QTY.Resizable = DataGridViewTriState.False;
@@ -526,10 +532,10 @@
             // 
             // FREE
             // 
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle9.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle9.NullValue = "0";
-            FREE.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle29.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle29.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle29.NullValue = "0";
+            FREE.DefaultCellStyle = dataGridViewCellStyle29;
             FREE.HeaderText = "Free";
             FREE.Name = "FREE";
             FREE.Resizable = DataGridViewTriState.False;
@@ -537,9 +543,9 @@
             // 
             // BATNO
             // 
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle10.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            BATNO.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle30.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle30.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            BATNO.DefaultCellStyle = dataGridViewCellStyle30;
             BATNO.HeaderText = "Batch No";
             BATNO.MaxInputLength = 10;
             BATNO.Name = "BATNO";
@@ -549,9 +555,9 @@
             // 
             // EXPDATE
             // 
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle11.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            EXPDATE.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle31.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle31.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            EXPDATE.DefaultCellStyle = dataGridViewCellStyle31;
             EXPDATE.HeaderText = "Exp Date";
             EXPDATE.Name = "EXPDATE";
             EXPDATE.Resizable = DataGridViewTriState.False;
@@ -559,10 +565,10 @@
             // 
             // PRICE
             // 
-            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle12.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle12.NullValue = "0.00";
-            PRICE.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle32.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle32.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle32.NullValue = "0.00";
+            PRICE.DefaultCellStyle = dataGridViewCellStyle32;
             PRICE.HeaderText = "Price";
             PRICE.Name = "PRICE";
             PRICE.Resizable = DataGridViewTriState.False;
@@ -570,8 +576,8 @@
             // 
             // COST
             // 
-            dataGridViewCellStyle13.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            COST.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle33.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            COST.DefaultCellStyle = dataGridViewCellStyle33;
             COST.HeaderText = "Cost";
             COST.Name = "COST";
             COST.Resizable = DataGridViewTriState.False;
@@ -580,10 +586,10 @@
             // TAXP
             // 
             TAXP.Currencylength = 6;
-            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle14.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle14.NullValue = "0.00";
-            TAXP.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle34.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle34.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle34.NullValue = "0.00";
+            TAXP.DefaultCellStyle = dataGridViewCellStyle34;
             TAXP.HeaderText = "Tax%";
             TAXP.Name = "TAXP";
             TAXP.Resizable = DataGridViewTriState.False;
@@ -592,10 +598,10 @@
             // TAX
             // 
             TAX.Currencylength = 8;
-            dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle15.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle15.NullValue = "0.00";
-            TAX.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle35.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle35.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle35.NullValue = "0.00";
+            TAX.DefaultCellStyle = dataGridViewCellStyle35;
             TAX.FillWeight = 50F;
             TAX.HeaderText = "Tax";
             TAX.Name = "TAX";
@@ -605,10 +611,10 @@
             // DISP
             // 
             DISP.Currencylength = 6;
-            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle16.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle16.NullValue = "0.00";
-            DISP.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle36.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle36.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle36.NullValue = "0.00";
+            DISP.DefaultCellStyle = dataGridViewCellStyle36;
             DISP.HeaderText = "Discount %";
             DISP.Name = "DISP";
             DISP.Resizable = DataGridViewTriState.False;
@@ -617,10 +623,10 @@
             // DIS
             // 
             DIS.Currencylength = 8;
-            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle17.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle17.NullValue = "0.00";
-            DIS.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle37.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle37.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle37.NullValue = "0.00";
+            DIS.DefaultCellStyle = dataGridViewCellStyle37;
             DIS.HeaderText = "Discount";
             DIS.Name = "DIS";
             DIS.Resizable = DataGridViewTriState.False;
@@ -628,10 +634,10 @@
             // 
             // AMOUNT
             // 
-            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle18.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle18.NullValue = "0.00";
-            AMOUNT.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle38.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle38.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle38.NullValue = "0.00";
+            AMOUNT.DefaultCellStyle = dataGridViewCellStyle38;
             AMOUNT.HeaderText = "Amount";
             AMOUNT.Name = "AMOUNT";
             AMOUNT.Resizable = DataGridViewTriState.False;
@@ -639,10 +645,10 @@
             // 
             // Delete
             // 
-            dataGridViewCellStyle19.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle19.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle19.NullValue = "X";
-            Delete.DefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle39.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle39.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle39.NullValue = "X";
+            Delete.DefaultCellStyle = dataGridViewCellStyle39;
             Delete.HeaderText = "";
             Delete.Name = "Delete";
             Delete.Resizable = DataGridViewTriState.False;
@@ -833,7 +839,7 @@
             // BtnPurchaseExit
             // 
             BtnPurchaseExit.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnPurchaseExit.Location = new Point(903, 617);
+            BtnPurchaseExit.Location = new Point(901, 617);
             BtnPurchaseExit.Margin = new Padding(4, 3, 4, 3);
             BtnPurchaseExit.Name = "BtnPurchaseExit";
             BtnPurchaseExit.Size = new Size(88, 27);
@@ -845,7 +851,7 @@
             // BtnPurchaseCancel
             // 
             BtnPurchaseCancel.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnPurchaseCancel.Location = new Point(691, 617);
+            BtnPurchaseCancel.Location = new Point(609, 617);
             BtnPurchaseCancel.Margin = new Padding(4, 3, 4, 3);
             BtnPurchaseCancel.Name = "BtnPurchaseCancel";
             BtnPurchaseCancel.Size = new Size(97, 27);
@@ -857,7 +863,7 @@
             // BtnPurchaseSave
             // 
             BtnPurchaseSave.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnPurchaseSave.Location = new Point(797, 617);
+            BtnPurchaseSave.Location = new Point(799, 617);
             BtnPurchaseSave.Margin = new Padding(4, 3, 4, 3);
             BtnPurchaseSave.Name = "BtnPurchaseSave";
             BtnPurchaseSave.Size = new Size(97, 27);
@@ -869,9 +875,9 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(ComboBoxProductRetailUOM);
-            groupBox1.Controls.Add(ComboBoxProductWholeSaleUOM);
             groupBox1.Controls.Add(ComboBoxProductPurchesUOM);
+            groupBox1.Controls.Add(ComboBoxProductWholeSaleUOM);
+            groupBox1.Controls.Add(ComboBoxProductRetailUOM);
             groupBox1.Controls.Add(EditProductTaxLink);
             groupBox1.Controls.Add(TextBoxProductPurchasePrice);
             groupBox1.Controls.Add(TextBoxPurchaseEntryWholeSalePrice);
@@ -906,16 +912,15 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Product Details";
             // 
-            // ComboBoxProductPurchesUOM
+            // ComboBoxProductRetailUOM
             // 
-            ComboBoxProductPurchesUOM.FormattingEnabled = true;
-            ComboBoxProductPurchesUOM.Location = new Point(13, 116);
-            ComboBoxProductPurchesUOM.Name = "ComboBoxProductPurchesUOM";
-            ComboBoxProductPurchesUOM.Size = new Size(138, 21);
-            ComboBoxProductPurchesUOM.TabIndex = 285;
-            ComboBoxProductPurchesUOM.TxtVisible = true;
-            ComboBoxProductPurchesUOM.Visible = false;
-            ComboBoxProductPurchesUOM.KeyPress += ComboBoxProductPurchesUOM_KeyPress;
+            ComboBoxProductRetailUOM.FormattingEnabled = true;
+            ComboBoxProductRetailUOM.Location = new Point(13, 157);
+            ComboBoxProductRetailUOM.Name = "ComboBoxProductRetailUOM";
+            ComboBoxProductRetailUOM.Size = new Size(138, 21);
+            ComboBoxProductRetailUOM.TabIndex = 2;
+            ComboBoxProductRetailUOM.TxtVisible = true;
+            ComboBoxProductRetailUOM.KeyPress += ComboBoxProductRetailUOM_KeyPress;
             // 
             // ComboBoxProductWholeSaleUOM
             // 
@@ -927,15 +932,16 @@
             ComboBoxProductWholeSaleUOM.TxtVisible = true;
             ComboBoxProductWholeSaleUOM.KeyPress += ComboBoxProductWholeSaleUOM_KeyPress;
             // 
-            // ComboBoxProductRetailUOM
+            // ComboBoxProductPurchesUOM
             // 
-            ComboBoxProductRetailUOM.FormattingEnabled = true;
-            ComboBoxProductRetailUOM.Location = new Point(13, 157);
-            ComboBoxProductRetailUOM.Name = "ComboBoxProductRetailUOM";
-            ComboBoxProductRetailUOM.Size = new Size(138, 21);
-            ComboBoxProductRetailUOM.TabIndex = 2;
-            ComboBoxProductRetailUOM.TxtVisible = true;
-            ComboBoxProductRetailUOM.KeyPress += ComboBoxProductRetailUOM_KeyPress;
+            ComboBoxProductPurchesUOM.FormattingEnabled = true;
+            ComboBoxProductPurchesUOM.Location = new Point(13, 116);
+            ComboBoxProductPurchesUOM.Name = "ComboBoxProductPurchesUOM";
+            ComboBoxProductPurchesUOM.Size = new Size(138, 21);
+            ComboBoxProductPurchesUOM.TabIndex = 285;
+            ComboBoxProductPurchesUOM.TxtVisible = true;
+            ComboBoxProductPurchesUOM.Visible = false;
+            ComboBoxProductPurchesUOM.KeyPress += ComboBoxProductPurchesUOM_KeyPress;
             // 
             // EditProductTaxLink
             // 
@@ -1268,7 +1274,7 @@
             // 
             BtnBarCodeprint.Enabled = false;
             BtnBarCodeprint.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnBarCodeprint.Location = new Point(585, 617);
+            BtnBarCodeprint.Location = new Point(507, 617);
             BtnBarCodeprint.Margin = new Padding(4, 3, 4, 3);
             BtnBarCodeprint.Name = "BtnBarCodeprint";
             BtnBarCodeprint.Size = new Size(97, 27);
@@ -1325,7 +1331,7 @@
             // BtnLoadInvoice
             // 
             BtnLoadInvoice.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnLoadInvoice.Location = new Point(450, 619);
+            BtnLoadInvoice.Location = new Point(376, 619);
             BtnLoadInvoice.Name = "BtnLoadInvoice";
             BtnLoadInvoice.Size = new Size(126, 23);
             BtnLoadInvoice.TabIndex = 294;
@@ -1336,19 +1342,79 @@
             // BtnExportInvoice
             // 
             BtnExportInvoice.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            BtnExportInvoice.Location = new Point(315, 619);
+            BtnExportInvoice.Location = new Point(245, 619);
             BtnExportInvoice.Name = "BtnExportInvoice";
             BtnExportInvoice.Size = new Size(126, 23);
             BtnExportInvoice.TabIndex = 295;
             BtnExportInvoice.Text = "Export Invoice";
             BtnExportInvoice.UseVisualStyleBackColor = true;
             // 
+            // BtnSalesPrint
+            // 
+            BtnSalesPrint.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnSalesPrint.Location = new Point(711, 617);
+            BtnSalesPrint.Name = "BtnSalesPrint";
+            BtnSalesPrint.Size = new Size(83, 24);
+            BtnSalesPrint.TabIndex = 296;
+            BtnSalesPrint.Text = "Print [F9]";
+            BtnSalesPrint.UseVisualStyleBackColor = true;
+            BtnSalesPrint.Click += BtnSalesPrint_Click;
+            // 
+            // groupBoxPrintSetup
+            // 
+            groupBoxPrintSetup.BackColor = SystemColors.Control;
+            groupBoxPrintSetup.Controls.Add(ComboBoxPrintingPaper);
+            groupBoxPrintSetup.Controls.Add(checkBoxGST);
+            groupBoxPrintSetup.Controls.Add(label22);
+            groupBoxPrintSetup.FlatStyle = FlatStyle.Flat;
+            groupBoxPrintSetup.Location = new Point(285, 561);
+            groupBoxPrintSetup.Name = "groupBoxPrintSetup";
+            groupBoxPrintSetup.Size = new Size(343, 54);
+            groupBoxPrintSetup.TabIndex = 297;
+            groupBoxPrintSetup.TabStop = false;
+            groupBoxPrintSetup.Text = "Printing SetUp";
+            // 
+            // ComboBoxPrintingPaper
+            // 
+            ComboBoxPrintingPaper.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxPrintingPaper.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxPrintingPaper.FormattingEnabled = true;
+            ComboBoxPrintingPaper.Location = new Point(129, 28);
+            ComboBoxPrintingPaper.MaxLength = 30;
+            ComboBoxPrintingPaper.Name = "ComboBoxPrintingPaper";
+            ComboBoxPrintingPaper.Size = new Size(200, 22);
+            ComboBoxPrintingPaper.TabIndex = 222;
+            ComboBoxPrintingPaper.TxtVisible = true;
+            // 
+            // checkBoxGST
+            // 
+            checkBoxGST.AutoSize = true;
+            checkBoxGST.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            checkBoxGST.Location = new Point(10, 30);
+            checkBoxGST.Name = "checkBoxGST";
+            checkBoxGST.Size = new Size(104, 17);
+            checkBoxGST.TabIndex = 221;
+            checkBoxGST.Text = "Non-GST Print";
+            checkBoxGST.UseVisualStyleBackColor = true;
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label22.Location = new Point(129, 12);
+            label22.Name = "label22";
+            label22.Size = new Size(132, 13);
+            label22.TabIndex = 223;
+            label22.Text = "Printing Paper and Format";
+            // 
             // FormPurchaseEntryNew
             // 
             AutoScaleDimensions = new SizeF(7F, 14F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1285, 682);
+            Controls.Add(groupBoxPrintSetup);
             Controls.Add(ComboBoxPurchaseEntryInventoryLocation);
+            Controls.Add(BtnSalesPrint);
             Controls.Add(BtnExportInvoice);
             Controls.Add(BtnLoadInvoice);
             Controls.Add(labelRoundOff);
@@ -1440,7 +1506,9 @@
             Controls.SetChildIndex(labelRoundOff, 0);
             Controls.SetChildIndex(BtnLoadInvoice, 0);
             Controls.SetChildIndex(BtnExportInvoice, 0);
+            Controls.SetChildIndex(BtnSalesPrint, 0);
             Controls.SetChildIndex(ComboBoxPurchaseEntryInventoryLocation, 0);
+            Controls.SetChildIndex(groupBoxPrintSetup, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItem).EndInit();
             StatusStripPurchase.ResumeLayout(false);
@@ -1449,6 +1517,8 @@
             groupBox1.PerformLayout();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
+            groupBoxPrintSetup.ResumeLayout(false);
+            groupBoxPrintSetup.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1564,5 +1634,10 @@
         private DataGridViewTextBoxColumn Column20;
         private DataGridViewTextBoxColumn Column21;
         private DataGridViewTextBoxColumn Column22;
+        private Button BtnSalesPrint;
+        private GroupBox groupBoxPrintSetup;
+        private controls.ComboBoxSwapTextBox ComboBoxPrintingPaper;
+        private CheckBox checkBoxGST;
+        private Label label22;
     }
 }
