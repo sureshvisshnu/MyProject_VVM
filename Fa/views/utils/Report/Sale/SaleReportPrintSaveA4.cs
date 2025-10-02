@@ -33,8 +33,8 @@ namespace fa.views.utils.Report.Sale
             fileName = ReportName;
             if (ReportGridView.Rows.Count != 0)
             {
-                try
-                {
+                //try
+                //{
                     switch (fileExtension.ToLower())
                     {
                         case "xls":
@@ -59,12 +59,12 @@ namespace fa.views.utils.Report.Sale
                         default:
                             break;
                     }
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show("File Error Please Contact System Admin");
-                    Console.WriteLine(e.ToString());
-                }
+                //}
+                //catch (Exception e)
+                //{
+                //    MessageBox.Show("File Error Please Contact System Admin");
+                //    Console.WriteLine(e.ToString());
+                //}
             }
             return true;
         }
@@ -166,11 +166,14 @@ namespace fa.views.utils.Report.Sale
             int Rows = DataTable.Rows.Count - 1;
             PdfPTable ReportMainTable = new PdfPTable(Cols);
 
-            float[] widths = null;
-            if (TypeOfReport == "InvoiceWiseSalesReport" || TypeOfReport == "InvoiceWiseSalesReturnReport" || TypeOfReport == "BillWisePurchaseReport" || TypeOfReport == "BillWisePurchaseReturnReport"
-               || TypeOfReport == "ReferedWiseSalesReport" || TypeOfReport == "SoldWiseSalesReport")
+            float[] widths = null!;
+            if (TypeOfReport == "InvoiceWiseSalesReport" || TypeOfReport == "InvoiceWiseSalesReturnReport" || TypeOfReport == "ReferedWiseSalesReport" || TypeOfReport == "SoldWiseSalesReport")
             {
                 widths = new float[] { 10f, 20f, 25f, 50f, 20f, 25f, 25f, 25f };
+            }
+            else if (TypeOfReport == "BillWisePurchaseReport" || TypeOfReport == "BillWisePurchaseReturnReport")
+            {
+                widths = new float[] { 10f, 20f, 25f, 50f, 25f, 25f, 25f };
             }
             else if (TypeOfReport == "CustomerWiseSalesReport" || TypeOfReport == "SupplierWisePurchaseReport" || TypeOfReport == "SupplierWisePurchaseReturnReport")
             {
