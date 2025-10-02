@@ -33,8 +33,8 @@ namespace fa.views.utils.Report.Sale
             fileName = ReportName;
             if (ReportGridView.Rows.Count != 0)
             {
-                //try
-                //{
+                try
+                {
                     switch (fileExtension.ToLower())
                     {
                         case "xls":
@@ -59,12 +59,12 @@ namespace fa.views.utils.Report.Sale
                         default:
                             break;
                     }
-                //}
-                //catch (Exception e)
-                //{
-                //    MessageBox.Show("File Error Please Contact System Admin");
-                //    Console.WriteLine(e.ToString());
-                //}
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show("File Error Please Contact System Admin");
+                    Console.WriteLine(e.ToString());
+                }
             }
             return true;
         }
