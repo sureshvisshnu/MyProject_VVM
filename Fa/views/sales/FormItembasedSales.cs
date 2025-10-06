@@ -1563,11 +1563,11 @@ namespace fa.views.sales
                 Amount = (Pprice * Quantity);
                 if (Amount > 0)
                 {
-                    double DiscountPercentage = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.DISP].Value) == null ? 0.00 : (float.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.DISP].Value.ToString()));
+                    double DiscountPercentage = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.DISP].Value) == null ? 0.00 : (float.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.DISP].Value.ToString()!));
                     double DiscountAmount = Amount * (DiscountPercentage / 100);
                     GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.DIS].Value = DiscountAmount;
                     Amount = Amount - DiscountAmount;
-                    double TaxPercentage = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAXP].Value) == null ? 0.00 : (float.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAXP].Value.ToString()));
+                    double TaxPercentage = (GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAXP].Value) == null ? 0.00 : (float.Parse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAXP].Value.ToString()!));
                     double TaxAmount = Amount * (TaxPercentage / 100);
                     GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAX].Value = TaxAmount;
                     Amount = Amount + TaxAmount;
@@ -1586,6 +1586,113 @@ namespace fa.views.sales
             DiscountAdditinalChargeGrid.InputAmount = TotalAmount;
             OverallTotal();
         }
+        private void ComputeFormTotalNew()
+        {
+            double TotalAmount = 0.00;
+            double TotalQuantity = 0;
+            int roundingPrecision = Global.Company.PrimaryCurrency.RoundingPrecision;
+
+            for (int i = 0; i < GridViewSalesItem.Rows.Count - 1; i++)
+            {
+                // Safe parsing helpers
+                double Quantity = 0.0;
+                double FreeQuantity = 0.0;
+                double Pprice = 0.0;
+                double Oprice = 0.0;
+
+                double.TryParse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.QTY].Value?.ToString(), out Quantity);
+                double.TryParse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.FREE].Value?.ToString(), out FreeQuantity);
+                double.TryParse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.PRICE].Value?.ToString(), out Pprice);
+                double.TryParse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.OPRICE].Value?.ToString(), out Oprice);
+
+                // UOM and product id
+                string selectedUom = GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.UOM].Value?.ToString() ?? string.Empty;
+                object idCell = GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.ID].Value;
+                long productId = idCell == null ? 0L : Convert.ToInt64(idCell);
+
+                double Amount = 0.0;
+
+                if (productId > 0 && Quantity > 0)
+                {
+                    Product product = CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(productId);
+                    if (product != null)
+                    {
+                        // Determine factor for selected UOM (defensive: fallback to 1)
+                        double selectedFactor = 1.0;
+                        if (!string.IsNullOrEmpty(selectedUom))
+                        {
+                            if (selectedUom.Equals(product.WholesaleUOM, StringComparison.OrdinalIgnoreCase))
+                                selectedFactor = product.WholesaleXFactor > 0 ? product.WholesaleXFactor : 1.0;
+                            else
+                                selectedFactor = product.RetailXFactor > 0 ? product.RetailXFactor : 1.0;
+                        }
+
+                        // Determine unit price to use:
+                        // - If Oprice (override) present (>0) -> treat it as unit price already for selected UOM (do NOT convert)
+                        // - Else use Pprice and convert Pprice (which is stored as price for product's base UOM) to selected UOM
+                        double unitPrice = 0.0;
+                        if (Oprice > 0.0)
+                        {
+                            unitPrice = Oprice; // assume override already matches selected UOM
+                        }
+                        else
+                        {
+                            // Pprice is assumed to be price for the product's base UOM (wholesale or retail UOM).
+                            // We divide by selectedFactor if Pprice is per larger UOM. This follows your approach:
+                            // Pprice = Pprice / factor
+                            // unitPrice = Pprice / factor  (same as Pprice = Pprice / factor; then multiply qty)
+                            // Defensive: if factor is 0, use 1
+                            if (selectedFactor <= 0) selectedFactor = 1.0;
+                            unitPrice = Pprice / selectedFactor;
+                        }
+
+                        // Amount is unit price * quantity (free quantity not charged)
+                        Amount = unitPrice * Quantity;
+                    }
+                }
+
+                TotalQuantity += Quantity;
+
+                if (Amount > 0.0)
+                {
+                    // Discount %
+                    double DiscountPercentage = 0.0;
+                    double.TryParse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.DISP].Value?.ToString(), out DiscountPercentage);
+
+                    double DiscountAmount = Math.Round(Amount * (DiscountPercentage / 100.0), roundingPrecision);
+                    GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.DIS].Value = DiscountAmount;
+                    Amount = Amount - DiscountAmount;
+
+                    // Tax %
+                    double TaxPercentage = 0.0;
+                    double.TryParse(GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAXP].Value?.ToString(), out TaxPercentage);
+
+                    double TaxAmount = Math.Round(Amount * (TaxPercentage / 100.0), roundingPrecision);
+                    GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAX].Value = TaxAmount;
+                    Amount = Amount + TaxAmount;
+
+                    // Final amount per row (rounded)
+                    Amount = Math.Round(Amount, roundingPrecision);
+                    GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.AMOUNT].Value = Amount;
+                    TotalAmount += Amount;
+                }
+                else
+                {
+                    GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.AMOUNT].Value = 0.00;
+                    GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.DIS].Value = 0.00;
+                    GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.TAX].Value = 0.00;
+                }
+            }
+
+            GridViewPurchaseItemTotal.Rows[0].Cells[(int)SaleEntryTotalTableColumn.VALUE].Value =
+                TotalAmount.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+
+            DiscountAdditinalChargeGrid.Quantity = TotalQuantity;
+            DiscountAdditinalChargeGrid.InputAmount = TotalAmount;
+            OverallTotal();
+        }
+
+
         private void OverallTotal()
         {
             double RoundedTotal = DiscountAdditinalChargeGrid.OutputAmount;
@@ -2102,6 +2209,95 @@ namespace fa.views.sales
             }
         }
         private void LoadPrice(int Index, string Uom)
+        {
+            if (GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ID].Value != null)
+            {
+                LoadEditableStock(Index, Uom);
+                Product product = CatalogProductManager.Instance.GetProductInfoById((long)GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ID].Value);
+                if (product != null)
+                {
+                    double Tax = product.UseHsnTax ? ProductTaxPercentage(product) : ProductTaxPercentage(product.SalesTax.ToList());
+
+                    // Get selected price type from combobox
+                    PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
+
+                    // Determine factor for selected UOM (defensive: fallback to 1)
+                    double selectedFactor = 1.0;
+                    if (!string.IsNullOrEmpty(Uom))
+                    {
+                        if (Uom.Equals(product.WholesaleUOM, StringComparison.OrdinalIgnoreCase))
+                            selectedFactor = product.WholesaleXFactor > 0 ? product.WholesaleXFactor : 1.0;
+                        else
+                            selectedFactor = product.RetailXFactor > 0 ? product.RetailXFactor : 1.0;
+                    }
+
+                    double unitPrice = 0.0;
+
+                    if ((bool)GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ISBAT].Value)
+                    {
+                        if (GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.BATCHID].Value != null)
+                        {
+                            InventoryBatch InventoryBatch = InventoryLocationManager.Instance.GetInventoryByBatchId(
+                                (long)GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.BATCHID].Value,
+                                LocationId);
+
+                            if (InventoryBatch != null)
+                            {
+                                double price = GetPriceByType(selectedPriceType, InventoryBatch);
+
+                                // Convert price to selected UOM
+                                if (selectedFactor <= 0) selectedFactor = 1.0;
+                                unitPrice = price / selectedFactor;
+
+                                // Apply tax if needed
+                                unitPrice = Global.Company.CompanySalesSetup.IncludingTax ?
+                                    unitPrice - ((unitPrice * (unitPrice * (Tax / 100))) / (unitPrice + (unitPrice * (Tax / 100)))) :
+                                    unitPrice;
+
+                                GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.PRICE].Value = Math.Round(unitPrice, Global.Company.PrimaryCurrency.RoundingPrecision);
+                                GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.MSRP].Value = InventoryBatch.MaxRetailPrice;
+                                SaleProductDetails.BatchId = InventoryBatch.Id;
+                            }
+                        }
+                        else
+                        {
+                            double price = GetPriceByType(selectedPriceType, product);
+
+                            // Convert price to selected UOM
+                            if (selectedFactor <= 0) selectedFactor = 1.0;
+                            unitPrice = price / selectedFactor;
+
+                            // Apply tax if needed
+                            unitPrice = Global.Company.CompanySalesSetup.IncludingTax ?
+                                unitPrice - ((unitPrice * (unitPrice * (Tax / 100))) / (unitPrice + (unitPrice * (Tax / 100)))) :
+                                unitPrice;
+
+                            GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.PRICE].Value = Math.Round(unitPrice, Global.Company.PrimaryCurrency.RoundingPrecision);
+                            SaleProductDetails.CurrentDate = DatetimePickerSalesDate.Date;
+                            SaleProductDetails.ProductId = product.Id;
+                        }
+                    }
+                    else
+                    {
+                        double price = GetPriceByType(selectedPriceType, product);
+
+                        // Convert price to selected UOM
+                        if (selectedFactor <= 0) selectedFactor = 1.0;
+                        unitPrice = price / selectedFactor;
+
+                        // Apply tax if needed
+                        unitPrice = Global.Company.CompanySalesSetup.IncludingTax ?
+                            unitPrice - ((unitPrice * (unitPrice * (Tax / 100))) / (unitPrice + (unitPrice * (Tax / 100)))) :
+                            unitPrice;
+
+                        GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.PRICE].Value = Math.Round(unitPrice, Global.Company.PrimaryCurrency.RoundingPrecision);
+                        SaleProductDetails.CurrentDate = DatetimePickerSalesDate.Date;
+                        SaleProductDetails.ProductId = product.Id;
+                    }
+                }
+            }
+        }
+        private void LoadPriceOld(int Index, string Uom)
         {
             if (GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ID].Value != null)
             {
@@ -2979,6 +3175,75 @@ namespace fa.views.sales
                 }
             }
         }
+        private void LoadUomTaxChangesForUomCqalc(long ProductId)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            Product Product = CatalogProductManager.Instance.GetProductInfoByIdForProductLoad(ProductId);
+
+            if (Product != null)
+            {
+                LoadProductCombo();
+                int index = GridViewSalesItem.CurrentRow.Index;
+
+                double Tax = Product.UseHsnTax
+                    ? ProductTaxPercentage(Product)
+                    : ProductTaxPercentage(Product.SalesTax.ToList());
+
+                // Clear and reload UOMs
+                var uomCell = (GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM] as DataGridViewComboBoxCell)!;
+                uomCell.Items.Clear();
+                uomCell.Items.Add(Product.RetailUOM);
+                if (!Product.RetailUOM.Equals(Product.WholesaleUOM, StringComparison.OrdinalIgnoreCase))
+                    uomCell.Items.Add(Product.WholesaleUOM);
+
+                // Get selected price type (retail or wholesale)
+                PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
+
+                // Default UOM
+                string selectedUOM = selectedPriceType == PriceType.Wholesale ? Product.WholesaleUOM : Product.RetailUOM;
+                uomCell.Value = selectedUOM;
+
+                // Fill product row defaults
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRODUCT].Value = Product.Name;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.QTY].Value = 0;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.FREE].Value = 0;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.OPRICE].Value = 0.00;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.MSRP].Value = Product.Msrp;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.TAX].Value = 0.00;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.TAXP].Value = Tax;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.DIS].Value = 0.00;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.DISP].Value = Product.DefaultDiscount;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.AMOUNT].Value = 0.00;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ID].Value = Product.Id;
+
+                // --- Price Calculation with UOM & XFactor ---
+                double basePrice = 0.0;
+                double divisor = 1.0;
+
+                if (selectedUOM == Product.WholesaleUOM)
+                {
+                    divisor = Product.WholesaleXFactor; // usually 12 for dozen
+                    basePrice = (selectedPriceType == PriceType.Wholesale ? Product.WholdSalePrice : Product.RetailPrice);
+                }
+                else if (selectedUOM == Product.RetailUOM)
+                {
+                    divisor = Product.RetailXFactor; // usually 1 for piece
+                    basePrice = (selectedPriceType == PriceType.Wholesale ? Product.WholdSalePrice : Product.RetailPrice);
+                }
+
+                // Adjust for tax (if price includes tax)
+                double finalPrice = Global.Company.CompanySalesSetup.IncludingTax
+                    ? basePrice / (1 + (Tax / 100))
+                    : basePrice;
+
+                // Price per selected UOM = basePrice ÷ XFactor
+                double unitPrice = finalPrice / divisor;
+
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRICE].Value = Math.Round(unitPrice, 2);
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ISBAT].Value = Product.isInventoryAtBatch ?? false;
+            }
+        }
+
         private void LoadUomTax(long ProductId)
         {
             Cursor.Current = Cursors.WaitCursor;
