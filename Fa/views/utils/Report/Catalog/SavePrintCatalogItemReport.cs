@@ -62,9 +62,9 @@ namespace fa.views.utils.Report.Catalog
                         if (!col.Visible) continue;
                         if (col.Name == string.Empty || col.GetType() == typeof(DataGridViewButtonColumn)) continue;
                         dt.Columns.Add(col.Name, typeof(string));
-                        dt.Columns[col.Name].Caption = col.HeaderText;
+                        dt.Columns[col.Name]!.Caption = col.HeaderText;
                     }
-                    if (dt.Columns.Count == 0) return null;
+                    if (dt.Columns.Count == 0) return null!;
                     foreach (DataGridViewRow row in ReportGridView.Rows)
                     {
                         DataRow drNewRow = dt.NewRow();

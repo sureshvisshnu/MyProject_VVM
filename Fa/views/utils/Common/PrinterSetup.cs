@@ -232,7 +232,7 @@ namespace fa.views.utils
 
             string PrintFormat = IsDotMatrix && !IsExport ? "Dotmatrix" : "Laser";
 
-            if (!isGSTInvoice && (PrintPaper == "A5 PORTRAIT" || PrintPaper == "A5 LANDSCAPE"))
+            if (!isGSTInvoice && (PrintPaper == "A5 PORTRAIT" || PrintPaper == "A4 PORTRAIT"))
             {
                 // Non-GST A5 paper - use simplified format
                 bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");

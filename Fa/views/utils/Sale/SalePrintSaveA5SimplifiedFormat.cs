@@ -378,6 +378,15 @@ namespace Fa.views.utils.Sale
             HeadCell.HorizontalAlignment = Element.ALIGN_CENTER;
             HeadTable.AddCell(HeadCell);
 
+            // Add phone number below address
+            if (!string.IsNullOrEmpty(Global.Company.ContactInfo.Phone))
+            {
+                HeadCell = new PdfPCell(new Phrase("Phone : " + Global.Company.ContactInfo.Phone, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+                HeadCell.Border = Rectangle.NO_BORDER;
+                HeadCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                HeadTable.AddCell(HeadCell);
+            }
+
             HeadCell = new PdfPCell(new Phrase(Heading, PdfDataAlignment.GetFont("Font_Bold_Italic_10_Black")));
             HeadCell.Border = Rectangle.NO_BORDER;
             HeadCell.HorizontalAlignment = Element.ALIGN_CENTER;

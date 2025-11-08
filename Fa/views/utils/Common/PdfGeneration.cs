@@ -254,7 +254,7 @@ namespace fa.views.utils
             return wasFileSaved;
         }
 
-        static string PaperFormat = (Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate.ToString(Global.Company.DateFormat) == Global.getCurrentFiscalYearStartDate().ToString(Global.Company.DateFormat) && x.YearEndDate.ToString(Global.Company.DateFormat) == Global.getCurrentFiscalYearEndDate().ToString(Global.Company.DateFormat) && x.EntryType == EntryType.SALES)).PrintPaperFormat.Name;
+        static string PaperFormat = (Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate.ToString(Global.Company.DateFormat)! == Global.getCurrentFiscalYearStartDate().ToString(Global.Company.DateFormat)! && x.YearEndDate.ToString(Global.Company.DateFormat) == Global.getCurrentFiscalYearEndDate().ToString(Global.Company.DateFormat)! && x.EntryType == EntryType.SALES)!).PrintPaperFormat.Name;
         private static readonly Font FBI8B = new Font(PdfDataAlignment.GetFont("Font_Normal_Italic_6_Black"));
         public static bool SaveMemoryStream(MemoryStream ms, string defaultFileName, string extension, bool isPrint, PaperTypes PaperType)
         {
@@ -290,12 +290,12 @@ namespace fa.views.utils
                     try
                     {
                         File.ReadAllBytes(tempFilePath);
-                        iTextSharp.text.Font blackFont = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
-                        iTextSharp.text.Font blackFontBold = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
+                        iTextSharp.text.Font blackFont = FontFactory.GetFont("Tahoma", 9, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
+                        iTextSharp.text.Font blackFontBold = FontFactory.GetFont("Tahoma", 9, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
                         if (PaperFormat == "105 MM ROLL" || PaperFormat == "80 MM ROLL")
                         {
-                            blackFont = FontFactory.GetFont("Arial", 6, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
-                            blackFontBold = FontFactory.GetFont("Arial", 6, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
+                            blackFont = FontFactory.GetFont("Tahoma", 6, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
+                            blackFontBold = FontFactory.GetFont("Tahoma", 6, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
                         }                    
                         using (MemoryStream stream = new MemoryStream())
                         {

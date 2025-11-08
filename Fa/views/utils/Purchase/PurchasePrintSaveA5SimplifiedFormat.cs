@@ -126,6 +126,124 @@ namespace Fa.views.utils.Purchase
         {
             using (MemoryStream myMemoryStream = new MemoryStream())
             {
+                // ✅ Determine paper size based on selection
+                Rectangle pageSize;
+                if (PrintPaper.Contains("A4"))
+                    pageSize = isLandscape ? PageSize.A4.Rotate() : PageSize.A4;
+                else
+                    pageSize = isLandscape ? PageSize.A5.Rotate() : PageSize.A5;
+
+                // ✅ Adjust margins for each format
+                float leftMargin = PrintPaper.Contains("A4") ? 25f : 20f;
+                float rightMargin = PrintPaper.Contains("A4") ? 25f : 10f;
+                float topMargin = PrintPaper.Contains("A4") ? 25f : 15f;
+                float bottomMargin = PrintPaper.Contains("A4") ? 45f : 35f;
+
+                Document pdfDoc = new Document(pageSize, leftMargin, rightMargin, topMargin, bottomMargin);
+                PageNumberHelper pageNumberHelper = new PageNumberHelper { IsLandScape = isLandscape };
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
+                writer.PageEvent = pageNumberHelper;
+
+                pdfDoc.Open();
+
+                // ✅ Header
+                string title = entrytype == Entrytype.QUOTE ? "ESTIMATE" : "PURCHASE INVOICE";
+                PdfPTable DocHeader = InvoiceHeader(title, purchaseEntry.RefNumber, purchaseEntry.PurchaseInvDate, entrytype);
+                pdfDoc.Add(DocHeader);
+
+                // ✅ Supplier / Vendor Info
+                PdfPTable CustomerTable = CustomerDetails(purchaseEntry);
+                pdfDoc.Add(CustomerTable);
+
+                // ✅ Space between header and table
+                pdfDoc.Add(new Paragraph(" "));
+
+                // ✅ Main table (columns)
+                PdfPTable table = new PdfPTable(PurchaseDetailsTableColumnName.Length);
+
+                // Adjust column widths dynamically for A4 vs A5
+                float[] widths;
+                if (PrintPaper.Contains("A4"))
+                {
+                    widths = isLandscape
+                        ? new float[] { 20f, 120f, 25f, 25f, 30f, 35f } // A4 Landscape
+                        : new float[] { 20f, 140f, 25f, 30f, 30f, 40f }; // A4 Portrait
+                }
+                else
+                {
+                    widths = isLandscape
+                        ? new float[] { 20f, 90f, 20f, 20f, 25f, 30f } // A5 Landscape
+                        : new float[] { 18f, 100f, 20f, 25f, 25f, 30f }; // A5 Portrait
+                }
+
+                table.SetWidths(widths);
+                table = CreateSalesMainTableHeader(table, dataTable);
+
+                // ✅ Add table data
+                for (int i = 0; i < dataTable.Rows.Count; i++)
+                {
+                    for (int j = 0; j < dataTable.Columns.Count; j++)
+                    {
+                        string cellText = dataTable.Rows[i][j]?.ToString() ?? "";
+                        var font = i == dataTable.Rows.Count - 1
+                            ? PdfDataAlignment.GetFont("Font_Bold_Italic_9_Black")
+                            : PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black");
+
+                        string truncated = PrintPaper.Contains("A4")
+                            ? (cellText.Length > 60 ? cellText.Substring(0, 60) + "..." : cellText)
+                            : (cellText.Length > 30 ? cellText.Substring(0, 30) + "..." : cellText);
+
+                        PdfPCell cell = new PdfPCell(new Phrase(truncated, font))
+                        {
+                            NoWrap = true,
+                            BorderWidth = 0.5f,
+                            MinimumHeight = PrintPaper.Contains("A4") ? 18f : 15f,
+                            HorizontalAlignment = j switch
+                            {
+                                0 => Element.ALIGN_CENTER,
+                                1 => Element.ALIGN_LEFT,
+                                _ => Element.ALIGN_RIGHT
+                            }
+                        };
+
+                        if (i == dataTable.Rows.Count - 1)
+                            cell.BackgroundColor = new BaseColor(220, 220, 220);
+
+                        table.AddCell(cell);
+                    }
+                }
+
+                pdfDoc.Add(table);
+
+                // ✅ Add Amount in Words
+                pdfDoc.Add(new Paragraph(" "));
+                PdfPTable AmountInWords = AmtInWordsColumn(TotalAmount);
+                pdfDoc.Add(AmountInWords);
+
+                // ✅ Add Signature Section
+                pdfDoc.Add(new Paragraph(" "));
+                PdfPTable SignatureTable = SignatureColumn();
+                pdfDoc.Add(SignatureTable);
+
+                pdfDoc.Close();
+
+                // ✅ Save / Print output dynamically by paper type
+                PdfGeneration.SaveMemoryStream(
+                    myMemoryStream,
+                    "PurchaseInvoice",
+                    fileExtension,
+                    isPrint,
+                    PrintPaper.Contains("A4")
+                        ? (isLandscape ? PaperTypes.A4_LANDSCAPE : PaperTypes.A4_PORTRAIT)
+                        : (isLandscape ? PaperTypes.A5_LANDSCAPE : PaperTypes.A5_PORTRAIT)
+                );
+            }
+        }
+
+        public void GeneratePDFLastOne(DataTable dataTable, PurchaseEntry purchaseEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount, Entrytype entrytype)
+        {
+            using (MemoryStream myMemoryStream = new MemoryStream())
+            {
                 // Set page size based on orientation
                 var pageSize = isLandscape ? PageSize.A5.Rotate() : PageSize.A5;
 

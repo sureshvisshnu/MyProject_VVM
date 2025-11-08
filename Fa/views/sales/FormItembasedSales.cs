@@ -3965,7 +3965,8 @@ namespace fa.views.sales
                     {
                         if (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.BATNO].ReadOnly)
                         {
-                            SendKeys.Send("{tab}{tab}{tab}");
+                            SendKeys.Send("{tab}{tab}");
+                            // SendKeys.Send("{tab}{tab}{tab}");
                         }
                     }
                     if (keyData == (Keys.Tab) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO))

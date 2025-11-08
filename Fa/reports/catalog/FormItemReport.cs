@@ -105,7 +105,7 @@ namespace fa.reports.catalog
             {
                 if (ComboTreeNode != null)
                 {
-                    if (ComboTreeNode.Name == "0" || ComboTreeNode.Name == "1" || ComboTreeNode.Name == "2")
+                    if (ComboTreeNode.Name == "0" || ComboTreeNode.Name == "2")
                     {
                         ComboBoxColumns.Nodes[int.Parse(ComboTreeNode.Name)].Checked = true;
                         continue;
