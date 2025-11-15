@@ -589,9 +589,11 @@ namespace fa.model.Catalog
         [ForeignKey("ProductId")]
         public Product Product { get; set; }
 
-        public decimal LinePrice { get; set; }
-        public decimal SpecialPrice { get; set; }
+        public float LinePrice { get; set; }
+        public float SpecialPrice { get; set; }
+        public float WholeSalePrice { get; set; }
     }
+
 
     public class CatalogItemSalesTaxMap 
     {

@@ -29,17 +29,17 @@ namespace Fa.views.catalog
         public static decimal MrpPercentage = 100; // NOT nullable
         private bool isUpdating = false;
         private float _mrp = 0;
+        private float _wholesalePrice;
 
-        public FormSpecialPrice(object sender)
+        public FormSpecialPrice(object sender, float wholesalePrice)
         {
+            _wholesalePrice = wholesalePrice;
+
             if (sender is FormCatalog)
-            {
                 parent = (FormCatalog)sender;
-            }
             else if (sender is FormPurchaseEntryNew)
-            {
                 parent = (FormPurchaseEntryNew)sender;
-            }
+
             InitializeComponent();
         }
 
@@ -53,14 +53,16 @@ namespace Fa.views.catalog
             if (float.TryParse(TextBoxLineMargin?.Text, out var lm)) lineMargin = lm;
             if (float.TryParse(TextBoxSpecialMargin?.Text, out var sm)) specMargin = sm;
 
+            TextBoxProductWholeSalePrice.Text = _wholesalePrice.ToString("0.##");
+
             // Pull basic product info from parent
             Product productFromParent = null!;
-            if (parent is FormCatalog cat)            {
-
+            if (parent is FormCatalog cat)
+            {
                 TextBoxProductCode.Text = cat.TextBoxProductCode.Text;
                 TextBoxProductName.Text = cat.TextBoxProductName.Text;
             }
-           
+
 
             // Prefill identity fields (as you already do)
             // ...
@@ -113,7 +115,7 @@ namespace Fa.views.catalog
             if (parent is FormCatalog catalogParent)
             {
                 if (float.TryParse(TextBoxLinePrice.Text, out float linePrice))
-                    catalogParent.LinePriceItem = linePrice;
+                    catalogParent.LineWholesalePrice = linePrice;   // <-- store here ONLY
 
                 if (float.TryParse(TextBoxSpecialPrice.Text, out float specialPrice))
                     catalogParent.SpecialPriceItem = specialPrice;
@@ -143,6 +145,11 @@ namespace Fa.views.catalog
 
             TextBoxLinePrice.Text = linePrice.ToString("0.00");
             TextBoxSpecialPrice.Text = specialPrice.ToString("0.00");
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

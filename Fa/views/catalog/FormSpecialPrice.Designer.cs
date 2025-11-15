@@ -50,16 +50,18 @@
             BtnPriceCalculatorCancel = new Button();
             statusStrip1 = new StatusStrip();
             CatalogErrorMsg = new ToolStripStatusLabel();
+            TextBoxProductWholeSalePrice = new fa.views.controls.text.CurrencyTextBox();
+            label35 = new Label();
             statusStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // ProductIdTransport
             // 
-            ProductIdTransport.Location = new Point(200, 78);
+            ProductIdTransport.Location = new Point(206, 10);
             // 
             // ProductBatchIdTransport
             // 
-            ProductBatchIdTransport.Location = new Point(177, 46);
+            ProductBatchIdTransport.Location = new Point(177, 11);
             // 
             // AccountIdTransport
             // 
@@ -197,7 +199,7 @@
             // 
             // TextBoxProductName
             // 
-            TextBoxProductName.Location = new Point(15, 79);
+            TextBoxProductName.Location = new Point(18, 39);
             TextBoxProductName.Name = "TextBoxProductName";
             TextBoxProductName.ReadOnly = true;
             TextBoxProductName.Size = new Size(300, 23);
@@ -206,7 +208,7 @@
             // 
             // TextBoxProductCode
             // 
-            TextBoxProductCode.Location = new Point(15, 37);
+            TextBoxProductCode.Location = new Point(15, 83);
             TextBoxProductCode.Name = "TextBoxProductCode";
             TextBoxProductCode.ReadOnly = true;
             TextBoxProductCode.Size = new Size(139, 23);
@@ -217,17 +219,18 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(12, 61);
+            label2.Location = new Point(15, 21);
             label2.Name = "label2";
             label2.Size = new Size(74, 13);
             label2.TabIndex = 495;
             label2.Text = "Product Name";
+            label2.Click += label2_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(12, 21);
+            label1.Location = new Point(12, 67);
             label1.Name = "label1";
             label1.Size = new Size(72, 13);
             label1.TabIndex = 494;
@@ -269,11 +272,35 @@
             CatalogErrorMsg.Size = new Size(25, 17);
             CatalogErrorMsg.Text = "      ";
             // 
+            // TextBoxProductWholeSalePrice
+            // 
+            TextBoxProductWholeSalePrice.BackColor = SystemColors.Window;
+            TextBoxProductWholeSalePrice.Decimals = 2;
+            TextBoxProductWholeSalePrice.Length = 10;
+            TextBoxProductWholeSalePrice.Location = new Point(227, 83);
+            TextBoxProductWholeSalePrice.Name = "TextBoxProductWholeSalePrice";
+            TextBoxProductWholeSalePrice.ReadOnly = true;
+            TextBoxProductWholeSalePrice.Size = new Size(82, 23);
+            TextBoxProductWholeSalePrice.TabIndex = 511;
+            TextBoxProductWholeSalePrice.Text = "0.00";
+            TextBoxProductWholeSalePrice.TextAlign = HorizontalAlignment.Right;
+            // 
+            // label35
+            // 
+            label35.AutoSize = true;
+            label35.Location = new Point(227, 67);
+            label35.Name = "label35";
+            label35.Size = new Size(90, 15);
+            label35.TabIndex = 512;
+            label35.Text = "Wholesale Price";
+            // 
             // FormSpecialPrice
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(335, 249);
+            Controls.Add(label35);
+            Controls.Add(TextBoxProductWholeSalePrice);
             Controls.Add(statusStrip1);
             Controls.Add(BtnPriceCalculatorSave);
             Controls.Add(BtnPriceCalculatorCancel);
@@ -323,6 +350,8 @@
             Controls.SetChildIndex(BtnPriceCalculatorCancel, 0);
             Controls.SetChildIndex(BtnPriceCalculatorSave, 0);
             Controls.SetChildIndex(statusStrip1, 0);
+            Controls.SetChildIndex(TextBoxProductWholeSalePrice, 0);
+            Controls.SetChildIndex(label35, 0);
             statusStrip1.ResumeLayout(false);
             statusStrip1.PerformLayout();
             ResumeLayout(false);
@@ -351,5 +380,7 @@
         private Button BtnPriceCalculatorCancel;
         private StatusStrip statusStrip1;
         private ToolStripStatusLabel CatalogErrorMsg;
+        public fa.views.controls.text.CurrencyTextBox TextBoxProductWholeSalePrice;
+        private Label label35;
     }
 }

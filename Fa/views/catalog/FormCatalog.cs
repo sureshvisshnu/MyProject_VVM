@@ -85,6 +85,7 @@ namespace fa.views.catalog
 
         public float LinePriceItem = 0;
         public float SpecialPriceItem = 0;
+        public float LineWholesalePrice { get; set; }
 
         FormBase parent = null!;
         public FormCatalog(object sender)
@@ -3299,9 +3300,14 @@ namespace fa.views.catalog
 
         private void BtnSpecialPrice_Click(object sender, EventArgs e)
         {
-            FormSpecialPrice SpecialPrice = new FormSpecialPrice(this);
-            //formSpecialPrice.ProductId = long.Parse(TextBoxCatalogId.Text);
-            SpecialPrice.ShowDialog(this);
+            float wholesalePrice = 0;
+            float.TryParse(TextBoxProductWholeSalePrice.Text, out wholesalePrice);
+
+            FormSpecialPrice specialPriceForm = new FormSpecialPrice(this, wholesalePrice);
+            specialPriceForm.ShowDialog(this);
+
+            // After closing popup, you can use:
+            float lineWSPrice = this.LineWholesalePrice;
         }
 
     }
