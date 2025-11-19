@@ -22,11 +22,7 @@ namespace Fa.reports.catalog
 
             if (productId.HasValue)
             {
-                if (Global.ProductDetailList == null || Global.ProductDetailList.Count == 0)
-                {
-                    Global.ProductDetailList = CatalogProductManager.Instance.ListProductByCompanyId(Global.Company.CompanyId);
-                }
-
+                Global.ProductDetailList = CatalogProductManager.Instance.ListProductByCompanyId(Global.Company.CompanyId);
                 var product = Global.ProductDetailList.FirstOrDefault(p => p.Id == productId.Value);
                 if (product != null)
                 {

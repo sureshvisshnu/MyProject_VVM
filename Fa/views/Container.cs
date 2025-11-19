@@ -2442,6 +2442,12 @@ namespace fa.views
             FormSalesEntryWithoutTax formSalesEntryWithoutTax = new FormSalesEntryWithoutTax();
             formSalesEntryWithoutTax.ShowDialog();
         }
+
+        private void uOMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //FormModifyXFactor formModifyXFactor = new FormModifyXFactor();
+            //formModifyXFactor.ShowDialog();
+        }
     }
     public class DayAppointment
     {

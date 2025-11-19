@@ -134,7 +134,9 @@ namespace fa.views.catalog
                     BtnCatalogImport.Visible = false;
                     BtnCatalogReport.Visible = false;
                     BtnSpecialPrice.Visible = false;
+                    BtnXFacor.Visible = false;
                     TreeViewCatalog.Visible = false;
+
                     TabControlCategory.Location = new Point(12, 12);
                     TabControlProductFamily.Location = new Point(12, 12);
                     TabControlProduct.Location = new Point(12, 12);
@@ -2025,6 +2027,7 @@ namespace fa.views.catalog
                 BtnProductParent.Enabled = enable;
                 BtnPriceCalculator.Enabled = enable;
                 BtnSpecialPrice.Enabled = enable;
+                BtnXFacor.Enabled = enable;
                 ComboBoxProductPurchaseAc.Visible = enable;
                 ComboBoxProductDiscountAc.Visible = enable;
                 ComboBoxProductSalesAc.Visible = enable;
@@ -3310,6 +3313,24 @@ namespace fa.views.catalog
             float lineWSPrice = this.LineWholesalePrice;
         }
 
+        private void BtnXFacor_Click(object sender, EventArgs e)
+        {
+            long productId = long.Parse(TextBoxCatalogId.Text);
+            FormModifyXFactor modifyForm = new FormModifyXFactor(productId);
+
+            // Prefill using PUBLIC PROPERTIES
+            modifyForm.ProductCode = TextBoxProductCode.Text;
+            modifyForm.ProductName = TextBoxProductName.Text;
+            modifyForm.RetailUOM = ComboBoxProductRetailUOM.Text;
+            modifyForm.WholesaleUOM = ComboBoxProductWholeSaleUOM.Text;
+            modifyForm.RetailXFactor = TextBoxProductXFactorRetail.Text;
+            modifyForm.WholesaleXFactor = TextBoxProductXFactorWholeSale.Text;
+
+            if (modifyForm.ShowDialog(this) == DialogResult.OK)
+            {
+                LoadCatalogInfo();
+            }
+        }
     }
     public static class PriceHelper
     {

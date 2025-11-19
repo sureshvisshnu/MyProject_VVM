@@ -326,6 +326,7 @@
             Column54 = new DataGridViewTextBoxColumn();
             Column55 = new DataGridViewTextBoxColumn();
             contextMenuAppointment = new ContextMenuStrip(components);
+            uOMToolStripMenuItem = new ToolStripMenuItem();
             menuStripMain.SuspendLayout();
             toolStripLoginInfo.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
@@ -1349,7 +1350,7 @@
             // 
             // catalogToolStripMenuItem
             // 
-            catalogToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manageCatalogToolStripMenuItem, catalogReportToolStripMenuItem, importDataToolStripMenuItem, manageItemTaxToolStripMenuItem, barCodeLabelReplaceToolStripMenuItem, priceViewerToolStripMenuItem });
+            catalogToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { manageCatalogToolStripMenuItem, catalogReportToolStripMenuItem, importDataToolStripMenuItem, manageItemTaxToolStripMenuItem, barCodeLabelReplaceToolStripMenuItem, priceViewerToolStripMenuItem, uOMToolStripMenuItem });
             catalogToolStripMenuItem.Image = (Image)resources.GetObject("catalogToolStripMenuItem.Image");
             catalogToolStripMenuItem.Name = "catalogToolStripMenuItem";
             catalogToolStripMenuItem.Size = new Size(223, 26);
@@ -3010,6 +3011,13 @@
             contextMenuAppointment.Name = "contextMenuAppointment";
             contextMenuAppointment.Size = new Size(61, 4);
             // 
+            // uOMToolStripMenuItem
+            // 
+            uOMToolStripMenuItem.Name = "uOMToolStripMenuItem";
+            uOMToolStripMenuItem.Size = new Size(221, 26);
+            uOMToolStripMenuItem.Text = "UOM X Fsctor Modification";
+            uOMToolStripMenuItem.Click += uOMToolStripMenuItem_Click;
+            // 
             // Container
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
@@ -3341,6 +3349,7 @@
         private ToolStripMenuItem itemSalesReportToolStripMenuItem;
         private ToolStripMenuItem priceViewerToolStripMenuItem;
         private ToolStripMenuItem salesNoTaxToolStripMenuItem;
+        private ToolStripMenuItem uOMToolStripMenuItem;
     }
 }
 

@@ -446,6 +446,35 @@ namespace fa.api.catalog
             }
             return ProductInfo;
         }
+
+        public Product UpdateProductXFactor(Product product)
+        {
+            using (AccountMasterContext context = new AccountMasterContext())
+            {
+                // Load the existing product from DB
+                Product dbProduct = context.Products
+                    .FirstOrDefault(p => p.Id == product.Id);
+
+                if (dbProduct == null)
+                    return null; // Product not found
+
+                // Update X-Factor & UOM fields
+                dbProduct.RetailUOM = product.RetailUOM;
+                dbProduct.WholesaleUOM = product.WholesaleUOM;
+                dbProduct.RetailXFactor = product.RetailXFactor;
+                dbProduct.WholesaleXFactor = product.WholesaleXFactor;
+
+                // If you also want to update modified date
+                dbProduct.LastModifiedDate = DateTime.Now;
+
+                // Save changes
+                context.SaveChanges();
+
+                return dbProduct;
+            }
+        }
+
+
         public IList<Product> ListProductByCompanyId(long LocationId, long CompanyId)
         {
             using (AccountMasterContext Context = new AccountMasterContext())

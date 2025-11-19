@@ -280,7 +280,7 @@
             TextBoxProductWholeSalePrice.Location = new Point(227, 83);
             TextBoxProductWholeSalePrice.Name = "TextBoxProductWholeSalePrice";
             TextBoxProductWholeSalePrice.ReadOnly = true;
-            TextBoxProductWholeSalePrice.Size = new Size(82, 23);
+            TextBoxProductWholeSalePrice.Size = new Size(100, 23);
             TextBoxProductWholeSalePrice.TabIndex = 511;
             TextBoxProductWholeSalePrice.Text = "0.00";
             TextBoxProductWholeSalePrice.TextAlign = HorizontalAlignment.Right;
