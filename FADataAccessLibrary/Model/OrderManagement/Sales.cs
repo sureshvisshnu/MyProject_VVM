@@ -117,5 +117,7 @@ namespace fa.model.OrderManagement
         public SaleDetail SaleDetailRefReturn { get; set; }
         public string Uom { get; set; }
         public int OrderNo { get; set; }
+        public int SortOrder { get; set; }
+
     }
 }
