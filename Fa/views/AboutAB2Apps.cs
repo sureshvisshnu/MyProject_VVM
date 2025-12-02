@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 namespace fa.views
 {
-    public partial class AboutVVMApps : Form
+    public partial class AboutAB2Apps : Form
     {
-        public AboutVVMApps()
+        public AboutAB2Apps()
         {
             InitializeComponent();
             LoadCompanyLogo();

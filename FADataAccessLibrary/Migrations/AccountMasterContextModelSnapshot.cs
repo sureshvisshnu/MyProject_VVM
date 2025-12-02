@@ -264,7 +264,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Integrated Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 12, 1, 22, 21, 13, 296, DateTimeKind.Local).AddTicks(3105),
+                            EffectiveTo = new DateTime(2400, 11, 15, 16, 19, 28, 624, DateTimeKind.Local).AddTicks(3173),
                             Name = "IGST",
                             Rule = "RunIGST()"
                         },
@@ -274,7 +274,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Central Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 12, 1, 22, 21, 13, 296, DateTimeKind.Local).AddTicks(3145),
+                            EffectiveTo = new DateTime(2400, 11, 15, 16, 19, 28, 624, DateTimeKind.Local).AddTicks(3210),
                             Name = "CGST",
                             Rule = "RunCGST()"
                         },
@@ -284,7 +284,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "State Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 12, 1, 22, 21, 13, 296, DateTimeKind.Local).AddTicks(3156),
+                            EffectiveTo = new DateTime(2400, 11, 15, 16, 19, 28, 624, DateTimeKind.Local).AddTicks(3220),
                             Name = "SGST",
                             Rule = "RunSGST()"
                         },
@@ -294,7 +294,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Tax at Source Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 12, 1, 22, 21, 13, 296, DateTimeKind.Local).AddTicks(3165),
+                            EffectiveTo = new DateTime(2400, 11, 15, 16, 19, 28, 624, DateTimeKind.Local).AddTicks(3229),
                             Name = "TCS",
                             Rule = "RunTCS()"
                         });
@@ -11330,9 +11330,6 @@ namespace FADataAccessLibrary.Migrations
 
                     b.Property<long?>("SaleId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("SortOrder")
-                        .HasColumnType("int");
 
                     b.Property<string>("Uom")
                         .HasColumnType("longtext");

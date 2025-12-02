@@ -1,6 +1,6 @@
 ﻿namespace fa.views
 {
-    partial class AboutVVMApps
+    partial class AboutAB2Apps
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutVVMApps));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutAB2Apps));
             label1 = new Label();
             closeBtn = new Button();
             label2 = new Label();

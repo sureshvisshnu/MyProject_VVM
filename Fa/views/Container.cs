@@ -840,7 +840,7 @@ namespace fa.views
 
         private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AboutVVMApps AboutFrom = new AboutVVMApps();
+            AboutAB2Apps AboutFrom = new AboutAB2Apps();
             AboutFrom.Show();
         }
 
