@@ -224,7 +224,7 @@ namespace Fa.views.utils.Sale
 
                 try
                 {
-                    foreach (SaleDetail SaleDetails in SaleEntry.SaleDetails.OrderBy(x => x.Id))
+                    foreach (SaleDetail SaleDetails in SaleEntry.SaleDetails.OrderBy(x => x.PrintOrderNo))
                     {
                         count++;
                         SaleDetail lSaleDetail = SalesManager.GetSaleDetail(SaleDetails.Id);

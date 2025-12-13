@@ -255,6 +255,7 @@ namespace fa.views.sales
                     SaleDetail.isBatch = (bool)GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.ISBAT].Value;
                     SaleDetail.Uom = GridViewSalesItem.Rows[i].Cells[(int)SaleEntryTableColumn.UOM].Value.ToString();
                     SaleDetail.OrderNo = i + 1;
+                    SaleDetail.PrintOrderNo = i + 1;
                     //FOR SQL
                     SaleDetail.ExpDate = DateTime.Now.Date;
                     if (SaleDetail.isBatch)

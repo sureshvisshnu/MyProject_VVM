@@ -11,7 +11,7 @@ using fa.model.Hms.Op;
 
 namespace fa.model.OrderManagement
 {
-    public class SaleEntry: AuditableEntityForWorkStation
+    public class SaleEntry : AuditableEntityForWorkStation
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
@@ -38,7 +38,7 @@ namespace fa.model.OrderManagement
         public List<OrderLevelSaleTaxDetail> TaxDetails { get; set; } = new List<OrderLevelSaleTaxDetail>();
         public ICollection<SaleDetail> SaleDetails { get; set; } = new List<SaleDetail>();
         public List<SaleAdditionalTransaction> SaleAdditionalTransactions { get; set; } = new List<SaleAdditionalTransaction>();
-        public Entrytype EntryType { get; set; } 
+        public Entrytype EntryType { get; set; }
         public DateTime QuotaionExpireAt { get; set; }
         public long? PaymentId { get; set; }
         [ForeignKey("PaymentId")]
@@ -76,7 +76,7 @@ namespace fa.model.OrderManagement
 
     public enum Entrytype
     {
-        SALE,QUOTE,RETURN
+        SALE, QUOTE, RETURN
     }
     public enum SaleMethod
     {
@@ -86,7 +86,7 @@ namespace fa.model.OrderManagement
     {
         Retail, WholeSale
     }
-   
+
     public class SaleDetail : AuditableEntityForWorkStation
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -117,5 +117,7 @@ namespace fa.model.OrderManagement
         public SaleDetail SaleDetailRefReturn { get; set; }
         public string Uom { get; set; }
         public int OrderNo { get; set; }
+        public int PrintOrderNo { get; set; }
+
     }
 }
