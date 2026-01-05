@@ -4,6 +4,7 @@ using fa.api.utils;
 using fa.model.Accounting.Masters;
 using fa.model.OrderManagement;
 using fa.views.utils;
+using fa.views.utils.Sale;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using System;
@@ -12,6 +13,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static fa.views.utils.PrinterSetup;
 using Rectangle = iTextSharp.text.Rectangle;
 
 namespace Fa.views.utils.Sale
@@ -195,8 +197,11 @@ namespace Fa.views.utils.Sale
                     isLandscape ? PaperTypes.A5_LANDSCAPE : PaperTypes.A5_PORTRAIT);
             }
         }
-        public void ExportToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint, Entrytype entrytype, bool isLandscape = false)
+        public string LastGeneratedFilePathForWE { get; set; } = string.Empty;
+
+        public void ExportToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint, Entrytype entrytype, bool isLandscape = false, bool isForWE = false)
         {
+            
             SalesManager SalesManager = SalesManager.Instance;
             SaleEntry SaleEntry = SalesManager.GetSaleEntry(SalesId);
 
@@ -262,16 +267,21 @@ namespace Fa.views.utils.Sale
                     MessageBox.Show("Error generating invoice: " + ex.Message);
                     return;
                 }
-
                 if (fileExtension == "Laser")
                 {
-                    GeneratePDF(SaleDetailsTable, SaleEntry, PrintPaper, "pdf", isPrint, isLandscape, TotalAmount, entrytype);
+                    GeneratePDF(SaleDetailsTable, SaleEntry, PrintPaper, "pdf", isPrint, isLandscape, TotalAmount, entrytype, isForWE);
+                    if (isForWE)
+                    {
+                        LastGeneratedFilePathForWE = LastGeneratedFilePath;
+                    }
                 }
             }
         }
+        public string LastGeneratedFilePath { get; set; } = string.Empty;
+        byte[] finalPdf;
 
         //public void GeneratePDF(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount)
-        public void GeneratePDF(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount, Entrytype entrytype)
+        public void GeneratePDF(DataTable dataTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isLandscape, double TotalAmount, Entrytype entrytype, bool isWE = false)
         {
             using (MemoryStream myMemoryStream = new MemoryStream())
             {
@@ -358,8 +368,25 @@ namespace Fa.views.utils.Sale
 
 
                 pdfDoc.Close();
-                PdfGeneration.SaveMemoryStream(myMemoryStream, "SaleInvoice", fileExtension, isPrint,
+
+                if (isWE)
+                {
+                    finalPdf = myMemoryStream.ToArray();
+                    var pdfGen = new PdfGeneration
+                    {
+                        IsPrint = false,
+                        FileName = "SaleInvoice",
+                        PdfFile = finalPdf,
+                        IsGetFileName = true
+                    };
+                    pdfGen.SavePdfForWE();
+                    LastGeneratedFilePath = pdfGen.GeneratedFilePath!;
+                }
+                else
+                {
+                    PdfGeneration.SaveMemoryStream(myMemoryStream, "SaleInvoice", fileExtension, isPrint,
                     isLandscape ? PaperTypes.A5_LANDSCAPE : PaperTypes.A5_PORTRAIT);
+                }
             }
         }
 

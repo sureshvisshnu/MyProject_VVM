@@ -157,6 +157,7 @@
             AmountReceivedGB = new GroupBox();
             ComboBoxPaymentType = new fa.views.controls.ComboBoxSwapTextBox();
             label1 = new Label();
+            BtnWhatsUpEmail = new Button();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).BeginInit();
             toolStrip1.SuspendLayout();
             StatusStripSales.SuspendLayout();
@@ -1296,13 +1297,25 @@
             label1.TabIndex = 40;
             label1.Text = "Payment Type";
             // 
+            // BtnWhatsUpEmail
+            // 
+            BtnWhatsUpEmail.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
+            BtnWhatsUpEmail.Location = new Point(292, 592);
+            BtnWhatsUpEmail.Name = "BtnWhatsUpEmail";
+            BtnWhatsUpEmail.Size = new Size(111, 24);
+            BtnWhatsUpEmail.TabIndex = 229;
+            BtnWhatsUpEmail.Text = "WhatsUp / Email";
+            BtnWhatsUpEmail.UseVisualStyleBackColor = true;
+            BtnWhatsUpEmail.Click += BtnWhatsUpEmail_Click;
+            // 
             // FormItembasedSales
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1353, 661);
-            Controls.Add(ComboBoxInvoicePriceBy);
+            Controls.Add(BtnWhatsUpEmail);
             Controls.Add(ComboBoxSaleInventoryLocation);
+            Controls.Add(ComboBoxInvoicePriceBy);
             Controls.Add(AmountReceivedGB);
             Controls.Add(YesNoRadioPriceTo);
             Controls.Add(label29);
@@ -1414,8 +1427,9 @@
             Controls.SetChildIndex(label29, 0);
             Controls.SetChildIndex(YesNoRadioPriceTo, 0);
             Controls.SetChildIndex(AmountReceivedGB, 0);
-            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
             Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
+            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
+            Controls.SetChildIndex(BtnWhatsUpEmail, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
@@ -1547,5 +1561,6 @@
         private Label label29;
         private GroupBox AmountReceivedGB;
         private controls.ComboBoxSwapTextBox ComboBoxPaymentType;
+        private Button BtnWhatsUpEmail;
     }
 }

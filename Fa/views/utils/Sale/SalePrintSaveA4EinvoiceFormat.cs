@@ -45,6 +45,356 @@ namespace Fa.views.utils.Sale
         {
             SNO, MFRID, DESC, UOM, HSN, BATCH, QTY, FREE, MRP, RATE, DISCP, TAXP, TOTALAMOUNT
         }
+        public string LastGeneratedFilePath { get; set; } = string.Empty;
+        byte[] finalPdf;
+
+        public void ExportA4PortraitToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint, bool isForWE = false)
+        {
+            SalesManager SalesManager = SalesManager.Instance;
+            SaleEntry SaleEntry = SalesManager.GetSaleEntry(SalesId);
+            IList<TaxTable> lTaxTable = new List<TaxTable>();
+            if (SaleEntry == null)
+            {
+                MessageBox.Show("Something went wrong, the selected sale is not valid.");
+                return;
+            }
+            List<CompanySalesTaxAccountMap> CompanySalesTaxAccountMap = (List<CompanySalesTaxAccountMap>)Global.Company.SalesTaxAccountMaps;
+            DataTable SaleDataTableTotal = new DataTable();
+            DataTable SaleDetailsTable = new DataTable();
+
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.SNO], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.MFRID], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.DESC], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.UOM], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.HSN], typeof(string));
+            //if (Global.Company.CompanySalesSetup.ShowBatchOnPrint)
+            //{
+            //    SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.BATCH], typeof(string));
+            //}
+            //else
+            //{
+            //    SaleDetailsTable.Columns.Add("1", typeof(string));
+            //}
+            SaleDetailsTable.Columns.Add("1", typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.QTY], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.FREE], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.MRP], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.RATE], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.DISCP], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.TAXP], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsTableColumnName[(int)SaleDetailsTableColumn.TOTALAMOUNT], typeof(string));
+
+            if (SaleEntry.SaleDetails.Count != 0)
+            {
+                double SubTotalForTax = 0;
+                double SubTotal = 0;
+                float LintTotal = 0;
+                float TaxTotal = 0;
+                float Discount = 0;
+                int count = 0;
+                double Qty = 0;
+                double TotalQty = 0;
+                double TotalFree = 0;
+                double Price = 0;
+                double TotalAmount = 0;
+                double GrossAmount = 0;
+                double TotalSaleAmount = 0;
+                double TotalCGST = 0;
+                double TotalSGST = 0;
+                double TotalRoundedSaleAmount = 0;
+
+                try
+                {
+                    foreach (SaleDetail SaleDetails in SaleEntry.SaleDetails.OrderBy(x => x.Id))
+                    {
+                        Discount = 0;
+                        SaleDetail lSaleDetail = SalesManager.GetSaleDetail(SaleDetails.Id);
+                        string salesTax = "\n";
+                        string subTotal = SaleDetails.OverridePrice == 0 ? (SaleDetails.Price * SaleDetails.Quantity).ToString("F") : (SaleDetails.OverridePrice * SaleDetails.Quantity).ToString("F");
+                        SubTotalForTax = SaleDetails.OverridePrice == 0 ? (SaleDetails.Price * SaleDetails.Quantity) : (SaleDetails.OverridePrice * SaleDetails.Quantity);
+                        var overAll = SaleDetails.OverridePrice == 0 ? (SaleDetails.Price * SaleDetails.Quantity) : (SaleDetails.OverridePrice * SaleDetails.Quantity);
+                        SubTotal = SubTotal + overAll;
+
+                        foreach (TaxDetail Taxes in lSaleDetail.TaxDetails)
+                        {
+                            salesTax += Global.Company.SalesTaxAccountMaps.FirstOrDefault(x => x.MapId == (Taxes.CatalogItemSalesTaxMap != null ? Taxes.CatalogItemSalesTaxMap.SalesTaxMapId : Taxes.ItemSalesTaxMap.SalesTaxMapId))!.Name + " @" + Taxes.TaxRate.ToString() + "% ";
+                        }
+
+                        if (lSaleDetail.Discounts.Count > 0)
+                        {
+                            salesTax += "\nDiscount @" + lSaleDetail.Discounts.Sum(X => X.Discount).ToString() + "%";
+                            subTotal += "\n(" + Math.Round(lSaleDetail.Discounts.Sum(X => X.DiscountAmount), 2).ToString("F") + ")\n";
+                            subTotal = SaleDetails.OverridePrice == 0 ? ((SaleDetails.Price * SaleDetails.Quantity) - lSaleDetail.Discounts.Sum(X => X.DiscountAmount)).ToString("F") : ((SaleDetails.OverridePrice * SaleDetails.Quantity) - lSaleDetail.Discounts.Sum(X => X.DiscountAmount)).ToString("F");
+                            SubTotalForTax = SaleDetails.OverridePrice == 0 ? ((SaleDetails.Price * SaleDetails.Quantity) - lSaleDetail.Discounts.Sum(X => X.DiscountAmount)) : ((SaleDetails.OverridePrice * SaleDetails.Quantity) - lSaleDetail.Discounts.Sum(X => X.DiscountAmount));
+                            Discount = lSaleDetail.Discounts.Sum(X => X.DiscountAmount);
+                        }
+                        count++;
+
+                        foreach (ItemLevelSaleTaxDetail SalesTax in lSaleDetail.TaxDetails)
+                        {
+                            TaxTable TaxTable = null!;
+                            string taxName = Global.Company.SalesTaxAccountMaps.FirstOrDefault(x => x.MapId == (SalesTax.CatalogItemSalesTaxMap != null ? SalesTax.CatalogItemSalesTaxMap.SalesTaxMapId : SalesTax.ItemSalesTaxMap.SalesTaxMapId))!.Name;
+
+                            TaxTable = lTaxTable.FirstOrDefault(x => x.TaxPer == SalesTax.TaxRate && x.SaleTaxMapId == (SalesTax.CatalogItemSalesTaxMap != null ? SalesTax.CatalogItemSalesTaxMap.SalesTaxMapId : SalesTax.ItemSalesTaxMap.SalesTaxMapId))!;
+                            if (TaxTable == null)
+                            {
+                                TaxTable = new TaxTable();
+                                TaxTable.TaxPer = SalesTax.TaxRate;
+                                TaxTable.TaxAmount = SalesTax.Amount;
+                                TaxTable.SaleTaxMapId = (SalesTax.CatalogItemSalesTaxMap != null ? SalesTax.CatalogItemSalesTaxMap.SalesTaxMapId : SalesTax.ItemSalesTaxMap.SalesTaxMapId);
+                                TaxTable.SubTotal = SubTotalForTax;
+                                lTaxTable.Add(TaxTable);
+                            }
+                            else
+                            {
+                                lTaxTable.Remove(TaxTable);
+                                TaxTable.TaxAmount += SalesTax.Amount;
+                                TaxTable.SubTotal += SubTotalForTax;
+                                lTaxTable.Add(TaxTable);
+                            }
+                            if (taxName == "CGST")
+                            {
+                                TotalCGST += SalesTax.Amount;
+                            }
+                            else
+                            {
+                                TotalSGST += SalesTax.Amount;
+                            }
+                        }
+                        LintTotal = LintTotal + SaleDetails.Amount;
+                        if (lSaleDetail.TaxDetails.Count > 0)
+                        {
+                            TaxTotal = TaxTotal + lSaleDetail.TaxDetails.Sum(X => X.Amount);
+                        }
+                        double TaxAmount = PdfDataAlignment.ProductTaxPercentage(lSaleDetail.TaxDetails, SaleEntry.SaleTaxType);
+                        Qty = SaleDetails.Quantity;
+                        Price = SaleDetails.OverridePrice == 0 ? SaleDetails.Price : SaleDetails.OverridePrice;
+                        TotalAmount = (Qty * Price) - Discount;
+
+                        DataRow SaleDetailsTableNewRow = SaleDetailsTable.NewRow();
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.SNO] = count.ToString();
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.MFRID] = lSaleDetail.Product.ProductFamily?.Name?.ToString() ?? "";
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.DESC] = SaleDetails.Product?.Name?.ToString() ?? "";
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.UOM] = SaleDetails.Uom?.ToString() ?? "";
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.HSN] = SaleDetails.Product?.HSNCode?.ToString() ?? "";
+                        //if (Global.Company.CompanySalesSetup.ShowBatchOnPrint)
+                        //{
+                        //    SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.BATCH] = (SaleDetails.BatchNo?.ToString() ?? "") + "\n" + (SaleDetails.BatchNo == null ? "" : SaleDetails.ExpDate != DateTime.MinValue ? SaleDetails.ExpDate.ToString("MM-yy") : "");
+                        //}
+                        //else
+                        //{
+                        //    SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.BATCH] = "";
+                        //}
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.BATCH] = "";
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.QTY] = Qty.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.FREE] = SaleDetails.FreeQuantity.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.MRP] = SaleDetails.Msrp.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.RATE] = Price.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.DISCP] = SaleDetails.Discounts.Sum(x => x.Discount).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.TAXP] = SaleDetails.TaxDetails.Count > 1 ? (SaleDetails.TaxDetails.First().TaxRate * 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) : (SaleDetails.TaxDetails.Count > 0 ? SaleDetails.TaxDetails.First().TaxRate.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) : TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsTableColumn.TOTALAMOUNT] = Math.Round(TotalAmount, 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+
+                        SaleDetailsTable.Rows.Add(SaleDetailsTableNewRow);
+                        GrossAmount += TotalAmount;
+                        TotalQty += SaleDetails.Quantity;
+                        TotalFree += SaleDetails.FreeQuantity;
+                    }
+                    SaleDataTableTotal.Columns.Add("1", typeof(string));
+                    SaleDataTableTotal.Columns.Add("2", typeof(string));
+                    SaleDataTableTotal.Columns.Add("3", typeof(string));
+                    SaleDataTableTotal.Columns.Add("4", typeof(string));
+                    SaleDataTableTotal.Columns.Add("5", typeof(string));
+                    SaleDataTableTotal.Columns.Add("6", typeof(string));
+                    SaleDataTableTotal.Columns.Add("7", typeof(string));
+                    SaleDataTableTotal.Columns.Add("8", typeof(string));
+                    SaleDataTableTotal.Columns.Add("9", typeof(string));
+                    SaleDataTableTotal.Columns.Add("10", typeof(string));
+                    SaleDataTableTotal.Columns.Add("11", typeof(string));
+                    SaleDataTableTotal.Columns.Add("12", typeof(string));
+                    SaleDataTableTotal.Columns.Add("13", typeof(string));
+
+                    double LintTotalTrans = Math.Round(LintTotal, 2);
+                    double RoundedTotal = LintTotalTrans;
+                    double RoundoffAmount = Rounds > 0 ? RoundOff(RoundedTotal) : 0;
+                    string AmountInWords = Global.Company.CountryId == 99 ? ConvertToINR(double.Parse((RoundedTotal + RoundoffAmount).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)))) : "";
+
+                    SaleDataTableTotal.Rows.Add(new object[] { "   ", "   ", "   ", "    ", "     ", "Total", "      ", "      ", "      ", "      ", "      ", "     ", GrossAmount.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+                    SaleDataTableTotal.Rows.Add(new object[] { "   ", "   ", "   ", "    ", "     ", "CGST", "      ", "      ", "      ", "      ", "      ", "     ", TotalCGST.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+                    SaleDataTableTotal.Rows.Add(new object[] { "   ", "   ", "   ", "    ", "     ", "SGST", "      ", "      ", "      ", "      ", "      ", "     ", TotalSGST.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+
+                    for (int i = 0; i < SaleEntry.SaleAdditionalTransactions.Count; i++)
+                    {
+                        if (SaleEntry.SaleAdditionalTransactions[i].Action == AdditionalTransactionAction.CR)
+                        {
+                            LintTotalTrans = LintTotalTrans - SaleEntry.SaleAdditionalTransactions[i].Amount;
+                        }
+                        else
+                        {
+                            LintTotalTrans = LintTotalTrans + SaleEntry.SaleAdditionalTransactions[i].Amount;
+                        }
+
+                        RoundoffAmount = Rounds > 0 ? RoundOff(LintTotalTrans) : 0;
+                        RoundedTotal = LintTotalTrans;
+
+                        var TransType = SaleEntry.SaleAdditionalTransactions[i].Type == AdditionalTransactionType.PERCENT ? " @" + SaleEntry.SaleAdditionalTransactions[i].Value + "%" : "";
+                        //Additional trans
+                        SaleDataTableTotal.Rows.Add(new object[] { "   ", "   ", "   ", "    ", "     ", SaleEntry.SaleAdditionalTransactions[i].DisplayName + TransType, "     ", "    ", "    ", "     ", "    ", (SaleEntry.SaleAdditionalTransactions[i].Action == AdditionalTransactionAction.CR ? "-" : "+") + Math.Round(SaleEntry.SaleAdditionalTransactions[i].Amount, 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), RoundedTotal.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+                    }
+
+                    SaleDataTableTotal.Rows.Add(new object[] { "   ", "   ", "   ", "    ", "     ", "Round off", "      ", "      ", "      ", "      ", "      ", "     ", RoundoffAmount.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+                    SaleDataTableTotal.Rows.Add(new object[] { "   ", "   ", "   ", "    ", "     ", "Grand Total", TotalQty.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision)), TotalFree.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision)), "      ", "      ", "      ", "      ", "Rs. " + (RoundedTotal + RoundoffAmount).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+                    TotalRoundedSaleAmount = double.Parse((RoundedTotal + RoundoffAmount).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)));
+                }
+                catch (DocumentException dex)
+                {
+                    MessageBox.Show(dex.ToString());
+                }
+                catch (IOException ioex)
+                {
+                    MessageBox.Show(ioex.ToString());
+                }
+                catch (Exception ee)
+                {
+                    MessageBox.Show("File Error Please Contact System Admin");
+                    Console.WriteLine(ee.ToString());
+                }
+                if (fileExtension == "Laser")
+                {
+                    GeneratePDF(lTaxTable, SaleDetailsTable, SaleDataTableTotal, SaleEntry, PrintPaper, "pdf", isPrint, TotalRoundedSaleAmount, LintTotal, isForWE);
+                }
+            }
+        }
+
+        public void GeneratePDF(IList<PrinterSetup.TaxTable> lTaxTable, DataTable dataTable, DataTable totalTable, SaleEntry saleEntry, string PrintPaper, string fileExtension, bool isPrint, double TotalSaleAmount, float LintTotal, bool isForWE = false)
+        {
+            using (MemoryStream myMemoryStream = new MemoryStream())
+            {
+                var pageSize = PageSize.A4;
+                int cols = 13;
+                int rows = dataTable.Rows.Count;
+
+                Document pdfDoc = new Document(pageSize, -55, -55, 10, 10);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
+                pdfDoc.Open();
+                PdfPTable DocHeader = InvoiceHeader("TAX INVOICE");
+                PdfPTable CompanyAndInvoiceDetail = CompanyAndInvoiceDetails(saleEntry);
+                PdfPTable CustomerAndDeliveryDetail = CustomerAndDeliveryDetails(saleEntry);
+                pdfDoc.Add(DocHeader);
+                pdfDoc.Add(CompanyAndInvoiceDetail);
+                pdfDoc.Add(CustomerAndDeliveryDetail);
+
+                PdfPTable table = new PdfPTable(cols);
+                float[] widths = new float[] { 8f, 30f, 60f, 18f, 23F, 30f, 15f, 15f, 18f, 18f, 18f, 20f, 32f };
+                table.SetWidths(widths);
+                table = CreateSalesMainTableHeader(table, dataTable);
+
+                for (int i = 0; i < (rows <= 15 ? 15 : rows); i++)
+                {
+                    PdfPCell rowCell = new PdfPCell();
+                    for (int j = 0; j < dataTable.Columns.Count; j++)
+                    {
+                        var temp = i < rows ? dataTable.Rows[i][j].ToString() : " ";
+                        rowCell = new PdfPCell(new Phrase(temp, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+
+                        if (j < 12)
+                        {
+                            rowCell.BorderWidthRight = (float)BorderStyle.None;
+                        }
+                        if (i % 2 != 0)
+                        {
+                            rowCell.BackgroundColor = new BaseColor(242, 242, 242);
+                        }
+                        else
+                        {
+                            rowCell.BackgroundColor = BaseColor.WHITE;
+                        }
+                        rowCell.HorizontalAlignment = j > 5 ? Element.ALIGN_RIGHT : Element.ALIGN_LEFT;
+                        rowCell.MinimumHeight = 15;
+                        rowCell.BorderColorTop = BaseColor.WHITE;
+                        rowCell.BorderColorBottom = BaseColor.WHITE;
+                        rowCell.BorderWidthTop = (float)BorderStyle.None;
+                        rowCell.BorderWidthBottom = (float)BorderStyle.None;
+                        table.AddCell(rowCell);
+                    }
+                }
+                int rowstotalTable = totalTable.Rows.Count;
+                for (int i = 0; i < rowstotalTable; i++)
+                {
+                    PdfPCell rowCell = new PdfPCell();
+                    for (int j = 0; j < totalTable.Columns.Count; j++)
+                    {
+                        var temp = totalTable.Rows[i][j].ToString();
+                        rowCell = new PdfPCell(new Phrase(temp, PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
+                        rowCell.BorderWidthBottom = (float)BorderStyle.None;
+                        rowCell.MinimumHeight = 15;
+                        rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                        rowCell.BorderColor = BaseColor.BLACK;
+
+                        if (i == totalTable.Rows.Count - 1)
+                        {
+                            rowCell = new PdfPCell(new Phrase(temp, PdfDataAlignment.GetFont("Font_Bold_Italic_9_Black")));
+                            if (j == 6 || j == 7)
+                            {
+                                rowCell = new PdfPCell(new Phrase(temp, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+                            }
+                            rowCell.BackgroundColor = new BaseColor(210, 210, 210);
+                            rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                            rowCell.BorderWidthBottom = (float)BorderStyle.None;
+                            rowCell.MinimumHeight = 20;
+                        }
+                        if (i == 0 || i == 1 || i == 2)
+                        {
+                            rowCell.BorderWidthTop = (float)BorderStyle.None;
+                        }
+                        if (j < 12)
+                        {
+                            rowCell.BorderWidthRight = (float)BorderStyle.None;
+                        }
+                        if ((j > 0 && j < 6) && i != 0 && i != 1 && i != 2)
+                        {
+                            rowCell.BorderWidthLeft = (float)BorderStyle.None;
+                        }
+
+                        table.AddCell(rowCell);
+                    }
+                }
+                pdfDoc.Add(table);
+
+                PdfPTable AmountInWordsColumn = AmtInWordsColumn(TotalSaleAmount);
+                pdfDoc.Add(AmountInWordsColumn);
+
+                if (lTaxTable.Count != 0)
+                {
+                    PdfPTable TaxPdfPTable = TaxTable(lTaxTable, totalTable, saleEntry);
+                    pdfDoc.Add(TaxPdfPTable);
+                }
+
+                PdfPTable SignatureColumn = QRWithSignatureColumn(saleEntry);
+                pdfDoc.Add(SignatureColumn);
+
+                pdfDoc.Close();
+                if (isForWE)
+                {
+                    finalPdf = myMemoryStream.ToArray();
+                    var pdfGen = new PdfGeneration
+                    {
+                        IsPrint = false,
+                        FileName = "SaleInvoice",
+                        PdfFile = finalPdf,
+                        IsGetFileName = true
+                    };
+                    pdfGen.SavePdfForWE();
+                    LastGeneratedFilePath = pdfGen.GeneratedFilePath!;
+
+                }
+                else
+                {
+                    PdfGeneration.SaveMemoryStream(myMemoryStream, "SaleInvoice", fileExtension, isPrint, PaperTypes.A4_PORTRAIT);
+                }
+
+            }
+        }
+
         public void ExportToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint)
         {
             SalesManager SalesManager = SalesManager.Instance;

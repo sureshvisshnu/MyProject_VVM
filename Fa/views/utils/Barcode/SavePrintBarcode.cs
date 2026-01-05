@@ -30,6 +30,9 @@ using System.Windows.Forms;
 using VisioForge.Libs.MediaFoundation.OPM;
 using Rectangle = iTextSharp.text.Rectangle;
 using SaveFileDialog = System.Windows.Forms.SaveFileDialog;
+using System.Drawing.Printing;
+using System.Printing;
+
 
 namespace fa.views.utils
 {

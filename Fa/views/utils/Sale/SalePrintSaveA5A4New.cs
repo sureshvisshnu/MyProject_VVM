@@ -21,7 +21,7 @@ namespace fa.views.utils.Sale
     {
         public static PdfPTable CusSaleHeader(SaleEntry SaleEntry)
         {
-            string CompanyName = Global.Company.DisplayAs+ (string.IsNullOrEmpty(Global.Company.Slogan) ? "" : "\n" + Global.Company.Slogan) + "\n";
+            string CompanyName = Global.Company.DisplayAs + (string.IsNullOrEmpty(Global.Company.Slogan) ? "" : "\n" + Global.Company.Slogan) + "\n";
             string Address = Global.Company.Address.FullAddressInSingleLine;
             string Phone = string.Empty;
             string Email = string.Empty;
@@ -60,16 +60,16 @@ namespace fa.views.utils.Sale
                 CompanyLicense = "\n" + CompanyLicense + "\n";
             }
             //Heading
-            Heading = SaleEntry.EntryType == Entrytype.SALE ? "TAX INVOICE" : SaleEntry.EntryType == Entrytype.QUOTE ? "QUOTATION": "RETURN INVOICE";
+            Heading = SaleEntry.EntryType == Entrytype.SALE ? "TAX INVOICE" : SaleEntry.EntryType == Entrytype.QUOTE ? "QUOTATION" : "RETURN INVOICE";
             //Customer Contact Info
             if (SaleEntry.AccountsId != null)
             {
                 Customer Customer = CustomerManager.Instance.GetCustomerById((long)SaleEntry.AccountsId);
-                if (Customer!=null && Customer.CustomerLicenceDetail.Count > 0)
+                if (Customer != null && Customer.CustomerLicenceDetail.Count > 0)
                 {
                     foreach (CustomerLicenceDetail Licence in Customer.CustomerLicenceDetail)
                     {
-                        if (Licence.CompanyCustomerLicenseMaster!=null && Licence.CompanyCustomerLicenseMaster.IncludeInInvoice)
+                        if (Licence.CompanyCustomerLicenseMaster != null && Licence.CompanyCustomerLicenseMaster.IncludeInInvoice)
                         {
                             CustomerLicense = (string.IsNullOrEmpty(CustomerLicense) ? CustomerLicense : CustomerLicense + "\n") + (Licence.CompanyCustomerLicenseMaster.DisplayName + ": " + Licence.Value);
                         }
@@ -101,7 +101,7 @@ namespace fa.views.utils.Sale
             CustomerDetail = (String.IsNullOrEmpty(SaleEntry.CustomerAddress) ? "" : SaleEntry.CustomerAddress.Replace("\r", "").Replace("\n", "").Replace(",", ", ")) + (String.IsNullOrEmpty(CustomerLicense) ? "" : "\n" + CustomerLicense);
             //Set Header boundaries
             int HeadColumns = 3;
-            float[] HeadWidths = new float[] { 40f, 35f, 25f };
+            float[] HeadWidths = new float[] { 40f, 45f, 15f };
             if (Global.getLogoAsBytes() != null)
             {
                 HeadColumns = 4;
@@ -126,59 +126,63 @@ namespace fa.views.utils.Sale
                 HeadCell.MinimumHeight = 16;
                 HeadCell.HorizontalAlignment = Element.ALIGN_LEFT;
                 HeadCell.Padding = 8;
-                HeadCell.Rowspan = 3;
+                HeadCell.PaddingTop = 0;
+                HeadCell.PaddingBottom = 0;
+                HeadCell.Rowspan = ReferrerName != string.Empty ? 4 : 3;
                 HeadTable.AddCell(HeadCell);
             }
             //company details
             var AddressData = CompanyName;
             HeadCell = new PdfPCell(new Phrase(AddressData, PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
             HeadCell.BorderColor = BaseColor.WHITE;
-            HeadCell.Colspan = 2;
             HeadCell.HorizontalAlignment = Element.ALIGN_LEFT;
             HeadCell.MinimumHeight = 5;
-            HeadCell.Padding = -1;
-            HeadTable.AddCell(HeadCell);
-
-            HeadCell = new PdfPCell(new Phrase(Heading, PdfDataAlignment.GetFont("Font_Bold_Italic_12_LightGray")));
-            HeadCell.BorderColor = BaseColor.WHITE;
-            HeadCell.Rowspan = 4;
-            HeadCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-            HeadTable.AddCell(HeadCell);
-
-            AddressData = Address + Phone + Email + Web + CompanyLicense;
-            HeadCell = new PdfPCell(new Phrase(AddressData, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
-            HeadCell.BorderColor = BaseColor.WHITE;
-            
-            HeadCell.HorizontalAlignment = Element.ALIGN_LEFT;
-            HeadCell.Rowspan = 3;
             HeadTable.AddCell(HeadCell);
 
             HeadCell = new PdfPCell(new Phrase("To", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
             HeadCell.BorderColor = BaseColor.WHITE;
             HeadCell.HorizontalAlignment = Element.ALIGN_LEFT;
             HeadTable.AddCell(HeadCell);
-            
+
+            HeadCell = new PdfPCell(new Phrase(Heading, PdfDataAlignment.GetFont("Font_Bold_Italic_12_LightGray")));
+            HeadCell.BorderColor = BaseColor.WHITE;
+            HeadCell.Rowspan = ReferrerName != string.Empty ? 4 : 3;
+            HeadCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            HeadTable.AddCell(HeadCell);
+
+            AddressData = Address + Phone + Email + Web + CompanyLicense;
+            HeadCell = new PdfPCell(new Phrase(AddressData, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+            HeadCell.BorderColor = BaseColor.WHITE;
+
+            HeadCell.HorizontalAlignment = Element.ALIGN_LEFT;
+            HeadCell.Rowspan = ReferrerName != string.Empty ? 3 : 2;
+            HeadTable.AddCell(HeadCell);
+
             HeadCell = new PdfPCell(new Phrase(CustomerName, PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
             HeadCell.BorderColor = BaseColor.WHITE;
             HeadCell.HorizontalAlignment = Element.ALIGN_LEFT;
             HeadTable.AddCell(HeadCell);
-            
+
             HeadCell = new PdfPCell(new Phrase(CustomerDetail, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
             HeadCell.BorderColor = BaseColor.WHITE;
             HeadCell.HorizontalAlignment = Element.ALIGN_LEFT;
+            HeadCell.PaddingTop = -1;
             HeadTable.AddCell(HeadCell);
 
-            HeadCell = new PdfPCell(new Phrase(ReferrerName != string.Empty ?  "Referred By : " + ReferrerName : " ", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
-            HeadCell.BorderColor = BaseColor.WHITE;
-            HeadCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-            HeadCell.Colspan = HeadColumns;
-            HeadTable.AddCell(HeadCell);
+            if (ReferrerName != string.Empty)
+            {
+                HeadCell = new PdfPCell(new Phrase(ReferrerName != string.Empty ? "Referred By : " + ReferrerName : " ", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+                HeadCell.BorderColor = BaseColor.WHITE;
+                HeadCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                HeadCell.Colspan = HeadColumns;
+                HeadTable.AddCell(HeadCell);
+            }
             return HeadTable;
-        }       
+        }
         //sale mini head
         public PdfPTable CusSaleMiniHeader(SaleEntry SaleEntry)
         {
-            string CompanyName = Global.Company.DisplayAs+(string.IsNullOrEmpty(Global.Company.Slogan)?"":"\n"+ Global.Company.Slogan) + "\n";
+            string CompanyName = Global.Company.DisplayAs + (string.IsNullOrEmpty(Global.Company.Slogan) ? "" : "\n" + Global.Company.Slogan) + "\n";
             string CustomerLicense = string.Empty;
             string Heading = string.Empty;
             string CustomerDetail = string.Empty;
@@ -187,11 +191,11 @@ namespace fa.views.utils.Sale
             //Customer Contact Info
             if (SaleEntry.AccountsId != null)
             {
-                CustomerDetail =SaleEntry.CustomerName;
+                CustomerDetail = SaleEntry.CustomerName;
             }
-            else if(!string.IsNullOrEmpty(SaleEntry.CustomerName))
+            else if (!string.IsNullOrEmpty(SaleEntry.CustomerName))
             {
-                CustomerDetail =SaleEntry.CustomerName;
+                CustomerDetail = SaleEntry.CustomerName;
             }
             //Set Header boundaries
             int HeadColumns = 3;
@@ -220,6 +224,356 @@ namespace fa.views.utils.Sale
             HeadTable.AddCell(HeadCell);
             return HeadTable;
         }
+        public string LastGeneratedFilePath { get; set; } = string.Empty;
+        byte[] finalPdf;
+        public void GenerateA5LandscapPDF(IList<TaxTable> lTaxTable, DataTable dataTable, DataTable totalTable, SaleEntry SaleEntry, string PrintPaper, string fileExtension, bool isPrint, bool isWE = false)
+        {
+            using (MemoryStream myMemoryStream = new MemoryStream())
+            {
+                var pageSize = new Rectangle(595, 421);
+                double A4Height = 339;
+                int cols = 12;
+                int rows = dataTable.Rows.Count;
+                Document pdfDoc = new Document(pageSize, -40, -40, 20, 20);
+                PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
+                pdfDoc.Open();
+                double lineHeight = 24;
+                PdfPTable PatientHeader = !string.IsNullOrEmpty(SaleEntry.Memo) ? PdfDataAlignment.PatientDetailHeader(SaleEntry.Memo) : null!;
+                PdfPTable SaleHeader = CusSaleHeader(SaleEntry);
+                PdfPTable SaleMiniHeader = CusSaleMiniHeader(SaleEntry);
+                PdfPTable SaleMainTable = PdfDataAlignment.SaleMainTable(SaleEntry);
+                PdfPTable MiniDummyTableWithoutBoard = PdfDataAlignment.DummyTableWithoutBoard(1, 1, 2);
+                PdfPTable MiniDummyTable = PdfDataAlignment.DummyTable(1, 1, 4);
+                pdfDoc.Add(SaleHeader);
+                if (!string.IsNullOrEmpty(SaleEntry.Memo))
+                {
+                    pdfDoc.Add(PatientHeader);
+                }
+                pdfDoc.Add(SaleMainTable);
+                pdfDoc.Add(MiniDummyTable);
+                PdfPTable table = new PdfPTable(cols);
+
+                float[] widths = new float[] { 15f, 100f, 26f, 35f, 35f, 30f, 26f, 26f, 23f, 20f, 20f, 35f };
+
+                double HeaderTableHeight = SaleHeader.TotalHeight + SaleMainTable.TotalHeight + MiniDummyTable.TotalHeight + (!string.IsNullOrEmpty(SaleEntry.Memo) ? PatientHeader.TotalHeight : 0);
+                double TotalWorkingOnPageH = HeaderTableHeight;
+                table.SetWidths(widths);
+                table = A5LandscapeColumnCaption(table, dataTable, PrintPaper);
+                double DisTotal = 0;
+                double PageSubTotal = 0;
+                double PageTaxTotal = 0;
+                double PageLineTotal = 0;
+                string RefNumber = (SaleEntry.EntryType == Entrytype.SALE ? "Invoice: " : "Quotes: ") + SaleEntry.RefNumber;
+                int newPageCount = 0;
+
+                for (int i = 0; i < rows; i++)
+                {
+                    PdfPCell rowCell = new PdfPCell();
+                    if (TotalWorkingOnPageH >= A4Height)
+                    {
+                        table = A5LandsRunningTotal(table, PrintPaper, PageSubTotal, PageTaxTotal, PageLineTotal);
+                        pdfDoc.Add(table);
+                        pdfDoc.NewPage();
+                        table = new PdfPTable(cols);
+                        table.SetWidths(widths);
+                        pdfDoc.Add(SaleMiniHeader);
+                        pdfDoc.Add(MiniDummyTableWithoutBoard);
+                        HeaderTableHeight = SaleMiniHeader.TotalHeight + MiniDummyTableWithoutBoard.TotalHeight;
+                        table = A5LandsContinueTotal(table, PrintPaper, RefNumber, PageSubTotal, PageTaxTotal, PageLineTotal);
+                        table = A5LandscapeColumnCaption(table, dataTable, PrintPaper);
+                        newPageCount = i;
+                    }
+                    double TempHeight = lineHeight;
+
+                    for (int j = 0; j < dataTable.Columns.Count; j++)
+                    {
+                        var temp = (j == 9 ? dataTable.Rows[i][j].ToString() : dataTable.Rows[i][j].ToString());
+                        DisTotal += j == 9 ? double.Parse(temp) : 0;
+                        if (j == 11)
+                        {
+                            string[] lines = temp.Split(new[] { "\n" }, StringSplitOptions.None);
+                            temp = lines[lines.Count() - 1];
+                        }
+                        rowCell.Padding = 4;
+                        rowCell = new PdfPCell(new Phrase(temp, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+                        rowCell.UseVariableBorders = true;
+                        rowCell.BorderColorLeft = BaseColor.LIGHT_GRAY;
+                        rowCell.BorderColorTop = BaseColor.WHITE;
+                        rowCell.BorderColorRight = BaseColor.LIGHT_GRAY;
+                        rowCell.BorderColorBottom = BaseColor.WHITE;
+                        if (i == 0)
+                        {
+                            rowCell.BorderColorTop = BaseColor.BLACK;
+                        }
+                        if (j == 0)
+                        {
+                            rowCell.BorderColorLeft = BaseColor.BLACK;
+                        }
+                        if (j == 11)
+                        {
+                            rowCell.BorderColorRight = BaseColor.BLACK;
+                        }
+                        //Row Odd Even Color
+                        if (i % 2 != 0)
+                        {
+                            rowCell.BackgroundColor = new BaseColor(242, 242, 242);
+                        }
+                        else
+                        {
+                            rowCell.BackgroundColor = BaseColor.WHITE;
+                        }
+                        if (j == 1)
+                        {
+                            string[] lines = temp.Split(new[] { "\r" }, StringSplitOptions.None);
+                            TempHeight += lines.Count() == 1 ? 0 : lines.Count() == 2 ? 10.5 : 20.5;
+                            float size = lines[0].Length > 40 ? 6 : lines[0].Length > 30 ? 7 : lines[0].Length > 20 ? 8 : 10;
+                            TempHeight += size == 10 ? 0 : 10.5;
+                            string FName = size == 6 ? "Font_Normal_Italic_7_Black" : size == 7 ? "Font_Normal_Italic_7_Black" : "Font_Normal_Italic_8_Black";
+                            rowCell.AddElement(new Phrase(lines[0], PdfDataAlignment.GetFont(FName)));
+                            rowCell.HorizontalAlignment = Element.ALIGN_BASELINE;
+                            rowCell.VerticalAlignment = Element.ALIGN_BASELINE;
+                            rowCell.PaddingTop = -3;
+                        }
+                        else if (j == 3 || j == 4 || j == 0 || j == 2 || j == 5)
+                        {
+                            rowCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                            if (j == 4)
+                            {
+                                string[] lines = temp.Split(new[] { "\n" }, StringSplitOptions.None);
+                                float TH = lines.Count() == 1 ? 14 : 25;
+
+                                if (TH > TempHeight)
+                                {
+                                    TempHeight = lines.Count() == 1 ? 14 : 25;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                        }
+                        if (j == 11)
+                        {
+                            PageLineTotal += double.Parse(temp);
+                        }
+                        table.AddCell(rowCell);
+                    }
+                    TotalWorkingOnPageH = (HeaderTableHeight + PdfDataAlignment.CalculatePdfTableHeight(table));
+                }
+                bool IsBank = Global.Company.CompanySalesSetup.IsBankDetailDisplayOnInvoice
+                    && !string.IsNullOrEmpty(Global.Company.CompanySalesSetup.BankDetails) ? true : false;
+                bool IsDeclaration = Global.Company.CompanySalesSetup.IsDeclarationDisplayOnInvoice
+                        && !string.IsNullOrEmpty(Global.Company.CompanySalesSetup.Declarations) ? true : false;
+                bool IsUPI = Global.Company.CompanySalesSetup.IsPrintQRCode;
+                int minRows = 10;
+
+                if (rows < minRows)
+                {
+                    int emptyRows = minRows - rows;
+                    emptyRows = (IsBank || IsDeclaration || IsUPI) ? emptyRows : totalTable.Rows.Count > 2 ? (14 - ((totalTable.Rows.Count - 2) + rows)) : emptyRows + 4;
+
+                    for (int i = 0; i < emptyRows; i++)
+                    {
+                        for (int j = 0; j < dataTable.Columns.Count; j++)
+                        {
+                            PdfPCell emptyCell = new PdfPCell(new Phrase(" ", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+                            emptyCell.UseVariableBorders = true;
+                            emptyCell.BorderColorLeft = BaseColor.LIGHT_GRAY;
+                            emptyCell.BorderColorTop = BaseColor.WHITE;
+                            emptyCell.BorderColorRight = BaseColor.LIGHT_GRAY;
+                            emptyCell.BorderColorBottom = BaseColor.WHITE;
+                            if (j == 0)
+                            {
+                                emptyCell.BorderColorLeft = BaseColor.BLACK;
+                            }
+                            if (j == 11)
+                            {
+                                emptyCell.BorderColorRight = BaseColor.BLACK;
+                            }
+                            if (i % 2 == 0)
+                            {
+                                emptyCell.BackgroundColor = new BaseColor(242, 242, 242);
+                            }
+                            else
+                            {
+                                emptyCell.BackgroundColor = BaseColor.WHITE;
+                            }
+                            table.AddCell(emptyCell);
+                        }
+                    }
+                }
+
+                int minRowsPerPage = 12;
+                int existingRowCount = dataTable.Rows.Count - newPageCount;
+
+                if (existingRowCount < minRowsPerPage && rows > minRows && newPageCount > 0)
+                {
+                    int emptyRows = minRowsPerPage - existingRowCount;
+                    emptyRows = (IsBank || IsDeclaration || IsUPI) ? emptyRows : totalTable.Rows.Count > 2 ? (18 - ((totalTable.Rows.Count - 2) + rows)) : emptyRows + 6;
+
+                    for (int i = 0; i < emptyRows; i++)
+                    {
+                        for (int j = 0; j < dataTable.Columns.Count; j++)
+                        {
+                            PdfPCell emptyCell = new PdfPCell(new Phrase(" ", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+                            emptyCell.UseVariableBorders = true;
+                            emptyCell.BorderColorLeft = BaseColor.LIGHT_GRAY;
+                            emptyCell.BorderColorTop = BaseColor.WHITE;
+                            emptyCell.BorderColorRight = BaseColor.LIGHT_GRAY;
+                            emptyCell.BorderColorBottom = BaseColor.WHITE;
+                            if (j == 0)
+                            {
+                                emptyCell.BorderColorLeft = BaseColor.BLACK;
+                            }
+                            if (j == 11)
+                            {
+                                emptyCell.BorderColorRight = BaseColor.BLACK;
+                            }
+                            if (i % 2 == 0)
+                            {
+                                emptyCell.BackgroundColor = new BaseColor(242, 242, 242);
+                            }
+                            else
+                            {
+                                emptyCell.BackgroundColor = BaseColor.WHITE;
+                            }
+                            table.AddCell(emptyCell);
+                        }
+                    }
+                }
+
+                //Total Table
+                int rowstotalTable = totalTable.Rows.Count;
+                PdfPTable totalPdfTable = new PdfPTable(cols);
+                totalPdfTable.SetWidths(widths);
+                for (int i = 0; i < rowstotalTable; i++)
+                {
+                    PdfPCell rowCell = new PdfPCell();
+                    for (int j = 0; j < 6; j++)
+                    {
+                        var temp = totalTable.Rows[i][j].ToString();
+                        rowCell = new PdfPCell(new Phrase(temp, PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
+
+                        rowCell.PaddingTop = 4;
+                        rowCell.PaddingBottom = 4;
+                        rowCell.PaddingRight = 2;
+                        rowCell.BorderColor = BaseColor.BLACK;
+                        rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                        if (j == 0)
+                        {
+                            rowCell = new PdfPCell(new Phrase(temp, PdfDataAlignment.GetFont("Font_Normal_Italic_7_Black")));
+                            rowCell.Colspan = 6;
+                            rowCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                            rowCell.PaddingTop = 2;
+                            rowCell.BorderWidthRight = (float)BorderStyle.None;
+                        }
+                        if (j == 1)
+                        {
+                            rowCell.Colspan = 1;
+                            rowCell.BorderWidthLeft = (float)BorderStyle.None;
+                        }
+                        if (j == 2)
+                        {
+                            rowCell.Colspan = 2;
+                            rowCell.BorderWidthLeft = (float)BorderStyle.None;
+                        }
+                        if (j == 5)
+                        {
+                            rowCell.BorderColorLeft = BaseColor.LIGHT_GRAY;
+                            rowCell.BorderWidthLeft = (float)BorderStyle.None;
+                        }
+                        if (i == rowstotalTable - 1)
+                        {
+                            if (j == 3)
+                            {
+                                rowCell.BorderWidthRight = (float)BorderStyle.None;
+                                rowCell.BorderColorRight = BaseColor.WHITE;
+                            }
+                            if (j == 4)
+                            {
+                                rowCell.BorderWidthLeft = (float)BorderStyle.None;
+                                rowCell.BorderColorLeft = BaseColor.WHITE;
+                            }
+                        }
+                        table.AddCell(rowCell);
+                    }
+                }
+                pdfDoc.Add(table);
+
+                double TaxTableHeight = 0;
+                if (Global.Company.SalesTaxAccountMaps.Count != 0)
+                {
+                    PdfPTable TaxPdfPTable = TaxTable(lTaxTable, totalTable, SaleEntry);
+                    TaxTableHeight = PdfDataAlignment.CalculatePdfTableHeight(TaxPdfPTable) + MiniDummyTable.HeaderHeight;
+                    TotalWorkingOnPageH = TotalWorkingOnPageH + TaxTableHeight;
+                    if (TotalWorkingOnPageH > A4Height)
+                    {
+                        pdfDoc.NewPage();
+                        pdfDoc.Add(SaleMiniHeader);
+                        pdfDoc.Add(MiniDummyTableWithoutBoard);
+                    }
+                    else
+                    {
+                        pdfDoc.Add(MiniDummyTable);
+                    }
+                    pdfDoc.Add(TaxPdfPTable);
+                }
+                pdfDoc.Close();
+                //PdfGeneration.SaveMemoryStream(myMemoryStream, (SaleEntry.EntryType == Entrytype.SALE ? "SaleInvoice" : SaleEntry.EntryType == Entrytype.RETURN ? "SaleReturnInvoice" : "SaleQuote"), fileExtension, isPrint, PrintPaper == "A5 LANDSCAPE" ? PaperTypes.A5_LANDSCAPE : PrintPaper == "A4 LANDSCAPE" ? PaperTypes.A4_LANDSCAPE : PaperTypes.A4_PORTRAIT);
+                if (isWE)
+                {
+                    finalPdf = myMemoryStream.ToArray();
+                    var pdfGen = new PdfGeneration
+                    {
+                        IsPrint = false,
+                        FileName = "SaleInvoice",
+                        PdfFile = finalPdf,
+                        IsGetFileName = true
+                    };
+                    pdfGen.SavePdfForWE();
+                    LastGeneratedFilePath = pdfGen.GeneratedFilePath!;
+
+                }
+                else
+                {
+                    PdfGeneration.SaveMemoryStream(
+                        myMemoryStream,
+                        (SaleEntry.EntryType == Entrytype.SALE ? "SaleInvoice" :
+                         SaleEntry.EntryType == Entrytype.RETURN ? "SaleReturnInvoice" : "SaleQuote"),
+                        fileExtension,
+                        isPrint,
+                        PrintPaper == "A5 LANDSCAPE" ? PaperTypes.A5_LANDSCAPE :
+                        PrintPaper == "A4 LANDSCAPE" ? PaperTypes.A4_LANDSCAPE :
+                        PaperTypes.A4_PORTRAIT
+                    );
+                }
+            }
+        }
+        private PdfPTable A5LandscapeColumnCaption(PdfPTable table, DataTable dataTable, string PrintPaper)
+        {
+            foreach (DataColumn column in dataTable.Columns)
+            {
+                PdfPCell headerCell = new PdfPCell();
+                var temp = column.Caption.ToString();
+                headerCell = new PdfPCell(new Phrase((temp == "1" || temp == "2") ? "" : temp, PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
+                headerCell.BackgroundColor = new BaseColor(200, 200, 200);
+                headerCell.BorderColor = BaseColor.BLACK;
+                headerCell.MinimumHeight = 18;
+
+                if (column.Caption == "Free" || column.Caption == "Sub Total" || column.Caption == "Total" || column.Caption == "Rate" || column.Caption == "Qty" || column.Caption == "Amount" || column.Caption == "MRP")
+                {
+                    headerCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+                }
+                else
+                {
+                    headerCell.HorizontalAlignment = Element.ALIGN_LEFT;
+                }
+                table.AddCell(headerCell);
+            }
+
+            return table;
+        }
+
         public void GeneratePDF(IList<TaxTable> lTaxTable, DataTable dataTable, DataTable totalTable, SaleEntry SaleEntry, string PrintPaper, string fileExtension, bool isPrint)
         {
             using (MemoryStream myMemoryStream = new MemoryStream())
@@ -228,34 +582,34 @@ namespace fa.views.utils.Sale
                 double A4Height = PrintPaper == "A5 LANDSCAPE" ? 339 : PrintPaper == "A4 LANDSCAPE" ? 700 : PrintPaper == "A4 PORTRAIT" ? 700 : 0;
                 int cols = PrintPaper == "A4 LANDSCAPE" ? 16 : PrintPaper == "A5 LANDSCAPE" ? 13 : 12;
                 int rows = dataTable.Rows.Count;
-                Document pdfDoc = new Document(pageSize, -50, -60, 10, 10);
+                Document pdfDoc = new Document(pageSize, -30, -30, 20, 20);
                 PdfWriter writer = PdfWriter.GetInstance(pdfDoc, myMemoryStream);
                 pdfDoc.Open();
                 double lineHeight = 24;
-                PdfPTable PatientHeader =!string.IsNullOrEmpty(SaleEntry.Memo)?PdfDataAlignment.PatientDetailHeader(SaleEntry.Memo):null!;
+                PdfPTable PatientHeader = !string.IsNullOrEmpty(SaleEntry.Memo) ? PdfDataAlignment.PatientDetailHeader(SaleEntry.Memo) : null;
                 PdfPTable SaleHeader = CusSaleHeader(SaleEntry);
                 PdfPTable SaleMiniHeader = CusSaleMiniHeader(SaleEntry);
                 PdfPTable SaleMainTable = PdfDataAlignment.SaleMainTable(SaleEntry);
                 PdfPTable MiniDummyTableWithoutBoard = PdfDataAlignment.DummyTableWithoutBoard(1, 1, 2);
                 PdfPTable MiniDummyTable = PdfDataAlignment.DummyTable(1, 1, 4);
                 pdfDoc.Add(SaleHeader);
-                if(!string.IsNullOrEmpty(SaleEntry.Memo))
+                if (!string.IsNullOrEmpty(SaleEntry.Memo))
                 {
                     pdfDoc.Add(PatientHeader);
                 }
                 pdfDoc.Add(SaleMainTable);
                 pdfDoc.Add(MiniDummyTable);
                 PdfPTable table = new PdfPTable(cols);
-                float[] widths = new float[] { 15f, 100f,25f, 32f, 40f, 22f, 23f, 35f, 40f, 23f, 35f, 50f };
+                float[] widths = new float[] { 15f, 100f, 25f, 32f, 40f, 22f, 23f, 35f, 40f, 23f, 35f, 50f };
                 if (PrintPaper == "A4 LANDSCAPE")
                 {
-                    widths = new float[] { 10f, 75f,20f, 30f, 30f, 30f, 35f, 35f, 20f, 15f, 20f, 25f, 35f, 20f, 25f, 50f };
+                    widths = new float[] { 10f, 75f, 20f, 30f, 30f, 30f, 35f, 35f, 20f, 15f, 20f, 25f, 35f, 20f, 25f, 50f };
                 }
                 if (PrintPaper == "A5 LANDSCAPE")
                 {
                     widths = new float[] { 15f, 100f, 25f, 32f, 30f, 25f, 22f, 23f, 35f, 35f, 23f, 35f, 45f };
                 }
-                double HeaderTableHeight = SaleHeader.TotalHeight + SaleMainTable.TotalHeight + MiniDummyTable.TotalHeight+(!string.IsNullOrEmpty(SaleEntry.Memo) ? PatientHeader .TotalHeight: 0);
+                double HeaderTableHeight = SaleHeader.TotalHeight + SaleMainTable.TotalHeight + MiniDummyTable.TotalHeight + (!string.IsNullOrEmpty(SaleEntry.Memo) ? PatientHeader.TotalHeight : 0);
                 double TotalWorkingOnPageH = HeaderTableHeight;
                 table.SetWidths(widths);
                 table = ColumnCaption(table, dataTable, PrintPaper);
@@ -278,7 +632,7 @@ namespace fa.views.utils.Sale
                         table.SetWidths(widths);
                         pdfDoc.Add(SaleMiniHeader);
                         pdfDoc.Add(MiniDummyTableWithoutBoard);
-                        HeaderTableHeight = SaleMiniHeader.TotalHeight+ MiniDummyTableWithoutBoard.TotalHeight;
+                        HeaderTableHeight = SaleMiniHeader.TotalHeight + MiniDummyTableWithoutBoard.TotalHeight;
                         //Continue Total
                         table = ContinueTotal(table, PrintPaper, RefNumber, PageSubTotal, PageTaxTotal, PageLineTotal);
                         //Item Table Header New Page
@@ -288,12 +642,12 @@ namespace fa.views.utils.Sale
                     //add item detail
                     for (int j = 0; j < dataTable.Columns.Count; j++)
                     {
-                        if ((j == 4 || j == 5 || j == 7 || j == 9 ) && PrintPaper != "A4 LANDSCAPE")
+                        if ((j == 4 || j == 5 || j == 7 || j == 9) && PrintPaper != "A4 LANDSCAPE")
                         {
                             if ((PrintPaper == "A5 LANDSCAPE" && j == 7) || (PrintPaper == "A4 PORTRAIT" && j == 7)) { }
                             else { continue; }
                         }
-                        if (j == 6  && PrintPaper == "A4 PORTRAIT")
+                        if (j == 6 && PrintPaper == "A4 PORTRAIT")
                         {
                             continue;
                         }
@@ -366,7 +720,7 @@ namespace fa.views.utils.Sale
                         }
                         if (j == 12)
                         {
-                            string[] lines = temp.Split(new[] { "\n" },StringSplitOptions.None);
+                            string[] lines = temp.Split(new[] { "\n" }, StringSplitOptions.None);
                             PageSubTotal += double.Parse(lines[lines.Count() - 1]);
                         }
                         if (j == 14)
@@ -432,7 +786,7 @@ namespace fa.views.utils.Sale
                     table.SetWidths(widths);
                     //Continue Total
                     table = ContinueTotal(table, PrintPaper, RefNumber, PageSubTotal, PageTaxTotal, PageLineTotal);
-                    TotalWorkingOnPageH = MiniDummyTableWithoutBoard.TotalHeight+ SaleMiniHeader.TotalHeight + PdfDataAlignment.CalculatePdfTableHeight(totalPdfTable);
+                    TotalWorkingOnPageH = MiniDummyTableWithoutBoard.TotalHeight + SaleMiniHeader.TotalHeight + PdfDataAlignment.CalculatePdfTableHeight(totalPdfTable);
                 }
                 pdfDoc.Add(table);
                 //tax table
@@ -453,9 +807,9 @@ namespace fa.views.utils.Sale
                         pdfDoc.Add(MiniDummyTable);
                     }
                     pdfDoc.Add(TaxPdfPTable);
-                }      
+                }
                 pdfDoc.Close();
-                PdfGeneration.SaveMemoryStream(myMemoryStream, (SaleEntry.EntryType == Entrytype.SALE ? "SaleInvoice" : SaleEntry.EntryType == Entrytype.RETURN ? "SaleReturnInvoice": "SaleQuote"), fileExtension, isPrint, PrintPaper == "A5 LANDSCAPE" ? PaperTypes.A5_LANDSCAPE : PrintPaper == "A4 LANDSCAPE" ? PaperTypes.A4_LANDSCAPE : PaperTypes.A4_PORTRAIT);
+                PdfGeneration.SaveMemoryStream(myMemoryStream, (SaleEntry.EntryType == Entrytype.SALE ? "SaleInvoice" : SaleEntry.EntryType == Entrytype.RETURN ? "SaleReturnInvoice" : "SaleQuote"), fileExtension, isPrint, PrintPaper == "A5 LANDSCAPE" ? PaperTypes.A5_LANDSCAPE : PrintPaper == "A4 LANDSCAPE" ? PaperTypes.A4_LANDSCAPE : PaperTypes.A4_PORTRAIT);
             }
         }
         private PdfPTable ColumnCaption(PdfPTable table, DataTable dataTable, string PrintPaper)
@@ -471,7 +825,7 @@ namespace fa.views.utils.Sale
                 if ((column.Caption == "Batch No" || column.Caption == "Exp Date" || column.Caption == "MRP" || column.Caption == "Free") && PrintPaper != "A4 LANDSCAPE")
                 {
                     if (column.Caption == "MRP" && PrintPaper == "A5 LANDSCAPE") { }
-                    else{ continue;}
+                    else { continue; }
                 }
                 if ((column.Caption == "Dis %" || column.Caption == "Dis Amount"))
                 {
@@ -491,7 +845,7 @@ namespace fa.views.utils.Sale
                     {
                         headerCell.Rowspan = 1;
                         continue;
-                    }                    
+                    }
                 }
                 if (column.Caption == "%")
                 {
@@ -566,7 +920,7 @@ namespace fa.views.utils.Sale
             rowCell.BorderColorRight = BaseColor.GRAY;
             rowCell.BorderColorBottom = BaseColor.BLACK;
             rowCell.MinimumHeight = Minimumheight;
-            rowCell.Colspan = PrintPaper == "A4 LANDSCAPE" ? 4:5;
+            rowCell.Colspan = PrintPaper == "A4 LANDSCAPE" ? 4 : 5;
             rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             rowCell.BackgroundColor = new BaseColor(220, 220, 220);
             table.AddCell(rowCell);
@@ -600,6 +954,48 @@ namespace fa.views.utils.Sale
             rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             rowCell.BackgroundColor = new BaseColor(220, 220, 220);
             table.AddCell(rowCell);
+            rowCell = new PdfPCell(new Phrase(PageLineTotal.ToString("F"), PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+            rowCell.UseVariableBorders = true;
+            rowCell.BorderColorLeft = BaseColor.GRAY;
+            rowCell.BorderColorTop = BaseColor.GRAY;
+            rowCell.BorderColorRight = BaseColor.BLACK;
+            rowCell.BorderColorBottom = BaseColor.BLACK;
+            rowCell.MinimumHeight = Minimumheight;
+            rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            rowCell.BackgroundColor = new BaseColor(220, 220, 220);
+            table.AddCell(rowCell);
+            return table;
+        }
+
+        private PdfPTable A5LandsRunningTotal(PdfPTable table, string PrintPaper, double PageSubTotal, double PageTaxTotal, double PageLineTotal)
+        {
+            int Minimumheight = 12;
+            PdfPCell rowCell = new PdfPCell();
+            rowCell = new PdfPCell(new Phrase("To Be Continue...", PdfDataAlignment.GetFont("Font_Normal_Italic_6_Black")));
+            rowCell.UseVariableBorders = true;
+            rowCell.BorderColorLeft = BaseColor.BLACK;
+            rowCell.BorderColorTop = BaseColor.GRAY;
+            rowCell.BorderColorRight = BaseColor.GRAY;
+            rowCell.BorderColorBottom = BaseColor.BLACK;
+            rowCell.MinimumHeight = Minimumheight;
+            rowCell.Colspan = 5;
+            rowCell.HorizontalAlignment = Element.ALIGN_LEFT;
+            rowCell.Padding = 3;
+            rowCell.BackgroundColor = new BaseColor(220, 220, 220);
+            table.AddCell(rowCell);
+
+            rowCell = new PdfPCell(new Phrase("Running Total", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+            rowCell.UseVariableBorders = true;
+            rowCell.BorderColorLeft = BaseColor.GRAY;
+            rowCell.BorderColorTop = BaseColor.GRAY;
+            rowCell.BorderColorRight = BaseColor.GRAY;
+            rowCell.BorderColorBottom = BaseColor.BLACK;
+            rowCell.MinimumHeight = Minimumheight;
+            rowCell.Colspan = 6;
+            rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            rowCell.BackgroundColor = new BaseColor(220, 220, 220);
+            table.AddCell(rowCell);
+
             rowCell = new PdfPCell(new Phrase(PageLineTotal.ToString("F"), PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
             rowCell.UseVariableBorders = true;
             rowCell.BorderColorLeft = BaseColor.GRAY;
@@ -661,9 +1057,36 @@ namespace fa.views.utils.Sale
             //table.AddCell(rowCell);
             return table;
         }
+        private PdfPTable A5LandsContinueTotal(PdfPTable table, string PrintPaper, string RefNumber, double PageSubTotal, double PageTaxTotal, double PageLineTotal)
+        {
+            int Minimumheight = 12;
+            PdfPCell rowCell = new PdfPCell();
+            rowCell = new PdfPCell(new Phrase(RefNumber, PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+            rowCell.MinimumHeight = Minimumheight;
+            rowCell.Colspan = 5;
+            rowCell.HorizontalAlignment = Element.ALIGN_LEFT;
+            rowCell.Padding = 3;
+            rowCell.BackgroundColor = new BaseColor(220, 220, 220);
+            table.AddCell(rowCell);
+
+            rowCell = new PdfPCell(new Phrase("Continue Total", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+            rowCell.MinimumHeight = Minimumheight;
+            rowCell.Colspan = 6;
+            rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            rowCell.BackgroundColor = new BaseColor(220, 220, 220);
+            table.AddCell(rowCell);
+
+            rowCell = new PdfPCell(new Phrase(PageLineTotal.ToString("F"), PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+            rowCell.MinimumHeight = Minimumheight;
+            rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            rowCell.BackgroundColor = new BaseColor(220, 220, 220);
+            table.AddCell(rowCell);
+
+            return table;
+        }
         private PdfPTable TaxTable(IList<TaxTable> lTaxTable, DataTable totalTable, SaleEntry SaleEntry)
         {
-            int numtax = lTaxTable.Where(x=>x.SaleTaxMapId!=null).ToList().Count;
+            int numtax = lTaxTable.Where(x => x.SaleTaxMapId != null).ToList().Count;
             //numtax = SaleEntry.SaleTaxType == SaleTaxType.INTER ? (numtax > 2 ? 2 : numtax) : (numtax > 1 ? 1 : numtax);
             int TaxCol = 5 + (numtax * 2);
             PdfPTable taxPdfTable = new PdfPTable(TaxCol);
@@ -691,11 +1114,11 @@ namespace fa.views.utils.Sale
             {
                 //if ((SaleEntry.SaleTaxType == SaleTaxType.INTER && (Map.AccountId == 31 || Map.AccountId == 32)) || (SaleEntry.SaleTaxType == SaleTaxType.INTRA && Map.AccountId == 28))
                 //{
-                    rowCell = new PdfPCell(new Phrase(tax.SaleTaxMapId != null?Global.Company.SalesTaxAccountMaps.FirstOrDefault(x => x.MapId == tax.SaleTaxMapId).Name:"", PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
-                    rowCell.MinimumHeight = MinimumHeight;
-                    rowCell.Colspan = 2;
-                    rowCell.HorizontalAlignment = Element.ALIGN_CENTER;
-                    rowCell.BackgroundColor = new BaseColor(200, 200, 200);
+                rowCell = new PdfPCell(new Phrase(tax.SaleTaxMapId != null ? Global.Company.SalesTaxAccountMaps.FirstOrDefault(x => x.MapId == tax.SaleTaxMapId).Name : "", PdfDataAlignment.GetFont("Font_Bold_Italic_8_Black")));
+                rowCell.MinimumHeight = MinimumHeight;
+                rowCell.Colspan = 2;
+                rowCell.HorizontalAlignment = Element.ALIGN_CENTER;
+                rowCell.BackgroundColor = new BaseColor(200, 200, 200);
                 taxPdfTable.AddCell(rowCell);
                 //}
             }
@@ -705,6 +1128,7 @@ namespace fa.views.utils.Sale
             rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
             rowCell.BackgroundColor = new BaseColor(200, 200, 200);
             rowCell.BorderColorRight = BaseColor.BLACK;
+            rowCell.BorderWidthRight = 0.5f;
             taxPdfTable.AddCell(rowCell);
             //signature
             rowCell = new PdfPCell(new Phrase("For " + Global.Company.Name + " \n\n\n Authorized Signatory", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
@@ -739,7 +1163,7 @@ namespace fa.views.utils.Sale
                 {
                     if (Count == 1)
                     {
-                        rowCell = new PdfPCell(new Phrase(llTaxTable.SubTotal.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+                        rowCell = new PdfPCell(new Phrase((lTaxTable.Sum(x => x.SubTotal) / 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
                         rowCell.MinimumHeight = MinimumHeight;
                         rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                         taxPdfTable.AddCell(rowCell);
@@ -767,7 +1191,7 @@ namespace fa.views.utils.Sale
             }
             else
             {
-                rowCell = new PdfPCell(new Phrase(totalTable.Rows[0][1].ToString(), PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
+                rowCell = new PdfPCell(new Phrase(totalTable.Rows[0][2].ToString(), PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
                 rowCell.MinimumHeight = MinimumHeight;
                 rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
                 taxPdfTable.AddCell(rowCell);
@@ -785,7 +1209,7 @@ namespace fa.views.utils.Sale
                 rowCell = new PdfPCell(new Phrase(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision), PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
                 rowCell.MinimumHeight = MinimumHeight;
                 rowCell.HorizontalAlignment = Element.ALIGN_RIGHT;
-                taxPdfTable.AddCell(rowCell);                
+                taxPdfTable.AddCell(rowCell);
             }
             rowCell = new PdfPCell(new Phrase("", PdfDataAlignment.GetFont("Font_Normal_Italic_8_Black")));
             rowCell.MinimumHeight = MinimumHeight;
@@ -803,7 +1227,7 @@ namespace fa.views.utils.Sale
             bool IsDeclaration = Global.Company.CompanySalesSetup.IsDeclarationDisplayOnInvoice
                     && !string.IsNullOrEmpty(Global.Company.CompanySalesSetup.Declarations) ? true : false;
             bool IsUPI = Global.Company.CompanySalesSetup.IsPrintQRCode;
-            int Cspan = IsBank && IsDeclaration && IsUPI ? (TaxCol == 9 || TaxCol == 7) ? 3 : TaxCol == 5 ? 2 : 1:
+            int Cspan = IsBank && IsDeclaration && IsUPI ? (TaxCol == 9 || TaxCol == 7) ? 3 : TaxCol == 5 ? 2 : 1 :
                         (IsBank && IsDeclaration && !IsUPI) ||
                         (IsBank && !IsDeclaration && IsUPI) ||
                         (!IsBank && IsDeclaration && IsUPI) ? TaxCol - (TaxCol / 2) :
@@ -860,7 +1284,7 @@ namespace fa.views.utils.Sale
                 rowCell.BorderColorRight = BaseColor.WHITE;
                 rowCell.BorderColorBottom = BaseColor.WHITE;
                 taxPdfTable.AddCell(rowCell);
-            }           
+            }
             return taxPdfTable;
         }
     }

@@ -50,7 +50,7 @@ namespace fa.views.sales
         {
             PaymentManager = PaymentManager.Instance;
             InitializeComponent();
-            excludedObjects = new string[] { "ab2ToolStrip1" };
+            excludedObjects = new string[] { "VVMToolStrip" };
 
         }
 
@@ -74,13 +74,13 @@ namespace fa.views.sales
         {
             label1.Visible = false;
             GridViewPendingInvoice.Visible = false;
-            ab2ToolStrip1.Visible = false;
+            VVMToolStrip.Visible = false;
             TabControlInvoiceDetails.Location = new Point(GridViewPendingInvoice.Location.X, (GridViewPendingInvoice.Location.Y - 40));
             GroupBoxPayMethod.Location = new Point(GridViewPendingInvoice.Location.X, (TabControlInvoiceDetails.Location.Y + TabControlInvoiceDetails.Height + 10));
             GroupBoxCashPayment.Location = new Point(GridViewPendingInvoice.Location.X, (GroupBoxPayMethod.Location.Y + GroupBoxPayMethod.Height + 10));
-            BtnReceiveDeliver.Location = new Point(GroupBoxCashPayment.Width - 120, BtnReceiveDeliver.Location.Y);
-            BtnReceive.Location = new Point(GroupBoxCashPayment.Width - 215, BtnReceiveDeliver.Location.Y);
-            BtnCancel.Location = new Point(GroupBoxCashPayment.Width - 300, BtnReceiveDeliver.Location.Y);
+            BtnReceiveDeliver.Location = new Point(GroupBoxCashPayment.Width - 70, BtnReceiveDeliver.Location.Y);
+            BtnReceive.Location = new Point(GroupBoxCashPayment.Width - 165, BtnReceiveDeliver.Location.Y);
+            BtnCancel.Location = new Point(GroupBoxCashPayment.Width - 250, BtnReceiveDeliver.Location.Y);
             this.Size = new Size(TabControlInvoiceDetails.Width + 40, this.Height);
             this.CenterToParent();
             LoadPaymentDetails(SearchSalesId);

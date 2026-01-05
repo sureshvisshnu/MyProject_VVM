@@ -16,11 +16,14 @@ namespace fa.views.utils
 {
     public class PdfGeneration
     {
-        public string FileName;
+        string finalSavedPath = null!;
+        public string? FileName;
         public bool IsPrint;
         public byte[] PdfFile;
         public string? ConsultingFileName;
         public string? ConsultingFilePath;
+        public bool IsGetFileName;
+        public string? GeneratedFilePath { get; set; }
         public void SavePdfFile()
         {
             bool wasFileSaved = false;
@@ -32,12 +35,15 @@ namespace fa.views.utils
                 sfDlg.Filter = string.Format("{1} files|*.{0}", "pdf", "pdf");
                 sfDlg.RestoreDirectory = true;
                 sfDlg.FileName = FileName;
+
+
                 var windowsTempPath = Path.GetTempPath();
                 Directory.CreateDirectory(windowsTempPath + "");
                 var printFilePath = String.Format("{0}", windowsTempPath);
                 var printFileName = String.Format("{0}.pdf", sfDlg.FileName);
                 var tempFilePath = String.Format("{0}\\{1}.pdf", Path.GetTempPath(), sfDlg.FileName);
                 System.IO.File.WriteAllBytes(tempFilePath, PdfFile);
+                GeneratedFilePath = tempFilePath;
 
                 if (IsPrint)
                 {
@@ -45,6 +51,8 @@ namespace fa.views.utils
                     {
                         File.WriteAllBytes(printFilePath + "\\" + printFileName, PdfFile);
                         PdfPrinter.printPDFInIron(Global.getDefaultPrinter(), printFilePath, printFileName);
+                        GeneratedFilePath = Path.Combine(printFilePath, printFileName);
+                        finalSavedPath = tempFilePath;   // printing uses temp file
                     }
                     catch (Exception e)
                     {
@@ -59,6 +67,8 @@ namespace fa.views.utils
 
                             File.WriteAllBytes(printFilePathCatch + "\\" + printFileName, PdfFile);
                             PdfPrinter.printPDFInIron(Global.getDefaultPrinter(), printFilePathCatch, printFileName);
+                            GeneratedFilePath = Path.Combine(printFilePathCatch, printFileName);
+
                         }
                     }
                 }
@@ -100,24 +110,36 @@ namespace fa.views.utils
                         printFileName = String.Format("{0}Preview{1}.pdf", FileName, Filecount);
                         fullPath = Path.Combine(printFilePath, printFileName);
                         File.WriteAllBytes(fullPath, PdfFile);
-                        ConsultingFileName = printFileName;
+                        GeneratedFilePath = fullPath;
+                        ConsultingFileName = sfDlg.FileName!;
                         ConsultingFilePath = printFilePath;
                     }
                 }
                 else
                 {
-                    if (sfDlg.ShowDialog() == DialogResult.OK)
+                    if (IsGetFileName)
                     {
-                        File.WriteAllBytes(sfDlg.FileName, PdfFile);
+                        string directFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), sfDlg.FileName!);
+                        File.WriteAllBytes(directFilePath, PdfFile);
                         wasFileSaved = true;
-
-                        if (MessageBox.Show(
-                                "Do you want to open the file?",
-                                "Confirmation",
-                                MessageBoxButtons.YesNo,
-                                MessageBoxIcon.Question) == DialogResult.Yes)
+                        GeneratedFilePath = directFilePath;
+                    }
+                    else
+                    {
+                        if (sfDlg.ShowDialog() == DialogResult.OK)
                         {
-                            System.Diagnostics.Process.Start(new ProcessStartInfo { FileName = @sfDlg.FileName, UseShellExecute = true });
+                            File.WriteAllBytes(sfDlg.FileName!, PdfFile);
+                            wasFileSaved = true;
+                            GeneratedFilePath = sfDlg.FileName;
+
+                            if (MessageBox.Show(
+                                    "Do you want to open the file?",
+                                    "Confirmation",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Question) == DialogResult.Yes)
+                            {
+                                System.Diagnostics.Process.Start(new ProcessStartInfo { FileName = @sfDlg.FileName, UseShellExecute = true });
+                            }
                         }
                     }
                 }
@@ -127,13 +149,36 @@ namespace fa.views.utils
                 sfDlg.Dispose();
             }
         }
+        public void SavePdfForWE()
+        {
+            try
+            {
+                var windowsTempPath = Path.GetTempPath();
+                Directory.CreateDirectory(windowsTempPath);
+
+                string safeFileName = FileName;
+
+                if (!safeFileName.EndsWith(".pdf"))
+                    safeFileName += ".pdf";
+
+                string tempFilePath = Path.Combine(windowsTempPath, safeFileName);
+
+                File.WriteAllBytes(tempFilePath, PdfFile);
+
+                GeneratedFilePath = tempFilePath;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("PDF generation failed for What'sApp.\n" + ex.Message);
+            }
+        }
 
         private bool FileIsOpen(string file)
         {
             bool retVal = false;
             try
             {
-                
+
                 using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
                 {
                     try
@@ -143,7 +188,7 @@ namespace fa.views.utils
                     catch (IOException)
                     {
                         retVal = true;
-                       
+
                     }
                     finally
                     {
@@ -156,12 +201,12 @@ namespace fa.views.utils
             }
             catch (IOException e)
             {
-               
+
                 retVal = true;
             }
             catch (UnauthorizedAccessException e)
             {
-               
+
             }
             return retVal;
         }
@@ -188,18 +233,18 @@ namespace fa.views.utils
                             sfDlg.Filter = string.Format("{1} files|*.{0}", extension, extension.ToUpper());
                             break;
                     }
-                        sfDlg.RestoreDirectory = true;
-                                        sfDlg.FileName = defaultFileName;
-                                        var windowsTempPath = Path.GetTempPath();
-                        Directory.CreateDirectory(windowsTempPath + "");
-                                        var printFilePath = String.Format("{0}", windowsTempPath);
-                        var printFileName = String.Format("{0}.pdf", sfDlg.FileName);
-                        var tempFilePath = String.Format("{0}\\{1}.pdf", Path.GetTempPath(), sfDlg.FileName);
-                        byte[] bytes = ms.ToArray();
-                        System.IO.File.WriteAllBytes(tempFilePath, bytes);
-                   
+                    sfDlg.RestoreDirectory = true;
+                    sfDlg.FileName = defaultFileName;
+                    var windowsTempPath = Path.GetTempPath();
+                    Directory.CreateDirectory(windowsTempPath + "");
+                    var printFilePath = String.Format("{0}", windowsTempPath);
+                    var printFileName = String.Format("{0}.pdf", sfDlg.FileName);
+                    var tempFilePath = String.Format("{0}\\{1}.pdf", Path.GetTempPath(), sfDlg.FileName);
+                    byte[] bytes = ms.ToArray();
+                    System.IO.File.WriteAllBytes(tempFilePath, bytes);
+
                     if (isPrint)
-                    {                    
+                    {
                         try
                         {
                             PdfPrinter.printPDFInIron(PrinterName, printFilePath, printFileName);
@@ -218,10 +263,10 @@ namespace fa.views.utils
                             }
                         }
                     }
-                    else if(defaultFileName == "Prescription")
+                    else if (defaultFileName == "Prescription")
                     {
-                        printFileName = String.Format("{0}.pdf", sfDlg.FileName+"Preview");
-                        File.WriteAllBytes(printFilePath + "\\" + printFileName, bytes);                       
+                        printFileName = String.Format("{0}.pdf", sfDlg.FileName + "Preview");
+                        File.WriteAllBytes(printFilePath + "\\" + printFileName, bytes);
                         System.Diagnostics.Process.Start(new ProcessStartInfo { FileName = @printFilePath + "\\" + printFileName, UseShellExecute = true });
                     }
                     else if (sfDlg.ShowDialog() == DialogResult.OK)
@@ -254,11 +299,11 @@ namespace fa.views.utils
             return wasFileSaved;
         }
 
-        static string PaperFormat = (Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate.ToString(Global.Company.DateFormat)! == Global.getCurrentFiscalYearStartDate().ToString(Global.Company.DateFormat)! && x.YearEndDate.ToString(Global.Company.DateFormat) == Global.getCurrentFiscalYearEndDate().ToString(Global.Company.DateFormat)! && x.EntryType == EntryType.SALES)!).PrintPaperFormat.Name;
+        static string PaperFormat = (Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate.ToString(Global.Company.DateFormat) == Global.getCurrentFiscalYearStartDate().ToString(Global.Company.DateFormat) && x.YearEndDate.ToString(Global.Company.DateFormat) == Global.getCurrentFiscalYearEndDate().ToString(Global.Company.DateFormat) && x.EntryType == EntryType.SALES)!).PrintPaperFormat.Name;
         private static readonly Font FBI8B = new Font(PdfDataAlignment.GetFont("Font_Normal_Italic_6_Black"));
         public static bool SaveMemoryStream(MemoryStream ms, string defaultFileName, string extension, bool isPrint, PaperTypes PaperType)
         {
-            
+
             bool wasFileSaved = false;
             try
             {
@@ -280,7 +325,7 @@ namespace fa.views.utils
                     }
                     sfDlg.RestoreDirectory = true;
                     sfDlg.FileName = defaultFileName + " " + DateTime.Now.ToString("dd-MM-yyyy").Replace("/", "-");
-                    var windowsTempPath = Path.GetTempPath(); 
+                    var windowsTempPath = Path.GetTempPath();
                     Directory.CreateDirectory(windowsTempPath + "");
                     var printFilePath = String.Format("{0}", windowsTempPath);
                     var printFileName = String.Format("{0}.pdf", sfDlg.FileName);
@@ -290,13 +335,13 @@ namespace fa.views.utils
                     try
                     {
                         File.ReadAllBytes(tempFilePath);
-                        iTextSharp.text.Font blackFont = FontFactory.GetFont("Tahoma", 9, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
-                        iTextSharp.text.Font blackFontBold = FontFactory.GetFont("Tahoma", 9, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
+                        iTextSharp.text.Font blackFont = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
+                        iTextSharp.text.Font blackFontBold = FontFactory.GetFont("Arial", 9, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
                         if (PaperFormat == "105 MM ROLL" || PaperFormat == "80 MM ROLL")
                         {
-                            blackFont = FontFactory.GetFont("Tahoma", 6, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
-                            blackFontBold = FontFactory.GetFont("Tahoma", 6, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
-                        }                    
+                            blackFont = FontFactory.GetFont("Arial", 6, iTextSharp.text.Font.ITALIC, BaseColor.BLACK);
+                            blackFontBold = FontFactory.GetFont("Arial", 6, iTextSharp.text.Font.BOLDITALIC, BaseColor.BLACK);
+                        }
                         using (MemoryStream stream = new MemoryStream())
                         {
                             PdfReader reader = new PdfReader(bytes);
@@ -346,11 +391,11 @@ namespace fa.views.utils
                         MessageBox.Show("There has been an error generating the file. Please try again. Error: " + exe);
                     }
                     if (isPrint)
-                    {                    
+                    {
                         try
                         {
                             File.WriteAllBytes(printFilePath + "\\" + printFileName, bytes);
-                            PdfPrinter.printPDFInIron(Global.getDefaultPrinter(), printFilePath, printFileName);                           
+                            PdfPrinter.printPDFInIron(Global.getDefaultPrinter(), printFilePath, printFileName);
                         }
                         catch (Exception e)
                         {
@@ -362,7 +407,7 @@ namespace fa.views.utils
                                 var printFilePathCatch = String.Format("{0}", windowsTempPath);
                                 printFileName = String.Format("{0}Print{1}.pdf", sfDlg.FileName, randomFileName);
                                 File.WriteAllBytes(printFilePathCatch + "\\" + printFileName, bytes);
-                                 PdfPrinter.printPDFInIron(Global.getDefaultPrinter(), printFilePathCatch, printFileName);
+                                PdfPrinter.printPDFInIron(Global.getDefaultPrinter(), printFilePathCatch, printFileName);
                             }
                         }
                     }
@@ -395,6 +440,7 @@ namespace fa.views.utils
             }
             return wasFileSaved;
         }
+
         // ItemReport
         public static bool SaveMemoryStreams(MemoryStream ms, string defaultFileName, string userPrinter, string extension, bool isPrint, PaperTypes PaperType)
         {
@@ -428,7 +474,7 @@ namespace fa.views.utils
                     System.IO.File.WriteAllBytes(tempFilePath, bytes);
                     try
                     {
-                        File.ReadAllBytes(tempFilePath);                       
+                        File.ReadAllBytes(tempFilePath);
                         using (MemoryStream stream = new MemoryStream())
                         {
                             PdfReader reader = new PdfReader(bytes);
@@ -636,6 +682,6 @@ namespace fa.views.utils
                         MessageBoxIcon.Error);
             }
             return wasFileSaved;
-        }        
+        }
     }
 }

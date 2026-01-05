@@ -39,8 +39,79 @@ namespace fa.views.utils
     }
     public class PrinterSetup
     {
-        public static void SalePrintSetup(long SaleId, bool IsExport, Entrytype entrytype, bool isGSTInvoice, string selectedPrintPaper = null!) // Add optional parameter for selected paper
+        public static string LastGeneratedFilePathForWE { get; set; } = string.Empty;
+
+        public static void SalePrintSetup(long SaleId, bool IsExport, Entrytype entrytype, string PrintFrom = "", string paperSelection = "", bool isForWE = false)
         {
+            string PrintPaper = "";
+            bool IsDotMatrix = false;
+            DateTime YearStartDate = Global.getCurrentFiscalYearStartDate();
+            DateTime YearEndDate = Global.getCurrentFiscalYearEndDate();
+            if (entrytype == Entrytype.SALE)
+            {
+                PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES)!.PrintPaperFormat.Name;
+                IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES)!.IsDotMatrix;
+            }
+            if (entrytype == Entrytype.QUOTE)
+            {
+                PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES_QUOTE)!.PrintPaperFormat.Name;
+                IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES_QUOTE)!.IsDotMatrix;
+            }
+            if (entrytype == Entrytype.RETURN)
+            {
+                PrintPaper = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES_RETURN)!.PrintPaperFormat.Name;
+                IsDotMatrix = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == YearStartDate && x.YearEndDate == YearEndDate && x.EntryType == EntryType.SALES_RETURN)!.IsDotMatrix;
+            }
+            if (!string.IsNullOrEmpty(paperSelection))
+            {
+                PrintPaper = paperSelection;
+            }
+            string PrintFormat = IsDotMatrix && !IsExport ? "Dotmatrix" : "Laser";
+            if (PrintPaper == "105 MM ROLL" || PrintPaper == "80 MM ROLL")
+            {
+                if (PrintFormat == "Dotmatrix" && !IsExport)
+                {
+                    SalePrintSaveDotmatrix105mm SalePrintSaveDotmatrix105mm = new SalePrintSaveDotmatrix105mm();
+                    SalePrintSaveDotmatrix105mm.ExportToFileOrPrint(SaleId, "pdf", IsExport ? false : true);
+                }
+                else
+                {
+                    SalePrintSave105mm SalePrintSave105mm = new SalePrintSave105mm();
+                    //SalePrintSave105mm.ExportToFileOrPrint(SaleId, "pdf", IsExport ? false : true, PrintPaper);
+                }
+            }
+            else if (PrintPaper == "A5 LANDSCAPE" || PrintPaper == "A5 PORTRAIT" || PrintPaper == "A4 LANDSCAPE")
+            {
+                if (PrintPaper == "A4 PORTRAIT" && PrintFormat == "Laser" && PrintFrom == "Sales")
+                {
+                    SalePrintSaveA4EinvoiceFormat SalePrintSaveA5A4 = new SalePrintSaveA4EinvoiceFormat();
+                    SalePrintSaveA5A4.ExportA4PortraitToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true, isForWE);
+                    if (isForWE)
+                    {
+                        PrinterSetup.LastGeneratedFilePathForWE = SalePrintSaveA5A4.LastGeneratedFilePath;
+                    }
+                }
+                else if (PrintPaper == "A5 PORTRAIT" && PrintFormat == "Laser" && PrintFrom == "Sales")
+                {
+                    SalePrintSaveA5A4 SalePrintSaveA5A4 = new SalePrintSaveA5A4();
+                    SalePrintSaveA5A4.ExportA5LandscapeToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true, isForWE);
+                    if (isForWE)
+                    {
+                        PrinterSetup.LastGeneratedFilePathForWE = SalePrintSaveA5A4.LastGeneratedFilePathForWE;
+                    }
+                }
+                else
+                {
+                    SalePrintSaveA5A4 SalePrintSaveA5A4 = new SalePrintSaveA5A4();
+                    SalePrintSaveA5A4.ExportToFileOrPrint(SaleId, PrintPaper, PrintFormat, IsExport ? false : true);
+                }
+            }
+        }
+        //public static void SalePrintSetup(long SaleId, bool IsExport, Entrytype entrytype, string PrintFrom = "", string paperSelection = "", bool isForWE = false)
+
+        public static void SalePrintAndWhatsUpSetup(long SaleId, bool IsExport, Entrytype entrytype, bool isGSTInvoice, bool IsPrint, string selectedPrintPaper = null!,  bool isForWE = false) // Add optional parameter for selected paper
+        {
+            
             string PrintPaper = selectedPrintPaper;
             DateTime YearStartDatex = Global.getCurrentFiscalYearStartDate();
             DateTime YearEndDatex = Global.getCurrentFiscalYearEndDate();
@@ -97,14 +168,20 @@ namespace fa.views.utils
             else if (!isGSTInvoice && (PrintPaper == "A5 PORTRAIT" || PrintPaper == "A5 LANDSCAPE"))
             {
                 // Non-GST A5 paper - use simplified format
+                SalePrintSaveA5SimplifiedFormat salePrintSaveA5SimplifiedFormat = new SalePrintSaveA5SimplifiedFormat();
                 bool isLandscape = PrintPaper.EndsWith("LANDSCAPE");
-                new SalePrintSaveA5SimplifiedFormat().ExportToFileOrPrint(
+                salePrintSaveA5SimplifiedFormat.ExportToFileOrPrint(
                     SaleId,
                     PrintPaper,
                     PrintFormat,
-                    !IsExport,
+                    IsPrint,
                     entrytype,
-                    isLandscape);
+                    isLandscape, 
+                    isForWE);
+                if (isForWE)
+                {
+                   PrinterSetup.LastGeneratedFilePathForWE = salePrintSaveA5SimplifiedFormat.LastGeneratedFilePathForWE;
+                }
             }
             else if (!isGSTInvoice && (PrintPaper == "A4 PORTRAIT" || PrintPaper == "A4 LANDSCAPE"))
             {

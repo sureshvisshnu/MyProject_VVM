@@ -21,6 +21,7 @@ namespace Fa.views.sales
         public long ProductId { get; set; } // Set from FormItembasedSales
         public long ProductBatchId { get; set; } // Set from FormItembasedSales
         public long CustomerId { get; set; } // Set from FormItembasedSales
+        public string? ProductName { get; set; }
         public FormSalsePriceSeeking(object sender)
         {
             InitializeComponent();
@@ -46,7 +47,7 @@ namespace Fa.views.sales
 
                 // Clear old rows
                 GridViewItems.Rows.Clear();
-
+                TextBoxSearchProduct.Text = ProductName ?? string.Empty;
                 int rowNum = 1;
                 foreach (var sale in sales.Take(5)) // limit to last 5
                 {

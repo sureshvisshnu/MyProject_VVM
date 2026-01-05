@@ -15,6 +15,8 @@ using fa.api.Accounting;
 using fa.api.utils;
 using Rectangle = iTextSharp.text.Rectangle;
 using fa.api.catalog;
+using fa.model.Catalog;
+
 
 namespace fa.views.utils.Sale
 {
@@ -25,6 +27,11 @@ namespace fa.views.utils.Sale
         readonly String[] SaleDetailsTableColumnName = new String[]
         {
         "#", "Item Description","UOM", "HSN/SAC Code","Batch No", "Exp Date","MRP", "Rate", "Qty","Free", "Dis %", "Dis Amount", "Sub Total", "%", "Amount","Line Total"
+        };
+
+        readonly String[] SaleDetailsColumnA5Lands = new String[]
+        {
+        "#", "Item Description","UOM", "HSN Code","Bat.No", "Exp.Date", "MRP", "Rate", "Qty", "Dis %", "Tax %", "Total"
         };
 
         private static readonly string[] Units = {
@@ -41,6 +48,11 @@ namespace fa.views.utils.Sale
         {
             SNO, DESC,UOM, HSN, BATCH, BATCHEXPDATE, MSRP, RATE, QTY, FREE, DISPER, DISAMOUNT, SUNTOTAL, TAXPER, TAXAMOUNT, LTOTAL
         }
+        public enum SaleDetailsColumnForA5Landscape
+        {
+            SNO, DESC, UOM, HSN, BATCH, BATCHEXPDATE, MSRP, RATE, QTY, DISPER, TAXPER, LTOTAL
+        }
+
         double Rounds = Global.Company.IdSpaces.FirstOrDefault(x => x.YearStartDate == Global.getCurrentFiscalYearStartDate() && x.YearEndDate == Global.getCurrentFiscalYearEndDate() && x.EntryType == EntryType.SALES).RoundOff;
         public void ExportToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint)
         {
@@ -275,6 +287,233 @@ namespace fa.views.utils.Sale
                 }
             }
         }
+        public string LastGeneratedFilePathForWE { get; set; } = string.Empty;
+        public void ExportA5LandscapeToFileOrPrint(long SalesId, string PrintPaper, string fileExtension, bool isPrint, bool isForWE = false)
+        {
+            IList<TaxTable> lTaxTable = new List<TaxTable>();
+            SalesManager SalesManager = SalesManager.Instance;
+            SaleEntry SaleEntry = SalesManager.GetSaleEntry(SalesId);
+            if (SaleEntry == null)
+            {
+                MessageBox.Show("Something went wrong, the selected sale is not valid.");
+                return;
+            }
+            List<CompanySalesTaxAccountMap> CompanySalesTaxAccountMap = (List<CompanySalesTaxAccountMap>)Global.Company.SalesTaxAccountMaps;
+            DataTable SaleDataTableTotal = new DataTable();
+            DataTable SaleDetailsTable = new DataTable();
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.SNO], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.DESC], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.UOM], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.HSN], typeof(string));
+            //if (Global.Company.CompanySalesSetup.ShowBatchOnPrint)
+            //{
+            //    SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.BATCH], typeof(string));
+            //    SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.BATCHEXPDATE], typeof(string));
+            //}
+            //else
+            //{
+            //    SaleDetailsTable.Columns.Add("1", typeof(string));
+            //    SaleDetailsTable.Columns.Add("2", typeof(string));
+            //}
+            SaleDetailsTable.Columns.Add("1", typeof(string));
+            SaleDetailsTable.Columns.Add("2", typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.MSRP], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.RATE], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.QTY], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.DISPER], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.TAXPER], typeof(string));
+            SaleDetailsTable.Columns.Add(SaleDetailsColumnA5Lands[(int)SaleDetailsColumnForA5Landscape.LTOTAL], typeof(string));
+            if (SaleEntry.SaleDetails.Count != 0)
+            {
+                double SubTotalForTax = 0;
+                double SubTotal = 0;
+                float LintTotal = 0;
+                float TaxTotal = 0;
+                float Discount = 0;
+                int count = 0;
+                try
+                {
+                    foreach (SaleDetail SaleDetails in SaleEntry.SaleDetails.OrderBy(x => x.Id))
+                    {
+                        SaleDetail lSaleDetail = SalesManager.GetSaleDetail(SaleDetails.Id);
+                        string salesTax = "\n";
+                        string subTotal = SaleDetails.OverridePrice == 0 ? (SaleDetails.Price * SaleDetails.Quantity).ToString("F") : (SaleDetails.OverridePrice * SaleDetails.Quantity).ToString("F");
+                        SubTotalForTax = SaleDetails.OverridePrice == 0 ? (SaleDetails.Price * SaleDetails.Quantity) : (SaleDetails.OverridePrice * SaleDetails.Quantity);
+                        var overAll = SaleDetails.OverridePrice == 0 ? (SaleDetails.Price * SaleDetails.Quantity) : (SaleDetails.OverridePrice * SaleDetails.Quantity);
+                        SubTotal = SubTotal + overAll;
+                        //Tax map
+                        foreach (TaxDetail Taxes in lSaleDetail.TaxDetails)
+                        {
+                            salesTax += Global.Company.SalesTaxAccountMaps.FirstOrDefault(x => x.MapId == (Taxes.CatalogItemSalesTaxMap != null ? Taxes.CatalogItemSalesTaxMap.SalesTaxMapId : Taxes.ItemSalesTaxMap.SalesTaxMapId)).Name + " @" + Taxes.TaxRate.ToString() + "% ";
+                        }
+                        //Discount
+                        if (lSaleDetail.Discounts.Count > 0)
+                        {
+                            salesTax += "\nDiscount @" + lSaleDetail.Discounts.Sum(X => X.Discount).ToString() + "%";
+                            subTotal += "\n(" + Math.Round(lSaleDetail.Discounts.Sum(X => X.DiscountAmount), 2).ToString("F") + ")\n";
+                            subTotal = SaleDetails.OverridePrice == 0 ? ((SaleDetails.Price * SaleDetails.Quantity) - lSaleDetail.Discounts.Sum(X => X.DiscountAmount)).ToString("F") : ((SaleDetails.OverridePrice * SaleDetails.Quantity) - lSaleDetail.Discounts.Sum(X => X.DiscountAmount)).ToString("F");
+                            SubTotalForTax = SaleDetails.OverridePrice == 0 ? ((SaleDetails.Price * SaleDetails.Quantity) - lSaleDetail.Discounts.Sum(X => X.DiscountAmount)) : ((SaleDetails.OverridePrice * SaleDetails.Quantity) - lSaleDetail.Discounts.Sum(X => X.DiscountAmount));
+                            Discount = Discount + lSaleDetail.Discounts.Sum(X => X.DiscountAmount);
+                        }
+                        count++;
+                        //Tax details
+                        foreach (ItemLevelSaleTaxDetail SalesTax in lSaleDetail.TaxDetails)
+                        {
+                            TaxTable TaxTable = null;
+
+                            TaxTable = lTaxTable.FirstOrDefault(x => x.TaxPer == SalesTax.TaxRate && x.SaleTaxMapId == (SalesTax.CatalogItemSalesTaxMap != null ? SalesTax.CatalogItemSalesTaxMap.SalesTaxMapId : SalesTax.ItemSalesTaxMap.SalesTaxMapId));
+                            if (TaxTable == null)
+                            {
+                                TaxTable = new TaxTable();
+                                TaxTable.TaxPer = SalesTax.TaxRate;
+                                TaxTable.TaxAmount = SalesTax.Amount;
+                                TaxTable.SaleTaxMapId = (SalesTax.CatalogItemSalesTaxMap != null ? SalesTax.CatalogItemSalesTaxMap.SalesTaxMapId : SalesTax.ItemSalesTaxMap.SalesTaxMapId);
+                                TaxTable.SubTotal = SubTotalForTax;
+                                lTaxTable.Add(TaxTable);
+                            }
+                            else
+                            {
+                                lTaxTable.Remove(TaxTable);
+                                TaxTable.TaxAmount += SalesTax.Amount;
+                                TaxTable.SubTotal += SubTotalForTax;
+                                lTaxTable.Add(TaxTable);
+                            }
+                        }
+                        LintTotal = LintTotal + SaleDetails.Amount;
+                        if (lSaleDetail.TaxDetails.Count > 0)
+                        {
+                            TaxTotal = TaxTotal + lSaleDetail.TaxDetails.Sum(X => X.Amount);
+                        }
+                        double TaxAmount = PdfDataAlignment.ProductTaxPercentage(lSaleDetail.TaxDetails, SaleEntry.SaleTaxType);
+
+                        IList<InventoryBatch> Batches = InventoryLocationManager.Instance.GetInventoryBatchbyProductId((long)lSaleDetail.ProductId!, (long)lSaleDetail.Sale.InventoryLocationId!);
+                        Product Product = CatalogProductManager.Instance.GetProductInfoByIdForProductLoad((long)lSaleDetail.ProductId!);
+                        InventoryBatch inventoryBatch = InventoryLocationManager.Instance.GetInventoryBatchDetail((long)lSaleDetail.ProductId!, lSaleDetail.BatchNo, (long)lSaleDetail.Sale.InventoryLocationId!);
+
+                        string format = TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision);
+                        PriceType priceType = Global.Company.CompanySalesSetup.PriceType;
+                        string Rate = string.Empty;
+
+                        if (Batches.Count == 0)
+                        {
+                            Rate = priceType switch
+                            {
+                                PriceType.Retail => Product.RetailPrice.ToString(format),
+                                PriceType.Wholesale => Product.WholdSalePrice.ToString(format),
+                                PriceType.MaxRetailPrice => Product.Msrp.ToString(format),
+                                _ => "0"
+                            };
+                        }
+                        else
+                        {
+                            if (inventoryBatch == null)
+                            {
+                                Rate = "0.00";
+                            }
+                            else
+                            {
+                                Rate = priceType switch
+                                {
+                                    PriceType.Retail => inventoryBatch.RetailSalePrice.ToString(format),
+                                    PriceType.Wholesale => inventoryBatch.WholeSalePrice.ToString(format),
+                                    PriceType.MaxRetailPrice => inventoryBatch.MaxRetailPrice.ToString(format),
+                                    _ => "0.00"
+                                };
+                            }
+                        }
+
+                        //create new row
+                        DataRow SaleDetailsTableNewRow = SaleDetailsTable.NewRow();
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.SNO] = count.ToString();
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.DESC] = SaleDetails.Product.Name.ToString();
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.UOM] = SaleDetails.Uom.ToString();
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.HSN] = SaleDetails.Product.HSNCode == null ? "" : SaleDetails.Product.HSNCode.ToString();
+                        //if (Global.Company.CompanySalesSetup.ShowBatchOnPrint && SaleDetails.BatchNo != null)
+                        //{
+                        //    string shortYearFormat = Global.Company.DateFormat.Replace("yyyy", "yy");
+                        //    SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.BATCH] = SaleDetails.BatchNo.ToString();
+                        //    SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.BATCHEXPDATE] = SaleDetails.ExpDate.ToString(shortYearFormat);
+                        //}
+                        //else
+                        //{
+                        //    SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.BATCH] = "";
+                        //    SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.BATCHEXPDATE] = "";
+                        //}
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.BATCH] = "";
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.BATCHEXPDATE] = "";
+
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.MSRP] = SaleDetails.Msrp.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.RATE] = SaleDetails.OverridePrice == 0 ? Rate : SaleDetails.OverridePrice.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.QTY] = SaleDetails.Quantity.ToString(TextUtils.DecimalPlace(Global.Company.QuantityPricision));
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.DISPER] = lSaleDetail.Discounts.Count > 0 ? lSaleDetail.Discounts.Sum(x => x.Discount).ToString("F") : "0.00";
+                        double Stotal = double.Parse(subTotal.ToString());
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.TAXPER] = PdfDataAlignment.ProductTaxPercentage(SaleDetails.TaxDetails, SaleEntry.SaleTaxType).ToString("F");
+                        SaleDetailsTableNewRow[(int)SaleDetailsColumnForA5Landscape.LTOTAL] = Math.Round(SaleDetails.Amount, 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
+                        //Add row
+                        SaleDetailsTable.Rows.Add(SaleDetailsTableNewRow);
+                    }
+                    SaleDataTableTotal.Columns.Add("1", typeof(string));
+                    SaleDataTableTotal.Columns.Add("2", typeof(string));
+                    SaleDataTableTotal.Columns.Add("3", typeof(string));
+                    SaleDataTableTotal.Columns.Add("4", typeof(string));
+                    SaleDataTableTotal.Columns.Add("5", typeof(string));
+                    SaleDataTableTotal.Columns.Add("6", typeof(string));
+
+                    double LintTotalTrans = Math.Round(LintTotal, 2);
+                    double RoundedTotal = LintTotalTrans;
+                    double RoundoffAmount = Rounds > 0 ? RoundOff(RoundedTotal) : 0;
+                    string AmountInWords = Global.Company.CountryId == 99 ? ConvertToINR(double.Parse((RoundedTotal + RoundoffAmount).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)))) : "";
+
+                    //Grand total
+                    SaleDataTableTotal.Rows.Add(new object[] { "     ", "    ", "Grand Total", Discount.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), TaxTotal.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), LintTotal.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+                    for (int i = 0; i < SaleEntry.SaleAdditionalTransactions.Count; i++)
+                    {
+                        if (SaleEntry.SaleAdditionalTransactions[i].Action == AdditionalTransactionAction.CR)
+                        {
+                            LintTotalTrans = LintTotalTrans - SaleEntry.SaleAdditionalTransactions[i].Amount;
+                        }
+                        else
+                        {
+                            LintTotalTrans = LintTotalTrans + SaleEntry.SaleAdditionalTransactions[i].Amount;
+                        }
+                        var TransType = SaleEntry.SaleAdditionalTransactions[i].Type == AdditionalTransactionType.PERCENT ? " @" + SaleEntry.SaleAdditionalTransactions[i].Value + "%" : "";
+                        RoundoffAmount = Rounds > 0 ? RoundOff(LintTotalTrans) : 0;
+                        RoundedTotal = LintTotalTrans;
+                        //Additional trans
+                        SaleDataTableTotal.Rows.Add(new object[] { "    ", "    ", SaleEntry.SaleAdditionalTransactions[i].Name + TransType, "       ", Math.Round(SaleEntry.SaleAdditionalTransactions[i].Amount, 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), Math.Round(LintTotalTrans, 2).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+                    }
+                    //Round off
+                    AmountInWords = Global.Company.CountryId == 99 ? ConvertToINR(double.Parse((RoundedTotal + RoundoffAmount).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)))) : "";
+                    SaleDataTableTotal.Rows.Add(new object[] { "(Amount in words) " + AmountInWords, "     ", "Round off", "    ", RoundoffAmount.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)), (RoundedTotal + RoundoffAmount).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)) });
+                }
+                catch (DocumentException dex)
+                {
+                    MessageBox.Show(dex.ToString());
+                }
+                catch (IOException ioex)
+                {
+                    MessageBox.Show(ioex.ToString());
+                }
+                catch (Exception ee)
+                {
+                    MessageBox.Show("File Error Please Contact System Admin");
+                    Console.WriteLine(ee.ToString());
+                }
+            }
+            if (SaleDetailsTable.Rows.Count != 0)
+            {
+                if (fileExtension == "Laser")
+                {
+                    SalePrintSaveA5A4New SalePrintSaveA5A4New = new SalePrintSaveA5A4New();
+                    SalePrintSaveA5A4New.GenerateA5LandscapPDF(lTaxTable, SaleDetailsTable, SaleDataTableTotal, SaleEntry, PrintPaper, "pdf", isPrint, isForWE);
+                    if (isForWE)
+                    {
+                        LastGeneratedFilePathForWE = SalePrintSaveA5A4New.LastGeneratedFilePath;
+                    }
+                }
+            }
+        }
+
         private double RoundOff(double TotalAmount)
         {
             double Round = (Rounds / 2);

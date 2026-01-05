@@ -394,29 +394,18 @@ namespace fa.views.sales
         }
         private void BtnSalesQuotesPrint_Click(object sender, EventArgs e)
         {
-            if (SalesManager.GetSaleEntry(long.Parse(TextBoxSalesQuotesId.Text)) != null)
-            {
-                Cursor.Current = Cursors.WaitCursor;
+            //if (SalesManager.GetSaleEntry(long.Parse(TextBoxSalesQuotesId.Text)) != null)
+            //{
+            //    Cursor.Current = Cursors.WaitCursor;
+            //    PrinterSetup.SalePrintSetup(long.Parse(TextBoxSalesQuotesId.Text), false, Entrytype.QUOTE);
+            //    Cursor.Current = Cursors.Default;
+            //}
+            //else
+            //{
+            //    DisplaySystemError("Somting went wrong, please check this sale quote is still valid.");
+            //    return;
+            //}
 
-                // ✅ Set default print format and GST flag
-                string paperFormatName = "A5 PORTRAIT";
-                bool isGSTPrint = false;
-
-                // ✅ Unified print method — same as FormItemBasedSales
-                PrinterSetup.SalePrintSetup(
-                    long.Parse(TextBoxSalesQuotesId.Text),
-                    false,
-                    Entrytype.QUOTE,
-                    isGSTPrint,
-                    paperFormatName);
-
-                Cursor.Current = Cursors.Default;
-            }
-            else
-            {
-                DisplaySystemError("Something went wrong, please check this sale quote is still valid.");
-                return;
-            }
         }
         private void BtnSalesQuotesCancel_Click(object sender, EventArgs e)
         {

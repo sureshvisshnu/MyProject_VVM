@@ -1,37 +1,39 @@
-﻿using fa.api.Accounting;
+﻿using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
+using fa.api.Accounting;
+using fa.api.catalog;
+using fa.api.Hms;
+using fa.api.Log;
+using fa.api.OrderManagement;
+using fa.api.System;
 using fa.api.UserProfile;
 using fa.model.Accounting.Masters;
-using fa.model.Common;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using System;
-using fa.api.Log;
-using fa.model.Employee;
-using fa.api.Hms;
-using fa.model.Hms.Master;
-using fa.api.catalog;
 using fa.model.Catalog;
+using fa.model.Common;
+using fa.model.Employee;
+using fa.model.hms.common;
+using fa.model.Hms.common;
+using fa.model.Hms.Master;
+using fa.model.OrderManagement;
+using fa.model.System;
+using fa.model.UserProfile;
 using fa.views.controls;
 using fa.views.controls.ComboTreeView;
-using fa.model.OrderManagement;
-using fa.api.System;
-using fa.model.System;
 using Fa.api.Hms;
-using fa.model.Hms.common;
-using System.Management;
-using System.Text.RegularExpressions;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Spreadsheet;
-using VisioForge.Libs.NAudio;
-using System.Collections;
-using fa.model.hms.common;
-using fa.model.UserProfile;
-using fa.api.OrderManagement;
 using FADataAccessLibrary.Api.Hms;
-using FADataAccessLibrary.Model.Hms.Master;
 using FADataAccessLibrary.Api.OrderManagement;
+using FADataAccessLibrary.Model.Hms.Master;
 using FADataAccessLibrary.Model.Purchase;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing.Printing;
+using System.Linq;
+using System.Management;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+using VisioForge.Libs.NAudio;
 
 namespace fa.libraries.utils
 {
@@ -539,7 +541,28 @@ namespace fa.libraries.utils
             }
             return s;
         }
+
         public static List<string> GetAvailablePrinter()
+        {
+            List<string> printerList = new();
+
+            try
+            {
+                foreach (string printer in PrinterSettings.InstalledPrinters)
+                {
+                    printerList.Add(printer);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Unable to load printers.\n" + ex.Message);
+            }
+
+            return printerList;
+        }
+
+
+        public static List<string> GetAvailablePrinterxx()
         {
             var PrinterList = new List<string>();
 

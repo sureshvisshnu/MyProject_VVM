@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
 using System.Management;
+using System.Printing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -75,8 +76,41 @@ namespace fa.views.utils
                 MessageBox.Show("Printer " + userPrinter + " is offline");
             }
         }
+        public static bool IsOnline(string printerName)
+        {
+            try
+            {
+                LocalPrintServer printServer = new LocalPrintServer();
 
-        public static bool IsOnline(string PrinterName)
+                PrintQueue queue = printServer
+                    .GetPrintQueues()
+                    .FirstOrDefault(p =>
+                        p.Name.Equals(printerName, StringComparison.OrdinalIgnoreCase))!;
+
+                if (queue == null)
+                    return false;
+
+                queue.Refresh();
+
+                // If any bad status flag is set → printer is NOT online
+                if (queue.QueueStatus.HasFlag(PrintQueueStatus.Offline) ||
+                    queue.QueueStatus.HasFlag(PrintQueueStatus.Error) ||
+                    queue.QueueStatus.HasFlag(PrintQueueStatus.PaperOut) ||
+                    queue.QueueStatus.HasFlag(PrintQueueStatus.Paused) ||
+                    queue.QueueStatus.HasFlag(PrintQueueStatus.NotAvailable) ||
+                    queue.QueueStatus.HasFlag(PrintQueueStatus.DoorOpen))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public static bool IsOnlinexx(string PrinterName)
         {
             ManagementScope scope = new ManagementScope(@"\root\cimv2");
             scope.Connect();

@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPOSReceivePayment));
             statusStrip1 = new StatusStrip();
             ErrorMsg = new ToolStripStatusLabel();
@@ -37,7 +37,7 @@
             TabControlInvoiceDetails = new TabControl();
             TabDetails = new TabPage();
             TextBoxRefNo = new TextBox();
-            DateTimePickerInvoiceDate = new controls.text.DateWithCalendar();
+            DateTimePickerInvoiceDate = new fa.views.controls.text.DateWithCalendar();
             label18 = new Label();
             TextBoxAddress = new TextBox();
             TextBoxName = new TextBox();
@@ -51,34 +51,34 @@
             RbtBank = new RadioButton();
             RbtCard = new RadioButton();
             GroupBoxCreditCard = new GroupBox();
-            ComboBoxCreditCardAccount = new controls.ComboBoxSwapTextBox();
-            TextBoxCreditAmountReceived = new controls.text.CurrencyTextBox();
+            ComboBoxCreditCardAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            TextBoxCreditAmountReceived = new fa.views.controls.text.CurrencyTextBox();
             label24 = new Label();
-            TextBoxCreditCardBalance = new controls.text.CurrencyTextBox();
+            TextBoxCreditCardBalance = new fa.views.controls.text.CurrencyTextBox();
             label22 = new Label();
-            TextBoxCreditCardAmount = new controls.text.CurrencyTextBox();
+            TextBoxCreditCardAmount = new fa.views.controls.text.CurrencyTextBox();
             label21 = new Label();
             TextBoxCreditTransaction = new TextBox();
-            DateTimePickerCreditDate = new controls.text.DateWithCalendar();
+            DateTimePickerCreditDate = new fa.views.controls.text.DateWithCalendar();
             label8 = new Label();
             label10 = new Label();
             label9 = new Label();
             GroupBoxCashPayment = new GroupBox();
-            TextBoxCashAmountReceived = new controls.text.CurrencyTextBox();
+            TextBoxCashAmountReceived = new fa.views.controls.text.CurrencyTextBox();
             label23 = new Label();
-            TextBoxCashBalance = new controls.text.CurrencyTextBox();
+            TextBoxCashBalance = new fa.views.controls.text.CurrencyTextBox();
             label4 = new Label();
-            TextBoxCashAmount = new controls.text.CurrencyTextBox();
+            TextBoxCashAmount = new fa.views.controls.text.CurrencyTextBox();
             label3 = new Label();
             GroupBoxCheckInfomation = new GroupBox();
-            ComboBoxCheckAccount = new controls.ComboBoxSwapTextBox();
+            ComboBoxCheckAccount = new fa.views.controls.ComboBoxSwapTextBox();
             TextBoxCheckDocument = new TextBox();
-            DateTimePickerCheckDate = new controls.text.DateWithCalendar();
+            DateTimePickerCheckDate = new fa.views.controls.text.DateWithCalendar();
             label15 = new Label();
             label7 = new Label();
             label6 = new Label();
             GroupBoxBankTransfer = new GroupBox();
-            ComboBoxBankAccount = new controls.ComboBoxSwapTextBox();
+            ComboBoxBankAccount = new fa.views.controls.ComboBoxSwapTextBox();
             TextBoxBankTransaction = new TextBox();
             label14 = new Label();
             label13 = new Label();
@@ -86,29 +86,29 @@
             TextBoxPaymentId = new TextBox();
             GroupBoxPayMethod = new GroupBox();
             RbtUpi = new RadioButton();
-            GridViewPendingInvoice = new controls.DataViewVerticalScroll();
+            GridViewPendingInvoice = new fa.views.controls.DataViewVerticalScroll();
             InvoiceDate = new DataGridViewTextBoxColumn();
             InvoiceNumber = new DataGridViewTextBoxColumn();
-            InvAmount = new controls.grid.DataGridViewCurrencyColumn();
+            InvAmount = new fa.views.controls.grid.DataGridViewCurrencyColumn();
             Column1 = new DataGridViewTextBoxColumn();
-            ab2ToolStrip1 = new controls.Ab2ToolStrip();
+            VVMToolStrip = new fa.views.controls.Ab2ToolStrip();
             toolStripLabel1 = new ToolStripLabel();
             TextBoxReceivePaymentSearch = new ToolStripTextBox();
             BtnSearchReceivePayment = new ToolStripButton();
             TextBoxSalesNetAmount = new TextBox();
             TextBoxSaleId = new TextBox();
             GroupBoxUpiPayment = new GroupBox();
-            ComboBoxUpiAccount = new controls.ComboBoxSwapTextBox();
-            TextBoxUpiAmountReceived = new controls.text.CurrencyTextBox();
+            ComboBoxUpiAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            TextBoxUpiAmountReceived = new fa.views.controls.text.CurrencyTextBox();
             label25 = new Label();
-            UpiDateTime = new controls.text.DateWithCalendar();
+            UpiDateTime = new fa.views.controls.text.DateWithCalendar();
             label20 = new Label();
             label19 = new Label();
             label12 = new Label();
             TextBoxUpiNumber = new TextBox();
-            TextBoxUpiBalance = new controls.text.CurrencyTextBox();
+            TextBoxUpiBalance = new fa.views.controls.text.CurrencyTextBox();
             label2 = new Label();
-            TextBoxUpiAmount = new controls.text.CurrencyTextBox();
+            TextBoxUpiAmount = new fa.views.controls.text.CurrencyTextBox();
             label11 = new Label();
             label26 = new Label();
             LableTotalAmountReceived = new Label();
@@ -121,7 +121,7 @@
             GroupBoxBankTransfer.SuspendLayout();
             GroupBoxPayMethod.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GridViewPendingInvoice).BeginInit();
-            ab2ToolStrip1.SuspendLayout();
+            VVMToolStrip.SuspendLayout();
             GroupBoxUpiPayment.SuspendLayout();
             SuspendLayout();
             // 
@@ -279,7 +279,7 @@
             // 
             // BtnReceive
             // 
-            BtnReceive.Location = new Point(576, 485);
+            BtnReceive.Location = new Point(582, 485);
             BtnReceive.Name = "BtnReceive";
             BtnReceive.Size = new Size(86, 23);
             BtnReceive.TabIndex = 13;
@@ -289,7 +289,7 @@
             // 
             // BtnCancel
             // 
-            BtnCancel.Location = new Point(495, 485);
+            BtnCancel.Location = new Point(507, 485);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Size = new Size(75, 23);
             BtnCancel.TabIndex = 15;
@@ -783,14 +783,14 @@
             GridViewPendingInvoice.AllowUserToResizeColumns = false;
             GridViewPendingInvoice.AllowUserToResizeRows = false;
             GridViewPendingInvoice.BackgroundColor = SystemColors.Control;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            GridViewPendingInvoice.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            GridViewPendingInvoice.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             GridViewPendingInvoice.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             GridViewPendingInvoice.Columns.AddRange(new DataGridViewColumn[] { InvoiceDate, InvoiceNumber, InvAmount, Column1 });
             GridViewPendingInvoice.EnableHeadersVisualStyles = false;
@@ -827,8 +827,8 @@
             // 
             // InvAmount
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
-            InvAmount.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
+            InvAmount.DefaultCellStyle = dataGridViewCellStyle2;
             InvAmount.HeaderText = "Amount";
             InvAmount.Name = "InvAmount";
             InvAmount.ReadOnly = true;
@@ -843,18 +843,18 @@
             Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
             Column1.Visible = false;
             // 
-            // ab2ToolStrip1
+            // VVMToolStrip
             // 
-            ab2ToolStrip1.BackColor = SystemColors.ControlLight;
-            ab2ToolStrip1.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            ab2ToolStrip1.GripStyle = ToolStripGripStyle.Hidden;
-            ab2ToolStrip1.Items.AddRange(new ToolStripItem[] { toolStripLabel1, TextBoxReceivePaymentSearch, BtnSearchReceivePayment });
-            ab2ToolStrip1.Location = new Point(0, 0);
-            ab2ToolStrip1.Name = "ab2ToolStrip1";
-            ab2ToolStrip1.Padding = new Padding(5);
-            ab2ToolStrip1.Size = new Size(767, 32);
-            ab2ToolStrip1.TabIndex = 1;
-            ab2ToolStrip1.Text = "ab2ToolStrip1";
+            VVMToolStrip.BackColor = SystemColors.ControlLight;
+            VVMToolStrip.Font = new Font("Tahoma", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            VVMToolStrip.GripStyle = ToolStripGripStyle.Hidden;
+            VVMToolStrip.Items.AddRange(new ToolStripItem[] { toolStripLabel1, TextBoxReceivePaymentSearch, BtnSearchReceivePayment });
+            VVMToolStrip.Location = new Point(0, 0);
+            VVMToolStrip.Name = "VVMToolStrip";
+            VVMToolStrip.Padding = new Padding(5);
+            VVMToolStrip.Size = new Size(767, 32);
+            VVMToolStrip.TabIndex = 1;
+            VVMToolStrip.Text = "ab2ToolStrip1";
             // 
             // toolStripLabel1
             // 
@@ -1071,7 +1071,7 @@
             // 
             label26.AutoSize = true;
             label26.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label26.Location = new Point(273, 490);
+            label26.Location = new Point(12, 490);
             label26.Name = "label26";
             label26.Size = new Size(91, 13);
             label26.TabIndex = 56;
@@ -1081,7 +1081,7 @@
             // 
             LableTotalAmountReceived.AutoSize = true;
             LableTotalAmountReceived.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
-            LableTotalAmountReceived.Location = new Point(370, 490);
+            LableTotalAmountReceived.Location = new Point(109, 490);
             LableTotalAmountReceived.Name = "LableTotalAmountReceived";
             LableTotalAmountReceived.Size = new Size(31, 13);
             LableTotalAmountReceived.TabIndex = 57;
@@ -1106,7 +1106,7 @@
             Controls.Add(GroupBoxCheckInfomation);
             Controls.Add(BtnCancel);
             Controls.Add(BtnReceive);
-            Controls.Add(ab2ToolStrip1);
+            Controls.Add(VVMToolStrip);
             Controls.Add(statusStrip1);
             Controls.Add(GroupBoxCreditCard);
             Controls.Add(TabControlInvoiceDetails);
@@ -1124,7 +1124,7 @@
             Controls.SetChildIndex(TabControlInvoiceDetails, 0);
             Controls.SetChildIndex(GroupBoxCreditCard, 0);
             Controls.SetChildIndex(statusStrip1, 0);
-            Controls.SetChildIndex(ab2ToolStrip1, 0);
+            Controls.SetChildIndex(VVMToolStrip, 0);
             Controls.SetChildIndex(BtnReceive, 0);
             Controls.SetChildIndex(BtnCancel, 0);
             Controls.SetChildIndex(GroupBoxCheckInfomation, 0);
@@ -1158,8 +1158,8 @@
             GroupBoxPayMethod.ResumeLayout(false);
             GroupBoxPayMethod.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)GridViewPendingInvoice).EndInit();
-            ab2ToolStrip1.ResumeLayout(false);
-            ab2ToolStrip1.PerformLayout();
+            VVMToolStrip.ResumeLayout(false);
+            VVMToolStrip.PerformLayout();
             GroupBoxUpiPayment.ResumeLayout(false);
             GroupBoxUpiPayment.PerformLayout();
             ResumeLayout(false);
@@ -1169,7 +1169,7 @@
         #endregion
 
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private controls.Ab2ToolStrip ab2ToolStrip1;
+        private controls.Ab2ToolStrip VVMToolStrip;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripTextBox TextBoxReceivePaymentSearch;
         private System.Windows.Forms.ToolStripButton BtnSearchReceivePayment;
