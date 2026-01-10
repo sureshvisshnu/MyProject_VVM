@@ -264,7 +264,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Integrated Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 12, 13, 16, 27, 47, 770, DateTimeKind.Local).AddTicks(6443),
+                            EffectiveTo = new DateTime(2400, 1, 10, 14, 37, 41, 33, DateTimeKind.Local).AddTicks(25),
                             Name = "IGST",
                             Rule = "RunIGST()"
                         },
@@ -274,7 +274,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Central Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 12, 13, 16, 27, 47, 770, DateTimeKind.Local).AddTicks(6479),
+                            EffectiveTo = new DateTime(2400, 1, 10, 14, 37, 41, 33, DateTimeKind.Local).AddTicks(67),
                             Name = "CGST",
                             Rule = "RunCGST()"
                         },
@@ -284,7 +284,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "State Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 12, 13, 16, 27, 47, 770, DateTimeKind.Local).AddTicks(6490),
+                            EffectiveTo = new DateTime(2400, 1, 10, 14, 37, 41, 33, DateTimeKind.Local).AddTicks(78),
                             Name = "SGST",
                             Rule = "RunSGST()"
                         },
@@ -294,7 +294,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Tax at Source Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 12, 13, 16, 27, 47, 770, DateTimeKind.Local).AddTicks(6499),
+                            EffectiveTo = new DateTime(2400, 1, 10, 14, 37, 41, 33, DateTimeKind.Local).AddTicks(88),
                             Name = "TCS",
                             Rule = "RunTCS()"
                         });
@@ -4369,7 +4369,7 @@ namespace FADataAccessLibrary.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("AccountId")
+                    b.Property<long>("AccountId")
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("Amount")
@@ -4378,7 +4378,10 @@ namespace FADataAccessLibrary.Migrations
                     b.Property<long>("CompanyId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CostCenterId")
+                    b.Property<long>("CompanyId1")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("CostCenterId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("CreatedBy")
@@ -4386,6 +4389,15 @@ namespace FADataAccessLibrary.Migrations
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeletionReason")
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Description")
                         .HasMaxLength(250)
@@ -4395,17 +4407,26 @@ namespace FADataAccessLibrary.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<DateTime>("PaymentDueDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("PaymentDueDateUtc")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<string>("Reference")
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<long?>("SalesId")
+                    b.Property<long>("SalesId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("TransactionDate")
@@ -4420,9 +4441,9 @@ namespace FADataAccessLibrary.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("CostCenterId");
+                    b.HasIndex("CompanyId1");
 
-                    b.HasIndex("SalesId");
+                    b.HasIndex("DeletedById");
 
                     b.ToTable("Payments");
 
@@ -4467,11 +4488,16 @@ namespace FADataAccessLibrary.Migrations
                     b.Property<string>("ReferenceTrasnactionId")
                         .HasColumnType("longtext");
 
+                    b.Property<long>("SalesId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("PaymentDetailId");
 
                     b.HasIndex("AccountId");
 
                     b.HasIndex("PaymentId");
+
+                    b.HasIndex("SalesId");
 
                     b.ToTable("PaymentDetails");
                 });
@@ -14887,21 +14913,25 @@ namespace FADataAccessLibrary.Migrations
                 {
                     b.HasOne("fa.model.Accounting.Masters.Account", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountId");
-
-                    b.HasOne("fa.model.Accounting.Masters.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
+                        .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("fa.model.Accounting.Masters.CostCenter", "CostCenter")
                         .WithMany()
-                        .HasForeignKey("CostCenterId");
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("fa.model.OrderManagement.SaleEntry", "Sales")
+                    b.HasOne("fa.model.Accounting.Masters.Company", "Company")
                         .WithMany()
-                        .HasForeignKey("SalesId");
+                        .HasForeignKey("CompanyId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fa.model.UserProfile.User", "DeletedBy")
+                        .WithMany()
+                        .HasForeignKey("DeletedById");
 
                     b.Navigation("Account");
 
@@ -14909,7 +14939,7 @@ namespace FADataAccessLibrary.Migrations
 
                     b.Navigation("CostCenter");
 
-                    b.Navigation("Sales");
+                    b.Navigation("DeletedBy");
                 });
 
             modelBuilder.Entity("fa.model.Accounting.Transactions.PaymentDetail", b =>
@@ -14926,9 +14956,17 @@ namespace FADataAccessLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("fa.model.OrderManagement.SaleEntry", "Sales")
+                        .WithMany()
+                        .HasForeignKey("SalesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Account");
 
                     b.Navigation("Payment");
+
+                    b.Navigation("Sales");
                 });
 
             modelBuilder.Entity("fa.model.Accounting.Transactions.Receipt", b =>

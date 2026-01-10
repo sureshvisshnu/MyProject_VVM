@@ -158,6 +158,10 @@
             ComboBoxPaymentType = new fa.views.controls.ComboBoxSwapTextBox();
             label1 = new Label();
             BtnWhatsUpEmail = new Button();
+            groupBox3 = new GroupBox();
+            label10 = new Label();
+            groupBox4 = new GroupBox();
+            label12 = new Label();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).BeginInit();
             toolStrip1.SuspendLayout();
             StatusStripSales.SuspendLayout();
@@ -166,6 +170,8 @@
             groupBox2.SuspendLayout();
             groupBoxPrintSetup.SuspendLayout();
             AmountReceivedGB.SuspendLayout();
+            groupBox3.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // ProductIdTransport
@@ -1081,7 +1087,7 @@
             SaleProductDetails.Margin = new Padding(4, 3, 4, 3);
             SaleProductDetails.Name = "SaleProductDetails";
             SaleProductDetails.ProductId = 0L;
-            SaleProductDetails.Size = new Size(281, 585);
+            SaleProductDetails.Size = new Size(281, 532);
             SaleProductDetails.TabIndex = 211;
             // 
             // label5
@@ -1308,14 +1314,58 @@
             BtnWhatsUpEmail.UseVisualStyleBackColor = true;
             BtnWhatsUpEmail.Click += BtnWhatsUpEmail_Click;
             // 
+            // groupBox3
+            // 
+            groupBox3.Controls.Add(label10);
+            groupBox3.ForeColor = Color.RosyBrown;
+            groupBox3.Location = new Point(1209, 581);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(120, 50);
+            groupBox3.TabIndex = 231;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Sale #";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label10.Location = new Point(7, 16);
+            label10.Name = "label10";
+            label10.Size = new Size(20, 23);
+            label10.TabIndex = 184;
+            label10.Text = "0";
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(label12);
+            groupBox4.ForeColor = Color.RosyBrown;
+            groupBox4.Location = new Point(1083, 581);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(120, 50);
+            groupBox4.TabIndex = 230;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Pur #";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label12.Location = new Point(7, 16);
+            label12.Name = "label12";
+            label12.Size = new Size(20, 23);
+            label12.TabIndex = 184;
+            label12.Text = "0";
+            // 
             // FormItembasedSales
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1353, 661);
-            Controls.Add(BtnWhatsUpEmail);
-            Controls.Add(ComboBoxSaleInventoryLocation);
+            Controls.Add(groupBox3);
+            Controls.Add(groupBox4);
             Controls.Add(ComboBoxInvoicePriceBy);
+            Controls.Add(ComboBoxSaleInventoryLocation);
+            Controls.Add(BtnWhatsUpEmail);
             Controls.Add(AmountReceivedGB);
             Controls.Add(YesNoRadioPriceTo);
             Controls.Add(label29);
@@ -1374,7 +1424,6 @@
             Text = "Sale";
             FormClosing += FormItembasedSales_FormClosing;
             Load += FormItembasedSales_Load;
-            Controls.SetChildIndex(checkBoxIsPatient, 0);
             Controls.SetChildIndex(BtnAdditionalDetail, 0);
             Controls.SetChildIndex(label3, 0);
             Controls.SetChildIndex(label4, 0);
@@ -1418,18 +1467,21 @@
             Controls.SetChildIndex(BtnExportPdf, 0);
             Controls.SetChildIndex(BtnSalesNewCustomer, 0);
             Controls.SetChildIndex(labelRoundOff, 0);
-            Controls.SetChildIndex(ProductIdTransport, 0);
-            Controls.SetChildIndex(ProductBatchIdTransport, 0);
-            Controls.SetChildIndex(AccountIdTransport, 0);
             Controls.SetChildIndex(groupBox2, 0);
             Controls.SetChildIndex(groupBoxPrintSetup, 0);
             Controls.SetChildIndex(label23, 0);
             Controls.SetChildIndex(label29, 0);
             Controls.SetChildIndex(YesNoRadioPriceTo, 0);
             Controls.SetChildIndex(AmountReceivedGB, 0);
-            Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
-            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
             Controls.SetChildIndex(BtnWhatsUpEmail, 0);
+            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
+            Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
+            Controls.SetChildIndex(groupBox4, 0);
+            Controls.SetChildIndex(groupBox3, 0);
+            Controls.SetChildIndex(checkBoxIsPatient, 0);
+            Controls.SetChildIndex(ProductIdTransport, 0);
+            Controls.SetChildIndex(ProductBatchIdTransport, 0);
+            Controls.SetChildIndex(AccountIdTransport, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
@@ -1444,6 +1496,10 @@
             groupBoxPrintSetup.PerformLayout();
             AmountReceivedGB.ResumeLayout(false);
             AmountReceivedGB.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
+            groupBox4.ResumeLayout(false);
+            groupBox4.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -1562,5 +1618,9 @@
         private GroupBox AmountReceivedGB;
         private controls.ComboBoxSwapTextBox ComboBoxPaymentType;
         private Button BtnWhatsUpEmail;
+        private GroupBox groupBox3;
+        private Label label10;
+        private GroupBox groupBox4;
+        private Label label12;
     }
 }

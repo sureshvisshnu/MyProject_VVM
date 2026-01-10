@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using fa.model.Accounting.Masters;
 using fa.model.OrderManagement;
+using fa.model.UserProfile;
 
 namespace fa.model.Accounting.Transactions
 {
@@ -11,21 +12,47 @@ namespace fa.model.Accounting.Transactions
     {
         [Key]
         public long PaymentId { get; set; }
-        public DateTime TransactionDate { set; get; }
+
+        public DateTime TransactionDate { get; set; }
+
         [MaxLength(10)]
-        public String Reference { get; set; }
-        public long? AccountId { get; set; }
-        [ForeignKey("AccountId")]
+        public string Reference { get; set; }
+
+        // ✅ CUSTOMER (MANDATORY)
+        public long AccountId { get; set; }
+
+        [ForeignKey(nameof(AccountId))]
         public virtual Account Account { get; set; }
-        public long? SalesId { get; set; }
-        [ForeignKey("SalesId")]
-        public virtual SaleEntry Sales { get; set; }
+
         [MaxLength(250)]
         public string Description { get; set; }
+
         public decimal Amount { get; set; }
+
         public PaymentType TransctionType { get; set; }
+
+        // ✅ Applied invoices
         public ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
+        public long CompanyId { get; set; }
+        public Company Company { get; set; }
+        [ForeignKey(nameof(CompanyId))]
+        public virtual CostCenter CostCenter { get; set; }
+        public long CostCenterId { get; set; }
+        public DateTime PaymentDueDate { get; set; }
+        public DateTime PaymentDueDateUtc { get; set; }
+        public bool IsDeleted { get; set; }
+        [ForeignKey(nameof(IsDeleted))]
+        public long? DeletedById { get; set; }
+
+        [ForeignKey(nameof(DeletedById))]
+        public virtual User DeletedBy { get; set; }
+
+        public DateTime DeletedOn { get; set ; }
+        [ForeignKey(nameof(IsDeleted))]
+        public string DeletionReason { get; set ; }
+        public long SalesId { get; set; }
     }
+
 
     public class CheckPayment : Payment
     {
@@ -68,15 +95,23 @@ namespace fa.model.Accounting.Transactions
     {
         [Key]
         public long PaymentDetailId { get; set; }
-        public long PaymentId { get; set; }
-        public Payment Payment { get; set; }
         public long AccountId { get; set; }
         public Account Account { get; set; }
-        public string Description { get; set; }
+        public long PaymentId { get; set; }
+        public Payment Payment { get; set; }
+
+        // ✅ Invoice reference
+        public long SalesId { get; set; }
+        public SaleEntry Sales { get; set; }
+
         public decimal Amount { get; set; }
+
         public InvoiceType InvoiceType { get; set; }
+
         public string ReferenceTrasnactionId { get; set; }
+        public string Description { get; set; }
     }
+
     public enum InvoiceType
     {
         Basic,
