@@ -136,6 +136,17 @@ namespace fa.api.catalog
                 return productFamilyIdsByName;
             }
         }
+        public ProductFamily GetProductFamilyByProductId(long productId, long companyId)
+        {
+            using var context = new AccountMasterContext();
+
+            return context.Products
+                .Where(p => p.Id == productId && p.CompanyId == companyId)
+                .Select(p => p.ProductFamily)
+                .Include(f => f.Parent)
+                .FirstOrDefault();
+        }
+
         public IList<ProductFamily> ListProductFamilyByCompanyId(long CompanyId)
         {
             using (AccountMasterContext Context = new AccountMasterContext())

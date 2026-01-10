@@ -163,6 +163,15 @@ namespace fa.api.catalog
         {
             return ListProductByCompanyId(CompanyId).FirstOrDefault(p => p.MaterialId.Equals(materialId, StringComparison.OrdinalIgnoreCase));
         }
+        public Product? GetProductInfoByProductId(long CompanyId, long ProductId)
+        {
+            Product ProductInfo = null;
+            using (AccountMasterContext Context = new AccountMasterContext())
+            {
+                ProductInfo = (Product)Context.Products.Where(p => p.Id == ProductId && p.CompanyId == CompanyId).FirstOrDefault<Product>();
+            }
+            return ProductInfo;
+        }
         public Product GetProductInfoBySaleDetailId(long ProductId)
         {
             Product ProductInfo = null;

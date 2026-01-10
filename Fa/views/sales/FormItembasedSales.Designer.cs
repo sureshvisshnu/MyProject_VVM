@@ -29,27 +29,27 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle23 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle21 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle22 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormItembasedSales));
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle19 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle7 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle8 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle9 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle10 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle11 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle12 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle13 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle18 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle20 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle24 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle25 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle26 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle39 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle27 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle28 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle29 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle30 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle31 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle32 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle33 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle34 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle35 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle36 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle37 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle38 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle40 = new DataGridViewCellStyle();
             LabelSalesFinalAmount = new Label();
             label7 = new Label();
             TextBoxSalesId = new TextBox();
@@ -159,9 +159,9 @@
             label1 = new Label();
             BtnWhatsUpEmail = new Button();
             groupBox3 = new GroupBox();
-            label10 = new Label();
+            SellingRate = new Label();
             groupBox4 = new GroupBox();
-            label12 = new Label();
+            PurchaseRate = new Label();
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).BeginInit();
             toolStrip1.SuspendLayout();
             StatusStripSales.SuspendLayout();
@@ -246,14 +246,14 @@
             GridViewPurchaseItemTotal.Name = "GridViewPurchaseItemTotal";
             GridViewPurchaseItemTotal.ReadOnly = true;
             GridViewPurchaseItemTotal.RowHeadersVisible = false;
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopRight;
-            dataGridViewCellStyle3.BackColor = SystemColors.Control;
-            dataGridViewCellStyle3.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle3.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            GridViewPurchaseItemTotal.RowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle23.Alignment = DataGridViewContentAlignment.TopRight;
+            dataGridViewCellStyle23.BackColor = SystemColors.Control;
+            dataGridViewCellStyle23.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle23.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle23.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle23.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle23.WrapMode = DataGridViewTriState.True;
+            GridViewPurchaseItemTotal.RowsDefaultCellStyle = dataGridViewCellStyle23;
             GridViewPurchaseItemTotal.Size = new Size(1067, 25);
             GridViewPurchaseItemTotal.TabIndex = 194;
             GridViewPurchaseItemTotal.TabStop = false;
@@ -261,20 +261,20 @@
             // Total
             // 
             Total.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.NullValue = "Total :";
-            Total.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle21.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle21.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle21.NullValue = "Total :";
+            Total.DefaultCellStyle = dataGridViewCellStyle21;
             Total.HeaderText = "Total";
             Total.Name = "Total";
             Total.ReadOnly = true;
             // 
             // Value
             // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle2.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.NullValue = "0.00";
-            Value.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle22.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle22.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle22.NullValue = "0.00";
+            Value.DefaultCellStyle = dataGridViewCellStyle22;
             Value.HeaderText = "Value";
             Value.Name = "Value";
             Value.ReadOnly = true;
@@ -588,9 +588,9 @@
             // 
             // dataGridViewTextBoxColumn1
             // 
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle4.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle24.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle24.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            dataGridViewTextBoxColumn1.DefaultCellStyle = dataGridViewCellStyle24;
             dataGridViewTextBoxColumn1.HeaderText = "Total";
             dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
             dataGridViewTextBoxColumn1.ReadOnly = true;
@@ -598,10 +598,10 @@
             // 
             // dataGridViewCurrencyColumn1
             // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle5.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle5.NullValue = "0.00";
-            dataGridViewCurrencyColumn1.DefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle25.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle25.Font = new Font("Microsoft Sans Serif", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle25.NullValue = "0.00";
+            dataGridViewCurrencyColumn1.DefaultCellStyle = dataGridViewCellStyle25;
             dataGridViewCurrencyColumn1.HeaderText = "Value";
             dataGridViewCurrencyColumn1.Name = "dataGridViewCurrencyColumn1";
             dataGridViewCurrencyColumn1.Resizable = DataGridViewTriState.True;
@@ -644,14 +644,14 @@
             GridViewSalesItem.AllowUserToDeleteRows = false;
             GridViewSalesItem.AllowUserToResizeRows = false;
             GridViewSalesItem.BackgroundColor = SystemColors.Control;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = SystemColors.Control;
-            dataGridViewCellStyle6.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle6.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Control;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle6.WrapMode = DataGridViewTriState.True;
-            GridViewSalesItem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle26.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle26.BackColor = SystemColors.Control;
+            dataGridViewCellStyle26.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            dataGridViewCellStyle26.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle26.SelectionBackColor = SystemColors.Control;
+            dataGridViewCellStyle26.SelectionForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle26.WrapMode = DataGridViewTriState.True;
+            GridViewSalesItem.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle26;
             GridViewSalesItem.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             GridViewSalesItem.Columns.AddRange(new DataGridViewColumn[] { Column1, Account, UnitOfMeasure, Column3, Column4, Column14, Column15, SalesPrice, OverridePrice, Column5, SalesTax, Column7, SalesDicount, SalesAmount, Delete, Column11, Column12, SalesDetailID, Column9, Msrp });
             GridViewSalesItem.EditMode = DataGridViewEditMode.EditOnEnter;
@@ -660,9 +660,9 @@
             GridViewSalesItem.MultiSelect = false;
             GridViewSalesItem.Name = "GridViewSalesItem";
             GridViewSalesItem.RowHeadersVisible = false;
-            dataGridViewCellStyle19.SelectionBackColor = SystemColors.Window;
-            dataGridViewCellStyle19.SelectionForeColor = SystemColors.ActiveCaptionText;
-            GridViewSalesItem.RowsDefaultCellStyle = dataGridViewCellStyle19;
+            dataGridViewCellStyle39.SelectionBackColor = SystemColors.Window;
+            dataGridViewCellStyle39.SelectionForeColor = SystemColors.ActiveCaptionText;
+            GridViewSalesItem.RowsDefaultCellStyle = dataGridViewCellStyle39;
             GridViewSalesItem.RowTemplate.Height = 20;
             GridViewSalesItem.ScrollBars = ScrollBars.Vertical;
             GridViewSalesItem.ShowCellToolTips = false;
@@ -709,9 +709,9 @@
             // 
             // Column3
             // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle7.NullValue = "0";
-            Column3.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle27.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle27.NullValue = "0";
+            Column3.DefaultCellStyle = dataGridViewCellStyle27;
             Column3.HeaderText = "Quantity";
             Column3.Name = "Column3";
             Column3.Resizable = DataGridViewTriState.False;
@@ -719,9 +719,9 @@
             // 
             // Column4
             // 
-            dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle8.NullValue = "0";
-            Column4.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle28.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle28.NullValue = "0";
+            Column4.DefaultCellStyle = dataGridViewCellStyle28;
             Column4.HeaderText = "Free";
             Column4.Name = "Column4";
             Column4.Resizable = DataGridViewTriState.False;
@@ -729,8 +729,8 @@
             // 
             // Column14
             // 
-            dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            Column14.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle29.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            Column14.DefaultCellStyle = dataGridViewCellStyle29;
             Column14.HeaderText = "Batch No";
             Column14.MaxInputLength = 10;
             Column14.Name = "Column14";
@@ -740,8 +740,8 @@
             // 
             // Column15
             // 
-            dataGridViewCellStyle10.Alignment = DataGridViewContentAlignment.MiddleRight;
-            Column15.DefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle30.Alignment = DataGridViewContentAlignment.MiddleRight;
+            Column15.DefaultCellStyle = dataGridViewCellStyle30;
             Column15.HeaderText = "Exp Date";
             Column15.Name = "Column15";
             Column15.Resizable = DataGridViewTriState.False;
@@ -749,9 +749,9 @@
             // 
             // SalesPrice
             // 
-            dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle11.NullValue = "0.00";
-            SalesPrice.DefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle31.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle31.NullValue = "0.00";
+            SalesPrice.DefaultCellStyle = dataGridViewCellStyle31;
             SalesPrice.HeaderText = "Price";
             SalesPrice.Name = "SalesPrice";
             SalesPrice.Resizable = DataGridViewTriState.False;
@@ -759,9 +759,9 @@
             // 
             // OverridePrice
             // 
-            dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle12.NullValue = "0.00";
-            OverridePrice.DefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle32.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle32.NullValue = "0.00";
+            OverridePrice.DefaultCellStyle = dataGridViewCellStyle32;
             OverridePrice.HeaderText = "OverridePrice";
             OverridePrice.Name = "OverridePrice";
             OverridePrice.Resizable = DataGridViewTriState.False;
@@ -770,9 +770,9 @@
             // 
             // Column5
             // 
-            dataGridViewCellStyle13.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle13.NullValue = "0.00";
-            Column5.DefaultCellStyle = dataGridViewCellStyle13;
+            dataGridViewCellStyle33.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle33.NullValue = "0.00";
+            Column5.DefaultCellStyle = dataGridViewCellStyle33;
             Column5.HeaderText = "Tax%";
             Column5.Name = "Column5";
             Column5.Resizable = DataGridViewTriState.False;
@@ -780,9 +780,9 @@
             // 
             // SalesTax
             // 
-            dataGridViewCellStyle14.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle14.NullValue = "0.00";
-            SalesTax.DefaultCellStyle = dataGridViewCellStyle14;
+            dataGridViewCellStyle34.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle34.NullValue = "0.00";
+            SalesTax.DefaultCellStyle = dataGridViewCellStyle34;
             SalesTax.FillWeight = 50F;
             SalesTax.HeaderText = "Tax";
             SalesTax.Name = "SalesTax";
@@ -792,9 +792,9 @@
             // Column7
             // 
             Column7.Currencylength = 6;
-            dataGridViewCellStyle15.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle15.NullValue = "0.00";
-            Column7.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle35.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle35.NullValue = "0.00";
+            Column7.DefaultCellStyle = dataGridViewCellStyle35;
             Column7.HeaderText = "Discount%";
             Column7.Name = "Column7";
             Column7.Resizable = DataGridViewTriState.False;
@@ -802,9 +802,9 @@
             // 
             // SalesDicount
             // 
-            dataGridViewCellStyle16.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle16.NullValue = "0.00";
-            SalesDicount.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle36.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle36.NullValue = "0.00";
+            SalesDicount.DefaultCellStyle = dataGridViewCellStyle36;
             SalesDicount.HeaderText = "Discount";
             SalesDicount.Name = "SalesDicount";
             SalesDicount.Resizable = DataGridViewTriState.False;
@@ -812,18 +812,18 @@
             // 
             // SalesAmount
             // 
-            dataGridViewCellStyle17.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle17.NullValue = "0.00";
-            SalesAmount.DefaultCellStyle = dataGridViewCellStyle17;
+            dataGridViewCellStyle37.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle37.NullValue = "0.00";
+            SalesAmount.DefaultCellStyle = dataGridViewCellStyle37;
             SalesAmount.HeaderText = "Amount";
             SalesAmount.Name = "SalesAmount";
             SalesAmount.Resizable = DataGridViewTriState.False;
             // 
             // Delete
             // 
-            dataGridViewCellStyle18.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle18.NullValue = "X";
-            Delete.DefaultCellStyle = dataGridViewCellStyle18;
+            dataGridViewCellStyle38.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle38.NullValue = "X";
+            Delete.DefaultCellStyle = dataGridViewCellStyle38;
             Delete.HeaderText = "";
             Delete.Name = "Delete";
             Delete.Resizable = DataGridViewTriState.False;
@@ -901,9 +901,9 @@
             // 
             // dataGridViewTextBoxColumn2
             // 
-            dataGridViewCellStyle20.Alignment = DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle20.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
-            dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle20;
+            dataGridViewCellStyle40.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle40.Font = new Font("Microsoft Sans Serif", 9.75F, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+            dataGridViewTextBoxColumn2.DefaultCellStyle = dataGridViewCellStyle40;
             dataGridViewTextBoxColumn2.HeaderText = "Value";
             dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             dataGridViewTextBoxColumn2.ReadOnly = true;
@@ -1316,55 +1316,55 @@
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(label10);
+            groupBox3.Controls.Add(SellingRate);
             groupBox3.ForeColor = Color.RosyBrown;
             groupBox3.Location = new Point(1209, 581);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(120, 50);
             groupBox3.TabIndex = 231;
             groupBox3.TabStop = false;
-            groupBox3.Text = "Sale #";
+            groupBox3.Text = "Sale ₹";
             // 
-            // label10
+            // SellingRate
             // 
-            label10.AutoSize = true;
-            label10.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label10.Location = new Point(7, 16);
-            label10.Name = "label10";
-            label10.Size = new Size(20, 23);
-            label10.TabIndex = 184;
-            label10.Text = "0";
+            SellingRate.AutoSize = true;
+            SellingRate.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            SellingRate.Location = new Point(7, 16);
+            SellingRate.Name = "SellingRate";
+            SellingRate.Size = new Size(20, 23);
+            SellingRate.TabIndex = 184;
+            SellingRate.Text = "0";
             // 
             // groupBox4
             // 
-            groupBox4.Controls.Add(label12);
+            groupBox4.Controls.Add(PurchaseRate);
             groupBox4.ForeColor = Color.RosyBrown;
             groupBox4.Location = new Point(1083, 581);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(120, 50);
             groupBox4.TabIndex = 230;
             groupBox4.TabStop = false;
-            groupBox4.Text = "Pur #";
+            groupBox4.Text = "Pur ₹";
             // 
-            // label12
+            // PurchaseRate
             // 
-            label12.AutoSize = true;
-            label12.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label12.Location = new Point(7, 16);
-            label12.Name = "label12";
-            label12.Size = new Size(20, 23);
-            label12.TabIndex = 184;
-            label12.Text = "0";
+            PurchaseRate.AutoSize = true;
+            PurchaseRate.Font = new Font("Tahoma", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            PurchaseRate.Location = new Point(7, 16);
+            PurchaseRate.Name = "PurchaseRate";
+            PurchaseRate.Size = new Size(20, 23);
+            PurchaseRate.TabIndex = 184;
+            PurchaseRate.Text = "0";
             // 
             // FormItembasedSales
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1353, 661);
+            Controls.Add(ComboBoxSaleInventoryLocation);
+            Controls.Add(ComboBoxInvoicePriceBy);
             Controls.Add(groupBox3);
             Controls.Add(groupBox4);
-            Controls.Add(ComboBoxInvoicePriceBy);
-            Controls.Add(ComboBoxSaleInventoryLocation);
             Controls.Add(BtnWhatsUpEmail);
             Controls.Add(AmountReceivedGB);
             Controls.Add(YesNoRadioPriceTo);
@@ -1474,14 +1474,14 @@
             Controls.SetChildIndex(YesNoRadioPriceTo, 0);
             Controls.SetChildIndex(AmountReceivedGB, 0);
             Controls.SetChildIndex(BtnWhatsUpEmail, 0);
-            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
-            Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
             Controls.SetChildIndex(groupBox4, 0);
             Controls.SetChildIndex(groupBox3, 0);
             Controls.SetChildIndex(checkBoxIsPatient, 0);
             Controls.SetChildIndex(ProductIdTransport, 0);
             Controls.SetChildIndex(ProductBatchIdTransport, 0);
             Controls.SetChildIndex(AccountIdTransport, 0);
+            Controls.SetChildIndex(ComboBoxInvoicePriceBy, 0);
+            Controls.SetChildIndex(ComboBoxSaleInventoryLocation, 0);
             ((System.ComponentModel.ISupportInitialize)GridViewPurchaseItemTotal).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
@@ -1619,8 +1619,8 @@
         private controls.ComboBoxSwapTextBox ComboBoxPaymentType;
         private Button BtnWhatsUpEmail;
         private GroupBox groupBox3;
-        private Label label10;
+        private Label SellingRate;
         private GroupBox groupBox4;
-        private Label label12;
+        private Label PurchaseRate;
     }
 }

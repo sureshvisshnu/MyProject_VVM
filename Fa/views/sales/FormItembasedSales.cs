@@ -3412,6 +3412,56 @@ namespace fa.views.sales
             }
             Cursor.Current = Cursors.Default;
         }
+        private void ShowPreviousPrices(long customerId, long productId)
+        {
+            try
+            {
+                Cursor.Current = Cursors.WaitCursor;
+
+                // Reset labels
+                PurchaseRate.Text = "0.00";
+                SellingRate.Text = "0.00";
+
+                // 🔹 1. Get last selling price for this customer
+                var sales = SalesManager.Instance
+                    .GetLastPricesByProductAndCustomer(
+                        Global.Company.CompanyId,
+                        productId,
+                        customerId
+                    );
+
+                var lastSale = sales?.FirstOrDefault();
+                if (lastSale != null)
+                {
+                    SellingRate.Text =
+                        lastSale.Price.ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
+                }
+
+                // 🔹 2. Get last purchase rate
+
+                var productFamily = CatalogProductManager.Instance.GetProductInfoByProductId(Global.Company.CompanyId, productId);
+                if (productFamily != null && productFamily.PurchasePrice > 0)
+                {
+                    PurchaseRate.Text =
+                        productFamily.PurchasePrice.ToString(
+                            Global.Company.PrimaryCurrency.CurrencyFormat
+                        );
+                }
+                else
+                {
+                    PurchaseRate.Text = "0.00";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());                
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
+        }
+
         private void ShowPrice()
         {
             if (GridViewSalesItem.CurrentRow != null)
@@ -3484,6 +3534,7 @@ namespace fa.views.sales
                         GridViewSalesItem.CurrentCell.Selected = true;
                         GridViewSalesItem.BeginEdit(true);
                     }));
+                    ShowPreviousPrices(CustomerId, ProductId);
                 }
                 else
                 {
@@ -3916,11 +3967,11 @@ namespace fa.views.sales
                                     LoadProductIntoGrid(product);
                                 }
                             }
-
+                            ShowPreviousPrices(CustomerId, ProductId);
                             _isBarcodeProcessing = false;
                             return true;
                         }
-
+                        
 
                         if (keyData == Keys.F5)
                         {
