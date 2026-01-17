@@ -1183,6 +1183,8 @@ namespace fa.views.sales
             TextBoxSalesType.ResetText();
             TextBoxSalesCustomerAddress.ResetText();
             TextBoxSalesMemo.ResetText();
+            PurchaseRate.ResetText();
+            SellingRate.ResetText();
             DatetimePickerSalesDate.Format = Global.Company.DateFormat;
             DatetimePickerSalesDate.Date = (DateTime)DateUtils.ToDate(Global.getTransactionDate().ToString(Global.Company.DateFormat), Global.Company.DateFormat);
             YesNoRbtSalesMethod.Checked = (Global.Company.CompanySalesSetup.DefaultSalesType == SaleMethod.Cash ? false : true);
@@ -2021,7 +2023,18 @@ namespace fa.views.sales
             {
                 if (GridViewSalesItem.Rows[GridViewSalesItem.CurrentRow.Index].Cells[(int)SaleEntryTableColumn.ID].Value != null)
                 {
-                    LocalProductId = (long)GridViewSalesItem.Rows[GridViewSalesItem.CurrentRow.Index].Cells[(int)SaleEntryTableColumn.ID].Value;
+                    try
+                    {
+                        var idCell = GridViewSalesItem.Rows[e.RowIndex]
+                            .Cells[(int)SaleEntryTableColumn.ID].Value;
+
+                        if (idCell != null)
+                            LocalProductId = (long)idCell;
+                    }
+                    catch
+                    {
+                        LocalProductId = null;
+                    }
                 }
             }
             catch
@@ -2030,6 +2043,10 @@ namespace fa.views.sales
             }
             if (e.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
             {
+                if (LocalProductId != null && CustomerId > 0)
+                {
+                    _ = ShowPreviousPricesAsync(CustomerId, (long)LocalProductId);
+                }
                 //Combine product
                 if (isCombineProduct && LocalProductId != null)
                 {
@@ -2312,6 +2329,7 @@ namespace fa.views.sales
                 }
             }
         }
+
         private void LoadPriceOld(int Index, string Uom)
         {
             if (GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ID].Value != null)
@@ -3534,7 +3552,7 @@ namespace fa.views.sales
                         GridViewSalesItem.CurrentCell.Selected = true;
                         GridViewSalesItem.BeginEdit(true);
                     }));
-                    ShowPreviousPrices(CustomerId, ProductId);
+                    //ShowPreviousPrices(CustomerId, ProductId);
                 }
                 else
                 {
@@ -3967,7 +3985,7 @@ namespace fa.views.sales
                                     LoadProductIntoGrid(product);
                                 }
                             }
-                            ShowPreviousPrices(CustomerId, ProductId);
+                            //ShowPreviousPrices(CustomerId, ProductId);
                             _isBarcodeProcessing = false;
                             return true;
                         }
@@ -5306,6 +5324,73 @@ namespace fa.views.sales
             formEmailSend.ShowDialog(this);
             
         }
+
+        private CancellationTokenSource _priceCts;
+
+        private async Task ShowPreviousPricesAsync(long customerId, long productId)
+        {
+            _priceCts?.Cancel();
+            _priceCts = new CancellationTokenSource();
+            var token = _priceCts.Token;
+
+            try
+            {
+                // Reset immediately (fast feedback)
+                PurchaseRate.Text = "0.00";
+                SellingRate.Text = "0.00";
+
+                await Task.Run(() =>
+                {
+                    token.ThrowIfCancellationRequested();
+
+                    // 🔹 Last selling price
+                    var sales = SalesManager.Instance
+                        .GetLastPricesByProductAndCustomer(
+                            Global.Company.CompanyId,
+                            productId,
+                            customerId
+                        );
+
+                    var lastSale = sales?.FirstOrDefault();
+
+                    // 🔹 Purchase price
+                    var product = CatalogProductManager.Instance
+                        .GetProductInfoByProductId(Global.Company.CompanyId, productId);
+
+                    // UI update on main thread
+                    BeginInvoke(new Action(() =>
+                    {
+                        if (token.IsCancellationRequested) return;
+
+                        if (lastSale != null)
+                        {
+                            SellingRate.Text =
+                                lastSale.Price.ToString(
+                                    Global.Company.PrimaryCurrency.CurrencyFormat
+                                );
+                        }
+
+                        if (product != null && product.PurchasePrice > 0)
+                        {
+                            PurchaseRate.Text =
+                                product.PurchasePrice.ToString(
+                                    Global.Company.PrimaryCurrency.CurrencyFormat
+                                );
+                        }
+                    }));
+                }, token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected → ignore
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex);
+            }
+        }
+
+
         /*
 protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 {
