@@ -2,6 +2,7 @@
 using fa.model.Accounting.Transaction;
 using fa.model.Accounting.Transactions;
 using Fa.api.Accounting.DoubleEntry;
+using FADataAccessLibrary.Model.Accounting.Transactions;
 using Microsoft.EntityFrameworkCore;
 
 namespace fa.api.Accounting
@@ -99,6 +100,24 @@ namespace fa.api.Accounting
             else
             {
                 throw new ArgumentException("Amount paid is morethan the balance of the Bill:" + PaymentDetail.ReferenceTrasnactionId);
+            }
+        }
+        public void ApplyNewPayment(PaymentDetailNew PaymentDetail, AccountMasterContext Context)
+        {
+            if (!string.IsNullOrEmpty(PaymentDetail.ReferenceTransactionId))
+            {
+                long BillId = long.Parse(PaymentDetail.ReferenceTransactionId);
+                Bill BillInfo = Context.Bills.FirstOrDefault(x => x.BillId == BillId);
+                if (BillInfo.Balance >= (float)PaymentDetail.Amount)
+                {
+                    BillInfo.Paid += (float)PaymentDetail.Amount;
+                    BillInfo.Balance -= (float)PaymentDetail.Amount;
+                    UpdateBillForApplayAndReversePayment(BillInfo, Context);
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Amount paid is morethan the balance of the Bill:" + PaymentDetail.ReferenceTransactionId);
             }
         }
         private void UpdateBillForApplayAndReversePayment(Bill Bill, AccountMasterContext Context)

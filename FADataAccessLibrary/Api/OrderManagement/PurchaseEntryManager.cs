@@ -9,6 +9,7 @@ using Fa.api.Accounting.DoubleEntry;
 using Fa.api.OrderManagement;
 using Microsoft.EntityFrameworkCore;
 using fa;
+using FADataAccessLibrary.Model.Accounting.Transactions;
 
 namespace fa.api.OrderManagement
 {
@@ -77,6 +78,23 @@ namespace fa.api.OrderManagement
             else
             {
                 throw new ArgumentException("Amount paid is morethan the balance of the Invoice:" + PaymentDetail.ReferenceTrasnactionId);
+            }
+        }
+        public void ApplyNewPayment(PaymentDetailNew PaymentDetail, AccountMasterContext Context)
+        {
+            if (!string.IsNullOrEmpty(PaymentDetail.ReferenceTransactionId))
+            {
+                PurchaseEntry lPurchaseEntry = GetPurchaseEntry(long.Parse(PaymentDetail.ReferenceTransactionId));
+                if (lPurchaseEntry.Balance >= (double)PaymentDetail.Amount)
+                {
+                    lPurchaseEntry.Paid += (double)PaymentDetail.Amount;
+                    lPurchaseEntry.Balance = Math.Round(((double)lPurchaseEntry.Balance - (double)PaymentDetail.Amount), 2);
+                    UpdatePurchaseEntryForApplayAndReversePayment(lPurchaseEntry, Context);
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Amount paid is morethan the balance of the Invoice:" + PaymentDetail.ReferenceTransactionId);
             }
         }
         public void ReversePayment(PaymentDetail PaymentDetail, AccountMasterContext Context)

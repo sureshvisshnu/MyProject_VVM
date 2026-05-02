@@ -228,6 +228,7 @@ namespace fa.views.account.masters
                 CheckBoxCustomerIsbranch.Checked = CustomerFromDB.IsSubAccount;
                 TextBoxCustomerNameonCheck.Text = CustomerFromDB.DisplayNameOnCheck;
                 CheckBoxUseDisplayName.Checked = CustomerFromDB.Name == CustomerFromDB.DisplayNameOnCheck ? true : false;
+                CheckBoxBillByPrevious.Checked = CustomerFromDB.BillWithPreviousPrice;
                 DateTimePickerCustomer.Date = (DateTime)DateUtils.ToDate(CustomerFromDB.BalanceAsOf.Date.ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
                 TextBoxCustomerBalance.Text = Math.Abs(CustomerFromDB.Balance).ToString(TextUtils.DecimalPlace(TextBoxCustomerBalance.Decimals));
                 ComboBoxBalanceType.SelectedIndex = CustomerFromDB.Balance < 0 ? 1 : 0;
@@ -351,6 +352,7 @@ namespace fa.views.account.masters
             lCustomer.BalanceAsOf = (DateTime)DateTimePickerCustomer.Date!;
             lCustomer.AccountType = AccountType.CUSTOMER;
             lCustomer.GSTNo = TextBoxGSTNo.Text.Trim();
+            lCustomer.BillWithPreviousPrice = CheckBoxBillByPrevious.Checked;
             if (CheckBoxCustomerIsbranch.Checked == true)
             {
                 if (ComboBoxCustomerParentAccount.SelectedIndex > -1)

@@ -69,6 +69,144 @@ namespace FADataAccessLibrary.Migrations
                     b.ToTable("countrytax", (string)null);
                 });
 
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.PaymentDetailNew", b =>
+                {
+                    b.Property<long>("PaymentDetailNewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("AccountId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<int>("InvoiceType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long>("PaymentNewId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ReferenceTransactionId")
+                        .HasColumnType("longtext");
+
+                    b.Property<long>("SalesId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("PaymentDetailNewId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("PaymentNewId");
+
+                    b.HasIndex("SalesId");
+
+                    b.ToTable("PaymentDetailsNew");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew", b =>
+                {
+                    b.Property<long>("PaymentNewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("AccountId")
+                        .HasColumnType("bigint");
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(65,30)");
+
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CostCenterId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("DeletedById")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DeletionReason")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime?>("LastModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("PaymentDueDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("PaymentDueDateUtc")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("PaymentTypeDiscriminator")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Reference")
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar(10)");
+
+                    b.Property<long>("SalesId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("TransactionDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int>("TransactionType")
+                        .HasColumnType("int");
+
+                    b.HasKey("PaymentNewId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("CostCenterId");
+
+                    b.HasIndex("DeletedById");
+
+                    b.ToTable("PaymentsNew");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("PaymentNew");
+
+                    b.UseTphMappingStrategy();
+                });
+
             modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.LabelStockMaster", b =>
                 {
                     b.Property<long>("Id")
@@ -264,7 +402,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Integrated Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 1, 10, 14, 37, 41, 33, DateTimeKind.Local).AddTicks(25),
+                            EffectiveTo = new DateTime(2400, 5, 2, 12, 43, 1, 261, DateTimeKind.Local).AddTicks(5871),
                             Name = "IGST",
                             Rule = "RunIGST()"
                         },
@@ -274,7 +412,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Central Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 1, 10, 14, 37, 41, 33, DateTimeKind.Local).AddTicks(67),
+                            EffectiveTo = new DateTime(2400, 5, 2, 12, 43, 1, 261, DateTimeKind.Local).AddTicks(5917),
                             Name = "CGST",
                             Rule = "RunCGST()"
                         },
@@ -284,7 +422,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "State Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 1, 10, 14, 37, 41, 33, DateTimeKind.Local).AddTicks(78),
+                            EffectiveTo = new DateTime(2400, 5, 2, 12, 43, 1, 261, DateTimeKind.Local).AddTicks(5933),
                             Name = "SGST",
                             Rule = "RunSGST()"
                         },
@@ -294,7 +432,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Tax at Source Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 1, 10, 14, 37, 41, 33, DateTimeKind.Local).AddTicks(88),
+                            EffectiveTo = new DateTime(2400, 5, 2, 12, 43, 1, 261, DateTimeKind.Local).AddTicks(5945),
                             Name = "TCS",
                             Rule = "RunTCS()"
                         });
@@ -4378,10 +4516,7 @@ namespace FADataAccessLibrary.Migrations
                     b.Property<long>("CompanyId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("CompanyId1")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("CostCenterId")
+                    b.Property<long?>("CostCenterId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("CreatedBy")
@@ -4393,15 +4528,14 @@ namespace FADataAccessLibrary.Migrations
                     b.Property<long?>("DeletedById")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTime>("DeletedOn")
+                    b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("DeletionReason")
                         .HasColumnType("longtext");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(250)
-                        .HasColumnType("varchar(250)");
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
@@ -4414,12 +4548,6 @@ namespace FADataAccessLibrary.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTime?>("LastModifiedDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("PaymentDueDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<DateTime>("PaymentDueDateUtc")
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Reference")
@@ -4441,7 +4569,7 @@ namespace FADataAccessLibrary.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.HasIndex("CompanyId1");
+                    b.HasIndex("CostCenterId");
 
                     b.HasIndex("DeletedById");
 
@@ -11453,6 +11581,9 @@ namespace FADataAccessLibrary.Migrations
                     b.Property<long?>("PaymentId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("PaymentNewId")
+                        .HasColumnType("bigint");
+
                     b.Property<long?>("PaymentType")
                         .HasColumnType("bigint");
 
@@ -11529,6 +11660,8 @@ namespace FADataAccessLibrary.Migrations
                     b.HasIndex("PatientId");
 
                     b.HasIndex("PaymentId");
+
+                    b.HasIndex("PaymentNewId");
 
                     b.HasIndex("ReferedById");
 
@@ -13223,6 +13356,92 @@ namespace FADataAccessLibrary.Migrations
                         });
                 });
 
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.BankTransferPaymentNew", b =>
+                {
+                    b.HasBaseType("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew");
+
+                    b.Property<long?>("BankTransferId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TransactionNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasIndex("BankTransferId");
+
+                    b.HasDiscriminator().HasValue("BankTransferPaymentNew");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.CardPaymentNew", b =>
+                {
+                    b.HasBaseType("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew");
+
+                    b.Property<string>("AuthorizationCode")
+                        .HasColumnType("longtext");
+
+                    b.Property<long?>("CAccountId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CCTransactionDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("CTransactionNumber")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CardHolderName")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CardType")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("LastFourDigits")
+                        .HasColumnType("longtext");
+
+                    b.HasIndex("CAccountId");
+
+                    b.HasDiscriminator().HasValue("CardPaymentNew");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.CheckPaymentNew", b =>
+                {
+                    b.HasBaseType("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew");
+
+                    b.Property<DateTime>("DepositedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("DepositedIntoId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("DocumentDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("DocumentNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasIndex("DepositedIntoId");
+
+                    b.HasDiscriminator().HasValue("CheckPaymentNew");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.UpiTransactionPaymentNew", b =>
+                {
+                    b.HasBaseType("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew");
+
+                    b.Property<DateTime>("UpiTransactionDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long?>("UpiTransactionId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UpiTransactionNumber")
+                        .HasColumnType("longtext");
+
+                    b.HasIndex("UpiTransactionId");
+
+                    b.HasDiscriminator().HasValue("UpiTransactionPaymentNew");
+                });
+
             modelBuilder.Entity("FADataAccessLibrary.Model.Hms.Master.PatientReportedAllergie", b =>
                 {
                     b.HasBaseType("FADataAccessLibrary.Model.Hms.Master.Allergie");
@@ -13240,6 +13459,9 @@ namespace FADataAccessLibrary.Migrations
             modelBuilder.Entity("fa.model.Accounting.Masters.Customer", b =>
                 {
                     b.HasBaseType("fa.model.Accounting.Masters.Account");
+
+                    b.Property<bool>("BillWithPreviousPrice")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<long?>("BillingAddressId")
                         .HasColumnType("bigint");
@@ -14106,6 +14328,62 @@ namespace FADataAccessLibrary.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.PaymentDetailNew", b =>
+                {
+                    b.HasOne("fa.model.Accounting.Masters.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew", "Payment")
+                        .WithMany("PaymentDetails")
+                        .HasForeignKey("PaymentNewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fa.model.OrderManagement.SaleEntry", "Sales")
+                        .WithMany()
+                        .HasForeignKey("SalesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Sales");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew", b =>
+                {
+                    b.HasOne("fa.model.Accounting.Masters.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId");
+
+                    b.HasOne("fa.model.Accounting.Masters.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("fa.model.Accounting.Masters.CostCenter", "CostCenter")
+                        .WithMany()
+                        .HasForeignKey("CostCenterId");
+
+                    b.HasOne("fa.model.UserProfile.User", "DeletedBy")
+                        .WithMany()
+                        .HasForeignKey("DeletedById");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("CostCenter");
+
+                    b.Navigation("DeletedBy");
+                });
+
             modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.LabelStockMaster", b =>
                 {
                     b.HasOne("fa.model.Accounting.Masters.Company", "Company")
@@ -14917,17 +15195,15 @@ namespace FADataAccessLibrary.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("fa.model.Accounting.Masters.CostCenter", "CostCenter")
+                    b.HasOne("fa.model.Accounting.Masters.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("fa.model.Accounting.Masters.Company", "Company")
+                    b.HasOne("fa.model.Accounting.Masters.CostCenter", "CostCenter")
                         .WithMany()
-                        .HasForeignKey("CompanyId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CostCenterId");
 
                     b.HasOne("fa.model.UserProfile.User", "DeletedBy")
                         .WithMany()
@@ -16283,6 +16559,10 @@ namespace FADataAccessLibrary.Migrations
                         .WithMany()
                         .HasForeignKey("PaymentId");
 
+                    b.HasOne("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew", "SalePaymentNew")
+                        .WithMany()
+                        .HasForeignKey("PaymentNewId");
+
                     b.HasOne("fa.model.Common.Refered", "ReferedBy")
                         .WithMany()
                         .HasForeignKey("ReferedById");
@@ -16318,6 +16598,8 @@ namespace FADataAccessLibrary.Migrations
                     b.Navigation("Registration");
 
                     b.Navigation("SalePayment");
+
+                    b.Navigation("SalePaymentNew");
 
                     b.Navigation("SaleRefQuoteReturn");
 
@@ -16850,6 +17132,42 @@ namespace FADataAccessLibrary.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.BankTransferPaymentNew", b =>
+                {
+                    b.HasOne("fa.model.Accounting.Masters.Account", "BankTransfer")
+                        .WithMany()
+                        .HasForeignKey("BankTransferId");
+
+                    b.Navigation("BankTransfer");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.CardPaymentNew", b =>
+                {
+                    b.HasOne("fa.model.Accounting.Masters.Account", "CAccount")
+                        .WithMany()
+                        .HasForeignKey("CAccountId");
+
+                    b.Navigation("CAccount");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.CheckPaymentNew", b =>
+                {
+                    b.HasOne("fa.model.Accounting.Masters.Account", "BankAccount")
+                        .WithMany()
+                        .HasForeignKey("DepositedIntoId");
+
+                    b.Navigation("BankAccount");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.UpiTransactionPaymentNew", b =>
+                {
+                    b.HasOne("fa.model.Accounting.Masters.Account", "UpiAccount")
+                        .WithMany()
+                        .HasForeignKey("UpiTransactionId");
+
+                    b.Navigation("UpiAccount");
+                });
+
             modelBuilder.Entity("fa.model.Accounting.Masters.Customer", b =>
                 {
                     b.HasOne("fa.model.Common.Address", "BillingAddress")
@@ -17374,6 +17692,11 @@ namespace FADataAccessLibrary.Migrations
                         .HasForeignKey("SaleId");
 
                     b.Navigation("SaleEntry");
+                });
+
+            modelBuilder.Entity("FADataAccessLibrary.Model.Accounting.Transactions.PaymentNew", b =>
+                {
+                    b.Navigation("PaymentDetails");
                 });
 
             modelBuilder.Entity("FADataAccessLibrary.Model.Catalog.LabelStockMaster", b =>

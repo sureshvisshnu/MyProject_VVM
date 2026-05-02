@@ -17,7 +17,7 @@ namespace fa.views.purchase
 {
     public enum SearchItemTableColumn
     {
-        NAME, MID, UOM, ID
+        NAME, MID, UOM, SPRICE, ID
     }
     public partial class FormSearchItems : FormBase
     {
@@ -63,7 +63,8 @@ namespace fa.views.purchase
                 {
                     GridViewItems.Rows[i].Cells[(int)SearchItemTableColumn.NAME].Value = lProduct.Name;
                     GridViewItems.Rows[i].Cells[(int)SearchItemTableColumn.MID].Value = lProduct.MaterialId;
-                    GridViewItems.Rows[i].Cells[(int)SearchItemTableColumn.UOM].Value = lProduct.UOM;
+                    GridViewItems.Rows[i].Cells[(int)SearchItemTableColumn.UOM].Value = lProduct.UOM;                    
+                    GridViewItems.Rows[i].Cells[(int)SearchItemTableColumn.SPRICE].Value = lProduct.WholdSalePrice.ToString(Global.Company.PrimaryCurrency.CurrencyFormat); ;
                     GridViewItems.Rows[i].Cells[(int)SearchItemTableColumn.ID].Value = lProduct.Id;
                     i++;
                 }

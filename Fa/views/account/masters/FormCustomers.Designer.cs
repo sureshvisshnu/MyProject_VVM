@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormCustomers));
             TabControlCustomer = new TabControl();
             TabCustomer = new TabPage();
-            ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxCustomerParentAccount = new fa.views.controls.ComboBoxSwapTextBox();
+            ComboBoxBalanceType = new fa.views.controls.ComboBoxSwapTextBox();
             TextBoxGSTNo = new TextBox();
             labelGSTNo = new Label();
             TextBoxCustomerBalance = new fa.views.controls.text.CurrencyTextBox();
@@ -55,6 +55,7 @@
             LabelCustomerAsof = new Label();
             LabelCustomerParent = new Label();
             TabBillingInfo = new TabPage();
+            CheckBoxBillByPrevious = new CheckBox();
             ComboBoxCustomerPaymentTerm = new fa.views.controls.ComboBoxSwapTextBox();
             ComboBoxCustomerPaymentMethod = new fa.views.controls.ComboBoxSwapTextBox();
             BillingAddressGroupBoxCustomer = new fa.views.controls.AddressGroupBoxWithStateSelection();
@@ -150,8 +151,8 @@
             // TabCustomer
             // 
             TabCustomer.BackColor = SystemColors.Window;
-            TabCustomer.Controls.Add(ComboBoxCustomerParentAccount);
             TabCustomer.Controls.Add(ComboBoxBalanceType);
+            TabCustomer.Controls.Add(ComboBoxCustomerParentAccount);
             TabCustomer.Controls.Add(TextBoxGSTNo);
             TabCustomer.Controls.Add(labelGSTNo);
             TabCustomer.Controls.Add(TextBoxCustomerBalance);
@@ -178,18 +179,6 @@
             TabCustomer.TabIndex = 0;
             TabCustomer.Text = "Customer";
             // 
-            // ComboBoxBalanceType
-            // 
-            ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
-            ComboBoxBalanceType.AutoCompleteSource = AutoCompleteSource.ListItems;
-            ComboBoxBalanceType.FormattingEnabled = true;
-            ComboBoxBalanceType.Items.AddRange(new object[] { "DR", "CR" });
-            ComboBoxBalanceType.Location = new Point(495, 308);
-            ComboBoxBalanceType.Name = "ComboBoxBalanceType";
-            ComboBoxBalanceType.Size = new Size(40, 21);
-            ComboBoxBalanceType.TabIndex = 15;
-            ComboBoxBalanceType.TxtVisible = true;
-            // 
             // ComboBoxCustomerParentAccount
             // 
             ComboBoxCustomerParentAccount.AutoCompleteMode = AutoCompleteMode.Suggest;
@@ -201,6 +190,18 @@
             ComboBoxCustomerParentAccount.TabIndex = 10;
             ComboBoxCustomerParentAccount.TxtVisible = true;
             ComboBoxCustomerParentAccount.KeyPress += ComboBoxCustomerParentAccount_KeyPress;
+            // 
+            // ComboBoxBalanceType
+            // 
+            ComboBoxBalanceType.AutoCompleteMode = AutoCompleteMode.Suggest;
+            ComboBoxBalanceType.AutoCompleteSource = AutoCompleteSource.ListItems;
+            ComboBoxBalanceType.FormattingEnabled = true;
+            ComboBoxBalanceType.Items.AddRange(new object[] { "DR", "CR" });
+            ComboBoxBalanceType.Location = new Point(495, 308);
+            ComboBoxBalanceType.Name = "ComboBoxBalanceType";
+            ComboBoxBalanceType.Size = new Size(40, 21);
+            ComboBoxBalanceType.TabIndex = 15;
+            ComboBoxBalanceType.TxtVisible = true;
             // 
             // TextBoxGSTNo
             // 
@@ -414,8 +415,9 @@
             // TabBillingInfo
             // 
             TabBillingInfo.BackColor = SystemColors.Window;
-            TabBillingInfo.Controls.Add(ComboBoxCustomerPaymentTerm);
             TabBillingInfo.Controls.Add(ComboBoxCustomerPaymentMethod);
+            TabBillingInfo.Controls.Add(ComboBoxCustomerPaymentTerm);
+            TabBillingInfo.Controls.Add(CheckBoxBillByPrevious);
             TabBillingInfo.Controls.Add(BillingAddressGroupBoxCustomer);
             TabBillingInfo.Controls.Add(label4);
             TabBillingInfo.Controls.Add(RadioCustomerLockBill);
@@ -429,9 +431,20 @@
             TabBillingInfo.Location = new Point(4, 22);
             TabBillingInfo.Name = "TabBillingInfo";
             TabBillingInfo.Padding = new Padding(3);
-            TabBillingInfo.Size = new Size(192, 74);
+            TabBillingInfo.Size = new Size(699, 340);
             TabBillingInfo.TabIndex = 1;
             TabBillingInfo.Text = "Billing Details";
+            // 
+            // CheckBoxBillByPrevious
+            // 
+            CheckBoxBillByPrevious.AutoSize = true;
+            CheckBoxBillByPrevious.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            CheckBoxBillByPrevious.Location = new Point(510, 11);
+            CheckBoxBillByPrevious.Name = "CheckBoxBillByPrevious";
+            CheckBoxBillByPrevious.Size = new Size(129, 17);
+            CheckBoxBillByPrevious.TabIndex = 46;
+            CheckBoxBillByPrevious.Text = "Bill By Previouse Price";
+            CheckBoxBillByPrevious.UseVisualStyleBackColor = true;
             // 
             // ComboBoxCustomerPaymentTerm
             // 
@@ -778,11 +791,11 @@
             CustomerLicenceInfoGrid.Location = new Point(14, 16);
             CustomerLicenceInfoGrid.Name = "CustomerLicenceInfoGrid";
             CustomerLicenceInfoGrid.RowHeadersVisible = false;
-            dataGridViewCellStyle4.BackColor = Color.White;
-            dataGridViewCellStyle4.ForeColor = Color.Black;
-            dataGridViewCellStyle4.SelectionBackColor = Color.White;
-            dataGridViewCellStyle4.SelectionForeColor = Color.Black;
-            CustomerLicenceInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.BackColor = Color.White;
+            dataGridViewCellStyle2.ForeColor = Color.Black;
+            dataGridViewCellStyle2.SelectionBackColor = Color.White;
+            dataGridViewCellStyle2.SelectionForeColor = Color.Black;
+            CustomerLicenceInfoGrid.RowsDefaultCellStyle = dataGridViewCellStyle2;
             CustomerLicenceInfoGrid.RowTemplate.Height = 20;
             CustomerLicenceInfoGrid.ScrollBars = ScrollBars.Vertical;
             CustomerLicenceInfoGrid.ShowCellToolTips = false;
@@ -831,9 +844,9 @@
             // 
             // CustomerTaxIdDelete
             // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.NullValue = "X";
-            CustomerTaxIdDelete.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = "X";
+            CustomerTaxIdDelete.DefaultCellStyle = dataGridViewCellStyle1;
             CustomerTaxIdDelete.HeaderText = "...";
             CustomerTaxIdDelete.Name = "CustomerTaxIdDelete";
             CustomerTaxIdDelete.Resizable = DataGridViewTriState.False;
@@ -1129,5 +1142,6 @@
         private controls.AddressGroupBoxWithStateSelection ShippingAddressGroupBoxCustomer;
         private TextBox TextBoxGSTNo;
         private Label labelGSTNo;
+        private CheckBox CheckBoxBillByPrevious;
     }
 }

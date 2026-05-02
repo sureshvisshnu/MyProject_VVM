@@ -8,6 +8,8 @@ using fa.model.Accounting.Transactions;
 using fa.model.Hms.common;
 using fa.model.OrderManagement;
 using fa.views.controls.grid;
+using FADataAccessLibrary.Api.Accounting;
+using FADataAccessLibrary.Model.Accounting.Transactions;
 using Pango;
 using System;
 using System.Collections.Generic;
@@ -45,6 +47,7 @@ namespace fa.views.sales
         PaymentManager PaymentManager = null!;
         public long SearchSalesId = 0L;
         public bool SalePaymentOnLoad = false;
+        public long AccountID = 0L;
 
         public FormPOSReceivePayment()
         {
@@ -262,6 +265,9 @@ namespace fa.views.sales
                 LoadPendingInvoice();
             }
         }
+        
+
+
         private void RbtCash_CheckedChanged(object sender, EventArgs e)
         {
             double TotalAmountReceived = 0;
@@ -277,7 +283,7 @@ namespace fa.views.sales
                 GroupBoxUpiPayment.Visible = false;
                 TextBoxCashBalance.Text = Math.Abs(GetBalance()).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
                 TextBoxCashAmount.Text = "0.00";
-                IList<Payment> Payment = PaymentManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransctionType == PaymentType.CASH).ToList();
+                IList<PaymentNew> Payment = PaymentsNewManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransactionType == PaymentType.CASH).ToList();
                 if (Payment != null)
                 {
                     TotalAmountReceived = (double)Payment.Sum(x => x.Amount);
@@ -313,7 +319,7 @@ namespace fa.views.sales
                 ComboUtils.InitializeCreditCardAccountCombo(ComboBoxCreditCardAccount, Global.Company.CompanyId);
                 TextBoxCreditCardBalance.Text = Math.Abs(GetBalance()).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
                 TextBoxCreditCardAmount.Text = "0.00";
-                IList<Payment> Payment = PaymentManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransctionType == PaymentType.CREDITCARD).ToList();
+                IList<PaymentNew> Payment = PaymentsNewManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransactionType == PaymentType.CREDITCARD).ToList();
                 if (Payment != null)
                 {
                     TotalAmountReceived = (double)Payment.Sum(x => x.Amount);
@@ -348,7 +354,7 @@ namespace fa.views.sales
                 ComboUtils.InitializeBankAccountCombo(ComboBoxUpiAccount, Global.Company.CompanyId);
                 TextBoxUpiBalance.Text = Math.Abs(GetBalance()).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
                 TextBoxUpiAmount.Text = "0.00";
-                IList<Payment> Payment = PaymentManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransctionType == PaymentType.UPI).ToList();
+                IList<PaymentNew> Payment = (IList<PaymentNew>)PaymentsNewManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransactionType == PaymentType.UPI).ToList();
                 if (Payment != null)
                 {
                     TotalAmountReceived = (double)Payment.Sum(x => x.Amount);
@@ -376,16 +382,33 @@ namespace fa.views.sales
 
             return lPayment;
         }
-
-        private BankTransferPayment GetBankTransferPaymentFromForm()
+        private PaymentNew GetNewPaymentFromForm()
         {
-            Payment Payment = GetPaymentFromForm();
+            PaymentNew lPayment = new PaymentNew();
+            lPayment.PaymentNewId = 0L;
+            lPayment.TransactionDate = (DateTime)DateTimePickerInvoiceDate.Date!;
+            lPayment.TransactionType = (RbtBank.Checked) ? PaymentType.BANKTRANSFER : (RbtCard.Checked) ? PaymentType.CREDITCARD : (RbtCheque.Checked) ? PaymentType.CHECK : (RbtUpi.Checked) ? PaymentType.UPI : PaymentType.CASH;
+            lPayment.Amount = decimal.Parse(TextBoxCashAmount.Text);
+            lPayment.CompanyId = Global.Company.CompanyId;
+            lPayment.SalesId = long.Parse(TextBoxSaleId.Text);
+            lPayment.AccountId = AccountID;
+            if (Global.CostCenter != null)
+            {
+                lPayment.CostCenterId = Global.CostCenter.CostCenterId;
+            }
+
+            return lPayment;
+        }
+
+        private BankTransferPaymentNew GetBankTransferPaymentFromForm()
+        {
+            PaymentNew Payment = GetNewPaymentFromForm();
             double GetPaymentAmount = 0;
             GetPaymentAmount = GetBalance();
-            BankTransferPayment lBankTransferPayment = new BankTransferPayment();
-            lBankTransferPayment.PaymentId = 0;
+            BankTransferPaymentNew lBankTransferPayment = new BankTransferPaymentNew();
+            lBankTransferPayment.PaymentNewId = 0;
             lBankTransferPayment.TransactionDate = Payment.TransactionDate;
-            lBankTransferPayment.TransctionType = Payment.TransctionType;
+            lBankTransferPayment.TransactionType = Payment.TransactionType;
             lBankTransferPayment.Amount = (decimal)GetPaymentAmount;
             lBankTransferPayment.CompanyId = Payment.CompanyId;
             lBankTransferPayment.CostCenterId = Payment.CostCenterId;
@@ -398,19 +421,20 @@ namespace fa.views.sales
                 if (AccountBank != null)
                 {
                     lBankTransferPayment.BankTransferId = AccountBank.Id;
+                    lBankTransferPayment.AccountId = AccountBank.Id;
                 }
             }
             return lBankTransferPayment;
         }
-        private CheckPayment GetCheckPaymentFromForm()
+        private CheckPaymentNew GetCheckPaymentFromForm()
         {
-            Payment Payment = GetPaymentFromForm();
+            PaymentNew Payment = GetNewPaymentFromForm();
             double GetPaymentAmount = 0;
             GetPaymentAmount = GetBalance();
-            CheckPayment lCheckPayment = new CheckPayment();
-            lCheckPayment.PaymentId = 0;
+            CheckPaymentNew lCheckPayment = new CheckPaymentNew();
+            lCheckPayment.PaymentNewId = 0;
             lCheckPayment.TransactionDate = Payment.TransactionDate;
-            lCheckPayment.TransctionType = Payment.TransctionType;
+            lCheckPayment.TransactionType = Payment.TransactionType;
             lCheckPayment.Amount = (decimal)GetPaymentAmount;
             lCheckPayment.CompanyId = Payment.CompanyId;
             lCheckPayment.CostCenterId = Payment.CostCenterId;
@@ -424,23 +448,24 @@ namespace fa.views.sales
                 if (AccountDepositedInto != null)
                 {
                     lCheckPayment.DepositedIntoId = AccountDepositedInto.Id;
+                    lCheckPayment.AccountId = AccountDepositedInto.Id;
                 }
             }
 
             return lCheckPayment;
         }
-        private CreditCardPayment GetCreditCardPaymentFromForm()
+        private CardPaymentNew GetCreditCardPaymentFromForm()
         {
-            Payment Payment = GetPaymentFromForm();
-            CreditCardPayment lCreditCardPayment = new CreditCardPayment();
-            lCreditCardPayment.PaymentId = 0;
+            PaymentNew Payment = GetNewPaymentFromForm();
+            CardPaymentNew lCreditCardPayment = new CardPaymentNew();
+            lCreditCardPayment.PaymentNewId = 0;
             lCreditCardPayment.TransactionDate = Payment.TransactionDate;
-            lCreditCardPayment.TransctionType = Payment.TransctionType;
+            lCreditCardPayment.TransactionType = Payment.TransactionType;
             lCreditCardPayment.Amount = decimal.Parse(TextBoxCreditCardAmount.Text);
             lCreditCardPayment.CompanyId = Payment.CompanyId;
             lCreditCardPayment.CostCenterId = Payment.CostCenterId;
             lCreditCardPayment.CCTransactionDate = (DateTime)DateTimePickerCreditDate.Date!;
-            lCreditCardPayment.CCTransactionNumber = TextBoxCreditTransaction.Text;
+            lCreditCardPayment.CTransactionNumber = TextBoxCreditTransaction.Text;
             lCreditCardPayment.SalesId = long.Parse(TextBoxSaleId.Text);
             Account lAccountBank = (Account)ComboBoxCreditCardAccount.Items[ComboBoxCreditCardAccount.SelectedIndex];
             if (lAccountBank != null)
@@ -448,18 +473,19 @@ namespace fa.views.sales
                 Account AccountBank = AccountManager.Instance.GetAccountById(lAccountBank.Id);
                 if (AccountBank != null)
                 {
-                    lCreditCardPayment.CCAccountId = AccountBank.Id;
+                    lCreditCardPayment.CAccountId = AccountBank.Id;
+                    lCreditCardPayment.AccountId = AccountBank.Id;
                 }
             }
             return lCreditCardPayment;
         }
-        private UpiTransactionPayment GetUpiTransactionPaymentFromForm()
+        private UpiTransactionPaymentNew GetUpiTransactionPaymentFromForm()
         {
-            Payment Payment = GetPaymentFromForm();
-            UpiTransactionPayment UpiTransactionPayment = new UpiTransactionPayment();
-            UpiTransactionPayment.PaymentId = 0;
+            PaymentNew Payment = GetNewPaymentFromForm();
+            UpiTransactionPaymentNew UpiTransactionPayment = new UpiTransactionPaymentNew();
+            UpiTransactionPayment.PaymentNewId = 0;
             UpiTransactionPayment.TransactionDate = Payment.TransactionDate;
-            UpiTransactionPayment.TransctionType = Payment.TransctionType;
+            UpiTransactionPayment.TransactionType= Payment.TransactionType;
             UpiTransactionPayment.Amount = decimal.Parse(TextBoxUpiAmount.Text);
             UpiTransactionPayment.CompanyId = Payment.CompanyId;
             UpiTransactionPayment.CostCenterId = Payment.CostCenterId;
@@ -473,6 +499,7 @@ namespace fa.views.sales
                 if (AccountUpi != null)
                 {
                     UpiTransactionPayment.UpiTransactionId = AccountUpi.Id;
+                    UpiTransactionPayment.AccountId = AccountUpi.Id;
                 }
             }
             return UpiTransactionPayment;
@@ -499,8 +526,8 @@ namespace fa.views.sales
         {
             if (ValidateForm())
             {
-                Payment lPayment = Payment();
-                UpdateSale(true, BtnReceiveDeliver.Enabled ? false : true, lPayment.PaymentId);
+                PaymentNew lPayment = Payment();
+                UpdateSale(true, BtnReceiveDeliver.Enabled ? false : true, lPayment.PaymentNewId);
                 TextBoxCashAmount.Text = "0.00";
                 TextBoxUpiAmount.Text = "0.00";
                 TextBoxCreditCardAmount.Text = "0.00";
@@ -528,7 +555,7 @@ namespace fa.views.sales
             if (balanceAmount == 0)
             {
                 SaleEntry Entry = SalesManager.Instance.GetSaleEntry(long.Parse(TextBoxSaleId.Text));
-                UpdateSale(true, true, (long)Entry.PaymentId);
+                UpdateSale(true, true, (long)Entry.PaymentNewId);
                 if (SalePaymentOnLoad)
                 {
                     this.Close();
@@ -546,17 +573,17 @@ namespace fa.views.sales
             }
         }
 
-        private Payment Payment()
+        private PaymentNew Payment()
         {
 
-            Payment PaymentFromDB = new Payment();
+            PaymentNew PaymentFromDB = new PaymentNew();
             if (RbtCash.Checked)
             {
-                Payment lPayment = GetPaymentFromForm();
+                PaymentNew lPayment = GetNewPaymentFromForm();
 
                 ////if (lPayment.PaymentId == 0)
                 //{
-                PaymentFromDB = PaymentManager.AddPayment(lPayment);
+                PaymentFromDB = PaymentsNewManager.Instance.AddPayment(lPayment);
                 //}
                 //else
                 //{
@@ -565,76 +592,82 @@ namespace fa.views.sales
             }
             else if (RbtCheque.Checked)
             {
-                CheckPayment lCheckPayment = GetCheckPaymentFromForm();
-                CheckPayment CheckPaymentFromDB = null!;
-                //if (lCheckPayment.PaymentId == 0)
-                //{
-                CheckPaymentFromDB = PaymentManager.AddCheckPayment(lCheckPayment);
-                //}
-                //else
-                //{
-                //    CheckPaymentFromDB = PaymentManager.UpdateCheckPayment(lCheckPayment);
-                //}
-                PaymentFromDB.PaymentId = CheckPaymentFromDB.PaymentId;
+                CheckPaymentNew lCheckPayment = GetCheckPaymentFromForm();
+                CheckPaymentNew CheckPaymentFromDB = PaymentsNewManager.Instance.AddCheckPayment(lCheckPayment);
+                PaymentFromDB.PaymentNewId = CheckPaymentFromDB.PaymentNewId;
             }
             else if (RbtCard.Checked)
             {
-                CreditCardPayment lCreditCardPayment = GetCreditCardPaymentFromForm();
-                CreditCardPayment CreditCardPaymentFromDB = null!;
+                CardPaymentNew lCreditCardPayment = GetCreditCardPaymentFromForm();
+                CardPaymentNew CreditCardPaymentFromDB = null!;
                 //if (lCreditCardPayment.PaymentId == 0)
                 //{
-                CreditCardPaymentFromDB = PaymentManager.AddCreditCardPayment(lCreditCardPayment);
+                CreditCardPaymentFromDB = PaymentsNewManager.Instance.AddCreditCardPayment(lCreditCardPayment);
                 //}
                 //else
                 //{
                 //    CreditCardPaymentFromDB = PaymentManager.UpdateCreditCardPayment(lCreditCardPayment);
                 //}
-                PaymentFromDB.PaymentId = CreditCardPaymentFromDB.PaymentId;
+                PaymentFromDB.PaymentNewId = CreditCardPaymentFromDB.PaymentNewId;
             }
             else if (RbtBank.Checked)
             {
-                BankTransferPayment lBankTransferPayment = GetBankTransferPaymentFromForm();
-                BankTransferPayment BankTransferPaymentFromDB = null!;
+                BankTransferPaymentNew lBankTransferPayment = GetBankTransferPaymentFromForm();
+                BankTransferPaymentNew BankTransferPaymentFromDB = null!;
                 //if (lBankTransferPayment.PaymentId == 0)
                 //{
-                BankTransferPaymentFromDB = PaymentManager.AddBankTransferPayment(lBankTransferPayment);
+                BankTransferPaymentFromDB = PaymentsNewManager.Instance.AddBankTransferPayment(lBankTransferPayment);
                 //}
                 //else
                 //{
                 //    BankTransferPaymentFromDB = PaymentManager.UpdateBankTransferPayment(lBankTransferPayment);
                 //}
-                PaymentFromDB.PaymentId = BankTransferPaymentFromDB.PaymentId;
+                PaymentFromDB.PaymentNewId = BankTransferPaymentFromDB.PaymentNewId;
             }
             else if (RbtUpi.Checked)
             {
-                UpiTransactionPayment upiTransactionPayment = GetUpiTransactionPaymentFromForm();
-                UpiTransactionPayment upiTransactionPaymentFromDB = null!;
+                UpiTransactionPaymentNew upiTransactionPayment = GetUpiTransactionPaymentFromForm();
+                UpiTransactionPaymentNew upiTransactionPaymentFromDB = null!;
                 //if (upiTransactionPayment.PaymentId == 0)
                 //{
-                upiTransactionPaymentFromDB = PaymentManager.AddUpiTransactionPayment(upiTransactionPayment);
+                upiTransactionPaymentFromDB = PaymentsNewManager.Instance.AddUpiTransactionPayment(upiTransactionPayment);
                 //}
                 //else
                 //{
                 //    upiTransactionPaymentFromDB = PaymentManager.UpdateUpiTransactionPayment(upiTransactionPayment);
                 //}
-                PaymentFromDB.PaymentId = upiTransactionPaymentFromDB.PaymentId;
+                PaymentFromDB.PaymentNewId = upiTransactionPaymentFromDB.PaymentNewId;
             }
-            TextBoxPaymentId.Text = PaymentFromDB.PaymentId.ToString();
+            TextBoxPaymentId.Text = PaymentFromDB.PaymentNewId.ToString();
             return PaymentFromDB;
         }
-        private void UpdateSale(bool Received, bool ReceivedDeliver, long PaymentId)
+        private void UpdateSaleOld(bool Received, bool ReceivedDeliver, long PaymentNewId)
         {
             SaleEntry SaleEntry = SalesManager.Instance.GetSaleEntry(long.Parse(TextBoxSaleId.Text));
             if (SaleEntry != null)
             {
                 SaleEntry.isPaymentReceived = Received;
                 SaleEntry.hasDelivered = ReceivedDeliver;
-                SaleEntry.PaymentId = PaymentId;
+                SaleEntry.PaymentNewId = PaymentNewId;
                 SalesManager.Instance.UpdateSaleEntry(SaleEntry);
             }
             else
             {
                 MessageBox.Show("The selected sale is not available anymore");
+            }
+        }
+        private void UpdateSale(bool Received, bool ReceivedDeliver, long PaymentNewId)
+        {
+            SaleEntry SaleEntry = SalesManager.Instance.GetSaleEntry(long.Parse(TextBoxSaleId.Text));
+            if (SaleEntry != null)
+            {
+                SaleEntry.isPaymentReceived = Received;
+                SaleEntry.hasDelivered = ReceivedDeliver;
+
+                // ✅ USE THIS
+                SaleEntry.PaymentNewId = PaymentNewId;
+
+                SalesManager.Instance.UpdateSaleEntry(SaleEntry);
             }
         }
 
@@ -931,7 +964,7 @@ namespace fa.views.sales
                         RbtCash.Checked = true;
                         TextBoxCashBalance.Text = Math.Abs(GetBalance()).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
                         TextBoxCashAmount.Text = "0.00";
-                        IList<Payment> Payment = PaymentManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransctionType == PaymentType.CASH).ToList();
+                        IList<PaymentNew> Payment = PaymentsNewManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransactionType == PaymentType.CASH).ToList();
                         if (Payment != null)
                         {
                             TotalAmountReceived = (double)Payment.Sum(x => x.Amount);
@@ -968,7 +1001,7 @@ namespace fa.views.sales
 
                         TextBoxCreditCardBalance.Text = Math.Abs(GetBalance()).ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision));
                         TextBoxCreditCardAmount.Text = "0.00";
-                        IList<Payment> Payment = PaymentManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransctionType == PaymentType.CREDITCARD).ToList();
+                        IList<PaymentNew> Payment = PaymentsNewManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransactionType == PaymentType.CREDITCARD).ToList();
                         if (Payment != null)
                         {
                             TotalAmountReceived = (double)Payment.Sum(x => x.Amount);
@@ -988,7 +1021,7 @@ namespace fa.views.sales
                         TextBoxUpiAmount.Text = "0.00";
                         TextBoxUpiNumber.Text = upiTransactionPayment.UpiTransactionNumber.ToString();
                         UpiDateTime.Date = (DateTime)DateUtils.ToDate(upiTransactionPayment.UpiTransactionDate.ToString(Global.Company.DateFormat), Global.Company.DateFormat)!;
-                        IList<Payment> Payment = PaymentManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransctionType == PaymentType.UPI).ToList();
+                        IList<PaymentNew> Payment = PaymentsNewManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text)).Where(x => x.TransactionType == PaymentType.UPI).ToList();
                         if (Payment != null)
                         {
                             TotalAmountReceived = (double)Payment.Sum(x => x.Amount);
@@ -1033,7 +1066,7 @@ namespace fa.views.sales
             double AmountReceived = 0.00;
             if (!string.IsNullOrEmpty(TextBoxSaleId.Text))
             {
-                IList<Payment> Payment = PaymentManager.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text));
+                IList<PaymentNew> Payment = PaymentsNewManager.Instance.ListAllUnAppliedPaymentPaymentBySale(long.Parse(TextBoxSaleId.Text));
                 if (Payment != null)
                 {
                     AmountReceived = (double)Payment.Sum(x => x.Amount);

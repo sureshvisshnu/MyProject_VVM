@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.ServiceProcess;
 using fa.views.Systems;
 using Fa.views.Systems;
+using fa.context;
+using Microsoft.EntityFrameworkCore;
 
 namespace fa.views
 {
@@ -121,6 +123,26 @@ namespace fa.views
         }
         private void loadAllDefaultValues()
         {
+            // Apply any pending database migrations
+            try
+            {
+                using (var context = new AccountMasterContext())
+                {
+                    var pendingMigrations = context.Database.GetPendingMigrations();
+                    if (pendingMigrations != null && pendingMigrations.Any())
+                    {
+                        Console.WriteLine("Applying pending migrations...");
+                        context.Database.Migrate();
+                        Console.WriteLine("✓ Migrations applied successfully!");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Warning: Could not apply migrations: {ex.Message}");
+                // Don't fail the application startup if migrations fail
+            }
+
             CompanyManager cm = CompanyManager.Instance;
         }
         private void LoadSoftwareImage()

@@ -8,6 +8,7 @@ using fa.model.Accounting.Transactions;
 using fa.model.Common;
 using fa.model.Hms.Master;
 using fa.model.Hms.Op;
+using FADataAccessLibrary.Model.Accounting.Transactions;
 
 namespace fa.model.OrderManagement
 {
@@ -43,6 +44,9 @@ namespace fa.model.OrderManagement
         public long? PaymentId { get; set; }
         [ForeignKey("PaymentId")]
         public Payment SalePayment { get; set; }
+        public long? PaymentNewId { get; set; }
+        [ForeignKey("PaymentNewId")]
+        public PaymentNew SalePaymentNew { get; set; }
         public bool isPaymentReceived { get; set; }
         public bool hasDelivered { get; set; }
         public bool isSaleLocked { get; set; }

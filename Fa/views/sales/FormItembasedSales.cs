@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Spreadsheet;
+﻿using DocumentFormat.OpenXml.Presentation;
+using DocumentFormat.OpenXml.Spreadsheet;
 using fa.api.Accounting;
 using fa.api.catalog;
 using fa.api.Hms;
@@ -101,6 +102,7 @@ namespace fa.views.sales
         //AccountManager AccountManager = null;
         public bool ItemBasedsaleOnLoad = false;
         public long ProductId = 0L;
+        public long PrevPriceProductId = 0L;
         public long BatchId;
         public long CustomerId = 0L;
         public long CustomerNameId = 0L;
@@ -111,11 +113,12 @@ namespace fa.views.sales
         public long OPId = 0L;
         public long LocationId = 0L;
         public long FormLocationId = 0L;
+        public bool BillWithPreviousPrice { get; set; }
 
         private const string BarcodePrefix = "{SCAN}";
         private bool _isScannerInput = false;
         private string ScannedBarcode = string.Empty;
-        private bool _isProcessingBarcode = false;
+        private bool _isEditProcessing = false;
         private bool _isManualSearchRequested = false;
         private bool _isBarcodeProcessing = false;
         private bool _isEnterKeyInQty = false;
@@ -474,6 +477,8 @@ namespace fa.views.sales
             FormPOSReceivePayment POSPayment = new FormPOSReceivePayment();
             POSPayment.SalePaymentOnLoad = true;
             POSPayment.SearchSalesId = long.Parse(TextBoxSalesId.Text);
+            POSPayment.AccountID = TextBoxSalesEntryCustomer.Id != null ? long.Parse(TextBoxSalesEntryCustomer.Id) : 0L;
+
             POSPayment.ShowDialog();
             LoadSaleEntry(long.Parse(TextBoxSalesId.Text));
             Cursor.Current = Cursors.Default;
@@ -1170,6 +1175,7 @@ namespace fa.views.sales
                     ComboBoxSaleInventoryLocation.SelectedIndex = ComboBoxSaleInventoryLocation.FindStringExact(Location.Name);
                 }
             }
+            _isEditProcessing = false;
             AllAdditionalDetails = new List<AdditionalDetail>();
             ComboBoxreferedby.SelectedIndex = -1;
             ComboBoxSoldby.SelectedIndex = -1;
@@ -1801,6 +1807,7 @@ namespace fa.views.sales
                 }
                 else
                 {
+                    _isEditProcessing = true;
                     LoadSaleEntry(SearchSalesId);
                 }
             }
@@ -2222,6 +2229,7 @@ namespace fa.views.sales
                     }
                 }
             }
+
         }
         private void GridViewSalesItem_DataError(object sender, DataGridViewDataErrorEventArgs e)
         {
@@ -3297,10 +3305,8 @@ namespace fa.views.sales
 
                 // Get price type from combobox instead of global setting
                 PriceType selectedPriceType = (PriceType)ComboBoxInvoicePriceBy.SelectedIndex;
-                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM].Value =
-                    selectedPriceType == PriceType.Wholesale ? Product.WholesaleUOM : Product.RetailUOM;
-
-                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM].Value = Global.Company.CompanySalesSetup.PriceType == PriceType.Wholesale ? Product.WholesaleUOM : Product.RetailUOM;
+                GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM].Value = selectedPriceType == PriceType.Wholesale ? Product.WholesaleUOM : Product.RetailUOM;
+                //GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.UOM].Value = Global.Company.CompanySalesSetup.PriceType == PriceType.Wholesale ? Product.WholesaleUOM : Product.RetailUOM;
                 GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRODUCT].Value = Product.Name;
                 GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.QTY].Value = 0;
                 GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.FREE].Value = 0;
@@ -3336,22 +3342,66 @@ namespace fa.views.sales
                 }
                 else
                 {
-                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRICE].Value =
-                        selectedPriceType == PriceType.Retail ?
+                    long customerId = TextBoxSalesEntryCustomer.Id == null ? 0L : long.Parse(TextBoxSalesEntryCustomer.Id);
+
+                    // Calculate normal price once
+                    decimal normalPrice =
+                        (decimal)(selectedPriceType == PriceType.Retail ?
                             (Global.Company.CompanySalesSetup.IncludingTax ?
-                                Product.RetailPrice - ((Product.RetailPrice * (Product.RetailPrice * (Tax / 100))) /
-                                (Product.RetailPrice + (Product.RetailPrice * (Tax / 100)))) :
-                                Product.RetailPrice) :
-                        selectedPriceType == PriceType.Wholesale ?
+                                Product.RetailPrice -
+                                ((Product.RetailPrice * (Product.RetailPrice * (Tax / 100))) /
+                                (Product.RetailPrice + (Product.RetailPrice * (Tax / 100))))
+                                : Product.RetailPrice)
+                        : selectedPriceType == PriceType.Wholesale ?
                             (Global.Company.CompanySalesSetup.IncludingTax ?
-                                Product.WholdSalePrice - ((Product.WholdSalePrice * (Product.WholdSalePrice * (Tax / 100))) /
-                                (Product.WholdSalePrice + (Product.WholdSalePrice * (Tax / 100)))) :
-                                Product.WholdSalePrice) :
-                            Product.Msrp - ((Product.Msrp * (Product.Msrp * (Tax / 100))) / (Product.Msrp + (Product.Msrp * (Tax / 100))));
+                                Product.WholdSalePrice -
+                                ((Product.WholdSalePrice * (Product.WholdSalePrice * (Tax / 100))) /
+                                (Product.WholdSalePrice + (Product.WholdSalePrice * (Tax / 100))))
+                                : Product.WholdSalePrice)
+                        :
+                            Product.Msrp -
+                            ((Product.Msrp * (Product.Msrp * (Tax / 100))) /
+                            (Product.Msrp + (Product.Msrp * (Tax / 100)))));
+
+                    // Only check previous price if needed
+                    decimal? previousPrice = null;
+
+                    if (BillWithPreviousPrice)
+                    {
+                        previousPrice = GetPreviousCustomerPrice(customerId, Product.Id);
+                    }
+
+                    // Decide final price
+                    decimal finalPrice = normalPrice;
+
+                    if (BillWithPreviousPrice && previousPrice.HasValue)
+                    {
+                        finalPrice = previousPrice.Value;
+                    }
+
+                    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRICE].Value = finalPrice;
                     GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ISBAT].Value = false;
                 }
+
+                //else
+                //{
+                //    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.PRICE].Value =
+                //        selectedPriceType == PriceType.Retail ?
+                //            (Global.Company.CompanySalesSetup.IncludingTax ?
+                //                Product.RetailPrice - ((Product.RetailPrice * (Product.RetailPrice * (Tax / 100))) /
+                //                (Product.RetailPrice + (Product.RetailPrice * (Tax / 100)))) :
+                //                Product.RetailPrice) :
+                //        selectedPriceType == PriceType.Wholesale ?
+                //            (Global.Company.CompanySalesSetup.IncludingTax ?
+                //                Product.WholdSalePrice - ((Product.WholdSalePrice * (Product.WholdSalePrice * (Tax / 100))) /
+                //                (Product.WholdSalePrice + (Product.WholdSalePrice * (Tax / 100)))) :
+                //                Product.WholdSalePrice) :
+                //            Product.Msrp - ((Product.Msrp * (Product.Msrp * (Tax / 100))) / (Product.Msrp + (Product.Msrp * (Tax / 100))));
+                //    GridViewSalesItem.Rows[index].Cells[(int)SaleEntryTableColumn.ISBAT].Value = false;
+                //}
             }
         }
+
         private void LoadUomTaxxx(long ProductId)
         {
             Cursor.Current = Cursors.WaitCursor;
@@ -3414,11 +3464,20 @@ namespace fa.views.sales
         }
         private void SearchPreviousPrice()
         {
+            long? TempCustomerId = TextBoxSalesEntryCustomer.Id == null ? 0L : long.Parse(TextBoxSalesEntryCustomer.Id);
             Cursor.Current = Cursors.WaitCursor;
             using (var form = new FormSalsePriceSeeking(this))
             {
+                if (_isEditProcessing == true)
+                {
+                    PrevPriceProductId = (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null) ? (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
+                    form.CustomerId = (long)TempCustomerId; // Get customer ID from the current form context
+                }
+                else
+                {
+                    form.CustomerId = CustomerNameId; // Get customer ID from the current form context
+                }
                 form.ProductId = GridViewSalesItem.CurrentRow?.Cells[(int)SaleEntryTableColumn.ID]?.Value as long? ?? 0L;
-                form.CustomerId = CustomerNameId; // Get customer ID from the current form context
                 form.ProductName = (string)(GridViewSalesItem.CurrentRow?.Cells[(int)SaleEntryTableColumn.PRODUCT]?.Value)!;
                 form.ShowDialog();
                 //if (form.ShowDialog() == DialogResult.OK && form.GridViewItems.CurrentRow != null)
@@ -3430,6 +3489,22 @@ namespace fa.views.sales
             }
             Cursor.Current = Cursors.Default;
         }
+        private decimal? GetPreviousCustomerPrice(long customerId, long productId)
+        {
+            if (customerId <= 0 || productId <= 0)
+                return null;
+
+            var lastSale = SalesManager.Instance
+                .GetLastPricesByProductAndCustomer(
+                    Global.Company.CompanyId,
+                    productId,
+                    customerId)
+                ?.FirstOrDefault();
+
+            return lastSale?.Price != null ? (decimal?)lastSale.Price : null;
+
+        }
+
         private void ShowPreviousPrices(long customerId, long productId)
         {
             try
@@ -3472,7 +3547,7 @@ namespace fa.views.sales
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());                
+                Console.WriteLine(ex.ToString());
             }
             finally
             {
@@ -3738,6 +3813,7 @@ namespace fa.views.sales
                     TextBoxSalesEntryCustomer.Id = CustomerId.ToString();
                     CustomerNameId = CustomerId;
                     TextBoxSalesCustomerAddress.Text = customer.BillingAddress.FullAddress.Replace("\n", System.Environment.NewLine);
+                    BillWithPreviousPrice = customer.BillWithPreviousPrice;
                 }
                 else
                 {
@@ -3866,6 +3942,11 @@ namespace fa.views.sales
         private void GridViewSalesItem_Leave(object sender, EventArgs e)
         {
             GridViewSalesItem.CurrentCell = GridViewSalesItem[(int)SaleEntryTableColumn.UOM, GridViewSalesItem.CurrentRow.Index];
+            if (GridViewSalesItem.CurrentCell != null)
+            {
+                GridViewSalesItem.CurrentCell.Selected = true;
+                GridViewSalesItem.BeginEdit(true);
+            }
         }
 
         private void DiscountAdditinalChargeGrid_Load(object sender, EventArgs e)
@@ -3953,6 +4034,12 @@ namespace fa.views.sales
                             SearchProduct();
                             return true;
                         }
+                        if (keyData == Keys.Up || keyData == Keys.Down)
+                        {
+                            long? TempCustomerId = TextBoxSalesEntryCustomer.Id == null ? 0L : long.Parse(TextBoxSalesEntryCustomer.Id);
+                            PrevPriceProductId = (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value != null) ? (long)GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.ID].Value : 0L;
+                            _ = ShowPreviousPricesAsync((long)TempCustomerId, PrevPriceProductId);
+                        }
 
                         if (keyData == Keys.Enter && !_isBarcodeProcessing)
                         {
@@ -3989,7 +4076,7 @@ namespace fa.views.sales
                             _isBarcodeProcessing = false;
                             return true;
                         }
-                        
+
 
                         if (keyData == Keys.F5)
                         {
@@ -5322,7 +5409,7 @@ namespace fa.views.sales
             formEmailSend.SaleEntryId = saleId;
 
             formEmailSend.ShowDialog(this);
-            
+
         }
 
         private CancellationTokenSource _priceCts;
@@ -5345,7 +5432,7 @@ namespace fa.views.sales
 
                     // 🔹 Last selling price
                     var sales = SalesManager.Instance
-                        .GetLastPricesByProductAndCustomer(
+                        .DisplayLastPricesByProductAndCustomer(
                             Global.Company.CompanyId,
                             productId,
                             customerId

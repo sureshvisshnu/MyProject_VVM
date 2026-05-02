@@ -3,6 +3,7 @@ using fa.context;
 using fa.model.Accounting.Masters;
 using fa.model.Accounting.Transaction;
 using fa.model.Accounting.Transactions;
+using FADataAccessLibrary.Model.Accounting.Transactions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,38 @@ namespace Fa.api.Accounting.DoubleEntry
             DeletePayments(Payment, Context);
             RecordPayments(Payment, Context);
         }
+
+        public void RecordNewPayment(PaymentNew Payment, AccountMasterContext Context)
+        {
+            DeleteNewPayments(Payment, Context);
+            RecordNewPayments(Payment, Context);
+        }
+
+        public void DeleteNewPayments(PaymentNew Payment, AccountMasterContext Context)
+        {
+            Company CurrentCompany = CompanyManager.Instance.GetCompany(Payment.CompanyId);
+            if (CurrentCompany == null)
+            {
+                Exception e = new Exception(CurrentCompanyNullMsg);
+                throw e;
+            }
+            List<DayBook> xx = Context.DoubleEntries.Where(x => x.TransactionType == DaybookTransactionType.Payment && x.CompanyId == CurrentCompany.CompanyId && x.ReferenceTrasnactionId == "" + Payment.Reference).ToList();
+            Context.DoubleEntries.RemoveRange(xx);
+            Context.SaveChanges();
+        }
+        public void RecordNewPayments(PaymentNew Payment, AccountMasterContext Context)
+        {
+            Company CurrentCompany = CompanyManager.Instance.GetCompany(Payment.CompanyId);
+            if (CurrentCompany == null)
+            {
+                Exception e = new Exception(CurrentCompanyNullMsg);
+                throw e;
+            }
+            Context.DoubleEntries.Add(GetFromSupplierEntryForNewPayment(Payment));
+            Context.DoubleEntries.AddRange(GetToAccountEntryForNewPayment(Payment));
+            Context.SaveChanges();
+        }
+
         //Deleteing all exisiting entries for the given company      
         public void DeletePayments(Payment Payment, AccountMasterContext Context)
         {
@@ -72,6 +105,19 @@ namespace Fa.api.Accounting.DoubleEntry
             dBook.Date = Payment.TransactionDate;
             dBook.Debit((double)Payment.Amount);
             dBook.Description = string.Format(SupplierEntryForPayment, Payment.Reference,Payment.Description);
+            dBook.ReferenceTrasnactionId = Payment.Reference;
+            dBook.TransactionType = DaybookTransactionType.Payment;
+            return dBook;
+        }
+        public DayBook GetFromSupplierEntryForNewPayment(PaymentNew Payment)
+        {
+            DayBook dBook = new DayBook();
+            dBook.AccountId = Payment.AccountId;
+            dBook.CompanyId = Payment.CompanyId;
+            dBook.CostCenterId = Payment.CostCenterId;
+            dBook.Date = Payment.TransactionDate;
+            dBook.Debit((double)Payment.Amount);
+            dBook.Description = string.Format(SupplierEntryForPayment, Payment.Reference, Payment.Description);
             dBook.ReferenceTrasnactionId = Payment.Reference;
             dBook.TransactionType = DaybookTransactionType.Payment;
             return dBook;
@@ -121,6 +167,61 @@ namespace Fa.api.Accounting.DoubleEntry
                 Desc = string.Format(PaymentCardEntryCaption, CreditCardPayment.CCTransactionNumber, CreditCardPayment.CCTransactionDate, lAccount.DisplayAs);
             }
             foreach (PaymentDetail Detail in Payment.PaymentDetails)
+            {
+                DayBook dBook = new DayBook();
+                dBook.AccountId = lAccount.Id;
+                dBook.CompanyId = Payment.CompanyId;
+                dBook.CostCenterId = Payment.CostCenterId;
+                dBook.Date = Payment.TransactionDate;
+                dBook.Credit((double)Detail.Amount);
+                dBook.Description = string.Format(SupplierEntryForPayment, Payment.Reference + (string.IsNullOrEmpty(Detail.Description) ? "" : " " + Detail.Description), Desc);
+                dBook.ReferenceTrasnactionId = Payment.Reference;
+                dBook.TransactionType = DaybookTransactionType.Payment;
+                dayBooks.Add(dBook);
+            }
+            return dayBooks;
+        }
+        public List<DayBook> GetToAccountEntryForNewPayment(PaymentNew Payment)
+        {
+            List<DayBook> dayBooks = new List<DayBook>();
+            Company Company = CompanyManager.Instance.GetCompany(Payment.CompanyId);
+            if (Company.CashOnHandAccount == null)
+            {
+                Exception e = new Exception(InvalidCompanyConfigMsg);
+                throw e;
+            }
+            Account PaymentAccount = AccountManager.Instance.GetAccountById((long)Payment.AccountId);
+            if (PaymentAccount == null)
+            {
+                Exception e = new Exception(InvalidCompanyConfigMsg);
+                throw e;
+            }
+            Account lAccount = null;
+            string Desc = string.Empty;
+            if (Payment.TransactionType == PaymentType.CASH)
+            {
+                lAccount = Company.CashOnHandAccount;
+                Desc = string.Format(PaymentCashEntryCaption, lAccount.DisplayAs);
+            }
+            else if (Payment.TransactionType== PaymentType.CHECK)
+            {
+                CheckPaymentNew CheckPayment = (CheckPaymentNew)Payment;
+                lAccount = AccountManager.Instance.GetAccountById((long)CheckPayment.DepositedIntoId);
+                Desc = string.Format(PaymentCheckEntryCaption, CheckPayment.DocumentNumber, CheckPayment.DocumentDate, lAccount.DisplayAs);
+            }
+            else if (Payment.TransactionType == PaymentType.BANKTRANSFER)
+            {
+                BankTransferPaymentNew BankTransferPayment = ((BankTransferPaymentNew)Payment);
+                lAccount = AccountManager.Instance.GetAccountById((long)BankTransferPayment.BankTransferId);
+                Desc = string.Format(PaymentBankEntryCaption, BankTransferPayment.TransactionNumber, BankTransferPayment.TransactionDate, lAccount.DisplayAs);
+            }
+            else if (Payment.TransactionType == PaymentType.CREDITCARD)
+            {
+                CardPaymentNew CreditCardPayment = ((CardPaymentNew)Payment);
+                lAccount = AccountManager.Instance.GetAccountById((long)CreditCardPayment.CAccountId);
+                Desc = string.Format(PaymentCardEntryCaption, CreditCardPayment.CTransactionNumber, CreditCardPayment.CCTransactionDate, lAccount.DisplayAs);
+            }
+            foreach (PaymentDetailNew Detail in Payment.PaymentDetails)
             {
                 DayBook dBook = new DayBook();
                 dBook.AccountId = lAccount.Id;

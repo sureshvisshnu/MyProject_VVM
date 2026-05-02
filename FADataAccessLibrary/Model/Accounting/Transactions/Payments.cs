@@ -18,41 +18,37 @@ namespace fa.model.Accounting.Transactions
         [MaxLength(10)]
         public string Reference { get; set; }
 
-        // ✅ CUSTOMER (MANDATORY)
         public long AccountId { get; set; }
 
         [ForeignKey(nameof(AccountId))]
         public virtual Account Account { get; set; }
 
-        [MaxLength(250)]
         public string Description { get; set; }
 
         public decimal Amount { get; set; }
 
         public PaymentType TransctionType { get; set; }
 
-        // ✅ Applied invoices
-        public ICollection<PaymentDetail> PaymentDetails { get; set; } = new List<PaymentDetail>();
-        public long CompanyId { get; set; }
-        public Company Company { get; set; }
-        [ForeignKey(nameof(CompanyId))]
-        public virtual CostCenter CostCenter { get; set; }
-        public long CostCenterId { get; set; }
+        public ICollection<PaymentDetail> PaymentDetails { get; set; }
+            = new List<PaymentDetail>();
+
+        public long SalesId { get; set; }
+
+        [NotMapped]
         public DateTime PaymentDueDate { get; set; }
+        [NotMapped]
         public DateTime PaymentDueDateUtc { get; set; }
         public bool IsDeleted { get; set; }
-        [ForeignKey(nameof(IsDeleted))]
+
         public long? DeletedById { get; set; }
 
         [ForeignKey(nameof(DeletedById))]
         public virtual User DeletedBy { get; set; }
 
-        public DateTime DeletedOn { get; set ; }
-        [ForeignKey(nameof(IsDeleted))]
-        public string DeletionReason { get; set ; }
-        public long SalesId { get; set; }
-    }
+        public DateTime? DeletedOn { get; set; }
 
+        public string DeletionReason { get; set; }
+    }
 
     public class CheckPayment : Payment
     {

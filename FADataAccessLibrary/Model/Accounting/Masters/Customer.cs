@@ -37,5 +37,6 @@ namespace fa.model.Accounting.Masters
         public bool LockBill {  get; set; }
         [MaxLength(20)]
         public string GSTNo { get; set; }
+        public bool BillWithPreviousPrice { get; set; }
     }
 }

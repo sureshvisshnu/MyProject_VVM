@@ -636,7 +636,7 @@ namespace fa.api.Accounting
         {
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                IList<Payment> PaymentInfo = (from Payment in Context.Payments.Include("PaymentDetails").Include("Account") where Payment.SalesId == SaleId select Payment).ToList();
+                IList<Payment> PaymentInfo = (from Payment in Context.Payments.Include(p => p.PaymentDetails).Include(p => p.Account) where Payment.SalesId == SaleId select Payment).ToList();
                 return PaymentInfo;
             }
         }
@@ -645,7 +645,7 @@ namespace fa.api.Accounting
             Payment Payment = null;
             using (AccountMasterContext Context = new AccountMasterContext())
             {
-                Payment = Context.Payments.Include("PaymentDetails").Include("Account").FirstOrDefault(x=>x.PaymentId==PaymentId);                
+                Payment = Context.Payments.Include(p => p.PaymentDetails).Include(p => p.Account).FirstOrDefault(x=>x.PaymentId==PaymentId);                
             }
             return Payment;
         }

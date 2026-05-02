@@ -37,17 +37,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormSearchItems));
             toolStrip = new ToolStrip();
             toolStripLabel1 = new ToolStripLabel();
-            TextBoxSearchProduct = new controls.ToolstripDelayedTextBox();
+            TextBoxSearchProduct = new fa.views.controls.ToolstripDelayedTextBox();
             BtnSearchSelect = new Button();
             statusStrip1 = new StatusStrip();
             PatientSearchErrorMsg = new ToolStripStatusLabel();
             BtnSearchCancel = new Button();
             BtnNewProduct = new Button();
-            GridViewItems = new controls.DataViewVerticalScroll();
-            PatientName = new DataGridViewTextBoxColumn();
-            PatientAddress = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column1 = new DataGridViewTextBoxColumn();
+            GridViewItems = new fa.views.controls.DataViewVerticalScroll();
             groupBox1 = new GroupBox();
             TextBoxSupplier = new TextBox();
             TextBoxProductFamily = new TextBox();
@@ -58,6 +54,11 @@
             label2 = new Label();
             label1 = new Label();
             BtnSearchItemReload = new Button();
+            PatientName = new DataGridViewTextBoxColumn();
+            PatientAddress = new DataGridViewTextBoxColumn();
+            Column2 = new DataGridViewTextBoxColumn();
+            sprice = new DataGridViewTextBoxColumn();
+            Column1 = new DataGridViewTextBoxColumn();
             toolStrip.SuspendLayout();
             statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)GridViewItems).BeginInit();
@@ -75,6 +76,10 @@
             // AccountIdTransport
             // 
             AccountIdTransport.Size = new Size(116, 21);
+            // 
+            // checkBoxIsPatient
+            // 
+            checkBoxIsPatient.Size = new Size(69, 17);
             // 
             // toolStrip
             // 
@@ -175,7 +180,7 @@
             GridViewItems.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             GridViewItems.ColumnHeadersHeight = 20;
             GridViewItems.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            GridViewItems.Columns.AddRange(new DataGridViewColumn[] { PatientName, PatientAddress, Column2, Column1 });
+            GridViewItems.Columns.AddRange(new DataGridViewColumn[] { PatientName, PatientAddress, Column2, sprice, Column1 });
             dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle6.BackColor = SystemColors.Window;
             dataGridViewCellStyle6.Font = new Font("Tahoma", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
@@ -203,54 +208,6 @@
             GridViewItems.Enter += GridViewItems_Enter;
             GridViewItems.KeyDown += GridViewItems_KeyDown;
             GridViewItems.Leave += GridViewItems_Leave;
-            // 
-            // PatientName
-            // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            PatientName.DefaultCellStyle = dataGridViewCellStyle2;
-            PatientName.HeaderText = "Name";
-            PatientName.Name = "PatientName";
-            PatientName.ReadOnly = true;
-            PatientName.Resizable = DataGridViewTriState.False;
-            PatientName.SortMode = DataGridViewColumnSortMode.NotSortable;
-            PatientName.Width = 280;
-            // 
-            // PatientAddress
-            // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            PatientAddress.DefaultCellStyle = dataGridViewCellStyle3;
-            PatientAddress.HeaderText = "MaterialID";
-            PatientAddress.Name = "PatientAddress";
-            PatientAddress.ReadOnly = true;
-            PatientAddress.Resizable = DataGridViewTriState.False;
-            PatientAddress.SortMode = DataGridViewColumnSortMode.NotSortable;
-            PatientAddress.Width = 200;
-            // 
-            // Column2
-            // 
-            Column2.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            Column2.DefaultCellStyle = dataGridViewCellStyle4;
-            Column2.HeaderText = "UOM";
-            Column2.Name = "Column2";
-            Column2.ReadOnly = true;
-            Column2.Resizable = DataGridViewTriState.False;
-            Column2.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // Column1
-            // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            Column1.DefaultCellStyle = dataGridViewCellStyle5;
-            Column1.HeaderText = "Id";
-            Column1.Name = "Column1";
-            Column1.ReadOnly = true;
-            Column1.Resizable = DataGridViewTriState.False;
-            Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Column1.Visible = false;
             // 
             // groupBox1
             // 
@@ -358,6 +315,61 @@
             BtnSearchItemReload.UseVisualStyleBackColor = true;
             BtnSearchItemReload.Click += BtnSearchItemReload_Click;
             // 
+            // PatientName
+            // 
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            PatientName.DefaultCellStyle = dataGridViewCellStyle2;
+            PatientName.HeaderText = "Name";
+            PatientName.Name = "PatientName";
+            PatientName.ReadOnly = true;
+            PatientName.Resizable = DataGridViewTriState.False;
+            PatientName.SortMode = DataGridViewColumnSortMode.NotSortable;
+            PatientName.Width = 250;
+            // 
+            // PatientAddress
+            // 
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            PatientAddress.DefaultCellStyle = dataGridViewCellStyle3;
+            PatientAddress.HeaderText = "MaterialID";
+            PatientAddress.Name = "PatientAddress";
+            PatientAddress.ReadOnly = true;
+            PatientAddress.Resizable = DataGridViewTriState.False;
+            PatientAddress.SortMode = DataGridViewColumnSortMode.NotSortable;
+            PatientAddress.Width = 125;
+            // 
+            // Column2
+            // 
+            Column2.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            Column2.DefaultCellStyle = dataGridViewCellStyle4;
+            Column2.HeaderText = "UOM";
+            Column2.Name = "Column2";
+            Column2.ReadOnly = true;
+            Column2.Resizable = DataGridViewTriState.False;
+            Column2.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // sprice
+            // 
+            sprice.HeaderText = " S RATE";
+            sprice.Name = "sprice";
+            sprice.ReadOnly = true;
+            sprice.Width = 75;
+            // 
+            // Column1
+            // 
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
+            Column1.DefaultCellStyle = dataGridViewCellStyle5;
+            Column1.HeaderText = "Id";
+            Column1.Name = "Column1";
+            Column1.ReadOnly = true;
+            Column1.Resizable = DataGridViewTriState.False;
+            Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Column1.Visible = false;
+            // 
             // FormSearchItems
             // 
             AutoScaleDimensions = new SizeF(6F, 13F);
@@ -380,6 +392,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Search Items";
             Load += FormSearchItems_Load;
+            Controls.SetChildIndex(checkBoxIsPatient, 0);
             Controls.SetChildIndex(BtnSearchCancel, 0);
             Controls.SetChildIndex(statusStrip1, 0);
             Controls.SetChildIndex(GridViewItems, 0);
@@ -421,11 +434,12 @@
         private TextBox TextBoxSupplier;
         private TextBox TextBoxProductFamily;
         private TextBox TextBoxManufacturer;
+        private Button BtnSearchItemReload;
+        private controls.ToolstripDelayedTextBox TextBoxSearchProduct;
         private DataGridViewTextBoxColumn PatientName;
         private DataGridViewTextBoxColumn PatientAddress;
         private DataGridViewTextBoxColumn Column2;
+        private DataGridViewTextBoxColumn sprice;
         private DataGridViewTextBoxColumn Column1;
-        private Button BtnSearchItemReload;
-        private controls.ToolstripDelayedTextBox TextBoxSearchProduct;
     }
 }

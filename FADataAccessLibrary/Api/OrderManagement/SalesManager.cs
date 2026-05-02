@@ -120,6 +120,8 @@ namespace fa.api.OrderManagement
                     }
                     // Changes made here CustomerId to AccountId and Customer to Account due to sales model change
                     SaleEntry.Account = null;
+                    SaleEntry.SalePayment = null;
+                    SaleEntry.SalePaymentNew = null;
                     Context.Entry(SaleEntryInfo).CurrentValues.SetValues(SaleEntry);
                     Context.SaveChanges();
                     ReceiptManager.Instance.salesEntry.Add(SaleEntryInfo);
@@ -371,6 +373,8 @@ namespace fa.api.OrderManagement
                     }
                     // Changes made here CustomerId to AccountId and Customer to Account due to sales model change
                     SaleEntry.Account = null;
+                    SaleEntry.SalePayment = null;
+                    SaleEntry.SalePaymentNew = null;
                     Context.Entry(SaleEntryInfo).CurrentValues.SetValues(SaleEntry);
 
                     ConsultationNote Note = ConsultationNoteManager.Instance.GetConsultationNoteBySaleId(SaleEntry.Id);
@@ -524,6 +528,8 @@ namespace fa.api.OrderManagement
                             // Changes made here CustomerId to AccountId and Customer to Account due to sales model change
 
                             SaleEntry.Account = null;
+                            SaleEntry.SalePayment = null;
+                            SaleEntry.SalePaymentNew = null;
                             Context.Entry(SaleEntryInfo).CurrentValues.SetValues(SaleEntry);
                             if (SaleEntry.EntryType == Entrytype.SALE || SaleEntry.EntryType == Entrytype.RETURN)
                             {
@@ -1120,6 +1126,24 @@ namespace fa.api.OrderManagement
                     .ToList();
             }
         }
-
+        public List<SaleDetail> DisplayLastPricesByProductAndCustomer(
+            long companyId,
+            long productId,
+            long customerId,
+            int recordCount = 5)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                return context.SaleDetail
+                    .Include(sd => sd.Sale) // so you can still access SaleDate, etc.
+                    .Where(sd =>
+                        sd.ProductId == productId &&
+                        sd.Sale.CompanyId == companyId &&
+                        sd.Sale.AccountsId == customerId)
+                    .OrderByDescending(sd => sd.Sale.SaleDate)
+                    .Take(recordCount)
+                    .ToList();
+            }
+        }
     }
 }

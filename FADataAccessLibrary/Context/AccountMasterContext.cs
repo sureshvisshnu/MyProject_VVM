@@ -19,6 +19,7 @@ using fa.model.System;
 using fa.model.UserProfile;
 using Fa.api.Accounting;
 using FADataAccessLibrary.Configuration;
+using FADataAccessLibrary.Model.Accounting.Transactions;
 using FADataAccessLibrary.Model.Catalog;
 using FADataAccessLibrary.Model.Common;
 using FADataAccessLibrary.Model.Hms.common;
@@ -242,6 +243,13 @@ namespace fa.context
 
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PaymentDetail> PaymentDetails { get; set; }
+
+        public DbSet<PaymentNew> PaymentsNew { get; set; }
+        public DbSet<CheckPaymentNew> CheckPaymentsNew { get; set; }
+        public DbSet<CardPaymentNew> CardPaymentsNew { get; set; }
+        public DbSet<BankTransferPaymentNew> BankTransferPaymentsNew { get; set; }
+        public DbSet<UpiTransactionPaymentNew> UpiTransactionPaymentsNew { get; set; }
+        public DbSet<PaymentDetailNew> PaymentDetailsNew { get; set; }
 
         public DbSet<CreditCardPayment> CreditCardPayments { get; set; }
         public DbSet<CheckPayment> CheckPayments { get; set; }
