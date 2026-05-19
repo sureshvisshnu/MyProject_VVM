@@ -1545,10 +1545,25 @@ namespace fa.views.catalog
 
                             else
                             {
-                                Product lProductById = CatalogProductManager.GetProductInfoById(lProduct.Id);
-                                if (lProductById != null)
+                                if (lProduct.Id != 0)
                                 {
-                                    lProductFromDB = CatalogProductManager.UpdateProduct(lProduct);
+                                    Product lProductById = CatalogProductManager.GetProductInfoById(lProduct.Id);
+                                    if (lProductById != null)
+                                    {
+                                        // ✅ Track purchase price change
+                                        if (lProductById.PurchasePrice != lProduct.PurchasePrice)
+                                        {
+                                            ProductPriceHistoryManager.Instance.AddPriceHistory(
+                                                lProduct.Id,
+                                                Global.Company.CompanyId,
+                                                lProductById.PurchasePrice,
+                                                lProduct.PurchasePrice,
+                                                "Manual Edit");
+                                        }
+
+                                        lProductFromDB = CatalogProductManager.UpdateProduct(lProduct);
+                                    }
+
 
                                     if (this.PendingPercentages != null)
                                     {
@@ -2210,6 +2225,10 @@ namespace fa.views.catalog
             if (keyData == (Keys.F4))
             {
                 BtnCatalogDelete.PerformClick();
+            }
+            if(keyData == (Keys.F5))
+            {
+                PurchasePriceUpdated();
             }
             if (keyData == (Keys.F7))
             {
@@ -3330,6 +3349,55 @@ namespace fa.views.catalog
             {
                 LoadCatalogInfo();
             }
+        }
+        public void PurchasePriceUpdated()
+        {
+            if (string.IsNullOrEmpty(TextBoxCatalogId.Text))
+                return;
+
+            long productId = long.Parse(TextBoxCatalogId.Text);
+            var history = ProductPriceHistoryManager.Instance.GetPriceHistoryByProductId(productId, Global.Company.CompanyId);
+
+            if (history == null || history.Count == 0)
+            {
+                MessageBox.Show("No price history found for this product.", "Price History");
+                return;
+            }
+
+            // Show in a simple DataGridView dialog
+            Form historyForm = new Form
+            {
+                Text = $"Purchase Price History - {TextBoxProductName.Text}",
+                Size = new Size(500, 350),
+                StartPosition = FormStartPosition.CenterParent
+            };
+
+            DataGridView grid = new DataGridView
+            {
+                Dock = DockStyle.Fill,
+                ReadOnly = true,
+                AllowUserToAddRows = false,
+                AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+            };
+
+            grid.Columns.Add("Date", "Date Changed");
+            grid.Columns.Add("OldPrice", "Old Price");
+            grid.Columns.Add("NewPrice", "New Price");
+            grid.Columns.Add("Source", "Source");
+
+            foreach (var item in history)
+            {
+                grid.Rows.Add(
+                    item.ChangedDate.ToString(Global.Company.DateFormat + " HH:mm"),
+                    item.OldPurchasePrice.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)),
+                    item.NewPurchasePrice.ToString(TextUtils.DecimalPlace(Global.Company.PrimaryCurrency.RoundingPrecision)),
+                    item.Source
+                );
+            }
+
+            historyForm.Controls.Add(grid);
+            historyForm.ShowDialog();
+
         }
     }
     public static class PriceHelper

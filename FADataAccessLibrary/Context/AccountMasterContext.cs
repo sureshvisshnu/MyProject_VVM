@@ -314,6 +314,7 @@ namespace fa.context
         public DbSet<ProductPercentage> ProductPercentages { get; set; }
         public DbSet<PercentageStorage> PercentageStorages { get; set; }
         public DbSet<SupplierProduct> SupplierProducts { get; set; }
+        public DbSet<ProductPriceHistory> ProductPriceHistories { get; set; }
 
         // BarCode Label Counter
         public DbSet<LabelStockMaster> LabelStockMasters { get; set; }

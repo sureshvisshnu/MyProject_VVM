@@ -402,7 +402,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Integrated Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 5, 2, 12, 43, 1, 261, DateTimeKind.Local).AddTicks(5871),
+                            EffectiveTo = new DateTime(2400, 5, 7, 21, 17, 36, 411, DateTimeKind.Local).AddTicks(3521),
                             Name = "IGST",
                             Rule = "RunIGST()"
                         },
@@ -412,7 +412,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Central Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 5, 2, 12, 43, 1, 261, DateTimeKind.Local).AddTicks(5917),
+                            EffectiveTo = new DateTime(2400, 5, 7, 21, 17, 36, 411, DateTimeKind.Local).AddTicks(3562),
                             Name = "CGST",
                             Rule = "RunCGST()"
                         },
@@ -422,7 +422,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "State Sales Tax Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 5, 2, 12, 43, 1, 261, DateTimeKind.Local).AddTicks(5933),
+                            EffectiveTo = new DateTime(2400, 5, 7, 21, 17, 36, 411, DateTimeKind.Local).AddTicks(3573),
                             Name = "SGST",
                             Rule = "RunSGST()"
                         },
@@ -432,7 +432,7 @@ namespace FADataAccessLibrary.Migrations
                             CountryId = 99L,
                             Discription = "Tax at Source Payable Account",
                             EffectiveFrom = new DateTime(2017, 9, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            EffectiveTo = new DateTime(2400, 5, 2, 12, 43, 1, 261, DateTimeKind.Local).AddTicks(5945),
+                            EffectiveTo = new DateTime(2400, 5, 7, 21, 17, 36, 411, DateTimeKind.Local).AddTicks(3582),
                             Name = "TCS",
                             Rule = "RunTCS()"
                         });
@@ -4969,6 +4969,38 @@ namespace FADataAccessLibrary.Migrations
                     b.HasIndex(new[] { "ProductCode" }, "IX_ProductPercentage_ProductCode");
 
                     b.ToTable("ProductPercentages");
+                });
+
+            modelBuilder.Entity("fa.model.Catalog.ProductPriceHistory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("ChangedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<float>("NewPurchasePrice")
+                        .HasColumnType("float");
+
+                    b.Property<float>("OldPurchasePrice")
+                        .HasColumnType("float");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Source")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductPriceHistories");
                 });
 
             modelBuilder.Entity("fa.model.Common.AdditionalDetail", b =>
@@ -15375,6 +15407,17 @@ namespace FADataAccessLibrary.Migrations
                         .IsRequired();
 
                     b.Navigation("Company");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("fa.model.Catalog.ProductPriceHistory", b =>
+                {
+                    b.HasOne("fa.model.Catalog.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
                 });

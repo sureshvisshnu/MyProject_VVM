@@ -1,13 +1,10 @@
-﻿using DocumentFormat.OpenXml.Presentation;
-using DocumentFormat.OpenXml.Spreadsheet;
-using fa.api.Accounting;
+﻿using fa.api.Accounting;
 using fa.api.catalog;
 using fa.api.Hms;
 using fa.api.Log;
 using fa.api.OrderManagement;
 using fa.api.System;
 using fa.api.utils;
-using fa.context;
 using fa.libraries.utils;
 using fa.libraries.Validation;
 using fa.model.Accounting.Masters;
@@ -27,28 +24,16 @@ using fa.views.controls.accounting;
 using fa.views.controls.grid;
 using fa.views.hms.helper;
 using fa.views.purchase;
-using fa.views.sales;
 using fa.views.utils;
 using Fa.api.catalog;
-using Fa.report.accounting.master;
 using Fa.reports.catalog;
 using Fa.views.sales;
 using Fa.views.Systems;
-using Gnostice.Documents.Controls.WinForms;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using Syncfusion.Styles;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
-using System.Drawing;
-using System.Linq;
+using System.Globalization;
 using System.Text;
-using System.Windows.Forms;
-using VisioForge.Libs.MediaFoundation.OPM;
-using VisioForge.Libs.NDI;
-using VisioForge.MediaFramework.Helpers;
 
 namespace fa.views.sales
 {
@@ -709,6 +694,10 @@ namespace fa.views.sales
         {
             if (ValidateForm())
             {
+                if (!PriceValidation())
+                {
+                    return;
+                }
                 try
                 {
                     Cursor.Current = Cursors.WaitCursor;
@@ -5477,37 +5466,134 @@ namespace fa.views.sales
             }
         }
 
+        private bool PriceValidation()
+        {
+            // Loop through all rows
+            foreach (DataGridViewRow row in GridViewSalesItem.Rows)
+            {
+                // Skip new empty row
+                // Skip new empty row
+                // Skip new empty row
+                if (row.IsNewRow)
+                    continue;
 
+                int rowIndex = row.Index;
+
+                // Get price cell
+                DataGridViewCell priceCell =
+                    GridViewSalesItem[(int)SaleEntryTableColumn.PRICE, rowIndex];
+
+                // Check null
+                if (priceCell == null || priceCell.Value == null)
+                    continue;
+
+                // Convert selling price
+                decimal sellPrice = 0;
+
+                if (!decimal.TryParse(
+                        priceCell.Value.ToString(),
+                        NumberStyles.Any,
+                        CultureInfo.InvariantCulture,
+                        out sellPrice))
+                {
+                    continue;
+                }
+
+                // Get ProductId cell value
+                object productIdObject =
+                    GridViewSalesItem[(int)SaleEntryTableColumn.ID, rowIndex].Value;
+
+                if (productIdObject == null)
+                    continue;
+
+                // Convert ProductId
+                long productId = 0;
+
+                if (!long.TryParse(productIdObject.ToString(), out productId))
+                    continue;
+
+                // Get product from database
+                Product product =
+                    CatalogProductManager.Instance
+                    .GetProductInfoByIdForProductLoad(productId);
+
+                if (product == null)
+                    continue;
+
+                // Get cost price
+                decimal costPrice = Convert.ToDecimal(product.CostPrice);
+
+                // Validation
+                if (sellPrice < costPrice)
+                {
+                    // Product name
+                    string productName =
+                        GridViewSalesItem[(int)SaleEntryTableColumn.PRODUCT, rowIndex]
+                        ?.Value?.ToString()
+                        ?? productId.ToString();
+
+                    // Show warning
+                    MessageBox.Show(
+                        $"Selling price for '{productName}' is less than cost price."
+                        + Environment.NewLine + Environment.NewLine
+                        + $"Cost Price : {costPrice}"
+                        + Environment.NewLine
+                        + $"Selling Price : {sellPrice}",
+                        "Price Validation",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning);
+
+                    // Select row
+                    row.Selected = true;
+
+                    // Focus exact price cell
+                    GridViewSalesItem.CurrentCell = priceCell;
+
+                    // Scroll to row
+                    GridViewSalesItem.FirstDisplayedScrollingRowIndex = row.Index;
+
+                    // Focus grid
+                    GridViewSalesItem.Focus();
+
+                    // Enter edit mode
+                    GridViewSalesItem.BeginEdit(true);
+
+                    return false;
+                }
+            }
+
+            return true;
+        }
         /*
-protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-{
-   if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
-   {
+    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+    {
+    if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
+    {
        return base.ProcessCmdKey(ref msg, keyData);
-   }
-   if (keyData == Keys.Tab && BtnSalesQuotesSearch.Selected == true && Global.Company.BusinessType != BuisnessType.Hospital)
-   {
+    }
+    if (keyData == Keys.Tab && BtnSalesQuotesSearch.Selected == true && Global.Company.BusinessType != BuisnessType.Hospital)
+    {
        YesNoRbtSalesMethod.Focus();
        return true;
-   }
-   if (keyData == Keys.Tab && BtnPrescriptionBySearch.Selected == true && Global.Company.BusinessType == BuisnessType.Hospital)
-   {
+    }
+    if (keyData == Keys.Tab && BtnPrescriptionBySearch.Selected == true && Global.Company.BusinessType == BuisnessType.Hospital)
+    {
        YesNoRbtSalesMethod.Focus();
        return true;
-   }
-   if (keyData == (Keys.F12))
-   {
+    }
+    if (keyData == (Keys.F12))
+    {
        GridViewSalesItem.CurrentCell = GridViewSalesItem[(int)SaleEntryTableColumn.PRODUCT, GridViewSalesItem.Rows.Count - 1];
        GridViewSalesItem.BeginEdit(true);
        return true;
-   }
-   if (keyData == (Keys.F2) && (TextBoxSalesEntryCustomer.Focused || BtnSalesSearchCustomer.Focused))
-   {
+    }
+    if (keyData == (Keys.F2) && (TextBoxSalesEntryCustomer.Focused || BtnSalesSearchCustomer.Focused))
+    {
        BtnSalesSearchCustomer.PerformClick();
        return true;
-   }
-   if (keyData == (Keys.F3))
-   {
+    }
+    if (keyData == (Keys.F3))
+    {
        if (BtnSalesNew.Enabled)
        {
            BtnSalesNew_Click(this, null!);
@@ -5516,39 +5602,39 @@ protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
        {
            BtnSalesNewCustomer.ShowDropDown();
        }
-   }
-   else if (keyData == (Keys.F4) && BtnSalesDelete.Enabled)
-   {
+    }
+    else if (keyData == (Keys.F4) && BtnSalesDelete.Enabled)
+    {
        BtnSalesDelete_Click(this, null!);
-   }
-   else if (keyData == (Keys.F6) && BtnReceivePayment.Enabled)
-   {
+    }
+    else if (keyData == (Keys.F6) && BtnReceivePayment.Enabled)
+    {
        BtnReceivePayment_Click(this, null!);
-   }
-   else if (keyData == (Keys.F9) && BtnSalesPrint.Enabled)
-   {
+    }
+    else if (keyData == (Keys.F9) && BtnSalesPrint.Enabled)
+    {
        BtnSalesPrint_Click(this, null!);
-   }
-   else if (keyData == (Keys.F8) && BtnSalesSave.Enabled)
-   {
+    }
+    else if (keyData == (Keys.F8) && BtnSalesSave.Enabled)
+    {
        BtnSalesSave_Click(this, null!);
-   }
-   else if (keyData == (Keys.F11))
-   {
+    }
+    else if (keyData == (Keys.F11))
+    {
        BtnAdditionalDetail.PerformClick();
-   }
-   else if (keyData == (Keys.Escape) && BtnSalesCancel.Enabled)
-   {
+    }
+    else if (keyData == (Keys.Escape) && BtnSalesCancel.Enabled)
+    {
        BtnSalesCancel_Click(this, null!);
        return false;
-   }
-   else if (keyData == (Keys.F10) && BtnSalesExit.Enabled)
-   {
+    }
+    else if (keyData == (Keys.F10) && BtnSalesExit.Enabled)
+    {
        BtnSalesExit_Click(this, null!);
        return true;
-   }
-   try
-   {
+    }
+    try
+    {
        if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
        {
            return base.ProcessCmdKey(ref msg, keyData);
@@ -5684,16 +5770,16 @@ protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
                TextBoxSalesMemo.Focus();
            }
        }
-   }
-   catch (Exception ex)
-   {
+    }
+    catch (Exception ex)
+    {
        _isBarcodeProcessing = false;
        Console.WriteLine($"Error: {ex.Message}");
        return true;
-   }
-   return base.ProcessCmdKey(ref msg, keyData);
-}
-*/
+    }
+    return base.ProcessCmdKey(ref msg, keyData);
+    }
+    */
 
     }
     public class PrintPaperFormat

@@ -612,6 +612,41 @@ namespace fa.model.Catalog
 
     }
 
+    [Table("ProductPriceHistories")]
+    public class ProductPriceHistory
+    {
+        [Key]
+        public long Id { get; set; }
+
+        public long ProductId { get; set; }
+
+        [ForeignKey("ProductId")]
+        public virtual Product Product { get; set; }
+
+        public long CompanyId { get; set; }
+
+        /// <summary>
+        /// The old purchase price before the change
+        /// </summary>
+        public float OldPurchasePrice { get; set; }
+
+        /// <summary>
+        /// The new purchase price after the change
+        /// </summary>
+        public float NewPurchasePrice { get; set; }
+
+        /// <summary>
+        /// Date when the price was changed
+        /// </summary>
+        public DateTime ChangedDate { get; set; }
+
+        /// <summary>
+        /// Optional: who changed it or from where (e.g., "Manual Edit", "Purchase Bill #123")
+        /// </summary>
+        [MaxLength(100)]
+        public string Source { get; set; }
+    }
+
     public enum CatalogItemType
     {
         CATEGORY=1, PRODUCTFAMILY=2, PRODUCT=3
