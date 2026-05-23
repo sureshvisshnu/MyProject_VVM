@@ -1,6 +1,5 @@
 ﻿using fa;
 using fa.api.OrderManagement;
-using fa.context;
 using fa.views;
 using fa.views.sales;
 using System;
@@ -13,21 +12,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Fa.views.sales
+namespace Fa.reports.Purchase
 {
-    public partial class FormSalsePriceSeeking : FormBase 
+    public partial class FormPurchasePriceSeeking : FormBase
     {
         public long LocationId = 0L;
         public long ProductId { get; set; } // Set from FormItembasedSales
         public long ProductBatchId { get; set; } // Set from FormItembasedSales
-        public long CustomerId { get; set; } // Set from FormItembasedSales
+        public long SupplierId { get; set; } // Set from FormItembasedSales
         public string? ProductName { get; set; }
-        public FormSalsePriceSeeking(object sender)
+
+        public FormPurchasePriceSeeking(object sender)
         {
             InitializeComponent();
-            //this.Shown += FormSalsePriceSeeking_Shown; // Load data when form is shown
         }
-        
+
         private void LoadPreviousPrices()
         {
             try
@@ -40,24 +39,24 @@ namespace Fa.views.sales
                 long customerId = callingForm?.CustomerId ?? 0;
 
                 // Get last 5 sales prices
-                var sales = SalesManager.Instance.GetLastPricesByProductAndCustomer(Global.Company.CompanyId,
+                var purchases = PurchaseEntryManager.Instance.GetLastPricesByProductAndSupplier(Global.Company.CompanyId,
                     productId: this.ProductId,
-                    customerId: this.CustomerId
+                    customerId: this.SupplierId
                 );
 
                 // Clear old rows
                 GridViewItems.Rows.Clear();
                 TextBoxSearchProduct.Text = ProductName ?? string.Empty;
                 int rowNum = 1;
-                foreach (var sale in sales.Take(5)) // limit to last 5
+                foreach (var purchase in purchases.Take(5)) // limit to last 5
                 {
                     DataGridViewRow row = new DataGridViewRow();
                     row.CreateCells(GridViewItems);
 
                     row.Cells[0].Value = rowNum++;
-                    row.Cells[1].Value = sale.Sale?.SaleDate.ToString(Global.Company.DateFormat);
-                    row.Cells[2].Value = sale.Price.ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
-                    row.Cells[3].Value = sale.Id;
+                    row.Cells[1].Value = purchase.PurchaseEntry?.PurchaseInvDate.ToString(Global.Company.DateFormat);
+                    row.Cells[2].Value = purchase.PurchaseCost.ToString(Global.Company.PrimaryCurrency.CurrencyFormat);
+                    row.Cells[3].Value = purchase.PurchaseEntry?.Id;
 
                     GridViewItems.Rows.Add(row);
                 }
@@ -76,7 +75,7 @@ namespace Fa.views.sales
             }
         }
 
-        private void FormSalsePriceSeeking_Load(object sender, EventArgs e)
+        private void FormPurchasePriceSeeking_Load(object sender, EventArgs e)
         {
             LoadPreviousPrices();
         }

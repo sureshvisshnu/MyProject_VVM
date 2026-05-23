@@ -812,6 +812,25 @@ namespace fa.api.OrderManagement
             }
             return PurchaseEntry;
         }
+        public List<PurchaseDetails> GetLastPricesByProductAndSupplier(
+            long companyId,
+            long productId,
+            long customerId,
+            int recordCount = 5)
+        {
+            using (var context = new AccountMasterContext())
+            {
+                return context.PurchaseDetails
+                    .Include(sd => sd.PurchaseEntry) // so you can still access SaleDate, etc.
+                    .Where(sd =>
+                        sd.ProductId == productId &&
+                        sd.PurchaseEntry.CompanyId == companyId &&
+                        sd.PurchaseEntry.AccountId == customerId)
+                    .OrderByDescending(sd => sd.PurchaseEntry.PurchaseInvDate)
+                    .Take(recordCount)
+                    .ToList();
+            }
+        }
         public IList<PurchaseEntry> GetPurchaseEntryByPurchaseEntryId(long PurchaseEntryId)
         {
             IList<PurchaseEntry> PurchaseEntry = null;

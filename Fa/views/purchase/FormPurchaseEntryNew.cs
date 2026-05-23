@@ -2190,6 +2190,12 @@ namespace fa.views.purchase
                     SearchBatchbyNo();
                     return true;
                 }
+                // Add inside ProcessCmdKey or your key handling method
+                if (keyData == Keys.F5)
+                {
+                    SearchPreviousPurchasePrice();
+                    return true;
+                }
                 if (keyData == (Keys.Tab) && GridViewPurchaseItem.CurrentCell.ColumnIndex == (int)PurchaseEntryTableColumn.FREE)
                 {
                     if (GridViewPurchaseItem.CurrentRow.Cells[(int)PurchaseEntryTableColumn.BATNO].ReadOnly)
@@ -3631,6 +3637,86 @@ namespace fa.views.purchase
         private void checkBoxGST_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxGST.Text = checkBoxGST.Checked ? "GST Print" : "Non-GST Print";
+        }
+
+        private void SearchPreviousPurchasePrice()
+        {
+            try
+            {
+                Cursor.Current = Cursors.WaitCursor;
+
+                // Supplier Id
+                long supplierId = 0L;
+
+                if (TextBoxPurchaseEntrySupplier.Id != null)
+                {
+                    long.TryParse(
+                        TextBoxPurchaseEntrySupplier.Id.ToString(),
+                        out supplierId);
+                }
+
+                using (FormPurchasePriceSeeking form =  new FormPurchasePriceSeeking(this))
+                {
+                    // Product Id
+                    long productId = 0L;
+
+                    if (GridViewPurchaseItem.CurrentRow != null &&
+                        GridViewPurchaseItem.CurrentRow
+                            .Cells[(int)PurchaseEntryTableColumn.ID]
+                            .Value != null)
+                    {
+                        long.TryParse(
+                            GridViewPurchaseItem.CurrentRow
+                                .Cells[(int)PurchaseEntryTableColumn.ID]
+                                .Value.ToString(),
+                            out productId);
+                    }
+
+                    // Product Name
+                    string productName = string.Empty;
+
+                    if (GridViewPurchaseItem.CurrentRow != null &&
+                        GridViewPurchaseItem.CurrentRow
+                            .Cells[(int)PurchaseEntryTableColumn.PRODUCT]
+                            .Value != null)
+                    {
+                        productName =
+                            GridViewPurchaseItem.CurrentRow
+                                .Cells[(int)PurchaseEntryTableColumn.PRODUCT]
+                                .Value.ToString()!;
+                    }
+
+                    // Assign values to form
+                    form.SupplierId = supplierId;
+
+                    form.ProductId = productId;
+
+                    form.ProductName = productName;
+
+                    // Open dialog
+                    form.ShowDialog();
+
+                    // Apply selected price back to grid
+                    //if (form.DialogResult == DialogResult.OK)
+                    //{
+                    //    if (form.GridViewItems.CurrentRow != null)
+                    //    {
+                    //        decimal selectedPrice = Convert.ToDecimal(
+                    //            form.GridViewItems.CurrentRow
+                    //                .Cells["price"]
+                    //                .Value);
+
+                    //        GridViewPurchaseItem.CurrentRow
+                    //            .Cells[(int)PurchaseEntryTableColumn.PRICE]
+                    //            .Value = selectedPrice;
+                    //    }
+                    //}
+                }
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            }
         }
     }
     public static class Extensions
