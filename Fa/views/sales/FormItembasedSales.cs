@@ -27,6 +27,7 @@ using fa.views.purchase;
 using fa.views.utils;
 using Fa.api.catalog;
 using Fa.reports.catalog;
+using Fa.views.hms.helper;
 using Fa.views.sales;
 using Fa.views.Systems;
 using Microsoft.Win32;
@@ -3838,9 +3839,62 @@ namespace fa.views.sales
                     CustomerId = (long)TempCustomerId;
                 }
             }
+            UpdatePaymentButtonVisibility();
             Cursor.Current = Cursors.Default;
         }
+        private void LoadCustomerInvoices(long customerId)
+        { /*
+            Cursor.Current = Cursors.WaitCursor; try
+            { // Ensure grid exists and has columns (adjust names/types as needed) if (GridViewCustomerInvoices.Columns.Count == 0) { GridViewCustomerInvoices.Columns.Add("InvoiceNo", "Invoice No"); GridViewCustomerInvoices.Columns.Add("Date", "Date"); GridViewCustomerInvoices.Columns.Add("TotalAmount", "Total"); GridViewCustomerInvoices.Columns.Add("AmountReceived", "Received"); GridViewCustomerInvoices.Columns.Add("Balance", "Balance"); }
+                GridViewCustomerInvoices.Rows.Clear();
 
+                // Fetch invoices for the customer - replace with your actual manager/DAO call
+                var invoices = SalesManager.GetInvoicesByCustomer(customerId); // IEnumerable<Invoice>
+
+                foreach (var inv in invoices)
+                {
+                    // Replace with your payments lookup to get amount received for this invoice
+                    decimal received = PaymentsManager.GetTotalReceivedForInvoice(inv.Id); // decimal
+                    decimal total = inv.TotalAmount;
+                    decimal balance = total - received;
+
+                    int ri = GridViewCustomerInvoices.Rows.Add();
+                    var row = GridViewCustomerInvoices.Rows[ri];
+                    row.Cells["InvoiceNo"].Value = inv.RefNumber ?? inv.InvoiceNumber ?? inv.Id.ToString();
+                    row.Cells["Date"].Value = inv.Date.ToShortDateString();
+                    row.Cells["TotalAmount"].Value = total;
+                    row.Cells["AmountReceived"].Value = received;
+                    row.Cells["Balance"].Value = balance;
+                    row.Tag = inv; // keep invoice object for later use (double-click etc.)
+                }
+
+                // Optionally select first row and focus
+                if (GridViewCustomerInvoices.Rows.Count > 0)
+                {
+                    GridViewCustomerInvoices.CurrentCell = GridViewCustomerInvoices.Rows[0].Cells[0];
+                    GridViewCustomerInvoices.Focus();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Failed to load customer invoices: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor.Current = Cursors.Default;
+            } */
+        }
+        private void UpdatePaymentButtonVisibility()
+        {
+            BtnShowPayment.Visible = false;
+
+            if (CustomerNameId > 0)
+            {
+                bool hasInvoices = SalesManager.Instance.HasInvoicesByCustomer(CustomerNameId);
+
+                BtnShowPayment.Visible = hasInvoices;
+            }
+        }
         private void LoadEditableStock(int Index, string Uom)
         {
             Product Product = CatalogProductManager.Instance.GetProductInfoByIdForProductLoad((long)GridViewSalesItem.Rows[Index].Cells[(int)SaleEntryTableColumn.ID].Value);
@@ -5564,222 +5618,235 @@ namespace fa.views.sales
 
             return true;
         }
+
+        private void BtnShowPayment_Click(object sender, EventArgs e)
+        {
+            if (CustomerNameId <= 0)
+            {
+                MessageBox.Show("Please select a customer.");
+                return;
+            }
+
+            FormPaymentDetails form = new FormPaymentDetails();
+            form.CustomerId = CustomerNameId;
+            form.ShowDialog();
+        }
         /*
-    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-    {
-    if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
-    {
-       return base.ProcessCmdKey(ref msg, keyData);
-    }
-    if (keyData == Keys.Tab && BtnSalesQuotesSearch.Selected == true && Global.Company.BusinessType != BuisnessType.Hospital)
-    {
-       YesNoRbtSalesMethod.Focus();
-       return true;
-    }
-    if (keyData == Keys.Tab && BtnPrescriptionBySearch.Selected == true && Global.Company.BusinessType == BuisnessType.Hospital)
-    {
-       YesNoRbtSalesMethod.Focus();
-       return true;
-    }
-    if (keyData == (Keys.F12))
-    {
-       GridViewSalesItem.CurrentCell = GridViewSalesItem[(int)SaleEntryTableColumn.PRODUCT, GridViewSalesItem.Rows.Count - 1];
-       GridViewSalesItem.BeginEdit(true);
-       return true;
-    }
-    if (keyData == (Keys.F2) && (TextBoxSalesEntryCustomer.Focused || BtnSalesSearchCustomer.Focused))
-    {
-       BtnSalesSearchCustomer.PerformClick();
-       return true;
-    }
-    if (keyData == (Keys.F3))
-    {
-       if (BtnSalesNew.Enabled)
-       {
-           BtnSalesNew_Click(this, null!);
-       }
-       else
-       {
-           BtnSalesNewCustomer.ShowDropDown();
-       }
-    }
-    else if (keyData == (Keys.F4) && BtnSalesDelete.Enabled)
-    {
-       BtnSalesDelete_Click(this, null!);
-    }
-    else if (keyData == (Keys.F6) && BtnReceivePayment.Enabled)
-    {
-       BtnReceivePayment_Click(this, null!);
-    }
-    else if (keyData == (Keys.F9) && BtnSalesPrint.Enabled)
-    {
-       BtnSalesPrint_Click(this, null!);
-    }
-    else if (keyData == (Keys.F8) && BtnSalesSave.Enabled)
-    {
-       BtnSalesSave_Click(this, null!);
-    }
-    else if (keyData == (Keys.F11))
-    {
-       BtnAdditionalDetail.PerformClick();
-    }
-    else if (keyData == (Keys.Escape) && BtnSalesCancel.Enabled)
-    {
-       BtnSalesCancel_Click(this, null!);
-       return false;
-    }
-    else if (keyData == (Keys.F10) && BtnSalesExit.Enabled)
-    {
-       BtnSalesExit_Click(this, null!);
-       return true;
-    }
-    try
-    {
-       if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
-       {
-           return base.ProcessCmdKey(ref msg, keyData);
-       }
+protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+{
+if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
+{
+return base.ProcessCmdKey(ref msg, keyData);
+}
+if (keyData == Keys.Tab && BtnSalesQuotesSearch.Selected == true && Global.Company.BusinessType != BuisnessType.Hospital)
+{
+YesNoRbtSalesMethod.Focus();
+return true;
+}
+if (keyData == Keys.Tab && BtnPrescriptionBySearch.Selected == true && Global.Company.BusinessType == BuisnessType.Hospital)
+{
+YesNoRbtSalesMethod.Focus();
+return true;
+}
+if (keyData == (Keys.F12))
+{
+GridViewSalesItem.CurrentCell = GridViewSalesItem[(int)SaleEntryTableColumn.PRODUCT, GridViewSalesItem.Rows.Count - 1];
+GridViewSalesItem.BeginEdit(true);
+return true;
+}
+if (keyData == (Keys.F2) && (TextBoxSalesEntryCustomer.Focused || BtnSalesSearchCustomer.Focused))
+{
+BtnSalesSearchCustomer.PerformClick();
+return true;
+}
+if (keyData == (Keys.F3))
+{
+if (BtnSalesNew.Enabled)
+{
+  BtnSalesNew_Click(this, null!);
+}
+else
+{
+  BtnSalesNewCustomer.ShowDropDown();
+}
+}
+else if (keyData == (Keys.F4) && BtnSalesDelete.Enabled)
+{
+BtnSalesDelete_Click(this, null!);
+}
+else if (keyData == (Keys.F6) && BtnReceivePayment.Enabled)
+{
+BtnReceivePayment_Click(this, null!);
+}
+else if (keyData == (Keys.F9) && BtnSalesPrint.Enabled)
+{
+BtnSalesPrint_Click(this, null!);
+}
+else if (keyData == (Keys.F8) && BtnSalesSave.Enabled)
+{
+BtnSalesSave_Click(this, null!);
+}
+else if (keyData == (Keys.F11))
+{
+BtnAdditionalDetail.PerformClick();
+}
+else if (keyData == (Keys.Escape) && BtnSalesCancel.Enabled)
+{
+BtnSalesCancel_Click(this, null!);
+return false;
+}
+else if (keyData == (Keys.F10) && BtnSalesExit.Enabled)
+{
+BtnSalesExit_Click(this, null!);
+return true;
+}
+try
+{
+if (GridViewSalesItem.CurrentCell.ColumnIndex != (int)SaleEntryTableColumn.PRODUCT)
+{
+  return base.ProcessCmdKey(ref msg, keyData);
+}
 
-       // 1. Handle F2 - ONLY opens SearchProduct()
-       if (keyData == Keys.F2)
-       {
-           if (!_isBarcodeProcessing) // Ensure we're not scanning
-           {
-               SearchProduct();
-           }
-           return true;
-       }
+// 1. Handle F2 - ONLY opens SearchProduct()
+if (keyData == Keys.F2)
+{
+  if (!_isBarcodeProcessing) // Ensure we're not scanning
+  {
+      SearchProduct();
+  }
+  return true;
+}
 
-       // 2. Handle Enter key - ONLY for barcode scanning
-       if (keyData == Keys.Enter && !_isBarcodeProcessing)
-       {
-           // Debounce check (200ms)
-           if ((DateTime.Now - _lastBarcodeTime).TotalMilliseconds < 200)
-               return true;
+// 2. Handle Enter key - ONLY for barcode scanning
+if (keyData == Keys.Enter && !_isBarcodeProcessing)
+{
+  // Debounce check (200ms)
+  if ((DateTime.Now - _lastBarcodeTime).TotalMilliseconds < 200)
+      return true;
 
-           _lastBarcodeTime = DateTime.Now;
-           _isBarcodeProcessing = true;
+  _lastBarcodeTime = DateTime.Now;
+  _isBarcodeProcessing = true;
 
-           string barcode;
+  string barcode;
 
-           // Ensure last character is committed
-           GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
-           GridViewSalesItem.EndEdit();
+  // Ensure last character is committed
+  GridViewSalesItem.CommitEdit(DataGridViewDataErrorContexts.Commit);
+  GridViewSalesItem.EndEdit();
 
-           // Read from editing control if still active
-           if (GridViewSalesItem.EditingControl is TextBox tb)
-               barcode = tb.Text;
-           else
-               barcode = GridViewSalesItem.CurrentCell.Value?.ToString()!;
+  // Read from editing control if still active
+  if (GridViewSalesItem.EditingControl is TextBox tb)
+      barcode = tb.Text;
+  else
+      barcode = GridViewSalesItem.CurrentCell.Value?.ToString()!;
 
-           if (!string.IsNullOrEmpty(barcode))
-           {
-               ScannedBarcode = barcode.StartsWith(BarcodePrefix) ? barcode.Substring(BarcodePrefix.Length) : barcode;
-               var product = GetProductByBarcodeFromCache(ScannedBarcode);
+  if (!string.IsNullOrEmpty(barcode))
+  {
+      ScannedBarcode = barcode.StartsWith(BarcodePrefix) ? barcode.Substring(BarcodePrefix.Length) : barcode;
+      var product = GetProductByBarcodeFromCache(ScannedBarcode);
 
-               if (product != null)
-               {
-                   LoadProductIntoGrid(product);
-               }
-           }
+      if (product != null)
+      {
+          LoadProductIntoGrid(product);
+      }
+  }
 
-           _isBarcodeProcessing = false;
-           return true;
-       }
+  _isBarcodeProcessing = false;
+  return true;
+}
 
 
 
-       if ((keyData == Keys.F2) && !GridViewSalesItem.CurrentCell.ReadOnly && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO)
-       {
-           if (ComboBoxSaleInventoryLocation.SelectedIndex < 0)
-           {
-               ComboBoxSaleInventoryLocation.Focus();
-               ComboBoxSaleInventoryLocation.Focus();
-               ToolStripStatusLabelErrorPurchase.Text = SelectInventoryLoactionErrorMsg;
-               return true;
-           }
-           else
-           {
-               SearchBatch();
-               return true;
-           }
-       }
-       if ((keyData == Keys.F5) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
-       {
-           SearchPreviousPrice();
-           return true;
-       }
-       if (keyData == (Keys.Tab) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.FREE)
-       {
-           if (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.BATNO].ReadOnly)
-           {
-               SendKeys.Send("{tab}{tab}{tab}");
-           }
-       }
-       if (keyData == (Keys.Tab) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO))
-       {
-           if (!GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.BATNO].ReadOnly)
-           {
-               SendKeys.Send("{tab}{tab}");
-           }
-       }
-       if (keyData == (Keys.Tab) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.OPRICE))
-       {
-           IsOverrideTabCtr = true;
-           SendKeys.Send("{tab}{tab}");
-       }
-       if (keyData == (Keys.Tab | Keys.Shift) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.OPRICE))
-       {
-           IsOverrideTabCtr = false;
-       }
-       if (keyData == (Keys.Tab) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.DISP)
-       {
-           if (GridViewSalesItem.CurrentCell.RowIndex != GridViewSalesItem.Rows.Count - 1)
-           {
-               SendKeys.Send("{tab}{tab}{tab}{tab}");
-           }
-           else
-           {
-               SendKeys.Send("{tab}{tab}{tab}");
-           }
-       }
-       if (keyData == (Keys.Tab | Keys.Shift) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.OPRICE)
-       {
-           if (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.BATNO].ReadOnly)
-           {
-               SendKeys.Send("{tab}{tab}{tab}");
-           }
-           else
-           {
-               SendKeys.Send("{tab}{tab}");
-           }
-       }
-       if (keyData == (Keys.Tab | Keys.Shift) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.DISP))
-       {
-           SendKeys.Send("{tab}{tab}");
-       }
+if ((keyData == Keys.F2) && !GridViewSalesItem.CurrentCell.ReadOnly && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO)
+{
+  if (ComboBoxSaleInventoryLocation.SelectedIndex < 0)
+  {
+      ComboBoxSaleInventoryLocation.Focus();
+      ComboBoxSaleInventoryLocation.Focus();
+      ToolStripStatusLabelErrorPurchase.Text = SelectInventoryLoactionErrorMsg;
+      return true;
+  }
+  else
+  {
+      SearchBatch();
+      return true;
+  }
+}
+if ((keyData == Keys.F5) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+{
+  SearchPreviousPrice();
+  return true;
+}
+if (keyData == (Keys.Tab) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.FREE)
+{
+  if (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.BATNO].ReadOnly)
+  {
+      SendKeys.Send("{tab}{tab}{tab}");
+  }
+}
+if (keyData == (Keys.Tab) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.BATNO))
+{
+  if (!GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.BATNO].ReadOnly)
+  {
+      SendKeys.Send("{tab}{tab}");
+  }
+}
+if (keyData == (Keys.Tab) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.OPRICE))
+{
+  IsOverrideTabCtr = true;
+  SendKeys.Send("{tab}{tab}");
+}
+if (keyData == (Keys.Tab | Keys.Shift) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.OPRICE))
+{
+  IsOverrideTabCtr = false;
+}
+if (keyData == (Keys.Tab) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.DISP)
+{
+  if (GridViewSalesItem.CurrentCell.RowIndex != GridViewSalesItem.Rows.Count - 1)
+  {
+      SendKeys.Send("{tab}{tab}{tab}{tab}");
+  }
+  else
+  {
+      SendKeys.Send("{tab}{tab}{tab}");
+  }
+}
+if (keyData == (Keys.Tab | Keys.Shift) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.OPRICE)
+{
+  if (GridViewSalesItem.CurrentRow.Cells[(int)SaleEntryTableColumn.BATNO].ReadOnly)
+  {
+      SendKeys.Send("{tab}{tab}{tab}");
+  }
+  else
+  {
+      SendKeys.Send("{tab}{tab}");
+  }
+}
+if (keyData == (Keys.Tab | Keys.Shift) && (GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.DISP))
+{
+  SendKeys.Send("{tab}{tab}");
+}
 
-       if (keyData == (Keys.Tab | Keys.Shift) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
-       {
-           if (GridViewSalesItem.CurrentRow.Index != 0)
-           {
-               SendKeys.Send("{tab}{tab}{tab}{tab}");
-           }
-           else
-           {
-               TextBoxSalesMemo.Focus();
-           }
-       }
-    }
-    catch (Exception ex)
-    {
-       _isBarcodeProcessing = false;
-       Console.WriteLine($"Error: {ex.Message}");
-       return true;
-    }
-    return base.ProcessCmdKey(ref msg, keyData);
-    }
-    */
+if (keyData == (Keys.Tab | Keys.Shift) && GridViewSalesItem.CurrentCell.ColumnIndex == (int)SaleEntryTableColumn.PRODUCT)
+{
+  if (GridViewSalesItem.CurrentRow.Index != 0)
+  {
+      SendKeys.Send("{tab}{tab}{tab}{tab}");
+  }
+  else
+  {
+      TextBoxSalesMemo.Focus();
+  }
+}
+}
+catch (Exception ex)
+{
+_isBarcodeProcessing = false;
+Console.WriteLine($"Error: {ex.Message}");
+return true;
+}
+return base.ProcessCmdKey(ref msg, keyData);
+}
+*/
 
     }
     public class PrintPaperFormat

@@ -37,6 +37,23 @@ namespace FADataAccessLibrary.Api.Accounting
             }
         }
 
+        public List<CustomerPaymentInvoiceDetails> GetCustomerPaymentDetails(long customerId)
+        {
+            using (AccountMasterContext context = new AccountMasterContext())
+            {
+                var result = (from sale in context.SaleEntry
+                              where sale.AccountsId == customerId
+                              select new CustomerPaymentInvoiceDetails
+                              {
+                                  InvoiceNo = sale.RefNumber,
+                                  InvoiceDate = sale.SaleDate,
+                                  InvoiceAmount = (decimal)sale.TotalAmount
+                              }).ToList();
+
+                return result;
+            }
+        }
+
         public IList<PaymentNew> ListAllUnAppliedPaymentPaymentBySale(long SaleId)
         {
             using (AccountMasterContext Context = new AccountMasterContext())
@@ -238,6 +255,16 @@ namespace FADataAccessLibrary.Api.Accounting
             }
             return UpiTransactionPayment;
         }
+    }
+    public class CustomerPaymentInvoiceDetails
+    {
+        public string InvoiceNo { get; set; }
+        public DateTime InvoiceDate { get; set; }
+        public decimal InvoiceAmount { get; set; }
+
+        public string PaymentRefNo { get; set; }
+        public DateTime? PaymentDate { get; set; }
+        public decimal PaymentAmount { get; set; }
     }
 }
     

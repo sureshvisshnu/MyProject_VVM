@@ -1107,6 +1107,15 @@ namespace fa.api.OrderManagement
                     .ToList();
             }
         }
+        public bool HasInvoicesByCustomer(long customerId)
+        {
+            using (AccountMasterContext context = new AccountMasterContext())
+            {
+                return context.SaleEntry .Include(se => se.SaleDetails)
+                              .Any(x => x.AccountsId == customerId);
+            }
+        }
+
         public List<SaleDetail> GetLastPricesByProductAndCustomer(
             long companyId,
             long productId,
