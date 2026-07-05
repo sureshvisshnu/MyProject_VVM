@@ -356,16 +356,48 @@ namespace Fa.views.utils.Sale
 
                 pdfDoc.Add(table);
 
-                // Add amount in words
-                pdfDoc.Add(new Paragraph(" "));
-                PdfPTable AmountInWords = AmtInWordsColumn(TotalAmount);
-                pdfDoc.Add(AmountInWords);
+                float remaining = writer.GetVerticalPosition(true);
 
-                // Add signature line
-                pdfDoc.Add(new Paragraph(" "));
-                PdfPTable SignatureTable = SignatureColumn();
-                pdfDoc.Add(SignatureTable);
+                PdfPTable amountTable = AmtInWordsColumn(TotalAmount);
+                PdfPTable signatureTable = SignatureColumn();
 
+                amountTable.TotalWidth = pdfDoc.PageSize.Width - pdfDoc.LeftMargin - pdfDoc.RightMargin;
+                amountTable.CalculateHeights();
+
+                signatureTable.TotalWidth = pdfDoc.PageSize.Width - pdfDoc.LeftMargin - pdfDoc.RightMargin;
+                signatureTable.CalculateHeights();
+
+                float footerHeight =
+                    amountTable.TotalHeight +
+                    signatureTable.TotalHeight +
+                    70f;
+
+                if (remaining >= footerHeight)
+                {
+                    pdfDoc.Add(new Paragraph(" "));
+                    pdfDoc.Add(amountTable);
+
+                    pdfDoc.Add(new Paragraph(" "));
+                    pdfDoc.Add(signatureTable);
+                }
+                else if (remaining >= 120f)
+                {
+                    pdfDoc.Add(new Paragraph(" "));
+                    pdfDoc.Add(amountTable);
+
+                    remaining = writer.GetVerticalPosition(true);
+
+                    if (remaining >= 100f)
+                    {
+                        pdfDoc.Add(new Paragraph(" "));
+                        pdfDoc.Add(signatureTable);
+                    }
+                }
+                else if (remaining >= 70f)
+                {
+                    pdfDoc.Add(new Paragraph(" "));
+                    pdfDoc.Add(amountTable);
+                }
 
                 pdfDoc.Close();
 

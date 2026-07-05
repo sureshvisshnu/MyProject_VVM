@@ -3,6 +3,7 @@ using fa.api.OrderManagement;
 using fa.context;
 using fa.model.Accounting.Masters;
 using fa.model.Accounting.Transactions;
+using fa.model.OrderManagement;
 using Fa.api.Accounting.DoubleEntry;
 using FADataAccessLibrary.Model.Accounting.Transactions;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,18 @@ namespace FADataAccessLibrary.Api.Accounting
                 return instance;
             }
         }
-
+        
+        public List<PaymentNew> GetPaymentsByCustomer(long customerId)
+        {
+            using (AccountMasterContext context = new AccountMasterContext())
+            {
+                return context.PaymentsNew
+                              .Where(x => x.AccountId == customerId
+                                       && !x.IsDeleted)
+                              .OrderByDescending(x => x.TransactionDate)
+                              .ToList();
+            }
+        }
         public List<CustomerPaymentInvoiceDetails> GetCustomerPaymentDetails(long customerId)
         {
             using (AccountMasterContext context = new AccountMasterContext())
@@ -60,6 +72,61 @@ namespace FADataAccessLibrary.Api.Accounting
             {
                 IList<PaymentNew> PaymentInfo = (from PaymentNew in Context.PaymentsNew.Include(p => p.PaymentDetails).Include(p => p.Account) where PaymentNew.SalesId == SaleId select PaymentNew).ToList();
                 return PaymentInfo;
+            }
+        }
+        public List<CustomerLedger> GetCustomerLedger(long customerId)
+        {
+            using (AccountMasterContext context = new AccountMasterContext())
+            {
+                List<CustomerLedger> ledger = new List<CustomerLedger>();
+
+                // Load Invoices
+                var sales = context.SaleEntry
+                                   .Where(x => x.AccountsId == customerId &&
+                                               x.EntryType == Entrytype.SALE)
+                                   .ToList();
+
+                foreach (var sale in sales)
+                {
+
+                    ledger.Add(new CustomerLedger
+                    {
+                        Date = sale.SaleDate,
+                        Reference = sale.RefNumber,
+                        Type = "Invoice",
+                        Amount = (decimal)sale.NetAmount
+                    });
+                }
+
+                // Load Payments
+                var payments = context.PaymentsNew
+                                      .Where(x => x.AccountId == customerId &&
+                                                  !x.IsDeleted)
+                                      .ToList();
+
+                foreach (var payment in payments)
+                {
+                    decimal balance = 0;
+
+                    var sale = sales.FirstOrDefault(x => x.Id == payment.SalesId);
+
+                    if (sale != null)
+                    {
+                        balance = (decimal)sale.Balance;
+                    }
+
+                    ledger.Add(new CustomerLedger
+                    {
+                        Date = payment.TransactionDate,
+                        Reference = payment.Reference,
+                        Type = "Payment",
+                        Amount = payment.Amount
+                    });
+                }
+
+                return ledger
+                        .OrderBy(x => x.Date)
+                        .ToList();
             }
         }
 
@@ -265,6 +332,16 @@ namespace FADataAccessLibrary.Api.Accounting
         public string PaymentRefNo { get; set; }
         public DateTime? PaymentDate { get; set; }
         public decimal PaymentAmount { get; set; }
+    }
+    public class CustomerLedger
+    {
+        public DateTime Date { get; set; }
+
+        public string Reference { get; set; }
+
+        public string Type { get; set; }   // Invoice or Payment
+
+        public decimal Amount { get; set; }
     }
 }
     

@@ -36,6 +36,17 @@ namespace fa.api.OrderManagement
                 return instance;
             }
         }
+        public List<SaleEntry> GetCustomerInvoices(long customerId)
+        {
+            using (AccountMasterContext context = new AccountMasterContext())
+            {
+                return context.SaleEntry
+                              .Where(x => x.AccountsId == customerId &&
+                                          x.EntryType == Entrytype.SALE)
+                              .OrderByDescending(x => x.SaleDate)
+                              .ToList();
+            }
+        }
         public void ApplyPayment(ReceiptDetail ReceiptDetail, AccountMasterContext Context, List<SaleEntry> SaleEntry)
         {
             if (!string.IsNullOrEmpty(ReceiptDetail.ReferenceTrasnactionId))

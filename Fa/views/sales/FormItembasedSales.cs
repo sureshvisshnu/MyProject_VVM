@@ -1221,7 +1221,6 @@ namespace fa.views.sales
         }
         private void EnableForm(Boolean enable)
         {
-
             BtnSalesDelete.Enabled = true;
             BtnSalesSave.Enabled = true;
             YesNoRbtSalesMethod.Enabled = true;
@@ -1256,6 +1255,7 @@ namespace fa.views.sales
             }
             if (enable)
             {
+                BtnShowPayment.Visible = false;    
                 BtnSalesNew.Enabled = !enable;
                 BtnSalesDelete.Enabled = !enable;
                 BtnSalesPrint.Enabled = !enable;
@@ -1269,6 +1269,7 @@ namespace fa.views.sales
             }
             else
             {
+                BtnShowPayment.Visible = false; 
                 BtnSalesNew.Enabled = !enable;
                 BtnSalesDelete.Enabled = !enable;
                 BtnSalesPrint.Enabled = string.IsNullOrEmpty(Global.getDefaultPrinter()) ? enable : !enable;
@@ -1284,6 +1285,7 @@ namespace fa.views.sales
             SaleEntry Entry = GetSavedSale();
             if (TextBoxSalesType.Text == "QUOTE" && Entry == null)
             {
+                BtnShowPayment.Enabled = enable;
                 BtnReceivePayment.Enabled = enable;
                 BtnSalesReturn.Enabled = enable;
                 BtnSalesNew.Enabled = enable;

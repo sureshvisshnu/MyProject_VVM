@@ -476,7 +476,7 @@ namespace Fa.reports.sales
                     DataGridViewItemSales.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                     DataGridViewItemSales.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
                 }
-        }
+            }
             catch (Exception ex)
             {
                 ItemSalesReportErrorMsg.Text = $"Error generating report: {ex.Message}";
@@ -484,7 +484,7 @@ namespace Fa.reports.sales
             finally
             {
                 EnableButtons(true);
-}
+            }
         }
 
         private void RenderReportGrid(List<ItemSalesReportRow> salesData, bool groupByCustomer)
@@ -1451,6 +1451,11 @@ namespace Fa.reports.sales
             }
 
             Cursor.Current = Cursors.Default;
+        }
+
+        private void BtnPrint_Click(object sender, EventArgs e)
+        {
+
         }
     }
     public class ItemSalesReportRow

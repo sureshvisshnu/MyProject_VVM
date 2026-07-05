@@ -58,6 +58,15 @@
             ToolStripBtnsave = new ToolStripButton();
             ToolStripBtnPrint = new ToolStripButton();
             DataGridViewItemSales = new fa.views.controls.DataViewVerticalScroll();
+            Column1 = new DataGridViewTextBoxColumn();
+            product = new DataGridViewTextBoxColumn();
+            customer = new DataGridViewTextBoxColumn();
+            salesdatefrom = new DataGridViewTextBoxColumn();
+            billno = new DataGridViewTextBoxColumn();
+            price = new DataGridViewTextBoxColumn();
+            qty = new DataGridViewTextBoxColumn();
+            salesid = new DataGridViewTextBoxColumn();
+            id = new DataGridViewTextBoxColumn();
             BtnExit = new Button();
             BtnCancel = new Button();
             BtnPrint = new Button();
@@ -69,15 +78,6 @@
             label2 = new Label();
             label3 = new Label();
             BtnExport = new Button();
-            Column1 = new DataGridViewTextBoxColumn();
-            product = new DataGridViewTextBoxColumn();
-            customer = new DataGridViewTextBoxColumn();
-            salesdatefrom = new DataGridViewTextBoxColumn();
-            billno = new DataGridViewTextBoxColumn();
-            price = new DataGridViewTextBoxColumn();
-            qty = new DataGridViewTextBoxColumn();
-            salesid = new DataGridViewTextBoxColumn();
-            id = new DataGridViewTextBoxColumn();
             StatusStripSales.SuspendLayout();
             VVMatrixToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DataGridViewItemSales).BeginInit();
@@ -284,6 +284,90 @@
             DataGridViewItemSales.Size = new Size(965, 451);
             DataGridViewItemSales.TabIndex = 192;
             // 
+            // Column1
+            // 
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            Column1.DefaultCellStyle = dataGridViewCellStyle2;
+            Column1.HeaderText = "#";
+            Column1.Name = "Column1";
+            Column1.ReadOnly = true;
+            Column1.Resizable = DataGridViewTriState.False;
+            Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
+            Column1.Width = 40;
+            // 
+            // product
+            // 
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            product.DefaultCellStyle = dataGridViewCellStyle3;
+            product.HeaderText = "Product";
+            product.Name = "product";
+            product.ReadOnly = true;
+            product.Resizable = DataGridViewTriState.False;
+            product.SortMode = DataGridViewColumnSortMode.NotSortable;
+            product.Width = 250;
+            // 
+            // customer
+            // 
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
+            customer.DefaultCellStyle = dataGridViewCellStyle4;
+            customer.HeaderText = "Customer";
+            customer.Name = "customer";
+            customer.ReadOnly = true;
+            customer.Resizable = DataGridViewTriState.False;
+            customer.SortMode = DataGridViewColumnSortMode.NotSortable;
+            customer.Width = 300;
+            // 
+            // salesdatefrom
+            // 
+            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            salesdatefrom.DefaultCellStyle = dataGridViewCellStyle5;
+            salesdatefrom.HeaderText = "Sales Date";
+            salesdatefrom.Name = "salesdatefrom";
+            salesdatefrom.ReadOnly = true;
+            salesdatefrom.SortMode = DataGridViewColumnSortMode.NotSortable;
+            salesdatefrom.Width = 75;
+            // 
+            // billno
+            // 
+            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            billno.DefaultCellStyle = dataGridViewCellStyle6;
+            billno.HeaderText = "Bill No";
+            billno.Name = "billno";
+            billno.ReadOnly = true;
+            billno.Width = 60;
+            // 
+            // price
+            // 
+            price.HeaderText = "Price";
+            price.Name = "price";
+            price.ReadOnly = true;
+            price.SortMode = DataGridViewColumnSortMode.NotSortable;
+            // 
+            // qty
+            // 
+            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            qty.DefaultCellStyle = dataGridViewCellStyle7;
+            qty.HeaderText = "Qty";
+            qty.Name = "qty";
+            qty.ReadOnly = true;
+            qty.Width = 120;
+            // 
+            // salesid
+            // 
+            salesid.HeaderText = "SALES ID";
+            salesid.Name = "salesid";
+            salesid.ReadOnly = true;
+            salesid.Visible = false;
+            // 
+            // id
+            // 
+            id.HeaderText = "REPORT ID";
+            id.Name = "id";
+            id.ReadOnly = true;
+            id.Visible = false;
+            // 
             // BtnExit
             // 
             BtnExit.Font = new Font("Tahoma", 8.25F, FontStyle.Bold, GraphicsUnit.Point);
@@ -315,6 +399,7 @@
             BtnPrint.TabIndex = 194;
             BtnPrint.Text = "Print [F9]";
             BtnPrint.UseVisualStyleBackColor = true;
+            BtnPrint.Click += BtnPrint_Click;
             // 
             // BtnSave
             // 
@@ -403,90 +488,6 @@
             BtnExport.Text = "Export";
             BtnExport.UseVisualStyleBackColor = true;
             BtnExport.Click += BtnExport_Click;
-            // 
-            // Column1
-            // 
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            Column1.DefaultCellStyle = dataGridViewCellStyle2;
-            Column1.HeaderText = "#";
-            Column1.Name = "Column1";
-            Column1.ReadOnly = true;
-            Column1.Resizable = DataGridViewTriState.False;
-            Column1.SortMode = DataGridViewColumnSortMode.NotSortable;
-            Column1.Width = 40;
-            // 
-            // product
-            // 
-            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
-            product.DefaultCellStyle = dataGridViewCellStyle3;
-            product.HeaderText = "Product";
-            product.Name = "product";
-            product.ReadOnly = true;
-            product.Resizable = DataGridViewTriState.False;
-            product.SortMode = DataGridViewColumnSortMode.NotSortable;
-            product.Width = 250;
-            // 
-            // customer
-            // 
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            customer.DefaultCellStyle = dataGridViewCellStyle4;
-            customer.HeaderText = "Customer";
-            customer.Name = "customer";
-            customer.ReadOnly = true;
-            customer.Resizable = DataGridViewTriState.False;
-            customer.SortMode = DataGridViewColumnSortMode.NotSortable;
-            customer.Width = 300;
-            // 
-            // salesdatefrom
-            // 
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            salesdatefrom.DefaultCellStyle = dataGridViewCellStyle5;
-            salesdatefrom.HeaderText = "Sales Date";
-            salesdatefrom.Name = "salesdatefrom";
-            salesdatefrom.ReadOnly = true;
-            salesdatefrom.SortMode = DataGridViewColumnSortMode.NotSortable;
-            salesdatefrom.Width = 75;
-            // 
-            // billno
-            // 
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            billno.DefaultCellStyle = dataGridViewCellStyle6;
-            billno.HeaderText = "Bill No";
-            billno.Name = "billno";
-            billno.ReadOnly = true;
-            billno.Width = 60;
-            // 
-            // price
-            // 
-            price.HeaderText = "Price";
-            price.Name = "price";
-            price.ReadOnly = true;
-            price.SortMode = DataGridViewColumnSortMode.NotSortable;
-            // 
-            // qty
-            // 
-            dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            qty.DefaultCellStyle = dataGridViewCellStyle7;
-            qty.HeaderText = "Qty";
-            qty.Name = "qty";
-            qty.ReadOnly = true;
-            qty.Width = 120;
-            // 
-            // salesid
-            // 
-            salesid.HeaderText = "SALES ID";
-            salesid.Name = "salesid";
-            salesid.ReadOnly = true;
-            salesid.Visible = false;
-            // 
-            // id
-            // 
-            id.HeaderText = "REPORT ID";
-            id.Name = "id";
-            id.ReadOnly = true;
-            id.Visible = false;
             // 
             // FormItemSalesReport
             // 
